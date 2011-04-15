@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 The Apache Software Foundation.
+ * Copyright 2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@
 
 #define XSEC_VERSION_MAJOR   1
 #define XSEC_VERSION_MEDIUM  6
-#define XSEC_VERSION_MINOR   0
+#define XSEC_VERSION_MINOR   1
 
 // --------------------------------------------------------------------------------
 //           Version Handling

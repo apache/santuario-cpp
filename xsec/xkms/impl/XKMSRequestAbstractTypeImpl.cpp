@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,13 +64,13 @@ XKMSRequestAbstractTypeImpl::~XKMSRequestAbstractTypeImpl() {
 
 	RespondWithVectorType::iterator i;
 
-	for (i = m_respondWithList.begin(); i < m_respondWithList.end(); ++i) {
+	for (i = m_respondWithList.begin(); i != m_respondWithList.end(); ++i) {
 		delete (*i);
 	}
 
 	ResponseMechanismVectorType::iterator j;
 
-	for (j = m_responseMechanismList.begin(); j < m_responseMechanismList.end(); ++j) {
+	for (j = m_responseMechanismList.begin(); j != m_responseMechanismList.end(); ++j) {
 		delete (*j);
 	}
 };

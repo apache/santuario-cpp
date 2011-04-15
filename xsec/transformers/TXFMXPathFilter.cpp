@@ -124,7 +124,7 @@ TXFMXPathFilter::~TXFMXPathFilter() {
 
 	lstsVectorType::iterator i;
 
-	for (i = m_lsts.begin(); i < m_lsts.end(); ++i) {
+	for (i = m_lsts.begin(); i != m_lsts.end(); ++i) {
 
 		if ((*i)->lst != NULL)
 			delete ((*i)->lst);
@@ -444,7 +444,7 @@ void TXFMXPathFilter::walkDocument(DOMNode * n) {
 			else {
 
 				// Remove this node from the ancestor lists
-				for (lstsIter = m_lsts.begin(); lstsIter < m_lsts.end(); ++lstsIter) {
+				for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
 					if ((*lstsIter)->ancestorInScope == current) {
 						(*lstsIter)->ancestorInScope = NULL;
@@ -479,7 +479,7 @@ void TXFMXPathFilter::walkDocument(DOMNode * n) {
 			// First check if this node is in any lists, and if so,
 			// set the appropriate ancestor nodes (if necessary)
 
-			for (lstsIter = m_lsts.begin(); lstsIter < m_lsts.end(); ++lstsIter) {
+			for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
 				if ((*lstsIter)->ancestorInScope == NULL &&
 					(*lstsIter)->lst->hasNode(current)) {
@@ -577,7 +577,7 @@ void TXFMXPathFilter::walkDocument(DOMNode * n) {
 	// First check if this node is in any lists, and if so,
 	// set the appropriate ancestor nodes (if necessary)
 
-	for (lstsIter = m_lsts.begin(); lstsIter < m_lsts.end(); ++lstsIter) {
+	for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
 		if ((*lstsIter)->ancestorInScope == NULL &&
 			(*lstsIter)->lst->hasNode(n)) {
@@ -623,7 +623,7 @@ void TXFMXPathFilter::walkDocument(DOMNode * n) {
 	}
 
 	// Now remove from ancestor lists if we are that ancestor
-	for (lstsIter = m_lsts.begin(); lstsIter < m_lsts.end(); ++lstsIter) {
+	for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
 		if ((*lstsIter)->ancestorInScope == n) {
 			(*lstsIter)->ancestorInScope = NULL;

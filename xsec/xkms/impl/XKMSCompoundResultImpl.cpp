@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2005 The Apache Software Foundation.
+ * Copyright 2004-2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ XKMSCompoundResultImpl::~XKMSCompoundResultImpl() {
 
 	ResultListVectorType::iterator i;
 
-	for (i = m_resultList.begin() ; i < m_resultList.end(); i++) {
+	for (i = m_resultList.begin() ; i != m_resultList.end(); ++i) {
 
 		delete (*i);
 

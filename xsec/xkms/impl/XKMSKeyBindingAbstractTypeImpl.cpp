@@ -1,5 +1,5 @@
 /*
- * Copyright 2004-2010 The Apache Software Foundation.
+ * Copyright 2004-2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ XKMSKeyBindingAbstractTypeImpl::~XKMSKeyBindingAbstractTypeImpl() {
 		delete mp_keyInfoList;
 
 	UseKeyWithVectorType::iterator i;
-	for (i = m_useKeyWithList.begin(); i < m_useKeyWithList.end(); ++i)
+	for (i = m_useKeyWithList.begin(); i != m_useKeyWithList.end(); ++i)
 		delete (*i);
 
 }

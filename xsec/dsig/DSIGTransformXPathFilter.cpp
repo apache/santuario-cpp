@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 The Apache Software Foundation.
+ * Copyright 2002-2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ DSIGTransformXPathFilter::~DSIGTransformXPathFilter() {
 
 	exprVectorType::iterator i;
 
-	for (i = m_exprs.begin(); i < m_exprs.end(); ++i) {
+	for (i = m_exprs.begin(); i != m_exprs.end(); ++i) {
 
 		delete (*i);
 

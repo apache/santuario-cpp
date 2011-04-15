@@ -1,4 +1,4 @@
-# Copyright 2002-2010 The Apache Software Foundation.
+# Copyright 2002-2011 The Apache Software Foundation.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 
 # Process this file with autoreconf
 AC_PREREQ(2.50)
-AC_INIT([[XML-Security-C]],[1.6.0],[santuario-dev@apache.org],[xml-security-c])
+AC_INIT([[XML-Security-C]],[1.6.1],[santuario-dev@apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2009 The Apache Software Foundation.
+ * Copyright 2002-2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -643,7 +643,7 @@ void TXFMXPathFilter::evaluateExprs(DSIGTransformXPathFilter::exprVectorType * e
 
 	DSIGTransformXPathFilter::exprVectorType::iterator i;
 
-	for (i = exprs->begin(); i < exprs->end(); ++i) {
+	for (i = exprs->begin(); i != exprs->end(); ++i) {
 
 		XSECXPathNodeList * lst = evaluateSingleExpr(*i);
 		filterSetHolder * sh;

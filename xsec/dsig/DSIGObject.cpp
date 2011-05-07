@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2010 The Apache Software Foundation.
+ * Copyright 2002-2011 The Apache Software Foundation.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,13 +132,13 @@ void DSIGObject::load(void) {
 
 
 	mp_idAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_Id);
+	if (mp_idAttr) {
 #if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
-	((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id);
-#else
-#  if defined (XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE)
+	    ((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id);
+#elif defined (XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE)
 		((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id, true);
-#  endif
 #endif
+	}
 
 	mp_mimeTypeAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_MimeType);
 	mp_encodingAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_Encoding);
@@ -224,10 +224,8 @@ void DSIGObject::setId(const XMLCh * id) {
 		// Mark as an ID
 #if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
 		((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id);
-#else
-#  if defined (XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE)
+#elif defined (XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE)
 		((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id, true);
-#  endif
 #endif
 		mp_idAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_Id);
 

@@ -1,5 +1,6 @@
 Changes since 1.6.0
 * [SANTUARIO-268] - TXFMXPathFilter->evaluateExpr crashes on Windows
+* [SANTUARIO-270] - DSIGObject::load method crashes for ds:Object without Id attribute
 
 Changes since 1.5.1
 =====================================

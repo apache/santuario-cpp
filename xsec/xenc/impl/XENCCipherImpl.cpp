@@ -228,8 +228,9 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
 
         for (XMLSize_t i = 0; i < length; ++i) {
             DOMNode * att = atts->item(i);
-            if (strEquals(att->getNodeName(), DSIGConstants::s_unicodeStrXmlns) || (XMLString::compareNString(
-                att->getNodeName(), DSIGConstants::s_unicodeStrXmlns, 5) && att->getNodeName()[5] == chColon)) {
+            if (strEquals(att->getNodeName(), DSIGConstants::s_unicodeStrXmlns) ||
+                    (XMLString::compareNString(att->getNodeName(), DSIGConstants::s_unicodeStrXmlns, 5) == 0 &&
+                            att->getNodeName()[5] == chColon)) {
 
                 // Check to see if this node has already been found
                 DOMNode * p = ctxParent;

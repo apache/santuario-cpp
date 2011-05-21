@@ -45,6 +45,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
+#define MAXB64BUFSIZE 2048
 
 // --------------------------------------------------------------------------------
 //           Some useful utility functions
@@ -56,10 +57,10 @@ bool compareBase64StringToRaw(const char * b64Str,
 							  unsigned int rawLen, 
 							  unsigned int maxCompare = 0) {
 	// Decode a base64 buffer and then compare the result to a raw buffer
-	// Compare at most maxCompare bits (if maxComare > 0)
+	// Compare at most maxCompare bits (if maxCompare > 0)
 	// Note - whilst the other parameters are bytes, maxCompare is bits
 
-	unsigned char outputStr[1024];
+	unsigned char outputStr[MAXB64BUFSIZE];
 	unsigned int outputLen = 0;
 	
 	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
@@ -74,8 +75,8 @@ bool compareBase64StringToRaw(const char * b64Str,
 	Janitor<XSECCryptoBase64> j_b64(b64);
 
 	b64->decodeInit();
-	outputLen = b64->decode((unsigned char *) b64Str, (unsigned int) strlen((char *) b64Str), outputStr, 1024);
-	outputLen += b64->decodeFinish(&outputStr[outputLen], 1024 - outputLen);
+	outputLen = b64->decode((unsigned char *) b64Str, (unsigned int) strlen((char *) b64Str), outputStr, MAXB64BUFSIZE);
+	outputLen += b64->decodeFinish(&outputStr[outputLen], MAXB64BUFSIZE - outputLen);
 
 	// Compare
 
@@ -147,7 +148,7 @@ void convertRawToBase64String(safeBuffer &b64SB,
 	// Translate the rawbuffer (at most maxBits or rawLen - whichever is smaller)
 	// to a base64 string
 
-	unsigned char b64Str[1024];
+	unsigned char b64Str[MAXB64BUFSIZE];
 	unsigned int outputLen = 0;
 	
 	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
@@ -178,8 +179,8 @@ void convertRawToBase64String(safeBuffer &b64SB,
 		size = rawLen;
 
 	b64->encodeInit();
-	outputLen = b64->encode((unsigned char *) raw, rawLen, b64Str, 1024);
-	outputLen += b64->encodeFinish(&b64Str[outputLen], 1024 - outputLen);
+	outputLen = b64->encode((unsigned char *) raw, rawLen, b64Str, MAXB64BUFSIZE - 1);
+	outputLen += b64->encodeFinish(&b64Str[outputLen], MAXB64BUFSIZE - outputLen - 1);
 	b64Str[outputLen] = '\0';
 
 	// Copy out
@@ -383,7 +384,10 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 	
 	// Now check the calculated hash
 
-	char b64Buf[1024];
+	// For now, use a fixed length buffer, but expand it,
+	// and detect if the signature size exceeds what we can
+	// handle.
+	char b64Buf[MAXB64BUFSIZE];
 	unsigned int b64Len;
 	safeBuffer b64SB;
 	
@@ -403,12 +407,18 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 			hash, 
 			hashLen,
 			(char *) b64Buf, 
-			1024);
+			MAXB64BUFSIZE);
 
 		if (b64Len <= 0) {
 
 			throw XSECException(XSECException::AlgorithmMapperError,
 				"Unknown error occured during a DSA Signing operation");
+
+		}
+		else if (b64Len >= MAXB64BUFSIZE) {
+
+            throw XSECException(XSECException::AlgorithmMapperError,
+                "DSA Signing operation exceeded size of buffer");
 
 		}
 
@@ -433,7 +443,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 			hash, 
 			hashLen,
 			(char *) b64Buf, 
-			1024,
+			MAXB64BUFSIZE,
 			hm);
 
 		if (b64Len <= 0) {
@@ -442,6 +452,12 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 				"Unknown error occured during a RSA Signing operation");
 
 		}
+        else if (b64Len >= MAXB64BUFSIZE) {
+
+            throw XSECException(XSECException::AlgorithmMapperError,
+                "RSA Signing operation exceeded size of buffer");
+
+        }
 
 		// Clean up some "funnies" and make sure the string is NULL terminated
 
@@ -466,7 +482,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 			hash, 
 			hashLen,
 			(char *) b64Buf, 
-			1024);
+			MAXB64BUFSIZE);
 
 		if (b64Len <= 0) {
 
@@ -474,6 +490,12 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 				"Unknown error occured during an ECDSA Signing operation");
 
 		}
+        else if (b64Len >= MAXB64BUFSIZE) {
+
+            throw XSECException(XSECException::AlgorithmMapperError,
+                "ECDSA Signing operation exceeded size of buffer");
+
+        }
 
 		if (b64Buf[b64Len-1] == '\n')
 			b64Buf[b64Len-1] = '\0';
@@ -504,7 +526,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 								hashLen, 
 								outputLength);
 		
-		strncpy(b64Buf, (char *) b64SB.rawBuffer(), 1024);
+		strncpy(b64Buf, (char *) b64SB.rawBuffer(), MAXB64BUFSIZE);
 		break;
 
 	default :

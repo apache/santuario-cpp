@@ -158,8 +158,9 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
 		XSECCryptoBase64::cleanBuffer(base64Signature, sigLen, cleanedBase64SignatureLen);
 	ArrayJanitor<char> j_cleanedBase64Signature(cleanedBase64Signature);
 
-	unsigned char sigVal[512];
 	int sigValLen;
+	unsigned char* sigVal = new unsigned char[sigLen + 1];
+    ArrayJanitor<unsigned char> j_sigVal(sigVal);
 
 	EVP_ENCODE_CTX m_dctx;
 	EVP_DecodeInit(&m_dctx);
@@ -237,13 +238,12 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 	}
 
 	// Now turn the signature into a base64 string
+	unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsa_sig->r) + BN_num_bits(dsa_sig->s)) / 8];
+    ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
 
-	unsigned char rawSigBuf[256];
-	unsigned int rawLen;
+	unsigned int rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);
 
-	rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);
-
-	if (rawLen <= 0) {
+    if (rawLen <= 0) {
 
 		throw XSECCryptoException(XSECCryptoException::ECError,
 			"OpenSSL:EC - Error converting signature to raw buffer");
@@ -252,7 +252,7 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 
 	unsigned int rawLenS = BN_bn2bin(dsa_sig->s, (unsigned char *) &rawSigBuf[rawLen]);
 
-	if (rawLenS <= 0) {
+    if (rawLenS <= 0) {
 
 		throw XSECCryptoException(XSECCryptoException::ECError,
 			"OpenSSL:EC - Error converting signature to raw buffer");

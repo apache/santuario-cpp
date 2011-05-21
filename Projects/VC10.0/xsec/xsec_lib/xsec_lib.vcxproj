@@ -168,7 +168,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -205,7 +205,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -306,7 +306,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -343,7 +343,7 @@
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_LIB_EXPORTS;PROJ_CANON;PROJ_DSIG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <MinimalRebuild>true</MinimalRebuild>
+      <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>

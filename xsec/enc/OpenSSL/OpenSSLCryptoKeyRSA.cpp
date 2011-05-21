@@ -189,21 +189,20 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
 			"OpenSSL:RSA - Attempt to validate signature with empty key");
 	}
 
-	unsigned char sigVal[1024];
-	int sigValLen;
-
-	EVP_ENCODE_CTX m_dctx;
-	int rc;
-
-	char * cleanedBase64Signature;
+	char* cleanedBase64Signature;
 	unsigned int cleanedBase64SignatureLen = 0;
 
 	cleanedBase64Signature =
 		XSECCryptoBase64::cleanBuffer(base64Signature, sigLen, cleanedBase64SignatureLen);
 	ArrayJanitor<char> j_cleanedBase64Signature(cleanedBase64Signature);
 
+	int sigValLen;
+	unsigned char* sigVal = new unsigned char[sigLen + 1];
+    ArrayJanitor<unsigned char> j_sigVal(sigVal);
+
+    EVP_ENCODE_CTX m_dctx;
 	EVP_DecodeInit(&m_dctx);
-	rc = EVP_DecodeUpdate(&m_dctx,
+	int rc = EVP_DecodeUpdate(&m_dctx,
 						  sigVal,
 						  &sigValLen,
 						  (unsigned char *) cleanedBase64Signature,

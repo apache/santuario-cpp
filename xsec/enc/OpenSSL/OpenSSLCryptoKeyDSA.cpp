@@ -164,15 +164,16 @@ bool OpenSSLCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
 			"OpenSSL:DSA - Attempt to validate signature with empty key");
 	}
 
-    char * cleanedBase64Signature;
+    char* cleanedBase64Signature;
 	unsigned int cleanedBase64SignatureLen = 0;
 
 	cleanedBase64Signature =
 		XSECCryptoBase64::cleanBuffer(base64Signature, sigLen, cleanedBase64SignatureLen);
 	ArrayJanitor<char> j_cleanedBase64Signature(cleanedBase64Signature);
 
-	unsigned char sigVal[512];
 	int sigValLen;
+	unsigned char* sigVal = new unsigned char[sigLen + 1];
+    ArrayJanitor<unsigned char> j_sigVal(sigVal);
 
 	EVP_ENCODE_CTX m_dctx;
 	EVP_DecodeInit(&m_dctx);
@@ -276,10 +277,10 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 
 	// Now turn the signature into a base64 string
 
-	unsigned char rawSigBuf[256];
-	unsigned int rawLen;
-
-	rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);
+	unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsa_sig->r) + BN_num_bits(dsa_sig->s)) / 8];
+    ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
+	
+    unsigned int rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);
 
 	if (rawLen <= 0) {
 

@@ -1,6 +1,7 @@
 Changes since 1.6.0
 * [SANTUARIO-268] - TXFMXPathFilter->evaluateExpr crashes on Windows
 * [SANTUARIO-270] - DSIGObject::load method crashes for ds:Object without Id attribute
+* [SANTUARIO-271] - Bug when signing files with big RSA keys
 * [SANTUARIO-272] - Memory bug inside XENCCipherImpl::deSerialise
 
 Changes since 1.5.1

@@ -699,8 +699,8 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 static bool isHexDigit(const XMLCh toCheck)
 {
     if ((toCheck >= chDigit_0) && (toCheck <= chDigit_9)
-    ||  (toCheck >= chLatin_A) && (toCheck <= chLatin_Z)
-    ||  (toCheck >= chLatin_a) && (toCheck <= chLatin_z))
+    ||  (toCheck >= chLatin_A) && (toCheck <= chLatin_F)
+    ||  (toCheck >= chLatin_a) && (toCheck <= chLatin_f))
     {
         return true;
     }
@@ -712,7 +712,7 @@ static unsigned int xlatHexDigit(const XMLCh toXlat)
     if ((toXlat >= chDigit_0) && (toXlat <= chDigit_9))
         return (unsigned int)(toXlat - chDigit_0);
 
-    if ((toXlat >= chLatin_A) && (toXlat <= chLatin_Z))
+    if ((toXlat >= chLatin_A) && (toXlat <= chLatin_F))
         return (unsigned int)(toXlat - chLatin_A) + 10;
 
     return (unsigned int)(toXlat - chLatin_a) + 10;
@@ -731,10 +731,11 @@ XMLCh * cleanURIEscapes(const XMLCh * str) {
 
 		if (percentIndex+2 >= len ||
 			!isHexDigit(retPath[percentIndex+1]) ||
-			!isHexDigit(retPath[percentIndex+2]))
+			!isHexDigit(retPath[percentIndex+2])) {
 		    XSEC_RELEASE_XMLCH(retPath);
 			throw XSECException(XSECException::ErrorOpeningURI,
 					"Bad escape sequence in URI");
+		}
 
 		unsigned int value = (xlatHexDigit(retPath[percentIndex+1]) * 16) +
 						     (xlatHexDigit(retPath[percentIndex+2]));

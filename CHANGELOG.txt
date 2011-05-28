@@ -3,6 +3,8 @@ Changes since 1.6.0
 * [SANTUARIO-270] - DSIGObject::load method crashes for ds:Object without Id attribute
 * [SANTUARIO-271] - Bug when signing files with big RSA keys
 * [SANTUARIO-272] - Memory bug inside XENCCipherImpl::deSerialise
+* [SANTUARIO-274] - Function cleanURIEscapes always throws XSECException, when any escape sequence occurs
+* [SANTUARIO-275] - Function isHexDigit doesn't recognize invalid escape sequences.
 
 Changes since 1.5.1
 =====================================

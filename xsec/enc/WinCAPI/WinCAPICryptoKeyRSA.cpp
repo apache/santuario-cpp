@@ -594,7 +594,7 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 						 &decryptSize)) {
 
 			throw XSECCryptoException(XSECCryptoException::RSAError,
-				"WinCAPI:RSA privateKeyDecrypt - Error Decrypting PKCS1_5 padded RSA encrypt");
+				"WinCAPI:RSA privateKeyDecrypt - Error Decrypting PKCS1v2 OAEP padded RSA encrypt");
 
 		}
 

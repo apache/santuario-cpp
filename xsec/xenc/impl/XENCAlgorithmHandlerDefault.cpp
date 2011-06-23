@@ -598,7 +598,7 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 	    else if (!XSECmapURIToHashMethod(digmeth, hm)) {
 	        safeBuffer sb;
 	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
-	        sb.sbXMLChCat(URI);
+	        sb.sbXMLChCat(digmeth);
 
 	        throw XSECException(XSECException::AlgorithmMapperError,
 	            sb.rawXMLChBuffer());

@@ -42,6 +42,7 @@ XSEC_USING_XERCES(ArrayJanitor);
 
 #if !defined (CRYPT_OAEP)
 #	define CRYPT_OAEP              0x00000040
+#   define CRYPT_DECRYPT_RSA_NO_PADDING_CHECK   0x00000020
 #	define KP_OAEP_PARAMS          36
 #endif
 
@@ -589,7 +590,7 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 		if (!CryptDecrypt(m_key,
 						 0,
 						 TRUE,
-						 CRYPT_OAEP,
+						 (hm == HASH_SHA1) ? CRYPT_OAEP : CRYPT_DECRYPT_RSA_NO_PADDING_CHECK,
 						 plainBuf,
 						 &decryptSize)) {
 
@@ -660,6 +661,11 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 		break;
 
 	case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+
+	    if (hm != HASH_SHA1) {
+	        throw XSECCryptoException(XSECCryptoException::RSAError,
+	            "WinCAPI:RSA - OAEP padding method requires SHA-1 digest method");
+	    }
 
 		if (!CryptEncrypt(m_key,
 						  0,			/* No Hash */

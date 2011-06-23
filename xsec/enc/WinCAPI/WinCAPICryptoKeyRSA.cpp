@@ -42,8 +42,11 @@ XSEC_USING_XERCES(ArrayJanitor);
 
 #if !defined (CRYPT_OAEP)
 #	define CRYPT_OAEP              0x00000040
-#   define CRYPT_DECRYPT_RSA_NO_PADDING_CHECK   0x00000020
 #	define KP_OAEP_PARAMS          36
+#endif
+
+#if !defined (CRYPT_DECRYPT_RSA_NO_PADDING_CHECK)
+#   define CRYPT_DECRYPT_RSA_NO_PADDING_CHECK   0x00000020
 #endif
 
 WinCAPICryptoKeyRSA::WinCAPICryptoKeyRSA(HCRYPTPROV prov) {

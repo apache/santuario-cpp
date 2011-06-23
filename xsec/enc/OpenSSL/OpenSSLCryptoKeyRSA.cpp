@@ -37,13 +37,174 @@
 #include <xsec/enc/XSECCryptoUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
 
+#include <openssl/err.h>
+#include <openssl/rand.h>
 #include <openssl/rsa.h>
+#include <openssl/sha.h>
 
 #include <xercesc/util/Janitor.hpp>
 
 XSEC_USING_XERCES(ArrayJanitor);
 
 #include <memory.h>
+
+namespace {
+
+    // This code is modified from OpenSSL to implement SHA-2 hashing with OAEP.
+    // The MGF code is limited to SHA-1 in accordance with the XML Encryption spec.
+    static int MGF1(unsigned char *mask, long len, const unsigned char *seed, long seedlen)
+	{
+	    return PKCS1_MGF1(mask, len, seed, seedlen, EVP_sha1());
+	}
+
+    int RSA_padding_add_PKCS1_OAEP(unsigned char *to, int tlen,
+	    const unsigned char *from, int flen,
+	    const unsigned char *param, int plen,
+        const EVP_MD* digest)
+	{
+	    int i, digestlen = EVP_MD_size(digest), emlen = tlen - 1;
+	    unsigned char *db, *seed;
+	    unsigned char *dbmask, seedmask[EVP_MAX_MD_SIZE];   // accomodate largest hash size
+
+        if (flen > emlen - 2 * digestlen - 1)
+		    {
+		    RSAerr(RSA_F_RSA_PADDING_ADD_PKCS1_OAEP,
+		       RSA_R_DATA_TOO_LARGE_FOR_KEY_SIZE);
+		    return 0;
+		    }
+
+	    if (emlen < 2 * digestlen + 1)
+		    {
+		    RSAerr(RSA_F_RSA_PADDING_ADD_PKCS1_OAEP, RSA_R_KEY_SIZE_TOO_SMALL);
+		    return 0;
+		    }
+
+	    to[0] = 0;
+	    seed = to + 1;
+	    db = to + digestlen + 1;
+
+	    EVP_Digest((void *)param, plen, db, NULL, digest, NULL);
+	    memset(db + digestlen, 0,
+		    emlen - flen - 2 * digestlen - 1);
+	    db[emlen - flen - digestlen - 1] = 0x01;
+	    memcpy(db + emlen - flen - digestlen, from, (unsigned int) flen);
+	    if (RAND_bytes(seed, digestlen) <= 0)
+		    return 0;
+
+	    dbmask = (unsigned char*) OPENSSL_malloc(emlen - digestlen);
+	    if (dbmask == NULL)
+		    {
+		    RSAerr(RSA_F_RSA_PADDING_ADD_PKCS1_OAEP, ERR_R_MALLOC_FAILURE);
+		    return 0;
+		    }
+
+	    if (MGF1(dbmask, emlen - digestlen, seed, digestlen) < 0)
+		    return 0;
+	    for (i = 0; i < emlen - digestlen; i++)
+		    db[i] ^= dbmask[i];
+
+	    if (MGF1(seedmask, digestlen, db, emlen - digestlen) < 0)
+		    return 0;
+	    for (i = 0; i < digestlen; i++)
+		    seed[i] ^= seedmask[i];
+
+	    OPENSSL_free(dbmask);
+	    return 1;
+	}
+
+    int RSA_padding_check_PKCS1_OAEP(unsigned char *to, int tlen,
+	    const unsigned char *from, int flen, int num,
+	    const unsigned char *param, int plen,
+        const EVP_MD* digest)
+	{
+	    int i, digestlen = EVP_MD_size(digest), dblen, mlen = -1;
+	    const unsigned char *maskeddb;
+	    int lzero;
+	    unsigned char *db = NULL, seed[EVP_MAX_MD_SIZE], phash[EVP_MAX_MD_SIZE];
+	    unsigned char *padded_from;
+	    int bad = 0;
+
+	    if (--num < 2 * digestlen + 1)
+		    /* 'num' is the length of the modulus, i.e. does not depend on the
+		     * particular ciphertext. */
+		    goto decoding_err;
+
+	    lzero = num - flen;
+	    if (lzero < 0)
+		    {
+		    /* signalling this error immediately after detection might allow
+		     * for side-channel attacks (e.g. timing if 'plen' is huge
+		     * -- cf. James H. Manger, "A Chosen Ciphertext Attack on RSA Optimal
+		     * Asymmetric Encryption Padding (OAEP) [...]", CRYPTO 2001),
+		     * so we use a 'bad' flag */
+		    bad = 1;
+		    lzero = 0;
+		    flen = num; /* don't overflow the memcpy to padded_from */
+		    }
+
+	    dblen = num - digestlen;
+	    db = (unsigned char*) OPENSSL_malloc(dblen + num);
+	    if (db == NULL)
+		    {
+		    RSAerr(RSA_F_RSA_PADDING_CHECK_PKCS1_OAEP, ERR_R_MALLOC_FAILURE);
+		    return -1;
+		    }
+
+	    /* Always do this zero-padding copy (even when lzero == 0)
+	     * to avoid leaking timing info about the value of lzero. */
+	    padded_from = db + dblen;
+	    memset(padded_from, 0, lzero);
+	    memcpy(padded_from + lzero, from, flen);
+
+	    maskeddb = padded_from + digestlen;
+
+	    if (MGF1(seed, digestlen, maskeddb, dblen))
+		    return -1;
+	    for (i = 0; i < digestlen; i++)
+		    seed[i] ^= padded_from[i];
+  
+	    if (MGF1(db, dblen, seed, digestlen))
+		    return -1;
+	    for (i = 0; i < dblen; i++)
+		    db[i] ^= maskeddb[i];
+
+	    EVP_Digest((void *)param, plen, phash, NULL, digest, NULL);
+
+	    if (memcmp(db, phash, digestlen) != 0 || bad)
+		    goto decoding_err;
+	    else
+		    {
+		    for (i = digestlen; i < dblen; i++)
+			    if (db[i] != 0x00)
+				    break;
+		    if (i == dblen || db[i] != 0x01)
+			    goto decoding_err;
+		    else
+			    {
+			    /* everything looks OK */
+
+			    mlen = dblen - ++i;
+			    if (tlen < mlen)
+				    {
+				    RSAerr(RSA_F_RSA_PADDING_CHECK_PKCS1_OAEP, RSA_R_DATA_TOO_LARGE);
+				    mlen = -1;
+				    }
+			    else
+				    memcpy(to, db + i, mlen);
+			    }
+		    }
+	    OPENSSL_free(db);
+	    return mlen;
+
+    decoding_err:
+	    /* to avoid chosen ciphertext attacks, the error message should not reveal
+	     * which kind of decoding error happened */
+	    RSAerr(RSA_F_RSA_PADDING_CHECK_PKCS1_OAEP, RSA_R_OAEP_DECODING_ERROR);
+	    if (db != NULL) OPENSSL_free(db);
+	    return -1;
+	}
+
+};
 
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
 mp_rsaKey(NULL),
@@ -445,6 +606,29 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 			int num = RSA_size(mp_rsaKey);
 			XSECnew(tBuf, unsigned char[inLength]);
 			ArrayJanitor<unsigned char> j_tBuf(tBuf);
+            const EVP_MD* evp_md = NULL;
+            switch (hm) {
+                case HASH_SHA1:
+                    evp_md = EVP_get_digestbyname("SHA1");
+                    break;
+                case HASH_SHA224:
+                    evp_md = EVP_get_digestbyname("SHA224");
+                    break;
+                case HASH_SHA256:
+                    evp_md = EVP_get_digestbyname("SHA256");
+                    break;
+                case HASH_SHA384:
+                    evp_md = EVP_get_digestbyname("SHA384");
+                    break;
+                case HASH_SHA512:
+                    evp_md = EVP_get_digestbyname("SHA512");
+                    break;
+            }
+
+            if (evp_md == NULL) {
+    			throw XSECCryptoException(XSECCryptoException::MDError,
+	        		"OpenSSL:RSA - OAEP digest algorithm not supported by this version of OpenSSL"); 
+            }
 
 			decryptSize = RSA_private_decrypt(inLength,
 #if defined(XSEC_OPENSSL_CONST_BUFFERS)
@@ -473,7 +657,8 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 													   decryptSize,
 													   num,
 													   mp_oaepParams,
-													   m_oaepParamsLen);
+													   m_oaepParamsLen,
+                                                       evp_md);
 
 			if (decryptSize < 0) {
 
@@ -563,6 +748,30 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 					"OpenSSL:RSA publicKeyEncrypt - Not enough space in cipherBuf");
 			}
 
+            const EVP_MD* evp_md = NULL;
+            switch (hm) {
+                case HASH_SHA1:
+                    evp_md = EVP_get_digestbyname("SHA1");
+                    break;
+                case HASH_SHA224:
+                    evp_md = EVP_get_digestbyname("SHA224");
+                    break;
+                case HASH_SHA256:
+                    evp_md = EVP_get_digestbyname("SHA256");
+                    break;
+                case HASH_SHA384:
+                    evp_md = EVP_get_digestbyname("SHA384");
+                    break;
+                case HASH_SHA512:
+                    evp_md = EVP_get_digestbyname("SHA512");
+                    break;
+            }
+
+            if (evp_md == NULL) {
+    			throw XSECCryptoException(XSECCryptoException::MDError,
+	        		"OpenSSL:RSA - OAEP digest algorithm not supported by this version of OpenSSL"); 
+            }
+
 			XSECnew(tBuf, unsigned char[num]);
 			ArrayJanitor<unsigned char> j_tBuf(tBuf);
 
@@ -570,14 +779,15 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 
 			encryptSize = RSA_padding_add_PKCS1_OAEP(tBuf,
 													 num,
-#if defined(XSEC_OPENSSL_CONST_BUFFERS)
+//#if defined(XSEC_OPENSSL_CONST_BUFFERS)
   					                                 inBuf,
-#else
-						                             (unsigned char *) inBuf,
-#endif
+//#else
+//						                             (unsigned char *) inBuf,
+//#endif
 													 inLength,
 													 mp_oaepParams,
-													 m_oaepParamsLen);
+													 m_oaepParamsLen,
+                                                     evp_md);
 
 			if (encryptSize <= 0) {
 

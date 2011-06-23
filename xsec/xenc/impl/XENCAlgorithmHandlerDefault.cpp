@@ -588,11 +588,21 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 	}
 	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1)) {
 
+        hashMethod hm;
 	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
-		if (digmeth && *digmeth && !strEquals(digmeth, DSIGConstants::s_unicodeStrURISHA1)) {
-			throw XSECException(XSECException::CipherError, 
-				"XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer - Currently only SHA-1 is supported for OAEP");
-		}
+
+	    // Is this a URI we recognize?
+	    if (!digmeth || !*digmeth) {
+	        hm = HASH_SHA1;
+	    }
+	    else if (!XSECmapURIToHashMethod(digmeth, hm)) {
+	        safeBuffer sb;
+	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
+	        sb.sbXMLChCat(URI);
+
+	        throw XSECException(XSECException::AlgorithmMapperError,
+	            sb.rawXMLChBuffer());
+	    }
 
 		// Read out any OAEP params
 		unsigned char * oaepParamsBuf = NULL;
@@ -625,7 +635,7 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 												  offset, 
 												  rsa->getLength(), 
 												  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-												  HASH_SHA1);
+												  hm);
 
 	}
 

@@ -5,6 +5,7 @@ Changes since 1.6.0
 * [SANTUARIO-272] - Memory bug inside XENCCipherImpl::deSerialise
 * [SANTUARIO-274] - Function cleanURIEscapes always throws XSECException, when any escape sequence occurs
 * [SANTUARIO-275] - Function isHexDigit doesn't recognize invalid escape sequences.
+* [SANTUARIO-276] - Percent-encoded multibyte (UTF-8) sequences unrecognized
 * [SANTUARIO-280] - RSA-OAEP handler only allows SHA-1 digests
 
 Changes since 1.5.1

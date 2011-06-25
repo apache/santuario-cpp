@@ -718,41 +718,45 @@ static unsigned int xlatHexDigit(const XMLCh toXlat)
     return (unsigned int)(toXlat - chLatin_a) + 10;
 }
 
-XMLCh * cleanURIEscapes(const XMLCh * str) {
+XMLCh * cleanURIEscapes(const XMLCh * uriPath) {
 
-	// Taken from Xerces XMLURI.cpp
+    XMLByte *ptr, *utf8Path;
+    xsecsize_t len = XMLString::stringLen(uriPath);
 
-	XMLCh * retPath = XMLString::replicate(str);
+    ptr = utf8Path = new XMLByte[len + 1];
 
-	xsecsize_t len = XMLString::stringLen(retPath);
-	int percentIndex = XMLString::indexOf(retPath, chPercent, 0);
+    for (xsecsize_t i = 0; i < len; i++) {
+        unsigned int value = uriPath[i];
 
-	while (percentIndex != -1) {
+        if (value > 255) {
+            delete[] utf8Path;
+            throw XSECException(XSECException::ErrorOpeningURI, "Wide character in URI");
+        }
 
-		if (percentIndex+2 >= len ||
-			!isHexDigit(retPath[percentIndex+1]) ||
-			!isHexDigit(retPath[percentIndex+2])) {
-		    XSEC_RELEASE_XMLCH(retPath);
-			throw XSECException(XSECException::ErrorOpeningURI,
-					"Bad escape sequence in URI");
-		}
+        if (value == chPercent) {
+            if (!(i + 2 < len && isHexDigit(uriPath[i + 1]) && isHexDigit(uriPath[i + 2]))) {
+                delete[] utf8Path;
+                throw XSECException(XSECException::ErrorOpeningURI, "Bad escape sequence in URI");
+            }
 
-		unsigned int value = (xlatHexDigit(retPath[percentIndex+1]) * 16) +
-						     (xlatHexDigit(retPath[percentIndex+2]));
+            value = (xlatHexDigit(uriPath[i + 1]) * 16) + (xlatHexDigit(uriPath[i + 2]));
+            i += 2;
+        }
 
-		retPath[percentIndex] = XMLCh(value);
-		int i = 0;
-		for (i = percentIndex+1 ; i < len - 2; ++i)
-			retPath[i] = retPath[i+2];
-		retPath[i] = chNull;
-		len = i;
+        *(ptr++) = (XMLByte) value;
+    }
+    *ptr = 0;
 
-		percentIndex = XMLString::indexOf(retPath, chPercent, ++percentIndex);
+    try {
+        XMLCh* unicodePath = transcodeFromUTF8(utf8Path);
+        delete[] utf8Path;
+        return unicodePath;
+    }
+    catch (XMLException&) {
+    }
 
-	}
-
-	return retPath;
-
+    delete[] utf8Path;
+    throw XSECException(XSECException::ErrorOpeningURI, "Failed to transcode URI from UTF-8");
 }
 
 // --------------------------------------------------------------------------------

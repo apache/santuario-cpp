@@ -98,6 +98,7 @@ namespace {
         EVP_MD_CTX_cleanup(&c);
         return rv;
     }
+#endif
 
     static int MGF1(unsigned char *mask, long len, const unsigned char *seed, long seedlen)
 	{

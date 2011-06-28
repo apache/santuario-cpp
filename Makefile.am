@@ -21,6 +21,7 @@ SUBDIRS = xsec
 
 EXTRA_DIST = \
 	CHANGELOG.txt \
+	INSTALL.txt \
 	LICENSE.txt \
 	NOTICE.txt \
 	Projects \

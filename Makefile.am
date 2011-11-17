@@ -1,5 +1,5 @@
 #
-# Copyright 2006-2010 The Apache Software Foundation.
+# Copyright 2006-2011 The Apache Software Foundation.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ EXTRA_DIST = \
 	NOTICE.txt \
 	Projects \
 	xml-security-c.spec \
-	m4/acx_pthread.m4 \
 	xsec/framework/resource.h \
 	xsec/framework/version.rc \
 	xsec/tools/threadTest/threadtest.cpp

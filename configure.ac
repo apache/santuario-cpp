@@ -58,10 +58,11 @@ if test "$GCC" = "yes" ; then
 fi
 
 # pthreads
-ACX_PTHREAD
+AX_PTHREAD
 CFLAGS="${CFLAGS} ${PTHREAD_CFLAGS}"
 CXXFLAGS="${CXXFLAGS} ${PTHREAD_CFLAGS}"
 LIBS="${LIBS} ${PTHREAD_LIBS}"
+CC="${PTHREAD_CC}"
 
 # Checks for required libraries
 AC_CHECK_LIB(m, floor)

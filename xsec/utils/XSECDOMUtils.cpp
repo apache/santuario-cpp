@@ -88,7 +88,7 @@ const XMLCh * getXPFLocalName(const DOMNode * node) {
 
 }
 
-const XMLCh DSIG_EXPORT * getXENCLocalName(const DOMNode *node) {
+const XMLCh * getXENCLocalName(const DOMNode *node) {
 
 	// XML Encryption namespace node
 
@@ -99,7 +99,18 @@ const XMLCh DSIG_EXPORT * getXENCLocalName(const DOMNode *node) {
 
 }
 
-const XMLCh DSIG_EXPORT * getXKMSLocalName(const DOMNode *node) {
+const XMLCh * getXENC11LocalName(const DOMNode *node) {
+
+	// XML Encryption 1.1 namespace node
+
+	if (!strEquals(node->getNamespaceURI(), DSIGConstants::s_unicodeStrURIXENC11))
+		return NULL;
+	else
+		return node->getLocalName();
+
+}
+
+const XMLCh * getXKMSLocalName(const DOMNode *node) {
 
 	// XKMS namespace node
 

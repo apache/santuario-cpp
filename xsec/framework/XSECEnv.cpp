@@ -86,6 +86,18 @@ const XMLCh s_defaultXENCPrefix[] = {
 
 };
 
+const XMLCh s_defaultXENC11Prefix[] = {
+
+	chLatin_x,
+	chLatin_e,
+	chLatin_n,
+	chLatin_c,
+    chDigit_1,
+    chDigit_1,
+	chNull
+
+};
+
 const XMLCh s_defaultXKMSPrefix[] = {
 
 	chLatin_x,
@@ -132,6 +144,7 @@ XSECEnv::XSECEnv(DOMDocument *doc) {
 	mp_ecPrefixNS = XMLString::replicate(s_defaultECPrefix);
 	mp_xpfPrefixNS = XMLString::replicate(s_defaultXPFPrefix);
 	mp_xencPrefixNS = XMLString::replicate(s_defaultXENCPrefix);
+    mp_xenc11PrefixNS = XMLString::replicate(s_defaultXENC11Prefix);
 	mp_xkmsPrefixNS = XMLString::replicate(s_defaultXKMSPrefix);
 
 	m_prettyPrintFlag = true;
@@ -159,6 +172,7 @@ XSECEnv::XSECEnv(const XSECEnv & theOther) {
 	mp_ecPrefixNS = XMLString::replicate(theOther.mp_ecPrefixNS);
 	mp_xpfPrefixNS = XMLString::replicate(theOther.mp_xpfPrefixNS);
 	mp_xencPrefixNS = XMLString::replicate(theOther.mp_xencPrefixNS);
+    mp_xenc11PrefixNS = XMLString::replicate(s_defaultXENC11Prefix);
 	mp_xkmsPrefixNS = XMLString::replicate(theOther.mp_xkmsPrefixNS);
 
 	m_prettyPrintFlag = theOther.m_prettyPrintFlag;
@@ -205,6 +219,10 @@ XSECEnv::~XSECEnv() {
 
 	if (mp_xencPrefixNS != NULL) {
 		XSEC_RELEASE_XMLCH(mp_xencPrefixNS);
+	}
+
+	if (mp_xenc11PrefixNS != NULL) {
+		XSEC_RELEASE_XMLCH(mp_xenc11PrefixNS);
 	}
 
 	if (mp_xkmsPrefixNS != NULL) {
@@ -299,6 +317,15 @@ void XSECEnv::setXENCNSPrefix(const XMLCh * prefix) {
 		XSEC_RELEASE_XMLCH(mp_xencPrefixNS);
 
 	mp_xencPrefixNS = XMLString::replicate(prefix);
+
+}
+
+void XSECEnv::setXENC11NSPrefix(const XMLCh * prefix) {
+
+	if (mp_xenc11PrefixNS != NULL)
+		XSEC_RELEASE_XMLCH(mp_xenc11PrefixNS);
+
+	mp_xenc11PrefixNS = XMLString::replicate(prefix);
 
 }
 

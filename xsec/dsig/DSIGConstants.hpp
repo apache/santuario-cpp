@@ -46,6 +46,7 @@ XSEC_USING_XERCES(XMLString);
 // Also used as algorithm ID for XPATH_FILTER
 #define URI_ID_XPF		"http://www.w3.org/2002/06/xmldsig-filter2"
 #define URI_ID_XENC		"http://www.w3.org/2001/04/xmlenc#"
+#define URI_ID_XENC11	"http://www.w3.org/2009/xmlenc11#"
 
 // Hashing Algorithms
 
@@ -61,6 +62,10 @@ XSEC_USING_XERCES(XMLString);
 #define URI_ID_AES128_CBC	"http://www.w3.org/2001/04/xmlenc#aes128-cbc"
 #define URI_ID_AES192_CBC	"http://www.w3.org/2001/04/xmlenc#aes192-cbc"
 #define URI_ID_AES256_CBC	"http://www.w3.org/2001/04/xmlenc#aes256-cbc"
+#define URI_ID_AES128_GCM	"http://www.w3.org/2009/xmlenc11#aes128-gcm"
+#define URI_ID_AES192_GCM	"http://www.w3.org/2009/xmlenc11#aes192-gcm"
+#define URI_ID_AES256_GCM	"http://www.w3.org/2009/xmlenc11#aes256-gcm"
+
 
 // Key Wrap Algorithm
 #define URI_ID_KW_AES128	"http://www.w3.org/2001/04/xmlenc#kw-aes128"
@@ -71,6 +76,15 @@ XSEC_USING_XERCES(XMLString);
 // Key Transport algorithms
 #define URI_ID_RSA_1_5			"http://www.w3.org/2001/04/xmlenc#rsa-1_5"
 #define URI_ID_RSA_OAEP_MGFP1	"http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"
+#define URI_ID_RSA_OAEP	        "http://www.w3.org/2009/xmlenc11#rsa-oaep"
+
+// OAEP MGFs
+#define URI_ID_MGF1_BASE	    "http://www.w3.org/2009/xmlenc11#mgf1"
+#define URI_ID_MGF1_SHA1        "http://www.w3.org/2009/xmlenc11#mgf1sha1"
+#define URI_ID_MGF1_SHA224      "http://www.w3.org/2009/xmlenc11#mgf1sha224"
+#define URI_ID_MGF1_SHA256      "http://www.w3.org/2009/xmlenc11#mgf1sha256"
+#define URI_ID_MGF1_SHA384      "http://www.w3.org/2009/xmlenc11#mgf1sha384"
+#define URI_ID_MGF1_SHA512      "http://www.w3.org/2009/xmlenc11#mgf1sha512"
 
 // Transforms
 
@@ -204,10 +218,21 @@ enum encryptionMethod {
 	ENCRYPT_KW_AES256		= 7,				// KeyWrap - AES256
 	ENCRYPT_KW_3DES			= 8,
 	ENCRYPT_RSA_15			= 9,				// RSA with PKCS 1.5 padding
-	ENCRYPT_RSA_OAEP_MGFP1	= 10				// RSA with OAEP
-
+	ENCRYPT_RSA_OAEP_MGFP1	= 10,				// RSA with OAEP and MGFP1
+    ENCRYPT_RSA_OAEP	    = 11,				// RSA with OAEP
+	ENCRYPT_AES128_GCM		= 12,				// 128 bit AES in GCM
+    ENCRYPT_AES192_GCM		= 13,				// 192 bit AES in GCM
+	ENCRYPT_AES256_GCM		= 14				// 256 bit AES in GCM
 };
 
+enum maskGenerationFunc {
+    MGF_NONE                = 0,                // No MGF defined
+    MGF1_SHA1               = 1,                // MGF1-SHA1
+    MGF1_SHA224             = 2,                // MGF1-SHA224
+    MGF1_SHA256             = 3,                // MGF1-SHA256
+    MGF1_SHA384             = 4,                // MGF1-SHA384
+    MGF1_SHA512             = 5                 // MGF1-SHA512
+};
 
 // --------------------------------------------------------------------------------
 //           Some utility functions
@@ -438,7 +463,27 @@ bool encryptionMethod2URI(safeBuffer &uri, encryptionMethod em) {
 		uri = URI_ID_RSA_OAEP_MGFP1;
 		break;
 
-	default:
+	case (ENCRYPT_RSA_OAEP) :
+
+		uri = URI_ID_RSA_OAEP;
+		break;
+
+	case (ENCRYPT_AES128_GCM) :
+
+		uri = URI_ID_AES128_GCM;
+		break;
+
+	case (ENCRYPT_AES192_GCM) :
+
+		uri = URI_ID_AES192_GCM;
+		break;
+
+    case (ENCRYPT_AES256_GCM) :
+
+		uri = URI_ID_AES256_GCM;
+		break;
+
+    default:
 
 		return false;
 
@@ -447,6 +492,46 @@ bool encryptionMethod2URI(safeBuffer &uri, encryptionMethod em) {
 	return true;
 
 }
+
+inline
+bool maskGenerationFunc2URI(safeBuffer &uri, maskGenerationFunc mgf) {
+
+	switch (mgf) {
+
+	case (MGF1_SHA1) :
+
+		uri = URI_ID_MGF1_SHA1;
+		break;
+
+	case (MGF1_SHA224) :
+
+		uri = URI_ID_MGF1_SHA224;
+		break;
+
+	case (MGF1_SHA256) :
+
+		uri = URI_ID_MGF1_SHA256;
+		break;
+
+	case (MGF1_SHA384) :
+
+		uri = URI_ID_MGF1_SHA384;
+		break;
+
+	case (MGF1_SHA512) :
+
+		uri = URI_ID_MGF1_SHA512;
+		break;
+
+	default:
+		return false;
+
+	}
+
+	return true;
+
+}
+
 
 // --------------------------------------------------------------------------------
 //           Constant Strings Class
@@ -472,6 +557,7 @@ public:
 	static const XMLCh * s_unicodeStrURIEC;
 	static const XMLCh * s_unicodeStrURIXPF;
 	static const XMLCh * s_unicodeStrURIXENC;
+    static const XMLCh * s_unicodeStrURIXENC11;
 
 	static const XMLCh * s_unicodeStrURISIGBASE;
 	static const XMLCh * s_unicodeStrURISIGBASEMORE;
@@ -524,13 +610,24 @@ public:
 	static const XMLCh * s_unicodeStrURIAES128_CBC;
 	static const XMLCh * s_unicodeStrURIAES192_CBC;
 	static const XMLCh * s_unicodeStrURIAES256_CBC;
+	static const XMLCh * s_unicodeStrURIAES128_GCM;
+    static const XMLCh * s_unicodeStrURIAES192_GCM;
+	static const XMLCh * s_unicodeStrURIAES256_GCM;
 	static const XMLCh * s_unicodeStrURIKW_AES128;
 	static const XMLCh * s_unicodeStrURIKW_AES192;
 	static const XMLCh * s_unicodeStrURIKW_AES256;
 	static const XMLCh * s_unicodeStrURIKW_3DES;
 	static const XMLCh * s_unicodeStrURIRSA_1_5;
 	static const XMLCh * s_unicodeStrURIRSA_OAEP_MGFP1;
+    static const XMLCh * s_unicodeStrURIRSA_OAEP;
 
+    static const XMLCh * s_unicodeStrURIMGF1_BASE;
+	static const XMLCh * s_unicodeStrURIMGF1_SHA1;
+	static const XMLCh * s_unicodeStrURIMGF1_SHA224;
+	static const XMLCh * s_unicodeStrURIMGF1_SHA256;
+	static const XMLCh * s_unicodeStrURIMGF1_SHA384;
+	static const XMLCh * s_unicodeStrURIMGF1_SHA512;
+   
 	static const XMLCh * s_unicodeStrURIXENC_ELEMENT;
 	static const XMLCh * s_unicodeStrURIXENC_CONTENT;
 
@@ -598,6 +695,9 @@ bool DSIG_EXPORT XSECmapURIToHashMethod(const XMLCh * URI,
 												  hashMethod & hm);
 bool DSIG_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
 							canonicalizationMethod & cm);
+
+bool DSIG_EXPORT XSECmapURIToMaskGenerationFunc(const XMLCh * URI,
+												  maskGenerationFunc & mgf);
 
 #endif /* DSIGCONSTANTS_HEADER */
 

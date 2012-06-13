@@ -118,6 +118,14 @@ void NSSCryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int paramsL
 
 }
 
+void NSSCryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
+
+	if (mgf != MGF1_SHA1)
+		throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+			"NSS::setMGF - NSS does not support pluggable MGF for OAEP");
+
+}
+
 // --------------------------------------------------------------------------------
 //           Get OAEP parameters length
 // --------------------------------------------------------------------------------
@@ -135,6 +143,12 @@ unsigned int NSSCryptoKeyRSA::getOAEPparamsLen(void) const {
 const unsigned char * NSSCryptoKeyRSA::getOAEPparams(void) const {
 
 	return NULL;
+
+}
+
+maskGenerationFunc NSSCryptoKeyRSA::getMGF() const {
+
+    return MGF1_SHA1;
 
 }
 

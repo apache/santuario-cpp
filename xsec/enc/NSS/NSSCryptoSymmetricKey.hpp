@@ -140,12 +140,16 @@ public :
 	 * @param mode mode selection (Currently ECB or CBC mode only)
 	 * @param iv Initialisation Vector to be used.  NULL if one is
 	 * not required, or if IV will be set from data stream
+     * @param tag Authentication tag to be used for AEAD ciphers
+     * @param taglen length of Authentication Tag
 	 * @returns true if the initialisation succeeded.
 	 */
 
 	virtual bool decryptInit(bool doPad = true,
 							 SymmetricKeyMode mode = MODE_CBC,
-							 const unsigned char * iv = NULL);
+							 const unsigned char * iv = NULL,
+                             const unsigned char* tag = NULL,
+                             unsigned int taglen = NULL);
 
 	/**
 	 * \brief Continue an decrypt operation using this key.

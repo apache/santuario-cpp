@@ -116,7 +116,9 @@ private:
 		XSECCryptoKey * key,
 		XSECCryptoKey::KeyType &kt,
 		XSECCryptoSymmetricKey::SymmetricKeyType &skt,
-		bool &isSymmetricKeyWrap);
+		bool &isSymmetricKeyWrap,
+        XSECCryptoSymmetricKey::SymmetricKeyMode &skm,
+        unsigned int& taglen);
 	unsigned int doRSADecryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
@@ -128,6 +130,11 @@ private:
 		XENCEncryptionMethod * encryptionMethod,
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
+		safeBuffer & result);
+	unsigned int doGCMDecryptToSafeBuffer(
+		TXFMChain * cipherText,
+		XSECCryptoKey * key,
+        unsigned int taglen,
 		safeBuffer & result);
 	unsigned int unwrapKeyAES(
    		TXFMChain * cipherText,
@@ -145,7 +152,6 @@ private:
    		TXFMChain * cipherText,
 		XSECCryptoKey * key,
 		safeBuffer & result);
-
 };
 
 /*\@}*/

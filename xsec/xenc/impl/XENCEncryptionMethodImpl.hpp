@@ -61,9 +61,11 @@ public:
 	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement(void) const
 		{return mp_encryptionMethodElement;}
 	virtual const XMLCh * getDigestMethod(void) const;
+	virtual const XMLCh * getMGF(void) const;
 	virtual const XMLCh * getOAEPparams(void) const;
 	virtual int getKeySize(void) const;
 	virtual void setDigestMethod(const XMLCh * method);
+    virtual void setMGF(const XMLCh * mgf);
 	virtual void setOAEPparams(const XMLCh * params);
 	virtual void setKeySize(int size);
 
@@ -83,6 +85,8 @@ private:
 								* mp_algorithmAttr;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode					
 								* mp_digestAlgorithmAttr;
+	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode					
+								* mp_mgfAlgorithmAttr;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode
 								* mp_oaepParamsTextNode;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode

@@ -107,6 +107,17 @@ public:
 	virtual const XMLCh * getOAEPparams(void) const = 0;
 
 	/**
+	 * \brief Get the MGF URI
+	 *
+	 * Return the Algorithm URI represtenting the Mask Generation Function for those
+	 * encryption algorithms that require it (such as RSA with OAEP padding)
+	 *
+	 * @returns the URI representing the mask generation function
+	 */
+
+	virtual const XMLCh * getMGF(void) const = 0;
+
+	/**
 	 * \brief Get the KeySize that was set in this EncryptionMethod.
 	 *
 	 * This field would not normally be used for the encryption algorithms
@@ -153,6 +164,18 @@ public:
 	 */
 
 	virtual void setOAEPparams(const XMLCh * params) = 0;
+
+	/**
+	 * \brief Set the value of the MGF
+	 *
+	 * Sets the MGF element's Algorithm attribute to the passed in
+	 * value - should be a URI string
+	 *
+	 * @param method String to set in the Algorithm attribute.  Will create a
+	 * \<xenc11:MGF\> element if one does not already exist
+	 */
+
+	virtual void setMGF(const XMLCh * mgf) = 0;
 
 	/**
 	 * \brief Set the KeySize that in this EncryptionMethod.

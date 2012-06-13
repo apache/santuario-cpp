@@ -48,7 +48,7 @@ XERCES_CPP_NAMESPACE_USE
 
 NSSCryptoSymmetricKey::NSSCryptoSymmetricKey(XSECCryptoSymmetricKey::SymmetricKeyType type) :
 m_keyType(type),
-m_keyMode(MODE_CBC),
+m_keyMode(MODE_NONE),
 m_initialised(false),
 mp_k(NULL)
 {
@@ -177,11 +177,13 @@ int NSSCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 		return 0;
 
 	if (mp_k == 0) {
-
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"NSS:SymmetricKey - Cannot initialise without key"); 
-
 	}
+    else if (m_keyMode == MODE_NONE) {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"NSS:SymmetricKey - Cannot initialise without mode"); 
+    }
 
 	// Set up the context according to the required cipher type
 
@@ -199,32 +201,36 @@ int NSSCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 			}
 
-      SECItem ivItem;
-      ivItem.data = (unsigned char*)iv;
-      ivItem.len = 8;
-	  int encryptAlg = (m_doPad == true ? CKM_DES3_CBC_PAD : CKM_DES3_CBC);
+            SECItem ivItem;
+            ivItem.data = (unsigned char*)iv;
+            ivItem.len = 8;
+            int encryptAlg = (m_doPad == true ? CKM_DES3_CBC_PAD : CKM_DES3_CBC);
 
-      SECItem * secParam = PK11_ParamFromIV(encryptAlg, &ivItem);
-      mp_ctx = PK11_CreateContextBySymKey(encryptAlg, CKA_DECRYPT, mp_k, secParam);
+            SECItem * secParam = PK11_ParamFromIV(encryptAlg, &ivItem);
+            mp_ctx = PK11_CreateContextBySymKey(encryptAlg, CKA_DECRYPT, mp_k, secParam);
 
-      if (secParam)
-        SECITEM_FreeItem(secParam, PR_TRUE);
+            if (secParam)
+                SECITEM_FreeItem(secParam, PR_TRUE);
 			
-      m_ivSize = 8;
+            m_ivSize = 8;
+        }
+        else if (m_keyMode == MODE_ECB) {
+	        SECItem * secParam = PK11_ParamFromIV(CKM_DES3_ECB, NULL);
+            mp_ctx = PK11_CreateContextBySymKey(CKM_DES3_ECB, CKA_DECRYPT, mp_k, secParam);
+            if (secParam)
+                SECITEM_FreeItem(secParam, PR_TRUE);	
+            m_ivSize = 0;
 		}
-		else {
-			SECItem * secParam = PK11_ParamFromIV(CKM_DES3_ECB, NULL);
-      mp_ctx = PK11_CreateContextBySymKey(CKM_DES3_ECB, CKA_DECRYPT, mp_k, secParam);
-      if (secParam)
-        SECITEM_FreeItem(secParam, PR_TRUE);	
-      m_ivSize = 0;
-		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "NSS:SymmetricKey - Unrecognized cipher mode");
+        }
 
 		break;
 
 	case (XSECCryptoSymmetricKey::KEY_AES_128) :
-  case (XSECCryptoSymmetricKey::KEY_AES_192) :
-  case (XSECCryptoSymmetricKey::KEY_AES_256) :
+    case (XSECCryptoSymmetricKey::KEY_AES_192) :
+    case (XSECCryptoSymmetricKey::KEY_AES_256) :
 
 		// An AES key
 
@@ -236,28 +242,33 @@ int NSSCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 			}
 
-      SECItem ivItem;
-      ivItem.data = (unsigned char*)iv;
-      ivItem.len = 16;
+            SECItem ivItem;
+            ivItem.data = (unsigned char*)iv;
+            ivItem.len = 16;
 
-      SECItem * secParam = PK11_ParamFromIV(CKM_AES_CBC_PAD, &ivItem);
-      mp_ctx = PK11_CreateContextBySymKey(CKM_AES_CBC_PAD, CKA_DECRYPT, mp_k, secParam);
+            SECItem * secParam = PK11_ParamFromIV(CKM_AES_CBC_PAD, &ivItem);
+            mp_ctx = PK11_CreateContextBySymKey(CKM_AES_CBC_PAD, CKA_DECRYPT, mp_k, secParam);
 
-      if (secParam)
-        SECITEM_FreeItem(secParam, PR_TRUE);
+            if (secParam)
+                SECITEM_FreeItem(secParam, PR_TRUE);
 
-      m_ivSize = 16;
+            m_ivSize = 16;
 
 		}
-		else {
+		else if (m_keyMode == MODE_ECB {
+
 			SECItem * secParam = PK11_ParamFromIV(CKM_AES_ECB, NULL);
 			mp_ctx = PK11_CreateContextBySymKey(CKM_AES_ECB, CKA_DECRYPT, mp_k, secParam);
-      if (secParam)
-        SECITEM_FreeItem(secParam, PR_TRUE);
+            if (secParam)
+                SECITEM_FreeItem(secParam, PR_TRUE);
 
-      m_ivSize = 0;
+            m_ivSize = 0;
 
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "NSS:SymmetricKey - Unrecognized cipher mode");
+        }
 
 		break;
 	
@@ -282,7 +293,9 @@ int NSSCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 bool NSSCryptoSymmetricKey::decryptInit(bool doPad, 
 											SymmetricKeyMode mode, 
-											const unsigned char * iv) {
+											const unsigned char * iv,
+                                            const unsigned char* tag,
+                                            unsigned int taglen) {
 
 	m_initialised = false;
     m_ivSent = iv == NULL;
@@ -316,21 +329,21 @@ unsigned int NSSCryptoSymmetricKey::decrypt(const unsigned char * inBuf,
 
 	int outl = inLength - offset;
 
-  SECStatus s = PK11_CipherOp(mp_ctx, plainBuf, &outl, maxOutLength, (unsigned char*)inBuf, inLength);
+    SECStatus s = PK11_CipherOp(mp_ctx, plainBuf, &outl, maxOutLength, (unsigned char*)inBuf, inLength);
 
-  if (s != SECSuccess) {
+    if (s != SECSuccess) {
 
-    throw XSECCryptoException(XSECCryptoException::SymmetricError,
-			"NSS:SymmetricKey - Error during NSS decrypt");
+        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+	    		"NSS:SymmetricKey - Error during NSS decrypt");
 
-  }
+    }
 
-  // remove IV
-  if (m_ivSent) {
-    memmove(plainBuf, &plainBuf[m_ivSize], outl);
-    outl -= m_ivSize;
-    m_ivSent = false;
-  }
+    // remove IV
+    if (m_ivSent) {
+        memmove(plainBuf, &plainBuf[m_ivSize], outl);
+        outl -= m_ivSize;
+        m_ivSent = false;
+    }
 
 	return outl;
 
@@ -345,20 +358,20 @@ unsigned int NSSCryptoSymmetricKey::decryptFinish(unsigned char * plainBuf,
 
 	unsigned int outl = 0;
 
-  SECStatus s = PK11_DigestFinal(mp_ctx, plainBuf, &outl, maxOutLength);
+    SECStatus s = PK11_DigestFinal(mp_ctx, plainBuf, &outl, maxOutLength);
 
-  if (s != SECSuccess) {
+    if (s != SECSuccess) {
 
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"NSS:SymmetricKey - Error during NSS decrypt finalisation");
 
-  }
+    }
 
-  PK11_DestroyContext(mp_ctx, PR_TRUE);
-  mp_ctx = NULL;
-  m_initialised = false;
+    PK11_DestroyContext(mp_ctx, PR_TRUE);
+    mp_ctx = NULL;
+    m_initialised = false;
 
-  return outl;
+    return outl;
 }
 
 // --------------------------------------------------------------------------------
@@ -376,11 +389,13 @@ bool NSSCryptoSymmetricKey::encryptInit(bool doPad,
 	m_keyMode = mode;
 	
 	if (mp_k == 0) {
-
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"NSS:SymmetricKey - Cannot initialise without key"); 
-
 	}
+    else if (m_keyMode == MODE_NONE) {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"NSS:SymmetricKey - Cannot initialise without mode"); 
+    }
 
 	// Do some parameter initialisation
 	m_initialised = true;
@@ -402,47 +417,51 @@ bool NSSCryptoSymmetricKey::encryptInit(bool doPad,
 
 		if (m_keyMode == MODE_CBC) {
 
-			if (iv == NULL) {
+		    if (iv == NULL) {
 				
-        SECStatus s = PK11_GenerateRandom(genIV, 8);
+                SECStatus s = PK11_GenerateRandom(genIV, 8);
 
-        if (s != SECSuccess) {
+                if (s != SECSuccess) {
 
 					throw XSECCryptoException(XSECCryptoException::SymmetricError,
 						"NSS:SymmetricKey - Error generating random IV");
 
-        }
+                }
 
 				usedIV = genIV;
 
-			}
-			else
+		    }
+		    else
 				usedIV = iv;
 
-      SECItem ivItem;
-      ivItem.data = (unsigned char*)usedIV;
-      ivItem.len = 8;
-	  int encryptAlg = (m_doPad == true ? CKM_DES3_CBC_PAD : CKM_DES3_CBC);
+            SECItem ivItem;
+            ivItem.data = (unsigned char*)usedIV;
+            ivItem.len = 8;
+	        int encryptAlg = (m_doPad == true ? CKM_DES3_CBC_PAD : CKM_DES3_CBC);
 
-      SECItem * secParam = PK11_ParamFromIV(encryptAlg, &ivItem);
-      mp_ctx = PK11_CreateContextBySymKey(encryptAlg, CKA_ENCRYPT, mp_k, secParam);
+            SECItem * secParam = PK11_ParamFromIV(encryptAlg, &ivItem);
+            mp_ctx = PK11_CreateContextBySymKey(encryptAlg, CKA_ENCRYPT, mp_k, secParam);
 
-      if (secParam)
-        SECITEM_FreeItem(secParam, PR_TRUE);
+            if (secParam)
+                SECITEM_FreeItem(secParam, PR_TRUE);
 
-      m_ivSize = 8;
+            m_ivSize = 8;
+	    }
+		else if (m_keyMode == MODE_ECB) {
+            mp_ctx = PK11_CreateContextBySymKey(CKM_DES3_ECB, CKA_ENCRYPT, mp_k, NULL);
+
+            m_ivSize = 0;
 		}
-		else {
-      mp_ctx = PK11_CreateContextBySymKey(CKM_DES3_ECB, CKA_ENCRYPT, mp_k, NULL);
-
-      m_ivSize = 0;
-		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "NSS:SymmetricKey - Unsupported DES3 cipher mode");
+        }
 
 		break;
 
 	case (XSECCryptoSymmetricKey::KEY_AES_128) :
-  case (XSECCryptoSymmetricKey::KEY_AES_192) :
-  case (XSECCryptoSymmetricKey::KEY_AES_256) :
+    case (XSECCryptoSymmetricKey::KEY_AES_192) :
+    case (XSECCryptoSymmetricKey::KEY_AES_256) :
 
 		// An AES key
 
@@ -452,12 +471,12 @@ bool NSSCryptoSymmetricKey::encryptInit(bool doPad,
 				
 				SECStatus s = PK11_GenerateRandom(genIV, 16);
 				
-        if (s != SECSuccess) {
+                if (s != SECSuccess) {
 
 					throw XSECCryptoException(XSECCryptoException::SymmetricError,
 						"NSS:SymmetricKey - Error generating random IV");
 
-        }
+                }
 
 				usedIV = genIV;
 
@@ -466,25 +485,29 @@ bool NSSCryptoSymmetricKey::encryptInit(bool doPad,
 				usedIV = iv;
 
 			SECItem ivItem;
-      ivItem.data = (unsigned char*)usedIV;
-      ivItem.len = 16;
+            ivItem.data = (unsigned char*)usedIV;
+            ivItem.len = 16;
 
-      SECItem * secParam = PK11_ParamFromIV(CKM_AES_CBC_PAD, &ivItem);
-      mp_ctx = PK11_CreateContextBySymKey(CKM_AES_CBC_PAD, CKA_ENCRYPT, mp_k, secParam);
+            SECItem * secParam = PK11_ParamFromIV(CKM_AES_CBC_PAD, &ivItem);
+            mp_ctx = PK11_CreateContextBySymKey(CKM_AES_CBC_PAD, CKA_ENCRYPT, mp_k, secParam);
 
-      if (secParam)
-        SECITEM_FreeItem(secParam, PR_TRUE);
+            if (secParam)
+                SECITEM_FreeItem(secParam, PR_TRUE);
 
-      m_ivSize = 16;
+            m_ivSize = 16;
 		}
-		else {
+		else if (m_keyMode == MODE_ECB) {
 			SECItem * secParam = PK11_ParamFromIV(CKM_AES_ECB, NULL);
 			mp_ctx = PK11_CreateContextBySymKey(CKM_AES_ECB, CKA_ENCRYPT, mp_k, secParam);
 			if (secParam)
 				SECITEM_FreeItem(secParam, PR_TRUE);
 
-      m_ivSize = 0;
+            m_ivSize = 0;
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "NSS:SymmetricKey - Unsupported AES cipher mode");
+        }
 
 		break;
 
@@ -496,7 +519,7 @@ bool NSSCryptoSymmetricKey::encryptInit(bool doPad,
 	}
 
 	// Add IV
-	if (m_keyMode == MODE_CBC) {
+	if (m_keyMode == MODE_CBC || m_keyMode == MODE_GCM) {
 
 		memcpy(m_lastBlock, usedIV, m_ivSize);
 
@@ -515,7 +538,7 @@ unsigned int NSSCryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 								 unsigned int inLength,
 								 unsigned int maxOutLength) {
 
-  if (m_initialised == false) {
+    if (m_initialised == false) {
 
 		encryptInit();
 
@@ -543,7 +566,7 @@ unsigned int NSSCryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 
 	}
 
-  SECStatus s = PK11_CipherOp(mp_ctx,
+    SECStatus s = PK11_CipherOp(mp_ctx,
                               &cipherBuf[offset],
                               &outl,
                               maxOutLength - offset,

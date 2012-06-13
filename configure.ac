@@ -17,7 +17,7 @@
 
 # Process this file with autoreconf
 AC_PREREQ(2.50)
-AC_INIT([[XML-Security-C]],[1.6.1],[santuario-dev@apache.org],[xml-security-c])
+AC_INIT([[XML-Security-C]],[1.7.0],[santuario-dev@apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)
@@ -428,6 +428,12 @@ if test x"$use_openssl" != "xno" ; then
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <openssl/evp.h>]], [[ EVP_aes_256_cbc();
     	]])],[AC_MSG_RESULT([yes])
     	AC_DEFINE([XSEC_OPENSSL_HAVE_AES],[1],[Define to 1 if OpenSSL has full AES support.])],
+    	[AC_MSG_RESULT([no])])
+
+    AC_MSG_CHECKING([for GCM support])
+    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <openssl/evp.h>]], [[ EVP_aes_256_gcm();
+    	]])],[AC_MSG_RESULT([yes])
+    	AC_DEFINE([XSEC_OPENSSL_HAVE_GCM],[1],[Define to 1 if OpenSSL has GCM support.])],
     	[AC_MSG_RESULT([no])])
 
     AC_CHECK_DECL(PKCS1_MGF1,

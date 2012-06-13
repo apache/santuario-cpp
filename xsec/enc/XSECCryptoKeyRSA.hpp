@@ -129,6 +129,26 @@ public :
 	virtual const unsigned char * getOAEPparams(void) const = 0;
 
 	/**
+	 * \brief Set the MGF
+	 *
+	 * By default, the library expects crypto implementations to perform
+	 * OAEP padding with MGF_SHA1.  This call allows the library (or user)
+	 * to set a different choice.
+	 *
+	 * @param mgf the MGF constant identifying the function to use
+	 */
+
+	virtual void setMGF(maskGenerationFunc mgf) = 0;
+
+	/**
+	 * \brief Get the MGF
+	 *
+	 * @returns the MGF constant in use
+	 */
+
+	virtual enum maskGenerationFunc getMGF(void) const = 0;
+
+	/**
 	 * \brief Verify a SHA1 PKCS1 encoded signature
 	 *
 	 * The library will call this function to validate an RSA signature

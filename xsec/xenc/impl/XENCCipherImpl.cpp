@@ -128,12 +128,16 @@ void XENCCipherImpl::Initialise(void) {
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIAES128_CBC, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIAES192_CBC, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIAES256_CBC, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIAES128_GCM, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIAES192_GCM, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIAES256_GCM, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIKW_AES128, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIKW_AES192, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIKW_AES256, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIKW_3DES, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_1_5, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_OAEP, def);
 
 }
 
@@ -635,8 +639,6 @@ XSECBinTXFMInputStream * XENCCipherImpl::decryptToBinInputStream(
             XSECAlgorithmMapper::s_defaultEncryptionMapping);
 
     }
-
-    safeBuffer sb("");
 
     if (handler != NULL) {
 

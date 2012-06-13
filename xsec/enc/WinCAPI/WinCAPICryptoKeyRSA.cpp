@@ -155,6 +155,14 @@ void WinCAPICryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int par
 
 }
 
+void WinCAPICryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
+
+	if (mgf != MGF1_SHA1)
+		throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+			"WinCAPI::setMGF - Windows Crypto API does not support pluggable MGF for OAEP");
+
+}
+
 unsigned int WinCAPICryptoKeyRSA::getOAEPparamsLen(void) const {
 
 	return 0;
@@ -167,6 +175,11 @@ const unsigned char * WinCAPICryptoKeyRSA::getOAEPparams(void) const {
 
 }
 
+maskGenerationFunc WinCAPICryptoKeyRSA::getMGF() const {
+
+    return MGF1_SHA1;
+
+}
 
 // --------------------------------------------------------------------------------
 //           Load key from parameters

@@ -161,6 +161,7 @@ const XMLCh * DSIGConstants::s_unicodeStrURIDSIG11;
 const XMLCh * DSIGConstants::s_unicodeStrURIEC;
 const XMLCh * DSIGConstants::s_unicodeStrURIXPF;
 const XMLCh * DSIGConstants::s_unicodeStrURIXENC;
+const XMLCh * DSIGConstants::s_unicodeStrURIXENC11;
 
 const XMLCh * DSIGConstants::s_unicodeStrURISIGBASE;
 const XMLCh * DSIGConstants::s_unicodeStrURISIGBASEMORE;
@@ -212,12 +213,23 @@ const XMLCh * DSIGConstants::s_unicodeStrURI3DES_CBC;
 const XMLCh * DSIGConstants::s_unicodeStrURIAES128_CBC;
 const XMLCh * DSIGConstants::s_unicodeStrURIAES192_CBC;
 const XMLCh * DSIGConstants::s_unicodeStrURIAES256_CBC;
+const XMLCh * DSIGConstants::s_unicodeStrURIAES128_GCM;
+const XMLCh * DSIGConstants::s_unicodeStrURIAES192_GCM;
+const XMLCh * DSIGConstants::s_unicodeStrURIAES256_GCM;
 const XMLCh * DSIGConstants::s_unicodeStrURIKW_AES128;
 const XMLCh * DSIGConstants::s_unicodeStrURIKW_AES192;
 const XMLCh * DSIGConstants::s_unicodeStrURIKW_AES256;
 const XMLCh * DSIGConstants::s_unicodeStrURIKW_3DES;
 const XMLCh * DSIGConstants::s_unicodeStrURIRSA_1_5;
 const XMLCh * DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1;
+const XMLCh * DSIGConstants::s_unicodeStrURIRSA_OAEP;
+
+const XMLCh * DSIGConstants::s_unicodeStrURIMGF1_BASE;
+const XMLCh * DSIGConstants::s_unicodeStrURIMGF1_SHA1;
+const XMLCh * DSIGConstants::s_unicodeStrURIMGF1_SHA224;
+const XMLCh * DSIGConstants::s_unicodeStrURIMGF1_SHA256;
+const XMLCh * DSIGConstants::s_unicodeStrURIMGF1_SHA384;
+const XMLCh * DSIGConstants::s_unicodeStrURIMGF1_SHA512;
 
 const XMLCh * DSIGConstants::s_unicodeStrURIXENC_ELEMENT;
 const XMLCh * DSIGConstants::s_unicodeStrURIXENC_CONTENT;
@@ -247,6 +259,7 @@ void DSIGConstants::create() {
 	s_unicodeStrURIEC = XMLString::transcode(URI_ID_EC);
 	s_unicodeStrURIXPF = XMLString::transcode(URI_ID_XPF);
 	s_unicodeStrURIXENC = XMLString::transcode(URI_ID_XENC);
+    s_unicodeStrURIXENC11 = XMLString::transcode(URI_ID_XENC11);
 
 	s_unicodeStrURISIGBASE = XMLString::transcode(URI_ID_SIG_BASE);
 	s_unicodeStrURISIGBASEMORE = XMLString::transcode(URI_ID_SIG_BASEMORE);
@@ -297,12 +310,23 @@ void DSIGConstants::create() {
 	s_unicodeStrURIAES128_CBC	= XMLString::transcode(URI_ID_AES128_CBC);
 	s_unicodeStrURIAES192_CBC	= XMLString::transcode(URI_ID_AES192_CBC);
 	s_unicodeStrURIAES256_CBC	= XMLString::transcode(URI_ID_AES256_CBC);
-	s_unicodeStrURIKW_AES128 = XMLString::transcode(URI_ID_KW_AES128);
+	s_unicodeStrURIAES128_GCM	= XMLString::transcode(URI_ID_AES128_GCM);
+    s_unicodeStrURIAES192_GCM	= XMLString::transcode(URI_ID_AES192_GCM);
+    s_unicodeStrURIAES256_GCM	= XMLString::transcode(URI_ID_AES256_GCM);
+    s_unicodeStrURIKW_AES128 = XMLString::transcode(URI_ID_KW_AES128);
 	s_unicodeStrURIKW_AES192 = XMLString::transcode(URI_ID_KW_AES192);
 	s_unicodeStrURIKW_AES256 = XMLString::transcode(URI_ID_KW_AES256);
 	s_unicodeStrURIKW_3DES = XMLString::transcode(URI_ID_KW_3DES);
 	s_unicodeStrURIRSA_1_5 = XMLString::transcode(URI_ID_RSA_1_5);
 	s_unicodeStrURIRSA_OAEP_MGFP1 = XMLString::transcode(URI_ID_RSA_OAEP_MGFP1);
+    s_unicodeStrURIRSA_OAEP = XMLString::transcode(URI_ID_RSA_OAEP);
+
+    s_unicodeStrURIMGF1_BASE = XMLString::transcode(URI_ID_MGF1_BASE);
+	s_unicodeStrURIMGF1_SHA1 = XMLString::transcode(URI_ID_MGF1_SHA1);
+	s_unicodeStrURIMGF1_SHA224 = XMLString::transcode(URI_ID_MGF1_SHA224);
+	s_unicodeStrURIMGF1_SHA256 = XMLString::transcode(URI_ID_MGF1_SHA256);
+	s_unicodeStrURIMGF1_SHA384 = XMLString::transcode(URI_ID_MGF1_SHA384);
+	s_unicodeStrURIMGF1_SHA512 = XMLString::transcode(URI_ID_MGF1_SHA512);
 
 	s_unicodeStrURIXENC_ELEMENT = XMLString::transcode(URI_ID_XENC_ELEMENT);
 	s_unicodeStrURIXENC_CONTENT = XMLString::transcode(URI_ID_XENC_CONTENT);
@@ -329,6 +353,7 @@ void DSIGConstants::destroy() {
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIEC);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIXPF);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC);
+    XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC11);
 
 	XSEC_RELEASE_XMLCH(s_unicodeStrURISIGBASE);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURISIGBASEMORE);
@@ -374,12 +399,24 @@ void DSIGConstants::destroy() {
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIAES128_CBC);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIAES192_CBC);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIAES256_CBC);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIAES128_GCM);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIAES192_GCM);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIAES256_GCM);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIKW_AES128);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIKW_AES192);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIKW_AES256);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIKW_3DES);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_1_5);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_OAEP_MGFP1);
+    XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_OAEP);
+
+    XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_BASE);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA1);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA224);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA256);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA384);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA512);
+
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC_ELEMENT);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC_CONTENT);
 
@@ -555,7 +592,6 @@ bool XSECmapURIToHashMethod(const XMLCh * URI,
 
 	hm = HASH_NONE;
 	return false;
-
 }
 
 bool XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
@@ -591,4 +627,39 @@ bool XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
 	}
 
 	return true;
+}
+
+bool XSECmapURIToMaskGenerationFunc(const XMLCh * URI, maskGenerationFunc & mgf) {
+
+
+	// Check this is a known prefix on the URI.
+	xsecsize_t len = XMLString::stringLen(DSIGConstants::s_unicodeStrURIMGF1_BASE);
+	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURIMGF1_BASE, len) == 0) {
+
+        hashMethod hm;
+		if (getHashMethod(&URI[len], hm)) {
+            switch (hm) {
+                case HASH_SHA1:
+                    mgf = MGF1_SHA1;
+                    return true;
+                case HASH_SHA224:
+                    mgf = MGF1_SHA224;
+                    return true;
+                case HASH_SHA256:
+                    mgf = MGF1_SHA256;
+                    return true;
+                case HASH_SHA384:
+                    mgf = MGF1_SHA384;
+                    return true;
+                case HASH_SHA512:
+                    mgf = MGF1_SHA512;
+                    return true;
+                default:
+                    ;
+            }
+        }
+	}
+
+	mgf = MGF_NONE;
+	return false;
 }

@@ -49,7 +49,7 @@ WinCAPICryptoSymmetricKey::WinCAPICryptoSymmetricKey(
 						HCRYPTPROV prov,
 						XSECCryptoSymmetricKey::SymmetricKeyType type) :
 m_keyType(type),
-m_keyMode(MODE_ECB),
+m_keyMode(MODE_NONE),
 m_initialised(false),
 m_doPad(true),
 m_p(prov),
@@ -134,11 +134,13 @@ int WinCAPICryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 		return 0;
 
 	if (m_k == 0) {
-
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"WinCAPI:SymmetricKey - Cannot initialise without key"); 
-
 	}
+    else if (m_keyMode == MODE_NONE) {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"WinCAPI:SymmetricKey - Cannot initialise without mode"); 
+    }
 
 	DWORD cryptMode;
 	if (m_keyMode == MODE_CBC) {
@@ -166,7 +168,7 @@ int WinCAPICryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 		}
 
 	}
-	else {
+	else if (m_keyMode == MODE_ECB) {
 		cryptMode = CRYPT_MODE_ECB;
 
 		if (!CryptSetKeyParam(m_k, KP_MODE, (BYTE *) (&cryptMode), 0)) {
@@ -176,6 +178,10 @@ int WinCAPICryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 		}
 	}
+    else {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"WinCAPI:SymmetricKey - Unknown cipher mode"); 
+    }
 
 	// Set up the context according to the required cipher type
 	switch (m_keyType) {
@@ -210,13 +216,29 @@ int WinCAPICryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 	}
 
-	return (m_keyMode == MODE_CBC ? m_blockSize : 0);
+	// Setup ivSize
+    switch (m_keyMode) {
+        case MODE_CBC:
+            m_ivSize = m_blockSize;
+            break;
+
+        case MODE_GCM:
+            m_ivSize = 12;
+            break;
+
+        default:
+            m_ivSize = 0;
+    }
+
+    return m_ivSize;
 }
 
 
 bool WinCAPICryptoSymmetricKey::decryptInit(bool doPad, 
 											SymmetricKeyMode mode, 
-											const unsigned char * iv) {
+											const unsigned char* iv,
+                                            const unsigned char* tag,
+                                            unsigned int taglen) {
 
 	m_initialised = false;
 	m_doPad = doPad;
@@ -337,11 +359,13 @@ void WinCAPICryptoSymmetricKey::encryptCtxInit(const unsigned char * iv) {
 		return;
 	
 	if (m_keyLen == 0) {
-
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"WinCAPI:SymmetricKey - Cannot initialise without key"); 
-
 	}
+    else if (m_keyMode == MODE_NONE) {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"WinCAPI:SymmetricKey - Cannot initialise without mode"); 
+    }
 
 	m_initialised = true;
 
@@ -388,7 +412,7 @@ void WinCAPICryptoSymmetricKey::encryptCtxInit(const unsigned char * iv) {
 		}
 
 	}
-	else {
+	else if (m_keyMode == MODE_ECB) {
 
 		cryptMode = CRYPT_MODE_ECB;
 
@@ -399,6 +423,10 @@ void WinCAPICryptoSymmetricKey::encryptCtxInit(const unsigned char * iv) {
 
 		}
 	}
+    else {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"OpenSSL:SymmetricKey - Unsupported cipher mode");
+    }
 
 	switch (m_keyType) {
 
@@ -424,6 +452,8 @@ void WinCAPICryptoSymmetricKey::encryptCtxInit(const unsigned char * iv) {
 		m_blockSize = 16;
 		if (m_keyMode == MODE_CBC)
 			m_ivSize = 16;
+        else if (m_keyMode == MODE_GCM)
+            m_ivSize = 12;
 		else 
 			m_ivSize = 0;
 		m_bytesInLastBlock = 0;
@@ -477,7 +507,7 @@ unsigned int WinCAPICryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 	
 	if (m_ivSize > 0) {
 
-		DWORD len = 16;
+		DWORD len = m_ivSize;
 		if (!CryptGetKeyParam(m_k, KP_IV, (unsigned char *) m_lastBlock, &len, 0)) {
 
 			throw XSECCryptoException(XSECCryptoException::SymmetricError,

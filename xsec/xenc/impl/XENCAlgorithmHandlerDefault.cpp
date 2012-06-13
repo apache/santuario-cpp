@@ -33,6 +33,7 @@
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/transformers/TXFMCipher.hpp>
 #include <xsec/transformers/TXFMBase64.hpp>
+#include <xsec/transformers/TXFMSB.hpp>
 #include <xsec/xenc/XENCEncryptionMethod.hpp>
 #include <xsec/enc/XSECCryptoKey.hpp>
 #include <xsec/enc/XSECCryptoSymmetricKey.hpp>
@@ -82,7 +83,9 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 											  XSECCryptoKey * key,
 											  XSECCryptoKey::KeyType &kt,
 											  XSECCryptoSymmetricKey::SymmetricKeyType &skt,
-											  bool &isSymmetricKeyWrap) {
+											  bool &isSymmetricKeyWrap,
+                                              XSECCryptoSymmetricKey::SymmetricKeyMode &skm,
+                                              unsigned int& taglen) {
 
 	if (key == NULL) {
 		throw XSECException(XSECException::CipherError, 
@@ -95,15 +98,16 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 	kt = key->getKeyType();
 	skt = XSECCryptoSymmetricKey::KEY_NONE;
 	isSymmetricKeyWrap = false;
+    skm = XSECCryptoSymmetricKey::MODE_NONE;
 	
 	switch (kt) {
 
 	case XSECCryptoKey::KEY_RSA_PUBLIC :
 	case XSECCryptoKey::KEY_RSA_PAIR :
 	case XSECCryptoKey::KEY_RSA_PRIVATE :
-
 		keyOK = strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_1_5) ||
-			strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1);
+			strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
+            strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_OAEP);
 		break;
 
 	case XSECCryptoKey::KEY_SYMMETRIC :
@@ -115,21 +119,68 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 			switch (skt) {
 
 			case XSECCryptoSymmetricKey::KEY_3DES_192 :
-				isSymmetricKeyWrap = strEquals(uri, DSIGConstants::s_unicodeStrURIKW_3DES);
-				keyOK = isSymmetricKeyWrap || strEquals(uri, DSIGConstants::s_unicodeStrURI3DES_CBC);
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_3DES)) {
+                    keyOK = true;
+                    isSymmetricKeyWrap = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURI3DES_CBC)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
 				break;
+
 			case XSECCryptoSymmetricKey::KEY_AES_128 :
-				isSymmetricKeyWrap = strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128);
-				keyOK =  isSymmetricKeyWrap || strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_CBC);
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128)) {
+                    keyOK = true;
+                    isSymmetricKeyWrap = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_CBC)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_GCM)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_GCM;
+                    taglen = 16;
+                }
 				break;
+
 			case XSECCryptoSymmetricKey::KEY_AES_192 :
-				isSymmetricKeyWrap = strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192);
-				keyOK =  isSymmetricKeyWrap || strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_CBC);
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192)) {
+                    keyOK = true;
+                    isSymmetricKeyWrap = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_CBC)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_GCM)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_GCM;
+                    taglen = 16;
+                }
 				break;
+
 			case XSECCryptoSymmetricKey::KEY_AES_256 :
-				isSymmetricKeyWrap = strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256);
-				keyOK =  isSymmetricKeyWrap || strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC);
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256)) {
+                    keyOK = true;
+                    isSymmetricKeyWrap = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                }
+                else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_GCM)) {
+                    keyOK = true;
+                    skm = XSECCryptoSymmetricKey::MODE_GCM;
+                    taglen = 16;
+                }
 				break;
+
 			default:
 				break;
 			}
@@ -516,23 +567,101 @@ bool XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 	XSECCryptoKey::KeyType kt;
 	XSECCryptoSymmetricKey::SymmetricKeyType skt;
 	bool isKeyWrap = false;
+    XSECCryptoSymmetricKey::SymmetricKeyMode skm;
+    unsigned int taglen;
 
-	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap);
-	if (kt != XSECCryptoKey::KEY_SYMMETRIC || isKeyWrap == true) {
+	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
+    if (kt != XSECCryptoKey::KEY_SYMMETRIC || isKeyWrap == true) {
 		throw XSECException(XSECException::CipherError, 
 			"XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM - only supports bulk symmetric algorithms");
 	}
 
+    if (skm == XSECCryptoSymmetricKey::MODE_GCM) {
+
+        // GCM doesn't fit the pipelined model of the existing code, so we have a custom
+        // routine that decrypts to a safeBuffer directly.
+        safeBuffer result;
+        unsigned int sz = doGCMDecryptToSafeBuffer(cipherText, key, taglen, result);
+
+        // Now we hijack the original tansform chain with a safeBuffer-sourced link.
+        TXFMSB* tsb;
+        XSECnew(tsb, TXFMSB(doc));
+        tsb->setInput(result, sz);
+        cipherText->appendTxfm(tsb);
+        result.cleanseBuffer();
+        return true;
+    }
+
+
 	// Add the decryption TXFM
-
-	TXFMCipher * tcipher;
+	TXFMCipher* tcipher;
 	XSECnew(tcipher, TXFMCipher(doc, key, false));
-
 	cipherText->appendTxfm(tcipher);
 
 	return true;
 }
 
+
+// --------------------------------------------------------------------------------
+//			GCM SafeBuffer decryption
+// --------------------------------------------------------------------------------
+
+unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
+		TXFMChain * cipherText,
+		XSECCryptoKey * key,
+        unsigned int taglen,
+		safeBuffer & result) {
+
+	// Only works with symmetric key
+    if (key->getKeyType() != XSECCryptoKey::KEY_SYMMETRIC) {
+		throw XSECException(XSECException::CipherError, 
+			"XENCAlgorithmHandlerDefault - GCM Decrypt must use symmetric key");
+	}
+
+    // First read in all the data so we can get to the tag.
+    safeBuffer cipherBuf("");
+    XMLByte inbuf[3072];
+    unsigned int szTotal = 0, sz = cipherText->getLastTxfm()->readBytes(inbuf, 3072);
+    while (sz > 0) {
+        cipherBuf.sbMemcpyIn(szTotal, inbuf, sz);
+        szTotal += sz;
+        sz = cipherText->getLastTxfm()->readBytes(inbuf, 3072);
+    }
+
+    if (szTotal <= taglen) {
+		throw XSECException(XSECException::CipherError, 
+			"XENCAlgorithmHandlerDefault - GCM ciphertext size not large enough to include authentication tag");
+    }
+
+    const unsigned char* cipherPtr = cipherBuf.rawBuffer();
+
+    // Init the cipher with the tag at the end of the cipher text and omit it from later decryption.
+    szTotal -= taglen;
+    ((XSECCryptoSymmetricKey*) key)->decryptInit(false, XSECCryptoSymmetricKey::MODE_GCM, NULL, cipherPtr + szTotal, taglen);
+
+    unsigned int plainOffset = 0;
+    do {
+        // Feed the data in at most 2048-byte chunks.
+        sz = ((XSECCryptoSymmetricKey*) key)->decrypt(cipherPtr, inbuf, (szTotal > 2048 ? 2048 : szTotal), 3072);
+        cipherPtr += (szTotal > 2048 ? 2048 : szTotal);
+        szTotal -= (szTotal > 2048 ? 2048 : szTotal);
+        if (sz > 0) {
+            result.sbMemcpyIn(plainOffset, inbuf, sz);
+            plainOffset += sz;
+        }
+    } while (szTotal > 0);
+
+    // Wrap it up.
+    sz = ((XSECCryptoSymmetricKey*) key)->decryptFinish(inbuf, 3072);
+    if (sz > 0) {
+        result.sbMemcpyIn(plainOffset, inbuf, sz);
+        plainOffset += sz;
+    }
+
+    // In case any plaintext is left lying around.
+    memset(inbuf, 0, 3072);
+    return plainOffset;
+}
 
 // --------------------------------------------------------------------------------
 //			RSA SafeBuffer decryption
@@ -586,13 +715,14 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 												  XSECCryptoKeyRSA::PAD_PKCS_1_5, 
 												  HASH_NONE);
 	}
-	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1)) {
+	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
+             strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
 
         hashMethod hm;
 	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
 
 	    // Is this a URI we recognize?
-	    if (!digmeth || !*digmeth) {
+	    if (!digmeth|| !*digmeth) {
 	        hm = HASH_SHA1;
 	    }
 	    else if (!XSECmapURIToHashMethod(digmeth, hm)) {
@@ -603,6 +733,20 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 	        throw XSECException(XSECException::AlgorithmMapperError,
 	            sb.rawXMLChBuffer());
 	    }
+
+        const XMLCh* mgfalg = encryptionMethod->getMGF();
+        if (mgfalg && *mgfalg) {
+            maskGenerationFunc mgf;
+            if (!XSECmapURIToMaskGenerationFunc(mgfalg, mgf)) {
+	            safeBuffer sb;
+	            sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown MGF URI : ");
+	            sb.sbXMLChCat(mgfalg);
+
+	            throw XSECException(XSECException::AlgorithmMapperError,
+	                sb.rawXMLChBuffer());
+            }
+            rsa->setMGF(mgf);
+        }
 
 		// Read out any OAEP params
 		unsigned char * oaepParamsBuf = NULL;
@@ -667,6 +811,8 @@ unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
 	XSECCryptoKey::KeyType kt;
 	XSECCryptoSymmetricKey::SymmetricKeyType skt;
 	bool isKeyWrap = false;
+    XSECCryptoSymmetricKey::SymmetricKeyMode skm;
+    unsigned int taglen;
 
 	if (encryptionMethod == NULL) {
 		throw XSECException(XSECException::CipherError,
@@ -675,7 +821,7 @@ unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
 
 
 	// Check the uri against the key type
-	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap);
+	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
 
 	// RSA?
 	if (kt == XSECCryptoKey::KEY_RSA_PAIR || 
@@ -715,14 +861,20 @@ unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
 
 	}
 
-	// It's symmetric and it's not a key wrap, so just treat as a block algorithm
+    if (skm == XSECCryptoSymmetricKey::MODE_GCM) {
+        // GCM doesn't fit the pipelined model of the existing code, so we have a custom
+        // routine that decrypts to a safeBuffer directly.
+        return doGCMDecryptToSafeBuffer(cipherText, key, taglen, result);
+    }
+
+	// It's symmetric and it's not a key wrap or GCM, so just treat as a block algorithm.
 
 	TXFMCipher * tcipher;
 	XSECnew(tcipher, TXFMCipher(doc, key, false));
 
 	cipherText->appendTxfm(tcipher);
 
-	// Do the decrypt to the safeBuffer
+	// Do the decrypt to the safeBuffer.
 
 	result.sbStrcpyIn("");
 	unsigned int offset = 0;
@@ -794,9 +946,41 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 												  HASH_NONE);
 	}
 
-	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1)) {
+	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
+            strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
+        
+        hashMethod hm;
+        if (encryptionMethod->getDigestMethod() == NULL) {
+            hm = HASH_SHA1;
+		    encryptionMethod->setDigestMethod(DSIGConstants::s_unicodeStrURISHA1);
+        }
+        else if (!XSECmapURIToHashMethod(encryptionMethod->getDigestMethod(), hm)) {
+	        safeBuffer sb;
+	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
+	        sb.sbXMLChCat(encryptionMethod->getDigestMethod());
 
-		encryptionMethod->setDigestMethod(DSIGConstants::s_unicodeStrURISHA1);
+	        throw XSECException(XSECException::AlgorithmMapperError,
+	            sb.rawXMLChBuffer());
+	    }
+
+        const XMLCh* mgfalg = encryptionMethod->getMGF();
+        if (mgfalg && *mgfalg) {
+            maskGenerationFunc mgf;
+            if (!XSECmapURIToMaskGenerationFunc(mgfalg, mgf)) {
+	            safeBuffer sb;
+	            sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown MGF URI : ");
+	            sb.sbXMLChCat(mgfalg);
+
+	            throw XSECException(XSECException::AlgorithmMapperError,
+	                sb.rawXMLChBuffer());
+            }
+            rsa->setMGF(mgf);
+        }
+        else if (rsa->getMGF() != MGF1_SHA1) {
+            safeBuffer sb;
+            if (maskGenerationFunc2URI(sb, rsa->getMGF()))
+                encryptionMethod->setMGF(sb.rawXMLChBuffer());
+        }
 
 		// Check for OAEP params
 		int oaepParamsLen = rsa->getOAEPparamsLen();
@@ -825,7 +1009,7 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 										  offset, 
 										  rsa->getLength(), 
 										  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-										  HASH_SHA1);
+										  hm);
 
 	}
 	else {
@@ -868,6 +1052,8 @@ bool XENCAlgorithmHandlerDefault::encryptToSafeBuffer(
 	XSECCryptoKey::KeyType kt;
 	XSECCryptoSymmetricKey::SymmetricKeyType skt;
 	bool isKeyWrap = false;
+    XSECCryptoSymmetricKey::SymmetricKeyMode skm;
+    unsigned int taglen;
 
 	if (encryptionMethod == NULL) {
 		throw XSECException(XSECException::CipherError,
@@ -876,7 +1062,7 @@ bool XENCAlgorithmHandlerDefault::encryptToSafeBuffer(
 
 
 	// Check the uri against the key type
-	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap);
+	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
 
 	// RSA?
 	if (kt == XSECCryptoKey::KEY_RSA_PRIVATE || 
@@ -955,6 +1141,15 @@ XSECCryptoKey * XENCAlgorithmHandlerDefault::createKeyForURI(
 		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
 	}
 	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC)) {
+		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
+	}
+	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_GCM)) {
+		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
+	}
+	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_GCM)) {
+		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
+	}
+	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_GCM)) {
 		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
 	}
 

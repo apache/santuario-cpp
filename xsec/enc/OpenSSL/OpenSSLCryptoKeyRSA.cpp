@@ -100,15 +100,16 @@ namespace {
     }
 #endif
 
-    static int MGF1(unsigned char *mask, long len, const unsigned char *seed, long seedlen)
+    static int MGF1(unsigned char *mask, long len, const unsigned char *seed, long seedlen, const EVP_MD* digest)
 	{
-	    return PKCS1_MGF1(mask, len, seed, seedlen, EVP_sha1());
+	    return PKCS1_MGF1(mask, len, seed, seedlen, digest);
 	}
 
     int RSA_padding_add_PKCS1_OAEP(unsigned char *to, int tlen,
 	    const unsigned char *from, int flen,
 	    const unsigned char *param, int plen,
-        const EVP_MD* digest)
+        const EVP_MD* digest,
+        const EVP_MD* mgf_digest)
 	{
 	    int i, digestlen = EVP_MD_size(digest), emlen = tlen - 1;
 	    unsigned char *db, *seed;
@@ -147,12 +148,12 @@ namespace {
 		    return 0;
 		    }
 
-	    if (MGF1(dbmask, emlen - digestlen, seed, digestlen) < 0)
+	    if (MGF1(dbmask, emlen - digestlen, seed, digestlen, mgf_digest) < 0)
 		    return 0;
 	    for (i = 0; i < emlen - digestlen; i++)
 		    db[i] ^= dbmask[i];
 
-	    if (MGF1(seedmask, digestlen, db, emlen - digestlen) < 0)
+	    if (MGF1(seedmask, digestlen, db, emlen - digestlen, mgf_digest) < 0)
 		    return 0;
 	    for (i = 0; i < digestlen; i++)
 		    seed[i] ^= seedmask[i];
@@ -164,7 +165,8 @@ namespace {
     int RSA_padding_check_PKCS1_OAEP(unsigned char *to, int tlen,
 	    const unsigned char *from, int flen, int num,
 	    const unsigned char *param, int plen,
-        const EVP_MD* digest)
+        const EVP_MD* digest,
+        const EVP_MD* mgf_digest)
 	{
 	    int i, digestlen = EVP_MD_size(digest), dblen, mlen = -1;
 	    const unsigned char *maskeddb;
@@ -207,12 +209,12 @@ namespace {
 
 	    maskeddb = padded_from + digestlen;
 
-	    if (MGF1(seed, digestlen, maskeddb, dblen))
+	    if (MGF1(seed, digestlen, maskeddb, dblen, mgf_digest))
 		    return -1;
 	    for (i = 0; i < digestlen; i++)
 		    seed[i] ^= padded_from[i];
   
-	    if (MGF1(db, dblen, seed, digestlen))
+	    if (MGF1(db, dblen, seed, digestlen, mgf_digest))
 		    return -1;
 	    for (i = 0; i < dblen; i++)
 		    db[i] ^= maskeddb[i];
@@ -259,7 +261,8 @@ namespace {
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
 mp_rsaKey(NULL),
 mp_oaepParams(NULL),
-m_oaepParamsLen(0) {
+m_oaepParamsLen(0),
+m_mgf(MGF1_SHA1) {
 };
 
 OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {
@@ -291,6 +294,12 @@ void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int par
 
 }
 
+void OpenSSLCryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
+
+    m_mgf = mgf;
+
+}
+
 unsigned int OpenSSLCryptoKeyRSA::getOAEPparamsLen(void) const {
 
 	return m_oaepParamsLen;
@@ -300,6 +309,12 @@ unsigned int OpenSSLCryptoKeyRSA::getOAEPparamsLen(void) const {
 const unsigned char * OpenSSLCryptoKeyRSA::getOAEPparams(void) const {
 
 	return mp_oaepParams;
+
+}
+
+maskGenerationFunc OpenSSLCryptoKeyRSA::getMGF() const {
+
+    return m_mgf;
 
 }
 
@@ -350,6 +365,7 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) {
 
 	mp_oaepParams = NULL;
 	m_oaepParamsLen = 0;
+    m_mgf = MGF1_SHA1;
 
 	mp_rsaKey = RSA_new();
 
@@ -654,9 +670,11 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 
 			unsigned char * tBuf;
 			int num = RSA_size(mp_rsaKey);
-			XSECnew(tBuf, unsigned char[inLength]);
+			XSECnew(tBuf, unsigned char[num]);
 			ArrayJanitor<unsigned char> j_tBuf(tBuf);
             const EVP_MD* evp_md = NULL;
+            const EVP_MD* mgf_md = NULL;
+
             switch (hm) {
                 case HASH_SHA1:
                     evp_md = EVP_get_digestbyname("SHA1");
@@ -678,6 +696,29 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
             if (evp_md == NULL) {
     			throw XSECCryptoException(XSECCryptoException::MDError,
 	        		"OpenSSL:RSA - OAEP digest algorithm not supported by this version of OpenSSL"); 
+            }
+
+            switch (m_mgf) {
+                case MGF1_SHA1:
+                    mgf_md = EVP_get_digestbyname("SHA1");
+                    break;
+                case MGF1_SHA224:
+                    mgf_md = EVP_get_digestbyname("SHA224");
+                    break;
+                case MGF1_SHA256:
+                    mgf_md = EVP_get_digestbyname("SHA256");
+                    break;
+                case MGF1_SHA384:
+                    mgf_md = EVP_get_digestbyname("SHA384");
+                    break;
+                case MGF1_SHA512:
+                    mgf_md = EVP_get_digestbyname("SHA512");
+                    break;
+            }
+
+            if (mgf_md == NULL) {
+    			throw XSECCryptoException(XSECCryptoException::MDError,
+	        		"OpenSSL:RSA - MGF not supported by this version of OpenSSL");
             }
 
 			decryptSize = RSA_private_decrypt(inLength,
@@ -708,7 +749,8 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 													   num,
 													   mp_oaepParams,
 													   m_oaepParamsLen,
-                                                       evp_md);
+                                                       evp_md,
+                                                       mgf_md);
 
 			if (decryptSize < 0) {
 
@@ -799,6 +841,8 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 			}
 
             const EVP_MD* evp_md = NULL;
+            const EVP_MD* mgf_md = NULL;
+
             switch (hm) {
                 case HASH_SHA1:
                     evp_md = EVP_get_digestbyname("SHA1");
@@ -822,6 +866,29 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 	        		"OpenSSL:RSA - OAEP digest algorithm not supported by this version of OpenSSL"); 
             }
 
+            switch (m_mgf) {
+                case MGF1_SHA1:
+                    mgf_md = EVP_get_digestbyname("SHA1");
+                    break;
+                case MGF1_SHA224:
+                    mgf_md = EVP_get_digestbyname("SHA224");
+                    break;
+                case MGF1_SHA256:
+                    mgf_md = EVP_get_digestbyname("SHA256");
+                    break;
+                case MGF1_SHA384:
+                    mgf_md = EVP_get_digestbyname("SHA384");
+                    break;
+                case MGF1_SHA512:
+                    mgf_md = EVP_get_digestbyname("SHA512");
+                    break;
+            }
+
+            if (mgf_md == NULL) {
+    			throw XSECCryptoException(XSECCryptoException::MDError,
+	        		"OpenSSL:RSA - MGF not supported by this version of OpenSSL");
+            }
+
 			XSECnew(tBuf, unsigned char[num]);
 			ArrayJanitor<unsigned char> j_tBuf(tBuf);
 
@@ -837,7 +904,8 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 													 inLength,
 													 mp_oaepParams,
 													 m_oaepParamsLen,
-                                                     evp_md);
+                                                     evp_md,
+                                                     mgf_md);
 
 			if (encryptSize <= 0) {
 

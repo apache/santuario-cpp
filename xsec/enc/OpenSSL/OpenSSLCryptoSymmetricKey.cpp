@@ -50,8 +50,9 @@ XERCES_CPP_NAMESPACE_USE;
 
 OpenSSLCryptoSymmetricKey::OpenSSLCryptoSymmetricKey(XSECCryptoSymmetricKey::SymmetricKeyType type) :
 m_keyType(type),
-m_keyMode(MODE_CBC),
+m_keyMode(MODE_NONE),
 m_keyBuf(""),
+m_tagBuf(""),
 m_keyLen(0),
 m_initialised(false) {
 
@@ -111,35 +112,37 @@ void OpenSSLCryptoSymmetricKey::setKey(const unsigned char * key, unsigned int k
 //           Decrypt
 // --------------------------------------------------------------------------------
 
-int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
+int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const unsigned char* tag, unsigned taglen) {
 
 	// Returns amount of IV data used (in bytes)
 	// Sets m_initialised iff the key is OK and the IV is OK.
+
+    // GCM modes will leave this unset until the second call with the iv
 
 	if (m_initialised)
 		return 0;
 
 	if (m_keyLen == 0) {
-
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"OpenSSL:SymmetricKey - Cannot initialise without key"); 
-
 	}
+    else if (m_keyMode == MODE_NONE) {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"OpenSSL:SymmetricKey - Cannot initialise without mode"); 
+    }
 
 	// Set up the context according to the required cipher type
 
 	switch (m_keyType) {
 
-	case (XSECCryptoSymmetricKey::KEY_3DES_192) :
+	case (KEY_3DES_192) :
 
 		// A 3DES key
 
 		if (m_keyMode == MODE_CBC) {
 
 			if (iv == NULL) {
-
 				return 0;	// Cannot initialise without an IV
-
 			}
 
 			/* Do not use "_ex" calls yet - as want backwards compatibility
@@ -152,14 +155,18 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 #endif
 			m_ivSize = 8;
 		}
-		else {
+		else if (m_keyMode == MODE_ECB) {
 #if defined(XSEC_OPENSSL_CONST_BUFFERS)
-			EVP_DecryptInit(&m_ctx, EVP_des_ede3(), m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit(&m_ctx, EVP_des_ecb(), m_keyBuf.rawBuffer(), NULL);
 #else
-			EVP_DecryptInit(&m_ctx, EVP_des_ede3(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit(&m_ctx, EVP_des_ecb(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
 #endif
 			m_ivSize = 0;
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported DES3 cipher mode"); 
+        }
 
 
 		m_blockSize = 8;
@@ -167,84 +174,168 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 #if defined (XSEC_OPENSSL_HAVE_AES)
 
-	case (XSECCryptoSymmetricKey::KEY_AES_128) :
+	case (KEY_AES_128) :
 
 		// An AES key
 
 		if (m_keyMode == MODE_CBC) {
 
 			if (iv == NULL) {
-
 				return 0;	// Cannot initialise without an IV
-
 			}
 
 			EVP_DecryptInit_ex(&m_ctx, EVP_aes_128_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
 
 		}
-		else {
+#if defined (XSEC_OPENSSL_HAVE_GCM)
+        else if (m_keyMode == MODE_GCM) {
+
+            if (tag != NULL && taglen != 16) {
+		        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "OpenSSL:SymmetricKey - Invalid authentication tag"); 
+            }
+
+            if (iv == NULL) {
+                // Just save off tag for later.
+                m_tagBuf.sbMemcpyIn(tag, taglen);
+                return 0;
+            }
+
+            if (m_tagBuf.sbRawBufferSize() == 0) {
+		        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "OpenSSL:SymmetricKey - Authentication tag not set"); 
+            }
+
+            // We have everything, so we can fully init.
+            EVP_CipherInit(&m_ctx, EVP_aes_128_gcm(), NULL, NULL, 0);
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
+            EVP_CipherInit(&m_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+		}
+#endif
+		else if (m_keyMode == MODE_ECB) {
 
 			EVP_DecryptInit_ex(&m_ctx, EVP_aes_128_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported AES cipher mode"); 
+        }
 
 		m_blockSize = 16;
 		break;
 	
-	case (XSECCryptoSymmetricKey::KEY_AES_192) :
+	case (KEY_AES_192) :
 
 		// An AES key
 
 		if (m_keyMode == MODE_CBC) {
 
 			if (iv == NULL) {
-
 				return 0;	// Cannot initialise without an IV
-
 			}
 
 			EVP_DecryptInit_ex(&m_ctx, EVP_aes_192_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
 
 		}
-		else {
+#if defined (XSEC_OPENSSL_HAVE_GCM)
+        else if (m_keyMode == MODE_GCM) {
+
+            if (tag != NULL && taglen != 16) {
+		        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "OpenSSL:SymmetricKey - Invalid authentication tag"); 
+            }
+
+            if (iv == NULL) {
+                // Just save off tag for later.
+                m_tagBuf.sbMemcpyIn(tag, taglen);
+                return 0;
+            }
+
+            if (m_tagBuf.sbRawBufferSize() == 0) {
+		        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "OpenSSL:SymmetricKey - Authentication tag not set"); 
+            }
+
+            // We have everything, so we can fully init.
+            EVP_CipherInit(&m_ctx, EVP_aes_192_gcm(), NULL, NULL, 0);
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
+            EVP_CipherInit(&m_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+
+		}
+#endif
+		else if (m_keyMode == MODE_ECB) {
 
 			EVP_DecryptInit_ex(&m_ctx, EVP_aes_192_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported AES cipher mode"); 
+        }
 
 		m_blockSize = 16;
 		break;
 
-	case (XSECCryptoSymmetricKey::KEY_AES_256) :
+	case (KEY_AES_256) :
 
 		// An AES key
 
 		if (m_keyMode == MODE_CBC) {
 
 			if (iv == NULL) {
-
 				return 0;	// Cannot initialise without an IV
-
 			}
 
 			EVP_DecryptInit_ex(&m_ctx, EVP_aes_256_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
 
 		}
-		else {
+#if defined (XSEC_OPENSSL_HAVE_GCM)
+        else if (m_keyMode == MODE_GCM) {
+
+            if (tag != NULL && taglen != 16) {
+		        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "OpenSSL:SymmetricKey - Invalid authentication tag"); 
+            }
+
+            if (iv == NULL) {
+                // Just save off tag for later.
+                m_tagBuf.sbMemcpyIn(tag, taglen);
+                return 0;
+            }
+
+            if (m_tagBuf.sbRawBufferSize() == 0) {
+		        throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			        "OpenSSL:SymmetricKey - Authentication tag not set"); 
+            }
+
+            // We have everything, so we can fully init.
+            EVP_CipherInit(&m_ctx, EVP_aes_256_gcm(), NULL, NULL, 0);
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
+            EVP_CipherInit(&m_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+
+		}
+#endif
+		else if (m_keyMode == MODE_ECB) {
 
 			EVP_DecryptInit_ex(&m_ctx, EVP_aes_256_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
-
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported AES cipher mode"); 
+        }
 
 		m_blockSize = 16;
-
 		break;
 #else 
 
-	case (XSECCryptoSymmetricKey::KEY_AES_128) :
-	case (XSECCryptoSymmetricKey::KEY_AES_192) :
-	case (XSECCryptoSymmetricKey::KEY_AES_256) :
+	case (KEY_AES_128) :
+	case (KEY_AES_192) :
+	case (KEY_AES_256) :
 
 		throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
 			 "OpenSSL:SymmetricKey - AES not supported in this version of OpenSSL");
@@ -253,14 +344,25 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 	
 	default :
 
-		// Cannot do this without an IV
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"OpenSSL:SymmetricKey - Unknown key type"); 
 
 	}
 
+
 	// Setup ivSize
-	m_ivSize = (m_keyMode == MODE_CBC ? m_blockSize : 0);
+    switch (m_keyMode) {
+        case MODE_CBC:
+            m_ivSize = m_blockSize;
+            break;
+
+        case MODE_GCM:
+            m_ivSize = 12;
+            break;
+
+        default:
+            m_ivSize = 0;
+    }
 
 	// Reset some parameters
 	m_initialised = true;
@@ -279,12 +381,14 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
 
 bool OpenSSLCryptoSymmetricKey::decryptInit(bool doPad, 
 											SymmetricKeyMode mode,
-											const unsigned char * iv) {
+											const unsigned char* iv,
+                                            const unsigned char* tag,
+                                            unsigned int taglen) {
 
 	m_doPad = doPad;
 	m_keyMode = mode;
 	m_initialised = false;
-	decryptCtxInit(iv);
+	decryptCtxInit(iv, tag, taglen);
 	return true;
 
 }
@@ -314,12 +418,16 @@ unsigned int OpenSSLCryptoSymmetricKey::decrypt(const unsigned char * inBuf,
 
 #endif
 
+    // If cipher isn't initialized yet, we call back in with the ciphertext to supply the IV
+    // For GCM, the tag has to have been supplied already or this will fail.
+
 	unsigned int offset = 0;
 	if (!m_initialised) {
-		offset = decryptCtxInit(inBuf);
-		if (offset > inLength) {
+        offset = decryptCtxInit(inBuf, NULL, 0);
+		
+        if (offset > inLength) {
 			throw XSECCryptoException(XSECCryptoException::SymmetricError,
-			"OpenSSL:SymmetricKey - Not enough data passed in to get IV");
+    			"OpenSSL:SymmetricKey - Not enough data passed in to get IV");
 		}
 	}
 
@@ -488,11 +596,13 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 	m_keyMode = mode;
 	
 	if (m_keyLen == 0) {
-
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"OpenSSL:SymmetricKey - Cannot initialise without key"); 
-
 	}
+    else if (m_keyMode == MODE_NONE) {
+		throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			"OpenSSL:SymmetricKey - Cannot initialise without mode"); 
+    }
 
 	// Do some parameter initialisation
 	m_initialised = true;
@@ -526,8 +636,9 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 				usedIV = genIV;
 
 			}
-			else
+			else {
 				usedIV = iv;
+            }
 
 #if defined (XSEC_OPENSSL_CONST_BUFFERS)
 			EVP_EncryptInit(&m_ctx, EVP_des_ede3_cbc(), m_keyBuf.rawBuffer(), usedIV);
@@ -535,13 +646,17 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			EVP_EncryptInit(&m_ctx, EVP_des_ede3_cbc(), (unsigned char *) m_keyBuf.rawBuffer(), (unsigned char *) usedIV);
 #endif
 		}
-		else {
+		else if (m_keyMode == MODE_ECB) {
 #if defined (XSEC_OPENSSL_CONST_BUFFERS)
 			EVP_EncryptInit(&m_ctx, EVP_des_ede3_ecb(), m_keyBuf.rawBuffer(), NULL);
 #else
 			EVP_EncryptInit(&m_ctx, EVP_des_ede3(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
 #endif
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported DES3 cipher mode"); 
+        }
 
 
 		m_blockSize = 8;
@@ -571,11 +686,35 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 
 			EVP_EncryptInit_ex(&m_ctx, EVP_aes_128_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
 		}
-		else {
+		else if (m_keyMode == MODE_ECB) {
 
 			EVP_EncryptInit_ex(&m_ctx, EVP_aes_128_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
+#ifdef XSEC_OPENSSL_HAVE_GCM
+		else if (m_keyMode == MODE_GCM) {
+
+			if (iv == NULL) {
+				
+				bool res = ((RAND_status() == 1) && (RAND_bytes(genIV, 12) == 1));
+				if (res == false) {
+					throw XSECCryptoException(XSECCryptoException::SymmetricError,
+						"OpenSSL:SymmetricKey - Error generating random IV");
+				}
+
+				usedIV = genIV;
+
+			}
+			else
+				usedIV = iv;
+
+			EVP_EncryptInit_ex(&m_ctx, EVP_aes_128_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
+		}
+#endif
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported AES cipher mode");
+        }
 
 		m_blockSize = 16;
 		break;
@@ -603,11 +742,34 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			EVP_EncryptInit_ex(&m_ctx, EVP_aes_192_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
 
 		}
+#ifdef XSEC_OPENSSL_HAVE_GCM
+		else if (m_keyMode == MODE_GCM) {
 
-		else {
+			if (iv == NULL) {
+				
+				bool res = ((RAND_status() == 1) && (RAND_bytes(genIV, 12) == 1));
+				if (res == false) {
+					throw XSECCryptoException(XSECCryptoException::SymmetricError,
+						"OpenSSL:SymmetricKey - Error generating random IV");
+				}
+
+				usedIV = genIV;
+
+			}
+			else
+				usedIV = iv;
+
+			EVP_EncryptInit_ex(&m_ctx, EVP_aes_192_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
+		}
+#endif
+		else if (m_keyMode == MODE_ECB) {
 
 			EVP_EncryptInit_ex(&m_ctx, EVP_aes_192_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported AES cipher mode");
+        }
 
 		m_blockSize = 16;
 		break;
@@ -634,11 +796,35 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			EVP_EncryptInit_ex(&m_ctx, EVP_aes_256_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
 
 		}
-		else {
+#ifdef XSEC_OPENSSL_HAVE_GCM
+		else if (m_keyMode == MODE_GCM) {
+
+			if (iv == NULL) {
+				
+				bool res = ((RAND_status() == 1) && (RAND_bytes(genIV, 12) == 1));
+				if (res == false) {
+					throw XSECCryptoException(XSECCryptoException::SymmetricError,
+						"OpenSSL:SymmetricKey - Error generating random IV");
+				}
+
+				usedIV = genIV;
+
+			}
+			else
+				usedIV = iv;
+
+			EVP_EncryptInit_ex(&m_ctx, EVP_aes_256_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
+		}
+#endif
+		else if (m_keyMode == MODE_ECB) {
 
 			EVP_EncryptInit_ex(&m_ctx, EVP_aes_256_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSL:SymmetricKey - Unsupported AES cipher mode");
+        }
 
 		m_blockSize = 16;
 		break;
@@ -667,8 +853,13 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 		m_ivSize = m_blockSize;
 		memcpy(m_lastBlock, usedIV, m_ivSize);
 	}
-	else
+    else if (m_keyMode == MODE_GCM) {
+        m_ivSize = 12;
+        memcpy(m_lastBlock, usedIV, m_ivSize);
+    }
+	else {
 		m_ivSize = 0;
+    }
 
 #if defined (XSEC_OPENSSL_CANSET_PADDING)
 	// Setup padding

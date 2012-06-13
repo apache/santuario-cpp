@@ -77,7 +77,8 @@ public :
 
 		MODE_NONE,					/** An error condition */
 		MODE_ECB,					/** Electronic Code Book */
-		MODE_CBC					/** Cipher Block Chaining */
+		MODE_CBC,					/** Cipher Block Chaining */
+        MODE_GCM                    /** Galois-Counter Mode */
 
 	};
 
@@ -155,31 +156,41 @@ public :
 
 	virtual void setKey(const unsigned char * key, unsigned int keyLen) = 0;
 
-	/**
+   	/**
 	 * \brief Initialise an decryption process
 	 *
 	 * Setup the key to get ready for a decryption session.
+     *
 	 * Callers can pass in an IV.  If one is not provided, 
 	 * but the algorithm requires one (e.g. 3DES_CBC), then 
 	 * implementations should assume that the start of the
 	 * cipher text stream will in fact be the IV.
+     *
+     * Callers may need to pass a tag to fully initialise an
+     * authenticated encryption algorithm. If a tag is not
+     * supplied, the caller can obtain the length of the required
+     * tag instead, and call this method again once the tag is
+     * obtained.
 	 *
 	 * @param doPad By default, we perform padding for last block
-	 * @param mode mode selection (Currently ECB or CBC mode only).
-	 * Default is CBC
+	 * @param mode mode selection, default is CBC
 	 * @param iv Initialisation Vector to be used.  NULL if one is
 	 * not required, or if IV will be set from data stream
+     * @param tag Authentication tag to be used for AEAD ciphers
+     * @param taglen length of Authentication Tag
 	 * @returns true if the initialisation succeeded.
 	 */
 
 	virtual bool decryptInit(bool doPad = true,
 							 SymmetricKeyMode mode = MODE_CBC,
-							 const unsigned char * iv = NULL) = 0;
+							 const unsigned char* iv = NULL,
+                             const unsigned char* tag = NULL,
+                             unsigned int taglen = NULL) = 0;
 
 	/**
-	 * \brief Continue an decrypt operation using this key.
+	 * \brief Continue a decrypt operation using this key.
 	 *
-	 * Decryption must have been set up using an encryptInit
+	 * Decryption must have been set up using a decryptInit
 	 * call.  Takes the inBuf and continues a decryption operation,
 	 * writing the output to outBuf.
 	 *
@@ -228,8 +239,7 @@ public :
 	 * implementations are required to generate one.
 	 *
 	 * @param doPad By default, we perform padding for last block
-	 * @param mode What mode to handle blocks (Currently CBC or ECB)
-	 * Default is CBC.
+	 * @param mode What mode to handle blocks. default is CBC
 	 * @param iv Initialisation Vector to be used.  NULL if one is
 	 * not required, or if IV is to be generated
 	 * @returns true if the initialisation succeeded.
@@ -265,9 +275,9 @@ public :
 								 unsigned int maxOutLength) = 0;
 
 	/**
-	 * \brief Finish a encryption operation
+	 * \brief Finish an encryption operation
 	 *
-	 * Complete a encryption process.  No plain text is passed in,
+	 * Complete an encryption process.  No plain text is passed in,
 	 * as this should simply be removing any remaining text from
 	 * the plain storage buffer and creating a final padded block.
 	 *

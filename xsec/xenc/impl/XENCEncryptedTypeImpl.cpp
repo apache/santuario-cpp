@@ -333,7 +333,8 @@ TXFMChain * XENCEncryptedTypeImpl::createCipherTXFMChain(void) {
             TXFMSB *sb;
             XSECnew(sb, TXFMSB(mp_env->getParentDocument()));
 
-            sb->setInput(safeBuffer(b64.get()));
+            safeBuffer temp(b64.get());
+            sb->setInput(temp);
 
             // Create a chain
             XSECnew(chain, TXFMChain(sb));

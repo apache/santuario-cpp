@@ -24,6 +24,9 @@
 /* Define to 1 if OpenSSL has full AES support. */
 #undef XSEC_OPENSSL_HAVE_AES
 
+/* Define to 1 if OpenSSL has GCM support. */
+#undef XSEC_OPENSSL_HAVE_GCM
+
 /* Define to 1 if OpenSSL has CRYPTO_cleanup_all_ex_data. */
 #undef XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA
 

@@ -183,7 +183,6 @@
 
 #	include <openssl/opensslv.h>
 #	if (OPENSSL_VERSION_NUMBER >= 0x00907000)
-
 #		define XSEC_OPENSSL_CONST_BUFFERS
 #		define XSEC_OPENSSL_HAVE_AES
 #       define XSEC_OPENSSL_HAVE_EC
@@ -194,6 +193,9 @@
 #		define XSEC_OPENSSL_D2IX509_CONST_BUFFER
 #       define XSEC_OPENSSL_HAVE_SHA2
 #       define XSEC_OPENSSL_HAVE_MGF1
+#	endif
+#	if (OPENSSL_VERSION_NUMBER >= 0x10001000)
+#		define XSEC_OPENSSL_HAVE_GCM
 #	endif
 
 #endif

@@ -49,13 +49,15 @@ TXFMSB::~TXFMSB() {
 
 void TXFMSB::setInput(TXFMBase *newInput) {
 
-	// Not possible as this needs to be the start of a tranform pipe
+	// We're the start of the actual data pipe, but we need to track
+    // the pointer for chain disposal.
+    input = newInput;
 
 	return;
 
 }
 
-void TXFMSB::setInput(const safeBuffer sbIn) {
+void TXFMSB::setInput(const safeBuffer& sbIn) {
 
 	// Assume this is a string
 
@@ -65,7 +67,7 @@ void TXFMSB::setInput(const safeBuffer sbIn) {
 
 }
 
-void TXFMSB::setInput(const safeBuffer sbIn, unsigned int sbSize) {
+void TXFMSB::setInput(const safeBuffer& sbIn, unsigned int sbSize) {
 
 	// Assume this is a string
 

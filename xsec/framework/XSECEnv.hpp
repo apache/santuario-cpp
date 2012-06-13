@@ -159,6 +159,15 @@ public:
 	void setXENCNSPrefix(const XMLCh * prefix);
 
 	/**
+	 * \brief Set prefix for XENC 1.1 nodes
+	 *
+	 * Set the namespace prefix the library will use when creating
+	 * nodes in the XENC 1.1 namespace
+	 */
+
+	void setXENC11NSPrefix(const XMLCh * prefix);
+
+	/**
 	 * \brief Set prefix for XKMS nodes
 	 *
 	 * Set the namespace prefix the library will use when creating
@@ -215,6 +224,16 @@ public:
 	 */
 
 	const XMLCh * getXENCNSPrefix(void) const {return mp_xencPrefixNS;}
+
+	/**
+	 * \brief Get the NS Prefix being used for XENC 1.1 elements.
+	 *
+	 * @returns A pointer to the buffer holding the prefix
+	 * @see #setXENC11NSPrefix
+	 *
+	 */
+
+	const XMLCh * getXENC11NSPrefix() const {return mp_xenc11PrefixNS;}
 
 	/**
 	 * \brief Get namespace prefix for XKMS nodes
@@ -524,11 +543,12 @@ private:
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument					
 								* mp_doc;
 	// For creating functions
-	XMLCh 						* mp_prefixNS;
-    XMLCh                       * mp_11PrefixNS;
+	XMLCh						* mp_prefixNS;
+	XMLCh						* mp_11PrefixNS;
 	XMLCh						* mp_ecPrefixNS;
 	XMLCh						* mp_xpfPrefixNS;
 	XMLCh						* mp_xencPrefixNS;
+	XMLCh						* mp_xenc11PrefixNS;
 	XMLCh						* mp_xkmsPrefixNS;
 
 	// Resolvers

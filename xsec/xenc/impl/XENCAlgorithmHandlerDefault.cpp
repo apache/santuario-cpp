@@ -99,6 +99,7 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 	skt = XSECCryptoSymmetricKey::KEY_NONE;
 	isSymmetricKeyWrap = false;
     skm = XSECCryptoSymmetricKey::MODE_NONE;
+    taglen = 0;
 	
 	switch (kt) {
 
@@ -1103,7 +1104,7 @@ bool XENCAlgorithmHandlerDefault::encryptToSafeBuffer(
 	// Must be bulk symmetric - do the encryption
 
 	TXFMCipher *tcipher;
-	XSECnew(tcipher, TXFMCipher(doc, key, true));
+	XSECnew(tcipher, TXFMCipher(doc, key, true, skm, taglen));
 	plainText->appendTxfm(tcipher);
 
 	// Transform to Base64

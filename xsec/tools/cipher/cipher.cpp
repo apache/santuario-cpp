@@ -179,7 +179,7 @@ void printUsage(void) {
 	cerr << "             If the first parameter is \"kek\", the key arguments will be used\n";
 	cerr << "                  as a Key EncryptionKey\n";
 	cerr << "             KEY_TYPE defines what the key is.  Can be one of :\n";
-	cerr << "                  X509, RSA, AES128, AES192, AES256 or 3DES\n";
+	cerr << "                  X509, RSA, AES128, AES192, AES256, AES128-GCM, AES192-GCM, AES256-GCM or 3DES\n";
 	cerr << "             options are :\n";
 	cerr << "                  <filename> - for X509 PEM files (must be an RSA KEK certificate\n";
 	cerr << "                  <filename> <password> - for RSA private key files (MUST be a KEK)\n";
@@ -261,7 +261,7 @@ int evaluate(int argc, char ** argv) {
 			useInteropResolver = true;
 			paramCount++;
 		}
-		else if (_stricmp(argv[paramCount], "--encrypt-file") == 0) {
+		else if (_stricmp(argv[paramCount], "--encrypt-file") == 0 || _stricmp(argv[paramCount], "-ef") == 0) {
 			// Use this file as the input
 			doDecrypt = false;
 			encryptFileAsData = true;
@@ -327,7 +327,10 @@ int evaluate(int argc, char ** argv) {
 			if (_stricmp(argv[paramCount], "3DES") == 0 ||
 				_stricmp(argv[paramCount], "AES128") == 0 ||
 				_stricmp(argv[paramCount], "AES192") == 0 ||
-				_stricmp(argv[paramCount], "AES256") == 0 ) {
+				_stricmp(argv[paramCount], "AES256") == 0 ||
+				_stricmp(argv[paramCount], "AES128-GCM") == 0 ||
+				_stricmp(argv[paramCount], "AES192-GCM") == 0 ||
+				_stricmp(argv[paramCount], "AES256-GCM") == 0) {
 				
 				if (paramCount +2 >= argc) {
 					printUsage();
@@ -346,9 +349,12 @@ int evaluate(int argc, char ** argv) {
 					if (isKEK) {
 						kekAlg = ENCRYPT_KW_AES128;
 					}
-					else {
+					else if (strlen(argv[paramCount]) == 6) {
 						keyAlg = ENCRYPT_AES128_CBC;
 					}
+                    else {
+                        keyAlg = ENCRYPT_AES128_GCM;
+                    }
 					break;
 				case '9' :
 					keyLen = 24;
@@ -356,9 +362,12 @@ int evaluate(int argc, char ** argv) {
 					if (isKEK) {
 						kekAlg = ENCRYPT_KW_AES192;
 					}
-					else {
+					else if (strlen(argv[paramCount]) == 6) {
 						keyAlg = ENCRYPT_AES192_CBC;
 					}
+                    else {
+                        keyAlg = ENCRYPT_AES192_GCM;
+                    }
 					break;
 				case '5' :
 					keyLen = 32;
@@ -366,9 +375,12 @@ int evaluate(int argc, char ** argv) {
 					if (isKEK) {
 						kekAlg = ENCRYPT_KW_AES256;
 					}
-					else {
+					else if (strlen(argv[paramCount]) == 6) {
 						keyAlg = ENCRYPT_AES256_CBC;
 					}
+                    else {
+                        keyAlg = ENCRYPT_AES256_GCM;
+                    }
 					break;
 				}
 
@@ -694,7 +706,6 @@ int evaluate(int argc, char ** argv) {
 		else {
 
 			XENCEncryptedData *xenc = NULL;
-
 			// Encrypting
 			if (kek != NULL && key == NULL) {
 				XSECPlatformUtils::g_cryptoProvider->getRandom(keyBuf, 24);
@@ -728,7 +739,7 @@ int evaluate(int argc, char ** argv) {
 			}
 
 			// Do we encrypt a created key?
-			if (kek != NULL) {
+			if (kek != NULL && xenc != NULL) {
 				XENCEncryptedKey *xkey = cipher->encryptKey(keyStr, keyLen, kekAlg);
 				// Add to the EncryptedData
 				xenc->appendEncryptedKey(xkey);

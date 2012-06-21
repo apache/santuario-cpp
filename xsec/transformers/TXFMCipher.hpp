@@ -48,7 +48,11 @@ public:
 
 	// Constructors and destructors
 
-	TXFMCipher(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, XSECCryptoKey * key, bool encrypt);
+    TXFMCipher(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
+                XSECCryptoKey* key,
+                bool encrypt,
+                XSECCryptoSymmetricKey::SymmetricKeyMode mode = XSECCryptoSymmetricKey::MODE_CBC,
+                unsigned int taglen = 0);
 	~TXFMCipher();
 
 	// Methods to get tranform output type and input requirement
@@ -76,6 +80,7 @@ private:
 	TXFMCipher();
 
 	bool					m_doEncrypt;		// Are we in encrypt (or decrypt) mode
+    unsigned int            m_taglen;           // Length of Authentication Tag for AEAD ciphers
 	XSECCryptoKey			* mp_cipher;		// Crypto implementation
 	bool					m_complete;
 	unsigned char			m_inputBuffer[2050];

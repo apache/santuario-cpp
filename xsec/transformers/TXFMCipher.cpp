@@ -37,28 +37,30 @@ XERCES_CPP_NAMESPACE_USE
 
 TXFMCipher::TXFMCipher(DOMDocument *doc, 
 					   XSECCryptoKey * key, 
-					   bool encrypt) : 
+					   bool encrypt,
+                       XSECCryptoSymmetricKey::SymmetricKeyMode mode,
+                       unsigned int taglen) : 
 TXFMBase(doc),
 m_doEncrypt(encrypt),
+m_taglen(taglen),
+mp_cipher(NULL),
 m_remaining(0) {
 
-
-	mp_cipher = key->clone();
+    if (key && key->getKeyType() == XSECCryptoKey::KEY_SYMMETRIC)
+	    mp_cipher = key->clone();
 	
 	if (!mp_cipher) {
-
 		throw XSECException(XSECException::CryptoProviderError, 
-				"Error cloning key");
-
+				"Error cloning key, or not a symmetric key");
 	}
 
 	m_complete = false;
 
 	try {
-		if (mp_cipher->getKeyType() == XSECCryptoKey::KEY_SYMMETRIC && m_doEncrypt)
-			((XSECCryptoSymmetricKey *) (mp_cipher))->encryptInit();
+		if (m_doEncrypt)
+			((XSECCryptoSymmetricKey *) (mp_cipher))->encryptInit((mode != XSECCryptoSymmetricKey::MODE_GCM), mode);
 		else
-			((XSECCryptoSymmetricKey *) (mp_cipher))->decryptInit();
+			((XSECCryptoSymmetricKey *) (mp_cipher))->decryptInit((mode != XSECCryptoSymmetricKey::MODE_GCM), mode);
 	}
 	catch (...) {
 		delete mp_cipher;
@@ -70,7 +72,6 @@ m_remaining(0) {
 
 TXFMCipher::~TXFMCipher() {
 
-	if (mp_cipher != NULL)
 		delete mp_cipher;
 
 };
@@ -138,27 +139,25 @@ unsigned int TXFMCipher::readBytes(XMLByte * const toFill, unsigned int maxToFil
 
 			unsigned int sz = input->readBytes(m_inputBuffer, 2048);
 		
-			if (mp_cipher->getKeyType() == XSECCryptoKey::KEY_SYMMETRIC) {
-				XSECCryptoSymmetricKey * symCipher = 
-					(XSECCryptoSymmetricKey*) mp_cipher;
-				if (m_doEncrypt) {
+			XSECCryptoSymmetricKey * symCipher = 
+				(XSECCryptoSymmetricKey*) mp_cipher;
+			if (m_doEncrypt) {
 					
-					if (sz == 0) {
-						m_complete = true;
-						m_remaining = symCipher->encryptFinish(m_outputBuffer, 3072);
-					}
-					else
-						m_remaining = symCipher->encrypt(m_inputBuffer, m_outputBuffer, sz, 3072);
+				if (sz == 0) {
+					m_complete = true;
+					m_remaining = symCipher->encryptFinish(m_outputBuffer, 3072, m_taglen);
 				}
-				else {
+				else
+					m_remaining = symCipher->encrypt(m_inputBuffer, m_outputBuffer, sz, 3072);
+			}
+			else {
 
-					if (sz == 0) {
-						m_complete = true;
-						m_remaining = symCipher->decryptFinish(m_outputBuffer, 3072);
-					}
-					else
-						m_remaining = symCipher->decrypt(m_inputBuffer, m_outputBuffer, sz, 3072);
+				if (sz == 0) {
+					m_complete = true;
+					m_remaining = symCipher->decryptFinish(m_outputBuffer, 3072);
 				}
+				else
+					m_remaining = symCipher->decrypt(m_inputBuffer, m_outputBuffer, sz, 3072);
 			}
 		}
 

@@ -923,7 +923,8 @@ unsigned int OpenSSLCryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 }
 
 unsigned int OpenSSLCryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
-													  unsigned int maxOutLength) {
+													  unsigned int maxOutLength,
+                                                      unsigned int taglen) {
 
 	int outl = maxOutLength;
 	m_initialised = false;
@@ -951,8 +952,18 @@ unsigned int OpenSSLCryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
 		outl -= m_blockSize;
 
 	}
-
 #endif
+
+    if (taglen > 0) {
+        // Extract authentication tag and add to ciphertext.
+        if (maxOutLength - outl < taglen) {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSLSymmetricKey::encryptFinish - **WARNING** - no room in ciphertext buffer for authentication tag"); 
+        }
+
+        EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_GET_TAG, taglen, cipherBuf + outl);
+        outl += taglen;
+    }
 
 	return outl;
 

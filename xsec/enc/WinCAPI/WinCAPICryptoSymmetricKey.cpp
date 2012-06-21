@@ -572,7 +572,8 @@ unsigned int WinCAPICryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 }
 
 unsigned int WinCAPICryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
-													  unsigned int maxOutLength) {
+													  unsigned int maxOutLength,
+                                                      unsigned int taglen) {
 
 	DWORD outl = m_bytesInLastBlock + m_blockSize;
 

@@ -266,11 +266,13 @@ public :
 	 *
 	 * @param plainBuf Buffer to place final block of cipher text in
 	 * @param maxOutLength Maximum number of bytes to pace in output
+     * @param taglen length of Authentication Tag
 	 * @returns Bytes placed in output buffer
 	 */
 
 	virtual unsigned int encryptFinish(unsigned char * plainBuf,
-									   unsigned int maxOutLength);
+									   unsigned int maxOutLength,
+                                       unsigned int taglen = 0);
 
 	//@}
 

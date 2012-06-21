@@ -589,7 +589,8 @@ unsigned int NSSCryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 // --------------------------------------------------------------------------------
 
 unsigned int NSSCryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
-													  unsigned int maxOutLength) {
+                                                  unsigned int maxOutLength,
+                                                  unsigned int taglen) {
 
 	unsigned int outl = 0;
 

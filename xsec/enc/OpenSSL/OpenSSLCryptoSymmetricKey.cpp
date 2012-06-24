@@ -960,9 +960,19 @@ unsigned int OpenSSLCryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
 		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			    "OpenSSLSymmetricKey::encryptFinish - **WARNING** - no room in ciphertext buffer for authentication tag"); 
         }
-
-        EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_GET_TAG, taglen, cipherBuf + outl);
-        outl += taglen;
+        if (m_keyMode == MODE_GCM) {
+#ifdef XSEC_OPENSSL_HAVE_GCM
+            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_GET_TAG, taglen, cipherBuf + outl);
+            outl += taglen;
+#else
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSLSymmetricKey::encryptFinish - AES-GCM not supported in this version of OpenSSL"); 
+#endif
+        }
+        else {
+		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
+			    "OpenSSLSymmetricKey::encryptFinish - cipher mode does not support authentication tag"); 
+        }
     }
 
 	return outl;

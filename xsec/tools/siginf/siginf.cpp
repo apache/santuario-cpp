@@ -376,7 +376,7 @@ void outputSignatureInfo(DSIGSignature *sig, bool skipReferences) {
 
 void printUsage(void) {
 
-	cerr << "\nUsage: siging [options] <input file name>\n\n";
+	cerr << "\nUsage: siginf [options] <input file name>\n\n";
 	cerr << "     Where options are :\n\n";
 	cerr << "     --skiprefs/-s\n";
 	cerr << "         Skip information on references - output main sig info only\n\n";

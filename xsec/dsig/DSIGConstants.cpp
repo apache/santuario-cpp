@@ -196,6 +196,7 @@ const XMLCh * DSIGConstants::s_unicodeStrURIRSA_SHA384;
 const XMLCh * DSIGConstants::s_unicodeStrURIRSA_SHA512;
 
 const XMLCh * DSIGConstants::s_unicodeStrURIECDSA_SHA1;
+const XMLCh * DSIGConstants::s_unicodeStrURIECDSA_SHA224;
 const XMLCh * DSIGConstants::s_unicodeStrURIECDSA_SHA256;
 const XMLCh * DSIGConstants::s_unicodeStrURIECDSA_SHA384;
 const XMLCh * DSIGConstants::s_unicodeStrURIECDSA_SHA512;
@@ -293,6 +294,7 @@ void DSIGConstants::create() {
 	s_unicodeStrURIRSA_SHA512 = XMLString::transcode(URI_ID_RSA_SHA512);
 
 	s_unicodeStrURIECDSA_SHA1 = XMLString::transcode(URI_ID_ECDSA_SHA1);
+    s_unicodeStrURIECDSA_SHA224 = XMLString::transcode(URI_ID_ECDSA_SHA224);
 	s_unicodeStrURIECDSA_SHA256 = XMLString::transcode(URI_ID_ECDSA_SHA256);
 	s_unicodeStrURIECDSA_SHA384 = XMLString::transcode(URI_ID_ECDSA_SHA384);
 	s_unicodeStrURIECDSA_SHA512 = XMLString::transcode(URI_ID_ECDSA_SHA512);
@@ -384,6 +386,7 @@ void DSIGConstants::destroy() {
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_SHA384);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_SHA512);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA1);
+    XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA224);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA256);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA384);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA512);

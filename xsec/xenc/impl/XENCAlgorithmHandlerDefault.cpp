@@ -132,10 +132,10 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 				break;
 
 			case XSECCryptoSymmetricKey::KEY_AES_128 :
-                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128)) {
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128) || strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128_PAD)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
-                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                    skm = XSECCryptoSymmetricKey::MODE_ECB;
                 }
                 else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_CBC)) {
                     keyOK = true;
@@ -149,10 +149,10 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 				break;
 
 			case XSECCryptoSymmetricKey::KEY_AES_192 :
-                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192)) {
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192) || strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192_PAD)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
-                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                    skm = XSECCryptoSymmetricKey::MODE_ECB;
                 }
                 else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_CBC)) {
                     keyOK = true;
@@ -166,10 +166,10 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 				break;
 
 			case XSECCryptoSymmetricKey::KEY_AES_256 :
-                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256)) {
+                if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256) || strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256_PAD)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
-                    skm = XSECCryptoSymmetricKey::MODE_CBC;
+                    skm = XSECCryptoSymmetricKey::MODE_ECB;
                 }
                 else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC)) {
                     keyOK = true;

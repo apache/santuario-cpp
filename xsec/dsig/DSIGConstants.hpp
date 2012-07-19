@@ -68,10 +68,13 @@ XSEC_USING_XERCES(XMLString);
 
 
 // Key Wrap Algorithm
-#define URI_ID_KW_AES128	"http://www.w3.org/2001/04/xmlenc#kw-aes128"
-#define URI_ID_KW_AES192	"http://www.w3.org/2001/04/xmlenc#kw-aes192"
-#define URI_ID_KW_AES256	"http://www.w3.org/2001/04/xmlenc#kw-aes256"
-#define URI_ID_KW_3DES		"http://www.w3.org/2001/04/xmlenc#kw-tripledes"
+#define URI_ID_KW_3DES		    "http://www.w3.org/2001/04/xmlenc#kw-tripledes"
+#define URI_ID_KW_AES128	    "http://www.w3.org/2001/04/xmlenc#kw-aes128"
+#define URI_ID_KW_AES192	    "http://www.w3.org/2001/04/xmlenc#kw-aes192"
+#define URI_ID_KW_AES256	    "http://www.w3.org/2001/04/xmlenc#kw-aes256"
+#define URI_ID_KW_AES128_PAD	"http://www.w3.org/2009/xmlenc11#kw-aes-128-pad"
+#define URI_ID_KW_AES192_PAD	"http://www.w3.org/2009/xmlenc11#kw-aes-192-pad"
+#define URI_ID_KW_AES256_PAD	"http://www.w3.org/2009/xmlenc11#kw-aes-256-pad"
 
 // Key Transport algorithms
 #define URI_ID_RSA_1_5			"http://www.w3.org/2001/04/xmlenc#rsa-1_5"
@@ -223,7 +226,10 @@ enum encryptionMethod {
     ENCRYPT_RSA_OAEP	    = 11,				// RSA with OAEP
 	ENCRYPT_AES128_GCM		= 12,				// 128 bit AES in GCM
     ENCRYPT_AES192_GCM		= 13,				// 192 bit AES in GCM
-	ENCRYPT_AES256_GCM		= 14				// 256 bit AES in GCM
+	ENCRYPT_AES256_GCM		= 14,				// 256 bit AES in GCM
+	ENCRYPT_KW_AES128_PAD	= 15,				// KeyWrap - AES128 with padding
+	ENCRYPT_KW_AES192_PAD	= 16,				// KeyWrap - AES192 with padding
+	ENCRYPT_KW_AES256_PAD	= 17				// KeyWrap - AES256 with padding
 };
 
 enum maskGenerationFunc {
@@ -484,6 +490,21 @@ bool encryptionMethod2URI(safeBuffer &uri, encryptionMethod em) {
 		uri = URI_ID_AES256_GCM;
 		break;
 
+	case (ENCRYPT_KW_AES128_PAD) :
+
+		uri = URI_ID_KW_AES128_PAD;
+		break;
+
+	case (ENCRYPT_KW_AES192_PAD) :
+
+		uri = URI_ID_KW_AES192_PAD;
+		break;
+
+	case (ENCRYPT_KW_AES256_PAD) :
+
+		uri = URI_ID_KW_AES256_PAD;
+		break;
+
     default:
 
 		return false;
@@ -615,10 +636,13 @@ public:
 	static const XMLCh * s_unicodeStrURIAES128_GCM;
     static const XMLCh * s_unicodeStrURIAES192_GCM;
 	static const XMLCh * s_unicodeStrURIAES256_GCM;
+	static const XMLCh * s_unicodeStrURIKW_3DES;
 	static const XMLCh * s_unicodeStrURIKW_AES128;
 	static const XMLCh * s_unicodeStrURIKW_AES192;
 	static const XMLCh * s_unicodeStrURIKW_AES256;
-	static const XMLCh * s_unicodeStrURIKW_3DES;
+	static const XMLCh * s_unicodeStrURIKW_AES128_PAD;
+	static const XMLCh * s_unicodeStrURIKW_AES192_PAD;
+	static const XMLCh * s_unicodeStrURIKW_AES256_PAD;
 	static const XMLCh * s_unicodeStrURIRSA_1_5;
 	static const XMLCh * s_unicodeStrURIRSA_OAEP_MGFP1;
     static const XMLCh * s_unicodeStrURIRSA_OAEP;

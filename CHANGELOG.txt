@@ -1,4 +1,4 @@
-Changes since 1.6.0
+Changes since 1.6.1
 =====================================
 * [SANTUARIO-314] - AES-GCM support
 * [SANTUARIO-315] - XML Encryption 1.1 OAEP enhancements

@@ -3,8 +3,8 @@ Version:        1.7.0
 Release:        1
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
-License:        Apache Software License
-URL:            http://santuario.apache.org/dist/c-library/
+License:        Apache 2.0
+URL:            http://www.apache.org/dist/santuario/c-library/
 Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
@@ -112,8 +112,9 @@ This package includes files needed for development with xml-security-c.
 %{_libdir}/*.a
 
 %changelog
-* Sun Jun 24 2012 Scott Cantor <cantor.2@osu.edu> 1.7.0-1
+* Mon Jul 30 2012 Scott Cantor <cantor.2@osu.edu> 1.7.0-1
 - update to 1.7.0
+- update URL and license
 
 * Tue Oct 26 2010 Scott Cantor <cantor.2@osu.edu> 1.6.0-1
 - update to 1.6.0

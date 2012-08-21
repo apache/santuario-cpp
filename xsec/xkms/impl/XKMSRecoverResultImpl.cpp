@@ -277,7 +277,7 @@ XKMSRSAKeyPair * XKMSRecoverResultImpl::getRSAKeyPair(const char * passPhrase) {
 	XSECCryptoKey * sk = handler->createKeyForURI(
 					xed->getEncryptionMethod()->getAlgorithm(),
 					(XMLByte *) kbuf,
-					XSEC_MAX_HASH_SIZE);
+					len);
 
 	memset(kbuf, 0, XSEC_MAX_HASH_SIZE);
 
@@ -350,7 +350,7 @@ XENCEncryptedData * XKMSRecoverResultImpl::setRSAKeyPair(const char * passPhrase
 	XSECCryptoKey * sk = handler->createKeyForURI(
 					uri,
 					(XMLByte *) kbuf,
-					XSEC_MAX_HASH_SIZE);
+					len);
 
 	memset(kbuf, 0, XSEC_MAX_HASH_SIZE);
 

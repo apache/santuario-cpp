@@ -147,6 +147,8 @@ void printUsage(void) {
 	cerr << "         Set an hmac key using the <string>\n\n";
 	cerr << "     --xsecresolver/-x\n";
 	cerr << "         Use the xml-security test XMLDSig URI resolver\n\n";
+	cerr << "     --id <name>\n";
+	cerr << "         Define an attribute Id by name\n\n";
 	cerr << "     --idns/-d <ns uri> <name>\n";
 	cerr << "         Define an attribute Id by namespace URI and name\n\n";
 #if defined (XSEC_HAVE_OPENSSL)
@@ -207,6 +209,14 @@ int evaluate(int argc, char ** argv) {
 		else if (_stricmp(argv[paramCount], "--xsecresolver") == 0 || _stricmp(argv[paramCount], "-x") == 0) {
 			useXSECURIResolver = true;
 			paramCount++;
+		}
+		else if (_stricmp(argv[paramCount], "--id") == 0) {
+			if (paramCount +1 >= argc) {
+				printUsage();
+				return 2;
+			}
+			paramCount++;
+			useIdAttributeName = argv[paramCount++];
 		}
 		else if (_stricmp(argv[paramCount], "--idns") == 0 || _stricmp(argv[paramCount], "-d") == 0) {
 			if (paramCount +2 >= argc) {
@@ -399,12 +409,17 @@ int evaluate(int argc, char ** argv) {
 	// so we add a KeyInfoResolverDefault to the Signature.
 
 	sig->setKeyInfoResolver(&theKeyInfoResolver);
-	sig->registerIdAttributeName(MAKE_UNICODE_STRING("ID"));
 
 	// Register defined attribute name
-	if (useIdAttributeName != NULL)
-		sig->registerIdAttributeNameNS(MAKE_UNICODE_STRING(useIdAttributeNS), 
-									   MAKE_UNICODE_STRING(useIdAttributeName));
+	if (useIdAttributeName != NULL) {
+        sig->setIdByAttributeName(true);
+        if (useIdAttributeNS != NULL) {
+		    sig->registerIdAttributeNameNS(MAKE_UNICODE_STRING(useIdAttributeNS), 
+									       MAKE_UNICODE_STRING(useIdAttributeName));
+        } else {
+            sig->registerIdAttributeName(MAKE_UNICODE_STRING(useIdAttributeName));
+        }
+    }
 
 	// Check whether we should use the internal resolver
 

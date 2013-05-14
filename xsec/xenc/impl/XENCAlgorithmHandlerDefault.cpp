@@ -1133,25 +1133,25 @@ XSECCryptoKey * XENCAlgorithmHandlerDefault::createKeyForURI(
 	XSECCryptoSymmetricKey * sk = NULL;
 
 	if (strEquals(uri, DSIGConstants::s_unicodeStrURI3DES_CBC)) {
-        if (keyLen != 192)
+        if (keyLen < 192 / 8)
             throw XSECException(XSECException::CipherError, 
 		        "XENCAlgorithmHandlerDefault - key size was invalid");
 		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 	}
 	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_GCM)) {
-        if (keyLen != 128)
+        if (keyLen < 128 / 8)
             throw XSECException(XSECException::CipherError, 
 		        "XENCAlgorithmHandlerDefault - key size was invalid");
 		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
 	}
 	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_GCM)) {
-        if (keyLen != 192)
+        if (keyLen < 192 / 8)
             throw XSECException(XSECException::CipherError, 
 		        "XENCAlgorithmHandlerDefault - key size was invalid");
 		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
 	}
 	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_GCM)) {
-        if (keyLen != 256)
+        if (keyLen < 256 / 8)
             throw XSECException(XSECException::CipherError, 
 		        "XENCAlgorithmHandlerDefault - key size was invalid");
 		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);

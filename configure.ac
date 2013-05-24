@@ -17,7 +17,7 @@
 
 # Process this file with autoreconf
 AC_PREREQ(2.50)
-AC_INIT([[XML-Security-C]],[1.7.1],[santuario-dev@apache.org],[xml-security-c])
+AC_INIT([[XML-Security-C]],[1.7.1],[dev@santuario.apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)

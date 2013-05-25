@@ -16,7 +16,7 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-INCLUDES = -I..
+AM_CPPFLAGS = -I..
 
 noinst_PROGRAMS = ${samples}
 bin_PROGRAMS = ${tools}

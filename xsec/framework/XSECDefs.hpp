@@ -69,6 +69,9 @@
     typedef unsigned int xsecsize_t;
 #endif
 
+// Pending API change, compile in a limit for Xerces SecurityManager entity expansion
+#define XSEC_ENTITY_EXPANSION_LIMIT 1000
+
 
 // --------------------------------------------------------------------------------
 //           Namespace Handling

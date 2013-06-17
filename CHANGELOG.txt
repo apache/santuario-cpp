@@ -1,3 +1,8 @@
+Changes since 1.7.0
+=====================================
+* Fixes for CVE-2013-2153, CVE-2013-2154, CVE-2013-2155, CVE-2013-2156
+* Reduced entity expansion limits when parsing
+
 Changes since 1.6.1
 =====================================
 * [SANTUARIO-314] - AES-GCM support

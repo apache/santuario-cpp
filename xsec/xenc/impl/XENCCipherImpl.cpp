@@ -270,8 +270,9 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
     sb.sbXMLChAppendCh(chCloseAngle);
 
     char* prefix = transcodeToUTF8(sb.rawXMLChBuffer());
-
     sbt = prefix;
+    XSEC_RELEASE_XMLCH(prefix);
+
     const char * crcb = content.rawCharBuffer();
     int offset = 0;
     if (crcb[0] == '<' && crcb[1] == '?') {
@@ -286,9 +287,6 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
 
     sbt.sbStrcatIn(&crcb[offset]);
 
-    // Now transform the content to UTF-8
-    //sb.sbXMLChCat8(content.rawCharBuffer());
-
     // Terminate the string
     sb.sbXMLChIn(DSIGConstants::s_unicodeStrEmpty);
     sb.sbXMLChAppendCh(chOpenAngle);
@@ -300,37 +298,24 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
     sbt.sbStrcatIn(trailer);
     XSEC_RELEASE_XMLCH(trailer);
 
-    // Now we need to parse the document
-    XercesDOMParser* parser = NULL;
-    MemBufInputSource* memIS = NULL;
-    try {
-        parser = new XercesDOMParser;
+    // Create an input source
+    xsecsize_t bytes = XMLString::stringLen(sbt.rawCharBuffer());
+    MemBufInputSource memIS((const XMLByte*) sbt.rawBuffer(), bytes, "XSECMem");
 
-        parser->setDoNamespaces(true);
-        parser->setCreateEntityReferenceNodes(true);
-        parser->setDoSchema(false);
+    XercesDOMParser parser;
+    parser.setDoNamespaces(true);
+    parser.setLoadExternalDTD(false);
 
-        // Create an input source
-        xsecsize_t bytes = XMLString::stringLen(sbt.rawCharBuffer());
-        memIS = new MemBufInputSource((const XMLByte*) sbt.rawBuffer(), bytes, "XSECMem");
-    }
-    catch (...) {
-        delete memIS;
-        delete parser;
-        XSEC_RELEASE_XMLCH(prefix);
-        throw;
-    }
+    SecurityManager securityManager;
+    securityManager.setEntityExpansionLimit(XSEC_ENTITY_EXPANSION_LIMIT);
+    parser.setSecurityManager(&securityManager);
 
-    XSEC_RELEASE_XMLCH(prefix);
-    Janitor<XercesDOMParser> j_parser(parser);
-    Janitor<MemBufInputSource> j_memIS(memIS);
-
-    parser->parse(*memIS);
-    xsecsize_t errorCount = parser->getErrorCount();
+    parser.parse(memIS);
+    xsecsize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
         throw XSECException(XSECException::CipherError, "Errors occured during de-serialisation of decrypted element content");
 
-    DOMDocument * doc = parser->getDocument();
+    DOMDocument * doc = parser.getDocument();
 
     // Create a DocumentFragment to hold the children of the parsed doc element
     DOMDocument *ctxDocument = ctx->getOwnerDocument();

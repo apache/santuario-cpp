@@ -218,31 +218,31 @@ char * XSECSOAPRequestorSimple::wrapAndSerialise(DOMDocument * request) {
 
 DOMDocument * XSECSOAPRequestorSimple::parseAndUnwrap(const char * buf, unsigned int len) {
 
-	XercesDOMParser * parser = new XercesDOMParser;
-	Janitor<XercesDOMParser> j_parser(parser);
+	XercesDOMParser parser;
+	parser.setDoNamespaces(true);
+	parser.setLoadExternalDTD(false);
 
-	parser->setDoNamespaces(true);
-	parser->setCreateEntityReferenceNodes(true);
-	parser->setDoSchema(true);
+	SecurityManager securityManager;
+	securityManager.setEntityExpansionLimit(XSEC_ENTITY_EXPANSION_LIMIT);
+	parser.setSecurityManager(&securityManager);
 
 	// Create an input source
 
-	MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) buf, len, "XSECMem");
-	Janitor<MemBufInputSource> j_memIS(memIS);
+	MemBufInputSource memIS((const XMLByte*) buf, len, "XSECMem");
 
-	parser->parse(*memIS);
-    xsecsize_t errorCount = parser->getErrorCount();
+	parser.parse(memIS);
+	xsecsize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
 		throw XSECException(XSECException::HTTPURIInputStreamError,
 							"Error parsing response message");
 
 	if (m_envelopeType == ENVELOPE_NONE) {
 
-		return parser->adoptDocument();
+		return parser.adoptDocument();
 
 	}
 
-    DOMDocument * responseDoc = parser->getDocument();
+	DOMDocument * responseDoc = parser.getDocument();
 
 	// Must be a SOAP message of some kind - so lets remove the wrapper.
 	// First create a new document for the Response message

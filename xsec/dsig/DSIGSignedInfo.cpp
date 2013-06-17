@@ -299,9 +299,14 @@ void DSIGSignedInfo::load(void) {
 
 	// Check for CanonicalizationMethod
 
-	while (tmpSI != 0 && (tmpSI->getNodeType() != DOMNode::ELEMENT_NODE))
+	while (tmpSI != 0 && (tmpSI->getNodeType() != DOMNode::ELEMENT_NODE)) {
+		if (tmpSI->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+				"EntityReference nodes in <SignedInfo> are unsupported.");
+		}
 		// Skip text and comments
 		tmpSI = tmpSI->getNextSibling();
+	}
 
 	if (tmpSI == 0 || !strEquals(getDSIGLocalName(tmpSI), "CanonicalizationMethod")) {
 
@@ -362,17 +367,23 @@ void DSIGSignedInfo::load(void) {
 
 	}
 
-	else
+	else {
 
 		throw XSECException(XSECException::UnknownCanonicalization);
+	}
 
 	// Now load the SignatureMethod
 
 	tmpSI = tmpSI->getNextSibling();
 
-	while (tmpSI != 0 && (tmpSI->getNodeType() != DOMNode::ELEMENT_NODE))
+	while (tmpSI != 0 && (tmpSI->getNodeType() != DOMNode::ELEMENT_NODE)) {
+		if (tmpSI->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+				"EntityReference nodes in <SignedInfo> are unsupported.");
+		}
 		// Skip text and comments
 		tmpSI = tmpSI->getNextSibling();
+	}
 
 	if (tmpSI == 0 || !strEquals(getDSIGLocalName(tmpSI), "SignatureMethod")) {
 
@@ -406,10 +417,14 @@ void DSIGSignedInfo::load(void) {
 	 * longer know at this point if this is an HMAC, we need to check. */
 
 	DOMNode *tmpSOV = tmpSI->getFirstChild();
-	while (tmpSOV != NULL && 
-		tmpSOV->getNodeType() != DOMNode::ELEMENT_NODE && 
-		!strEquals(getDSIGLocalName(tmpSOV), "HMACOutputLength"))
+	while (tmpSOV != NULL &&
+		(tmpSOV->getNodeType() != DOMNode::ELEMENT_NODE || !strEquals(getDSIGLocalName(tmpSOV), "HMACOutputLength"))) {
+		if (tmpSOV->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+				"EntityReference nodes in <SignedInfo> are unsupported.");
+		}
 		tmpSOV = tmpSOV->getNextSibling();
+	}
 
 	if (tmpSOV != NULL) {
 
@@ -433,9 +448,14 @@ void DSIGSignedInfo::load(void) {
 
 	// Run through the rest of the elements until done
 
-	while (tmpSI != 0 && (tmpSI->getNodeType() != DOMNode::ELEMENT_NODE))
+	while (tmpSI != 0 && (tmpSI->getNodeType() != DOMNode::ELEMENT_NODE)) {
+		if (tmpSI->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+				"EntityReference nodes in <SignedInfo> are unsupported.");
+		}
 		// Skip text and comments
 		tmpSI = tmpSI->getNextSibling();
+	}
 
 	if (tmpSI != NULL) {
 

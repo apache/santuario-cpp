@@ -516,17 +516,15 @@ TXFMBase * DSIGReference::getURIBaseTXFM(DOMDocument * doc,
 		}
 
 		else if (URI[9] == XERCES_CPP_NAMESPACE_QUALIFIER chOpenParen &&
-			     URI[10] == XERCES_CPP_NAMESPACE_QUALIFIER chLatin_i &&
-				 URI[11] == XERCES_CPP_NAMESPACE_QUALIFIER chLatin_d &&
-				 URI[12] == XERCES_CPP_NAMESPACE_QUALIFIER chOpenParen &&
-				 URI[13] == XERCES_CPP_NAMESPACE_QUALIFIER chSingleQuote) {
+				URI[10] == XERCES_CPP_NAMESPACE_QUALIFIER chLatin_i &&
+				URI[11] == XERCES_CPP_NAMESPACE_QUALIFIER chLatin_d &&
+				URI[12] == XERCES_CPP_NAMESPACE_QUALIFIER chOpenParen &&
+				URI[13] == XERCES_CPP_NAMESPACE_QUALIFIER chSingleQuote) {
 
 			xsecsize_t len = XMLString::stringLen(&URI[14]);
 
-			XMLCh tmp[512];
-
-			if (len > 511)
-				len = 511;
+			XMLCh* tmp = new XMLCh[len + 1];
+			ArrayJanitor<XMLCh> j_tmp(tmp);
 
 			xsecsize_t j = 14, i = 0;
 
@@ -630,9 +628,14 @@ void DSIGReference::load(void) {
 	// Now check for Transforms
 	tmpElt = mp_referenceNode->getFirstChild();
 
-	while (tmpElt != 0 && (tmpElt->getNodeType() != DOMNode::ELEMENT_NODE))
+	while (tmpElt != 0 && (tmpElt->getNodeType() != DOMNode::ELEMENT_NODE)) {
+		if (tmpElt->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+				"EntityReference nodes in <Reference> are unsupported.");
+		}
 		// Skip text and comments
 		tmpElt = tmpElt->getNextSibling();
+	}
 
 	if (tmpElt == 0) {
 
@@ -651,13 +654,19 @@ void DSIGReference::load(void) {
 
 		// Find next node
 		tmpElt = tmpElt->getNextSibling();
-		while (tmpElt != 0 && (tmpElt->getNodeType() != DOMNode::ELEMENT_NODE))
+		while (tmpElt != 0 && (tmpElt->getNodeType() != DOMNode::ELEMENT_NODE)) {
+			if (tmpElt->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+				throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+					"EntityReference nodes in <Reference> are unsupported.");
+			}
 			tmpElt = tmpElt->getNextSibling();
+		}
 
 
 	} /* if tmpElt node type = transforms */
-	else
+	else {
 		mp_transformList = NULL;
+	}
 
 
 	if (tmpElt == NULL || !strEquals(getDSIGLocalName(tmpElt), "DigestMethod")) {
@@ -692,8 +701,14 @@ void DSIGReference::load(void) {
 
 	tmpElt = tmpElt->getNextSibling();
 
-	while (tmpElt != 0 && !(strEquals(getDSIGLocalName(tmpElt), "DigestValue")))
+	while (tmpElt != 0 &&
+		(tmpElt->getNodeType() != DOMNode::ELEMENT_NODE || !strEquals(getDSIGLocalName(tmpElt), "DigestValue"))) {
+		if (tmpElt->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+				"EntityReference nodes in <Reference> are unsupported.");
+		}
 		tmpElt = tmpElt->getNextSibling();
+	}
 
 	if (tmpElt == 0) {
 
@@ -731,8 +746,13 @@ void DSIGReference::load(void) {
 
 			// Find Manifest child
 			manifestNode = manifestNode->getFirstChild();
-			while (manifestNode != 0 && manifestNode->getNodeType() != DOMNode::ELEMENT_NODE)
+			while (manifestNode != 0 && manifestNode->getNodeType() != DOMNode::ELEMENT_NODE) {
+				if (manifestNode->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+					throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+						"EntityReference nodes in <Reference> are unsupported.");
+				}
 				manifestNode = manifestNode->getNextSibling();
+			}
 
 			if (manifestNode == 0 || !strEquals(getDSIGLocalName(manifestNode), "Manifest"))
 				throw XSECException(XSECException::ExpectedDSIGChildNotFound,
@@ -743,8 +763,14 @@ void DSIGReference::load(void) {
 		// Now have the manifest node, find the first reference and load!
 		referenceNode = manifestNode->getFirstChild();
 
-		while (referenceNode != 0 && !strEquals(getDSIGLocalName(referenceNode), "Reference"))
+		while (referenceNode != 0 &&
+			(referenceNode->getNodeType() != DOMNode::ELEMENT_NODE || !strEquals(getDSIGLocalName(referenceNode), "Reference"))) {
+			if (referenceNode->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+				throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+					"EntityReference nodes in <Reference> are unsupported.");
+			}
 			referenceNode = referenceNode->getNextSibling();
+		}
 
 		if (referenceNode == 0)
 			throw XSECException(XSECException::ExpectedDSIGChildNotFound,
@@ -797,8 +823,13 @@ DSIGReferenceList *DSIGReference::loadReferenceListFromXML(const XSECEnv * env, 
 		// Find next element Node
 		tmpRef = tmpRef->getNextSibling();
 
-		while (tmpRef != 0 && tmpRef->getNodeType() != DOMNode::ELEMENT_NODE)
+		while (tmpRef != 0 && tmpRef->getNodeType() != DOMNode::ELEMENT_NODE) {
+			if (tmpRef->getNodeType() == DOMNode::ENTITY_REFERENCE_NODE) {
+				throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+					"EntityReference nodes in <Reference> are unsupported.");
+			}
 			tmpRef = tmpRef->getNextSibling();
+		}
 
 	}
 

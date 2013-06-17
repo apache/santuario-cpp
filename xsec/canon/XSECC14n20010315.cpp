@@ -240,6 +240,8 @@ void XSECC14n20010315::setExclusive(char * xmlnsList) {
 
 	}
 
+	ArrayJanitor<char> j_nsBuf(nsBuf);
+
 	int i, j;
 
 	i = 0;
@@ -247,21 +249,22 @@ void XSECC14n20010315::setExclusive(char * xmlnsList) {
 	while (xmlnsList[i] != '\0') {
 
 		while (xmlnsList[i] == ' ' ||
-			   xmlnsList[i] == '\0' ||
 			   xmlnsList[i] == '\t' ||
 			   xmlnsList[i] == '\r' ||
-			   xmlnsList[i] == '\n')
+			   xmlnsList[i] == '\n') {
 
 			   ++i;	// Skip white space
+		}
 
 		j = 0;
 		while (!(xmlnsList[i] == ' ' ||
 			   xmlnsList[i] == '\0' ||
 			   xmlnsList[i] == '\t' ||
 			   xmlnsList[i] == '\r' ||
-			   xmlnsList[i] == '\n'))
+			   xmlnsList[i] == '\n')) {
 
 			   nsBuf[j++] = xmlnsList[i++];	// Copy name
+		}
 
 		// Terminate the string
 		nsBuf[j] = '\0';
@@ -280,8 +283,6 @@ void XSECC14n20010315::setExclusive(char * xmlnsList) {
 		}
 
 	}
-
-	delete[] nsBuf;
 
 }
 

@@ -114,8 +114,11 @@ void TXFMParser::setInput(TXFMBase *newInput) {
 	XercesDOMParser parser;
 
 	parser.setDoNamespaces(true);
-	parser.setCreateEntityReferenceNodes(true);
-	parser.setDoSchema(true);
+	parser.setLoadExternalDTD(false);
+
+	SecurityManager securityManager;
+	securityManager.setEntityExpansionLimit(XSEC_ENTITY_EXPANSION_LIMIT);
+	parser.setSecurityManager(&securityManager);
 
 	parser.parse(is);
     xsecsize_t errorCount = parser.getErrorCount();

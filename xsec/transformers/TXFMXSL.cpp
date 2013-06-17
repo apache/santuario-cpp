@@ -187,7 +187,11 @@ void TXFMXSL::evaluateStyleSheet(const safeBuffer &sbStyleSheet) {
 
 	parser->setDoNamespaces(true);
 	parser->setCreateEntityReferenceNodes(true);
+	parser->setLoadExternalDTD(false);
 	parser->setDoSchema(true);
+
+	SecurityManager securityManager;
+	parser->setSecurityManager(&securityManager);
 
 	// Create an input source
 

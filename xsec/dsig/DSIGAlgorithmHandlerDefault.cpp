@@ -60,6 +60,15 @@ bool compareBase64StringToRaw(const char * b64Str,
 	// Compare at most maxCompare bits (if maxCompare > 0)
 	// Note - whilst the other parameters are bytes, maxCompare is bits
 
+	// The div function below takes signed int, so make sure the value
+	// is safe to cast.
+	if ((int) maxCompare < 0) {
+
+		throw XSECException(XSECException::CryptoProviderError, 
+				"Comparison length was unsafe");
+
+	}
+
 	unsigned char outputStr[MAXB64BUFSIZE];
 	unsigned int outputLen = 0;
 	
@@ -126,7 +135,7 @@ bool compareBase64StringToRaw(const char * b64Str,
 
 	char mask = 0x01;
 	if (maxCompare != 0) {
-	    for (j = 0 ; j < (unsigned int) d.rem; ++i) {
+	    for (j = 0 ; j < (unsigned int) d.rem; ++j) {
 
 		    if ((raw[i] & mask) != (outputStr[i] & mask))
 			    return false;
@@ -516,7 +525,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		// Signature already created, so just translate to base 64 and enter string
 
         // FIX: CVE-2009-0217
-        if (outputLength > 0 && (outputLength < 80 || outputLength < hashLen / 2)) {
+        if (outputLength > 0 && (outputLength > hashLen || outputLength < 80 || outputLength < hashLen / 2)) {
             throw XSECException(XSECException::AlgorithmMapperError,
                 "HMACOutputLength set to unsafe value.");
         }
@@ -641,7 +650,7 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 		// Already done - just compare calculated value with read value
 
         // FIX: CVE-2009-0217
-        if (outputLength > 0 && (outputLength < 80 || outputLength < hashLen / 2)) {
+        if (outputLength > 0 && (outputLength > hashLen || outputLength < 80 || outputLength < hashLen / 2)) {
             throw XSECException(XSECException::AlgorithmMapperError,
                 "HMACOutputLength set to unsafe value.");
         }

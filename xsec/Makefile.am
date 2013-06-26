@@ -590,7 +590,7 @@ nss_sources = \
 #
 # Now the library specific build items
 #
-libxml_security_c_la_LDFLAGS = -version-info 17:1:0
+libxml_security_c_la_LDFLAGS = -version-info 17:2:0
 
 install-exec-hook:
 	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done

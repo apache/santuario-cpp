@@ -529,10 +529,15 @@ TXFMBase * DSIGReference::getURIBaseTXFM(DOMDocument * doc,
 			xsecsize_t j = 14, i = 0;
 
 			// Have an ID
-			while (URI[j] != '\'') {
+			while (i < len && URI[j] != '\'') {
 				tmp[i++] = URI[j++];
 			}
+
 			tmp[i] = XERCES_CPP_NAMESPACE_QUALIFIER chNull;
+			
+			if (URI[j] != '\'') {
+				throw XSECException(XSECException::UnsupportedXpointerExpr);	
+			}
 
 			to->setInput(doc, tmp);
 

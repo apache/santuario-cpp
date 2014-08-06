@@ -12,8 +12,13 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 BuildRequires:  libXerces-c-devel >= 2.8
 %{?_with_xalan:BuildRequires: libXalan-c-devel >= 1.6}
 %else
+%if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
+BuildRequires:  xerces-c-devel >= 2.8
+%{?_with_xalan:BuildRequires: xalan-c-devel >= 1.6}
+%else
 BuildRequires:  libxerces-c-devel >= 2.8
 %{?_with_xalan:BuildRequires: libxalan-c-devel >= 1.6}
+%endif
 %endif
 BuildRequires:  openssl-devel gcc-c++ pkgconfig
 %if "%{_vendor}" == "redhat"
@@ -61,8 +66,13 @@ Requires:	openssl-devel
 Requires:	libXerces-c-devel
 %{?_with_xalan:Requires: libXalan-c-devel}
 %else
+%if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
+Requires:	xerces-c-devel
+%{?_with_xalan:Requires: xalan-c-devel}
+%else
 Requires:	libxerces-c-devel
 %{?_with_xalan:Requires: libxalan-c-devel}
+%endif
 %endif
 Provides:   xml-security-c-devel = %{version}-%{release}
 Obsoletes:  xml-security-c-devel < %{version}-%{release}
@@ -112,6 +122,10 @@ This package includes files needed for development with xml-security-c.
 %{_libdir}/*.a
 
 %changelog
+* Tue May 13 2014 Ian Young <ian@iay.org.uk> 1.7.2-2.2
+- fix package dependencies for RHEL/CentOS 7
+- fix bogus dates in changelog
+
 * Mon Jul 30 2012 Scott Cantor <cantor.2@osu.edu> 1.7.0-1
 - update to 1.7.0
 - update URL and license
@@ -142,5 +156,5 @@ This package includes files needed for development with xml-security-c.
 * Sun Jul 03 2005   Scott Cantor  <cantor.2@osu.edu> - 1.2.0-1
 - Updated version.
 
-* Mon Oct 19 2004   Derek Atkins  <derek@ihtfp.com> - 1.1.1-1
+* Tue Oct 19 2004   Derek Atkins  <derek@ihtfp.com> - 1.1.1-1
 - First Package.

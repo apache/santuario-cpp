@@ -1,5 +1,5 @@
 Name:           xml-security-c
-Version:        1.7.2
+Version:        1.7.3
 Release:        1
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
@@ -122,6 +122,9 @@ This package includes files needed for development with xml-security-c.
 %{_libdir}/*.a
 
 %changelog
+* Wed Jan 28 2015 Scott Cantor <cantor.2@osu.edu> 1.7.3-1
+- update to 1.7.3
+
 * Tue May 13 2014 Ian Young <ian@iay.org.uk> 1.7.2-2.2
 - fix package dependencies for RHEL/CentOS 7
 - fix bogus dates in changelog

@@ -74,7 +74,6 @@
 
 #if defined(HAVE_UNISTD_H)
 # include <unistd.h>
-# define _MAX_PATH PATH_MAX
 #else
 # if defined(HAVE_DIRECT_H)
 #  include <direct.h>
@@ -1169,10 +1168,14 @@ int main(int argc, char **argv) {
      
 	// Map out base path of the file
 	char * filename=argv[argc-1];
-	char path[_MAX_PATH];
-	char baseURI[(_MAX_PATH * 2) + 10];
-	getcwd(path, _MAX_PATH);
-
+#if HAVE_GETCWD_DYN
+	char *path = getcwd(NULL, 0);
+	char *baseURI = (char*)malloc(strlen(path) + 8 + 1 + strlen(filename) + 1);
+#else
+	char path[PATH_MAX];
+	char baseURI[(PATH_MAX * 2) + 10];
+	getcwd(path, PATH_MAX);
+#endif
 	strcpy(baseURI, "file:///");		
 
 	// Ugly and nasty but quick
@@ -1202,6 +1205,10 @@ int main(int argc, char **argv) {
 
 	theResolver->setBaseURI(MAKE_UNICODE_STRING(baseURI));
 	sig->setURIResolver(theResolver);
+#if HAVE_GETCWD_DYN
+	free(path);
+	free(baseURI);
+#endif
 
 	try {
 		sig->load();

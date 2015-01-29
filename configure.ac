@@ -17,7 +17,7 @@
 
 # Process this file with autoreconf
 AC_PREREQ(2.50)
-AC_INIT([[XML-Security-C]],[1.7.2],[dev@santuario.apache.org],[xml-security-c])
+AC_INIT([[XML-Security-C]],[1.7.3],[dev@santuario.apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)
@@ -65,11 +65,11 @@ LIBS="${LIBS} ${PTHREAD_LIBS}"
 CC="${PTHREAD_CC}"
 
 # Checks for required libraries
-AC_CHECK_LIB(m, floor)
-AC_CHECK_LIB(socket, getservent)
+AC_CHECK_LIB(m, floor,)
+AC_CHECK_LIB(socket, getservent,)
 
 # Check for required includes
-AC_CHECK_HEADERS(unistd.h direct.h)
+AC_CHECK_HEADERS([unistd.h direct.h])
 
 AC_CHECK_DECL(strcasecmp,[AC_DEFINE([XSEC_HAVE_STRCASECMP],[1],[Define to 1 if strcasecmp present.])],,[#include <string.h>]) 
 
@@ -380,7 +380,7 @@ if test x"$use_openssl" != "xno" ; then
 
     # Check for explicit location or try pkg-config
     if test x"$use_openssl" = "xyes" ; then
-        AC_PATH_PROG(PKG_CONFIG, pkg-config)
+        AC_PATH_PROG(PKG_CONFIG, pkg-config,)
         if test "x$PKG_CONFIG" != x && test "x$PKG_CONFIG" != "xno" ; then
             if pkg-config openssl ; then
                 SSLLIBS="`$PKG_CONFIG --libs openssl`"
@@ -471,7 +471,7 @@ if test x"$use_nss" != "xno" ; then
 
     # Check for explicit location or try pkg-config
     if test x"$use_nss" = "xyes" ; then
-        AC_PATH_PROG(PKG_CONFIG, pkg-config)
+        AC_PATH_PROG(PKG_CONFIG, pkg-config,)
         if test "x$PKG_CONFIG" != x && test "x$PKG_CONFIG" != "xno" ; then
             if pkg-config nss ; then
                 NSSLIBS="`$PKG_CONFIG --libs nss`"

@@ -525,7 +525,7 @@ unsigned int WinCAPICryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 	   Otherwise we get some nasty errors due to rounding calculations when inputs
 	   are too small */
 
-	if (m_bytesInLastBlock + inLength < m_blockSize) {
+	if (inLength < m_blockSize) {
 		// Not enough input data
 		memcpy(&m_lastBlock[m_bytesInLastBlock], inBuf, inLength);
 		m_bytesInLastBlock += inLength;

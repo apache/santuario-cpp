@@ -238,7 +238,7 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 	}
 
 	// Now turn the signature into a base64 string
-	unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsa_sig->r) + BN_num_bits(dsa_sig->s)) / 8];
+	unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsa_sig->r) + BN_num_bits(dsa_sig->s) + 7) / 8];
     ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
 
 	unsigned int rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);

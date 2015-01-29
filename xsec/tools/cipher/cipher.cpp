@@ -60,7 +60,6 @@
 
 #if defined(HAVE_UNISTD_H)
 # include <unistd.h>
-# define _MAX_PATH PATH_MAX
 #else
 # if defined(HAVE_DIRECT_H)
 #  include <direct.h>
@@ -639,10 +638,14 @@ int evaluate(int argc, char ** argv) {
 			if (useInteropResolver == true) {
 
 				// Map out base path of the file
-				char path[_MAX_PATH];
-				char baseURI[(_MAX_PATH * 2) + 10];
-				getcwd(path, _MAX_PATH);
-
+#if HAVE_GETCWD_DYN
+				char *path = getcwd(NULL, 0);
+				char *baseURI = (char*)malloc(strlen(path) + 8 + 1 + strlen(filename) + 1);
+#else
+				char path[PATH_MAX];
+				char baseURI[(PATH_MAX * 2) + 10];
+				getcwd(path, PATH_MAX);
+#endif
 				strcpy(baseURI, "file:///");		
 
 				// Ugly and nasty but quick
@@ -671,6 +674,10 @@ int evaluate(int argc, char ** argv) {
 				baseURI[lastSlash + 1] = '\0';
 
 				XMLCh * uriT = XMLString::transcode(baseURI);
+#if HAVE_GETCWD_DYN
+				free(path);
+				free(baseURI);
+#endif
 
 				XencInteropResolver ires(doc, &(uriT[8]));
 				XSEC_RELEASE_XMLCH(uriT);

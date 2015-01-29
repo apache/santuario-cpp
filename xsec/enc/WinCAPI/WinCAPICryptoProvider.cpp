@@ -71,7 +71,7 @@ WinCAPICryptoProvider::WinCAPICryptoProvider(
 		PROV_RSA_AES,
 		CRYPT_VERIFYCONTEXT)) 
 	{
-		// Check of we maybe don't understand AES
+		// Check if we maybe don't understand AES
 
 		DWORD error = GetLastError();
 		if (error == NTE_PROV_TYPE_NOT_DEF || error == 0) {
@@ -130,8 +130,13 @@ WinCAPICryptoProvider::WinCAPICryptoProvider(
 			m_provRSAType,
 			dwFlags | CRYPT_NEWKEYSET)) {
 
-			throw XSECException(XSECException::InternalError,
-				"WinCAPICryptoProvider() - Error obtaining generating internal key store for PROV_RSA_FULL");
+		    // Prevents failure on mandatory profiles, see SANTUARIO-378.
+		    if (GetLastError() != NTE_TEMPORARY_PROFILE) {
+	            throw XSECException(XSECException::InternalError,
+	                "WinCAPICryptoProvider() - Error obtaining generating internal key store for PROV_RSA_FULL");
+		    } else {
+		        m_provApacheKeyStore = NULL;
+		    }
 		}
 		else {
 			HCRYPTKEY k;
@@ -162,7 +167,9 @@ WinCAPICryptoProvider::~WinCAPICryptoProvider() {
 
 	CryptReleaseContext(m_provRSA, 0);
 	CryptReleaseContext(m_provDSS, 0);
-	CryptReleaseContext(m_provApacheKeyStore, 0);
+	if (m_provApacheKeyStore) {
+	    CryptReleaseContext(m_provApacheKeyStore, 0);
+	}
 
 }
 

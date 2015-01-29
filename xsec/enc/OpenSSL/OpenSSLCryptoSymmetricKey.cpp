@@ -488,7 +488,7 @@ unsigned int OpenSSLCryptoSymmetricKey::decryptFinish(unsigned char * plainBuf,
 		// Should never see any bytes output, as we are not padding
 
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
-			"OpenSSL:SymmetricKey - Unexpectedly recieved bytes from EVP_DecryptFinal_ex"); 
+			"OpenSSL:SymmetricKey - Unexpectedly received bytes from EVP_DecryptFinal_ex");
 
 	}
 

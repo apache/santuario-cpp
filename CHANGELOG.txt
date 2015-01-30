@@ -1,3 +1,5 @@
+For subsequent changes, refer to the issue tracker.
+
 Changes since 1.7.0
 =====================================
 * Fixes for CVE-2013-2153, CVE-2013-2154, CVE-2013-2155, CVE-2013-2156

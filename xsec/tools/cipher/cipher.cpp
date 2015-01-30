@@ -638,7 +638,7 @@ int evaluate(int argc, char ** argv) {
 			if (useInteropResolver == true) {
 
 				// Map out base path of the file
-#if HAVE_GETCWD_DYN
+#if XSEC_HAVE_GETCWD_DYN
 				char *path = getcwd(NULL, 0);
 				char *baseURI = (char*)malloc(strlen(path) + 8 + 1 + strlen(filename) + 1);
 #else
@@ -674,7 +674,7 @@ int evaluate(int argc, char ** argv) {
 				baseURI[lastSlash + 1] = '\0';
 
 				XMLCh * uriT = XMLString::transcode(baseURI);
-#if HAVE_GETCWD_DYN
+#if XSEC_HAVE_GETCWD_DYN
 				free(path);
 				free(baseURI);
 #endif

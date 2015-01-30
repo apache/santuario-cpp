@@ -9,6 +9,9 @@
 /* Define to 1 if strcasecmp present. */
 #undef XSEC_HAVE_STRCASECMP
 
+/* Define to 1 if getcwd(NULL, 0) works. */
+#undef XSEC_HAVE_GETCWD_DYN
+
 /* Define to 1 if Xalan is unavailable. */
 #undef XSEC_NO_XALAN
 

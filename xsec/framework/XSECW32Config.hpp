@@ -211,4 +211,7 @@
 /* Windows direct.h */
 #define HAVE_DIRECT_H 1
 
+/* Define to 1 if getcwd(NULL, 0) works. */
+#define XSEC_HAVE_GETCWD_DYN 1
+
 #include <xsec/framework/XSECVersion.hpp>

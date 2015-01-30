@@ -1168,7 +1168,7 @@ int main(int argc, char **argv) {
      
 	// Map out base path of the file
 	char * filename=argv[argc-1];
-#if HAVE_GETCWD_DYN
+#if XSEC_HAVE_GETCWD_DYN
 	char *path = getcwd(NULL, 0);
 	char *baseURI = (char*)malloc(strlen(path) + 8 + 1 + strlen(filename) + 1);
 #else
@@ -1205,7 +1205,7 @@ int main(int argc, char **argv) {
 
 	theResolver->setBaseURI(MAKE_UNICODE_STRING(baseURI));
 	sig->setURIResolver(theResolver);
-#if HAVE_GETCWD_DYN
+#if XSEC_HAVE_GETCWD_DYN
 	free(path);
 	free(baseURI);
 #endif

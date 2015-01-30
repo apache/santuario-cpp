@@ -437,7 +437,7 @@ int evaluate(int argc, char ** argv) {
 		AnonymousResolver theAnonymousResolver;
 		     
 		// Map out base path of the file
-#if HAVE_GETCWD_DYN
+#if XSEC_HAVE_GETCWD_DYN
 		char *path = getcwd(NULL, 0);
 		char *baseURI = (char*)malloc(strlen(path) + 8 + 1 + strlen(filename) + 1);
 #else
@@ -474,7 +474,7 @@ int evaluate(int argc, char ** argv) {
 		XMLCh * baseURIXMLCh = XMLString::transcode(baseURI);
 
 		XMLUri uri(MAKE_UNICODE_STRING(baseURI));
-#if HAVE_GETCWD_DYN
+#if XSEC_HAVE_GETCWD_DYN
 		free(path);
 		free(baseURI);
 #endif

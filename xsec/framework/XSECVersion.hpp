@@ -30,7 +30,7 @@
 
 #define XSEC_VERSION_MAJOR   1
 #define XSEC_VERSION_MEDIUM  7
-#define XSEC_VERSION_MINOR   2
+#define XSEC_VERSION_MINOR   3
 
 // --------------------------------------------------------------------------------
 //           Version Handling

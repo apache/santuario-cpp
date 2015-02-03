@@ -221,7 +221,6 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 	// Sign a pre-calculated hash using this key
 
 	if (mp_ecKey == NULL) {
-
 		throw XSECCryptoException(XSECCryptoException::ECError,
 			"OpenSSL:EC - Attempt to sign data with empty key");
 	}
@@ -231,35 +230,50 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 	dsa_sig = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
 
 	if (dsa_sig == NULL) {
-
 		throw XSECCryptoException(XSECCryptoException::ECError,
 			"OpenSSL:EC - Error signing data");
-
 	}
 
-	// Now turn the signature into a base64 string
-	unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsa_sig->r) + BN_num_bits(dsa_sig->s) + 7) / 8];
+    // To encode the signature properly, we need to know the "size of the
+    // base point order of the curve in bytes", which seems to correspond to the
+    // number of bits in the EC Group "order", using the OpenSSL API.
+    // This is the size of the r and s values in the signature when converting them
+    // to octet strings. The code below is cribbed from ECDSA_size.
+
+    unsigned int keyLen = 0;
+    const EC_GROUP* group = EC_KEY_get0_group(mp_ecKey);
+    if (group) {
+        BIGNUM* order = BN_new();
+        if (order) {
+            if (EC_GROUP_get_order(group, order, NULL)) {
+                keyLen = (BN_num_bits(order) + 7) / 8; // round up to byte size
+            }
+            BN_clear_free(order);
+        }
+    }
+
+    if (keyLen == 0) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+			"OpenSSL:EC - Error caclulating signature size");
+    }
+
+	// Now turn the signature into a raw octet string, half r and half s.
+
+	unsigned char* rawSigBuf = new unsigned char[keyLen * 2];
+    memset(rawSigBuf, 0, keyLen * 2);
     ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
 
-	unsigned int rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);
-
-    if (rawLen <= 0) {
-
+    unsigned int rawLen = (BN_num_bits(dsa_sig->r) + 7) / 8;
+    if (BN_bn2bin(dsa_sig->r, rawSigBuf + keyLen - rawLen) <= 0) {
 		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error converting signature to raw buffer");
-
+			"OpenSSL:EC - Error copying signature 'r' value to buffer");
 	}
 
-	unsigned int rawLenS = BN_bn2bin(dsa_sig->s, (unsigned char *) &rawSigBuf[rawLen]);
-
-    if (rawLenS <= 0) {
-
+	rawLen = (BN_num_bits(dsa_sig->s) + 7) / 8;
+    if (BN_bn2bin(dsa_sig->s, rawSigBuf + keyLen + keyLen - rawLen) <= 0) {
 		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error converting signature to raw buffer");
-
+			"OpenSSL:EC - Error copying signature 's' value to buffer");
 	}
-
-	rawLen += rawLenS;
 
 	// Now convert to Base 64
 
@@ -269,9 +283,7 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 	BIO_set_mem_eof_return(bmem, 0);
 	b64 = BIO_push(b64, bmem);
 
-	// Translate signature to Base64
-
-	BIO_write(b64, rawSigBuf, rawLen);
+	BIO_write(b64, rawSigBuf, keyLen * 2);
 	BIO_flush(b64);
 
 	unsigned int sigValLen = BIO_read(bmem, base64SignatureBuf, base64SignatureBufLen);
@@ -279,13 +291,11 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 	BIO_free_all(b64);
 
 	if (sigValLen <= 0) {
-
 		throw XSECCryptoException(XSECCryptoException::ECError,
 			"OpenSSL:EC - Error base64 encoding signature");
 	}
 
 	return sigValLen;
-
 }
 
 

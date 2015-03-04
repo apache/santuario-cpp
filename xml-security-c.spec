@@ -8,17 +8,12 @@ URL:            http://www.apache.org/dist/santuario/c-library/
 Source:         %{name}-%{version}.tar.gz
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-%if 0%{?suse_version} > 1030 && 0%{?suse_version} < 1120
-BuildRequires:  libXerces-c-devel >= 2.8
-%{?_with_xalan:BuildRequires: libXalan-c-devel >= 1.6}
-%else
 %if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
-BuildRequires:  xerces-c-devel >= 2.8
+BuildRequires:  xerces-c-devel >= 3.1
 %{?_with_xalan:BuildRequires: xalan-c-devel >= 1.6}
 %else
-BuildRequires:  libxerces-c-devel >= 2.8
+BuildRequires:  libxerces-c-devel >= 3.1
 %{?_with_xalan:BuildRequires: libxalan-c-devel >= 1.6}
-%endif
 %endif
 BuildRequires:  openssl-devel gcc-c++ pkgconfig
 %if "%{_vendor}" == "redhat"
@@ -62,17 +57,12 @@ Summary:	Development files for the Apache C++ XML security library
 Group:		Development/Libraries/C and C++
 Requires:	libxml-security-c17 = %{version}-%{release}
 Requires:	openssl-devel
-%if 0%{?suse_version} > 1030 && 0%{?suse_version} < 1120
-Requires:	libXerces-c-devel
-%{?_with_xalan:Requires: libXalan-c-devel}
-%else
 %if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
-Requires:	xerces-c-devel
+Requires:       xerces-c-devel
 %{?_with_xalan:Requires: xalan-c-devel}
 %else
-Requires:	libxerces-c-devel
+Requires:       libxerces-c-devel
 %{?_with_xalan:Requires: libxalan-c-devel}
-%endif
 %endif
 Provides:   xml-security-c-devel = %{version}-%{release}
 Obsoletes:  xml-security-c-devel < %{version}-%{release}
@@ -124,6 +114,7 @@ This package includes files needed for development with xml-security-c.
 %changelog
 * Wed Jan 28 2015 Scott Cantor <cantor.2@osu.edu> 1.7.3-1
 - update to 1.7.3
+- remove support for dead Xerces versions
 
 * Tue May 13 2014 Ian Young <ian@iay.org.uk> 1.7.2-2.2
 - fix package dependencies for RHEL/CentOS 7

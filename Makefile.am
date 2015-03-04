@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = xsec

@@ -5,7 +5,7 @@ Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
 License:        Apache 2.0
 URL:            http://www.apache.org/dist/santuario/c-library/
-Source:         %{name}-%{version}.tar.gz
+Source:         %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
@@ -115,6 +115,7 @@ This package includes files needed for development with xml-security-c.
 * Wed Jan 28 2015 Scott Cantor <cantor.2@osu.edu> 1.7.3-1
 - update to 1.7.3
 - remove support for dead Xerces versions
+- switch to bzipped source to avoid SuSE problems later
 
 * Tue May 13 2014 Ian Young <ian@iay.org.uk> 1.7.2-2.2
 - fix package dependencies for RHEL/CentOS 7

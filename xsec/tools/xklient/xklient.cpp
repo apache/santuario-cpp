@@ -271,6 +271,8 @@ XSECCryptoX509 * loadX509(const char * infile) {
 		i = (int) fread(buf, 1, 1024, f);
 	}
 
+	fclose(f);
+
 	sb[j] = '\0';
 
 	XSECCryptoX509 * ret = 

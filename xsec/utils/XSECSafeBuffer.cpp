@@ -55,13 +55,27 @@ void safeBuffer::checkAndExpand(xsecsize_t size) {
 	// For a given size, check it will fit (with one byte spare)
 	// and expand if necessary
 
-	if (size + 1 < bufferSize)
+	if (size + 2 < bufferSize)
 		return;
 
-	// Make the new size twice the size of the new string requirement
-	xsecsize_t newBufferSize = size * 2;
+	// Resize and add 1K for further growth
+	xsecsize_t newBufferSize = size + 1024;
+
+	// Did we overflow?
+	if (size + 2 > newBufferSize) {
+		/* We've got a string that's too big to deal with */
+		throw XSECException(XSECException::SafeBufferError,
+			"Buffer has grown too large");
+	}
 
 	unsigned char * newBuffer = new unsigned char[newBufferSize];
+	if (newBuffer == NULL)
+	{
+		/* Ran out of memory */
+		throw XSECException(XSECException::MemoryAllocationFail,
+			"Error allocating memory for Buffer");
+	}
+
 	memset((void *) newBuffer, 0, newBufferSize);
 	memcpy(newBuffer, buffer, bufferSize);
 
@@ -73,7 +87,6 @@ void safeBuffer::checkAndExpand(xsecsize_t size) {
 	bufferSize = newBufferSize;
 	delete[] buffer;
 	buffer = newBuffer;
-
 }
 
 void safeBuffer::checkBufferType(bufferType bt) const {
@@ -107,6 +120,7 @@ safeBuffer::safeBuffer(xsecsize_t initialSize) {
 	buffer = new unsigned char[initialSize];
 	memset((void *) buffer, 0, bufferSize);
 	mp_XMLCh = NULL;
+	m_bufferType = BUFFER_UNKNOWN;
 	m_isSensitive = false;
 
 }
@@ -205,6 +219,7 @@ void safeBuffer::sbStrncpyIn(const char * inStr, xsecsize_t n) {
     xsecsize_t len = (xsecsize_t) strlen(inStr);
 	checkAndExpand((n < len) ? n : len);
 	strncpy((char *) buffer, inStr, n);
+	buffer[n] = '\0';
 	m_bufferType = BUFFER_CHAR;
 
 }
@@ -224,7 +239,7 @@ void safeBuffer::sbStrncpyIn(const safeBuffer & inStr, xsecsize_t n) {
 void safeBuffer::sbStrcatIn(const char * inStr) {
 
 	checkBufferType(BUFFER_CHAR);
-    checkAndExpand((xsecsize_t) (strlen((char *) buffer) + strlen(inStr)));
+    checkAndExpand((xsecsize_t) (strlen((char *) buffer) + strlen(inStr) + 1));
 	strcat((char *) buffer, inStr);
 
 }
@@ -240,8 +255,10 @@ void safeBuffer::sbStrcatIn(const safeBuffer & inStr) {
 void safeBuffer::sbStrncatIn(const char * inStr, xsecsize_t n) {
     checkBufferType(BUFFER_CHAR);
     xsecsize_t len = (xsecsize_t) strlen(inStr);
-    checkAndExpand(((n < len) ? n : len) + (xsecsize_t) strlen((char *) buffer) + 2);
+	xsecsize_t totalLen = ((n < len) ? n : len) + (xsecsize_t)strlen((char *)buffer);
+    checkAndExpand(totalLen + 2);
 	strncat((char *) buffer, inStr, n);
+	buffer[totalLen] = '\0';
 
 }
 
@@ -272,7 +289,7 @@ void safeBuffer::sbStrinsIn(const char * inStr, xsecsize_t offset) {
 			"Attempt to insert string after termination point");
 	}
 
-	checkAndExpand(bl + il);
+	checkAndExpand(bl + il + 1);
 
 	memmove(&buffer[offset + il], &buffer[offset], bl - offset + 1);
 	memcpy(&buffer[offset], inStr, il);
@@ -292,7 +309,7 @@ void safeBuffer::sbStrinsIn(const XMLCh * inStr, xsecsize_t offset) {
 			"Attempt to insert string after termination point");
 	}
 
-	checkAndExpand(bl + il);
+	checkAndExpand(bl + il + size_XMLCh);
 
 	memmove(&buffer[xoffset + il], &buffer[xoffset], bl - xoffset + size_XMLCh);
 	memcpy(&buffer[xoffset], inStr, il);
@@ -304,6 +321,11 @@ void safeBuffer::sbMemcpyOut(void *outBuf, xsecsize_t n) const {
 
 	// WARNING - JUST ASSUMES OUTPUT BUFFER LONG ENOUGH
 	// ALSO MAKES NO ASSUMPTION OF THE BUFFER TYPE
+
+	if (n > bufferSize) {
+		throw XSECException(XSECException::SafeBufferError,
+			"safeBuffer::sbMemcpyOut Attempt to copy more data than buffer can hold");
+	}
 
 	memcpy(outBuf, buffer, n);
 

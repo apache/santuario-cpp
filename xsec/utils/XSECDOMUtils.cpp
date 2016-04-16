@@ -720,6 +720,10 @@ static bool isHexDigit(const XMLCh toCheck)
 
 static unsigned int xlatHexDigit(const XMLCh toXlat)
 {
+	if (!isHexDigit(toXlat)) {
+		throw XSECException(XSECException::ErrorOpeningURI,
+			"Unknown hex char");
+	}
     if ((toXlat >= chDigit_0) && (toXlat <= chDigit_9))
         return (unsigned int)(toXlat - chDigit_0);
 

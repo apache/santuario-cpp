@@ -303,6 +303,47 @@ unsigned int XSECBinHTTPURIInputStream::getSocketHandle(const XMLUri&  urlSource
     // To do:  We should really support http 1.1.  This implementation
     //         is weak.
 
+	safeBuffer request("GET ");
+	request.sbStrcatIn(pathAsCharStar.get());
+
+	if (queryAsCharStar.get() != 0)
+	{
+		// Tack on a ? before the fragment
+		request.sbStrcatIn("?");
+		request.sbStrcatIn(queryAsCharStar.get());
+	}
+
+	if (fragmentAsCharStar.get() != 0)
+	{
+		request.sbStrcatIn(fragmentAsCharStar.get());
+	}
+	request.sbStrcatIn(" HTTP/1.0\r\n");
+
+
+	request.sbStrcatIn("Host: ");
+	request.sbStrcatIn(hostNameAsCharStar.get());
+	if (portNumber != 80)
+	{
+		char portNumberStr[34];
+		request.sbStrcatIn(":");
+		_itoa(portNumber, portNumberStr, 10);
+		request.sbStrcatIn(portNumberStr);
+	}
+	request.sbStrcatIn("\r\n\r\n");
+
+	// Send the http request
+	int lent = (int)request.sbStrlen();
+	int  aLent = 0;
+	if ((aLent = send((unsigned short)s, (const char *) request.rawBuffer(), lent, 0)) != lent)
+	{
+		// Call WSAGetLastError() to get the error number.
+		throw XSECException(XSECException::HTTPURIInputStreamError,
+			"Error reported writing to socket");
+	}
+
+
+#if 0
+
     memset(fBuffer, 0, sizeof(fBuffer));
 
     strcpy(fBuffer, "GET ");
@@ -342,7 +383,7 @@ unsigned int XSECBinHTTPURIInputStream::getSocketHandle(const XMLUri&  urlSource
 							"Error reported writing to socket");
     }
 
-
+#endif
     //
     // get the response, check the http header for errors from the server.
     //
@@ -437,7 +478,7 @@ unsigned int XSECBinHTTPURIInputStream::getSocketHandle(const XMLUri&  urlSource
 
 		// Now read
 		p++;
-		for (q=0; q < 255 && p[q] != '\r' && p[q] !='\n'; ++q)
+		for (q=0; q < 255 && p[q] != '\r' && p[q] !='\n' && p[q] != '\0'; ++q)
 			redirectBuf[q] = p[q];
 
 		redirectBuf[q] = '\0';

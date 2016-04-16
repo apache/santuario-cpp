@@ -164,7 +164,7 @@
  * Define presence of cryptographic providers
  */
 
-#define XSEC_HAVE_OPENSSL 1
+// #define XSEC_HAVE_OPENSSL 1
 
 #define XSEC_HAVE_WINCAPI 1
 

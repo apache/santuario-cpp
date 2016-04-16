@@ -2547,6 +2547,13 @@ int main(int argc, char **argv) {
 	bool		doSignatureUnitTests = true;
 	bool		doXKMSTest = true;
 
+	// Testing for which Crypto API to use by default - only really useful on windows
+#if !defined(XSEC_HAVE_OPENSSL)
+#if defined(XSEC_HAVE_WINCAPI)
+	g_useWinCAPI = true;
+#endif
+#endif
+
 	int paramCount = 1;
 
 	while (paramCount < argc) {

@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects
 
 AM_CPPFLAGS = -I..
 

@@ -399,6 +399,8 @@ if test x"$use_openssl" != "xno" ; then
             else
                 AC_MSG_WARN([OpenSSL not supported by pkg-config, try --with-openssl=PATH instead])
             fi
+        else
+             SSLLIBS="-lcrypto -lssl"
         fi
     else
         if test x_$use_openssl != x_/usr; then

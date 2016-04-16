@@ -74,12 +74,12 @@ if ($^O =~ m/Win/) {
   $cipher = "../Build/Win32/VC6/Debug/cipher.exe";
 }
 else {
-  $checksig = "../bin/checksig";
-  $cipher = "../bin/cipher";
+  $checksig = ".libs/checksig";
+  $cipher = ".libs/cipher";
 }
 
 # Directory setup
-my $data_dir = "../../data";
+my $data_dir = "../../xml-security-java/src/test/resources";
 
 # Digital Signature Tests
 
@@ -181,7 +181,7 @@ my @dsig_array=(
 
 # Extra unit tests provided for bug reports
 
-"org/apache/xml/security/testcases/SAML2ArtifactResponse.xml,,n,n",
+"org/apache/xml/security/testcases/SAML2ArtifactResponse.xml,--id ID,n,n",
 
 );
 

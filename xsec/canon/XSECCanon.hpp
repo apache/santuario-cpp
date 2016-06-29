@@ -28,6 +28,9 @@
  * $Id$
  */
 
+#ifndef XSECCanon_INCLUDE
+#define XSECCanon_INCLUDE
+
 // XSEC includes
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/utils/XSECSafeBuffer.hpp>
@@ -98,4 +101,6 @@ protected:
 	virtual xsecsize_t processNextNode() = 0;
 
 };
+
+#endif /* XSECCanon_INCLUDE */
 

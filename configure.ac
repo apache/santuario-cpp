@@ -60,13 +60,6 @@ if test "$GCC" = "yes" ; then
     CXXFLAGS="-Wall $GCC_CXXFLAGS"
 fi
 
-# pthreads
-AX_PTHREAD
-CFLAGS="${CFLAGS} ${PTHREAD_CFLAGS}"
-CXXFLAGS="${CXXFLAGS} ${PTHREAD_CFLAGS}"
-LIBS="${LIBS} ${PTHREAD_LIBS}"
-CC="${PTHREAD_CC}"
-
 # Check for required includes
 AC_CHECK_HEADERS([unistd.h direct.h])
 

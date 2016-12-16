@@ -37,6 +37,7 @@
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyDSA.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyEC.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSCrypt/XSCryptCryptoBase64.hpp>
 
@@ -191,7 +192,7 @@ XSECCryptoKey::KeyType OpenSSLCryptoX509::getPublicKeyType() const {
 
     XSECCryptoKey::KeyType ret;
 
-    switch (pkey->type) {
+    switch (EVP_PKEY_id(pkey)) {
 
     case EVP_PKEY_DSA :
 
@@ -241,7 +242,7 @@ XSECCryptoKey * OpenSSLCryptoX509::clonePublicKey() const {
             "OpenSSL:X509 - cannot retrieve public key from cert");
     }
 
-    switch (pkey->type) {
+    switch (EVP_PKEY_id(pkey)) {
 
     case EVP_PKEY_DSA :
 

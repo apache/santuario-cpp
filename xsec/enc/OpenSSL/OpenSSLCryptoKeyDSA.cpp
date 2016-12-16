@@ -105,7 +105,7 @@ void OpenSSLCryptoKeyDSA::setPBase(BIGNUM  * p) {
 
 #else
     // Save it for later
-    if (mp_accumP == NULL)
+    if (mp_accumP != NULL)
         BN_free(mp_accumP);
 
     mp_accumP = p;
@@ -132,7 +132,7 @@ void OpenSSLCryptoKeyDSA::setQBase(BIGNUM  * q) {
     mp_dsaKey->q = q;
 
 #else
-    if (mp_accumQ == NULL)
+    if (mp_accumQ != NULL)
         BN_free(mp_accumQ);
 
     mp_accumQ = q;
@@ -159,7 +159,7 @@ void OpenSSLCryptoKeyDSA::setGBase(BIGNUM  * g) {
     mp_dsaKey->g = g;
 
 #else
-    if (mp_accumG == NULL)
+    if (mp_accumG != NULL)
         BN_free(mp_accumG);
 
     mp_accumG = g;
@@ -212,6 +212,9 @@ OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA(EVP_PKEY *k) : mp_accumP(NULL), mp_accu
     // Create a new key to be loaded as we go
 
     mp_dsaKey = DSA_new();
+    mp_accumG = NULL;
+    mp_accumP = NULL;
+    mp_accumQ = NULL;
 
     if (k == NULL || EVP_PKEY_id(k) != EVP_PKEY_DSA)
         return; // Nothing to do with us
@@ -220,7 +223,7 @@ OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA(EVP_PKEY *k) : mp_accumP(NULL), mp_accu
     DSA_get0_pqg(EVP_PKEY_get0_DSA(k), &otherP, &otherQ, &otherG);
 
     if (otherP != NULL && otherQ != NULL && otherG != NULL) {
-        DSA_set0_pqg(EVP_PKEY_get0_DSA(k), BN_dup(otherP), BN_dup(otherQ), BN_dup(otherG));
+        DSA_set0_pqg(mp_dsaKey, BN_dup(otherP), BN_dup(otherQ), BN_dup(otherG));
     }
 
     const BIGNUM *otherPriv = NULL, *otherPub = NULL;
@@ -233,7 +236,7 @@ OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA(EVP_PKEY *k) : mp_accumP(NULL), mp_accu
         if (otherPriv != NULL)
             newPriv = BN_dup(otherPriv);
 
-        DSA_set0_key(EVP_PKEY_get0_DSA(k), BN_dup(otherPub), newPriv);
+        DSA_set0_key(mp_dsaKey, BN_dup(otherPub), newPriv);
 
     }
 }
@@ -315,8 +318,7 @@ bool OpenSSLCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
 
     DSA_SIG * dsa_sig = DSA_SIG_new();
 
-    dsa_sig->r = BN_dup(R);
-    dsa_sig->s = BN_dup(S);
+    DSA_SIG_set0(dsa_sig, BN_dup(R), BN_dup(S));
 
     BN_free(R);
     BN_free(S);
@@ -367,11 +369,16 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
     }
 
     // Now turn the signature into a base64 string
+    
+    const BIGNUM *dsaSigR;
+    const BIGNUM *dsaSigS;
 
-    unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsa_sig->r) + BN_num_bits(dsa_sig->s) + 7) / 8];
+    DSA_SIG_get0(dsa_sig, &dsaSigR, &dsaSigS);
+
+    unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsaSigR) + BN_num_bits(dsaSigS) + 7) / 8];
     ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
     
-    unsigned int rawLen = BN_bn2bin(dsa_sig->r, rawSigBuf);
+    unsigned int rawLen = BN_bn2bin(dsaSigR, rawSigBuf);
 
     if (rawLen <= 0) {
 
@@ -380,7 +387,7 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 
     }
 
-    unsigned int rawLenS = BN_bn2bin(dsa_sig->s, (unsigned char *) &rawSigBuf[rawLen]);
+    unsigned int rawLenS = BN_bn2bin(dsaSigS, (unsigned char *) &rawSigBuf[rawLen]);
 
     if (rawLenS <= 0) {
 

@@ -43,6 +43,7 @@
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoSymmetricKey.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 
 #include <xsec/enc/XSCrypt/XSCryptCryptoBase64.hpp>
 
@@ -343,7 +344,7 @@ XSECCryptoKey* OpenSSLCryptoProvider::keyDER(const char* buf, unsigned long len,
     if (pkey) {
         XSECCryptoKey* ret = NULL;
         try {
-            switch (pkey->type) {
+            switch (EVP_PKEY_id(pkey)) {
                 case EVP_PKEY_RSA:
                     ret = new OpenSSLCryptoKeyRSA(pkey);
                     break;

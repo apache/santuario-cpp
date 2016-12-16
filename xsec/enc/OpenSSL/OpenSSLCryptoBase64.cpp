@@ -44,14 +44,31 @@
 
 XERCES_CPP_NAMESPACE_USE
 
+// --------------------------------------------------------------------------------
+//           Construction/Destruction
+// --------------------------------------------------------------------------------
 
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+OpenSSLCryptoBase64::OpenSSLCryptoBase64() : mp_dctx(&m_dctx_store), mp_ectx(&m_ectx_store) { }
+OpenSSLCryptoBase64::~OpenSSLCryptoBase64() { }
+#else
+OpenSSLCryptoBase64::OpenSSLCryptoBase64() : mp_dctx(EVP_ENCODE_CTX_new()), mp_ectx(EVP_ENCODE_CTX_new()) {
+    if (!mp_ectx || !mp_dctx)
+        throw XSECCryptoException(XSECCryptoException::ECError, "OpenSSL:CrypoBase64 - cannot allocate contexts");
+};
+OpenSSLCryptoBase64::~OpenSSLCryptoBase64() {
+    EVP_ENCODE_CTX_free(mp_ectx);
+    EVP_ENCODE_CTX_free(mp_dctx);
+}
+
+#endif
 // --------------------------------------------------------------------------------
 //           Decoding
 // --------------------------------------------------------------------------------
 
 void OpenSSLCryptoBase64::decodeInit(void) {
 
-	EVP_DecodeInit(&m_dctx);
+	EVP_DecodeInit(mp_dctx);
 
 }
 
@@ -70,7 +87,7 @@ unsigned int OpenSSLCryptoBase64::decode(const unsigned char * inData,
 
 	}
 
-	rc = EVP_DecodeUpdate(&m_dctx, 
+	rc = EVP_DecodeUpdate(mp_dctx,
 						  outData, 
 						  &outLen, 
 						  (unsigned char *) inData, 
@@ -99,7 +116,7 @@ unsigned int OpenSSLCryptoBase64::decodeFinish(unsigned char * outData,
 	int outLen;
 	outLen = outLength;
 
-	EVP_DecodeFinal(&m_dctx, outData, &outLen); 
+	EVP_DecodeFinal(mp_dctx, outData, &outLen);
 
 	return outLen;
 
@@ -111,7 +128,7 @@ unsigned int OpenSSLCryptoBase64::decodeFinish(unsigned char * outData,
 
 void OpenSSLCryptoBase64::encodeInit(void) {
 
-	EVP_EncodeInit(&m_ectx);
+	EVP_EncodeInit(mp_ectx);
 
 }
 
@@ -130,9 +147,9 @@ unsigned int OpenSSLCryptoBase64::encode(const unsigned char * inData,
 
 	}
 
-	EVP_EncodeUpdate(&m_ectx, 
+	EVP_EncodeUpdate( mp_ectx,
 					  outData, 
-					  &outLen, 
+					 &outLen, 
 					  (unsigned char *) inData, 
 					  inLength);
 
@@ -153,7 +170,7 @@ unsigned int OpenSSLCryptoBase64::encodeFinish(unsigned char * outData,
 	int outLen;
 	outLen = outLength;
 
-	EVP_EncodeFinal(&m_ectx, outData, &outLen); 
+	EVP_EncodeFinal(mp_ectx, outData, &outLen); 
 
 	return outLen;
 

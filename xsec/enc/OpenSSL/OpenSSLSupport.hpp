@@ -16,6 +16,8 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#if !defined(XSEC_OPENSSL_SUPPORT_H)
+#define XSEC_OPENSSL_SUPPORT_H 1
 
 #if defined (XSEC_HAVE_OPENSSL)
 #include <openssl/evp.h>
@@ -62,10 +64,34 @@ DSA *EVP_PKEY_get0_DSA(EVP_PKEY *pkey);
 #define EVP_PKEY_id(_evp_) ((_evp_)->type)
 #define EVP_PKEY_get0_EC_KEY(_evp_) ((_evp_)->pkey.ec)
 #define EVP_PKEY_get0_RSA(_evp_) ((_evp_)->pkey.rsa)
+
 #endif
 
 #define DUP_NON_NULL(_what_) ((_what_)?BN_dup((_what_)):NULL)
 
+/**
+ * \brief RAII for EVP_ENCODE_CTX
+ *
+ * In OpenSSL 1.1 EVP_ENCODE_CTX becomes opaque so we cannot
+ * just create one on the stack
+ */
+
+class EvpEncodeCtxRAII
+{
+public:
+    EvpEncodeCtxRAII();
+
+    ~EvpEncodeCtxRAII();
+
+    EVP_ENCODE_CTX *of(void);
+
+private:
+    EVP_ENCODE_CTX *mp_ctx;
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    EVP_ENCODE_CTX mp_ctx_store;
+#endif    
+};
 
 
+#endif
 #endif

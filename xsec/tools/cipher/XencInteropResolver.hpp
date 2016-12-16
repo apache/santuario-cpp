@@ -21,7 +21,7 @@
  * XSEC
  *
  * XencInteropResolver := Class to resolve key elements into certificates for
- *						interop test
+ *                      interop test
  *
  * Author(s): Berin Lautenbach
  *
@@ -45,27 +45,27 @@ class XencInteropResolver : public XSECKeyInfoResolver {
 
 public :
 
-	XencInteropResolver(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc, const XMLCh * baseURI);
-	~XencInteropResolver();
+    XencInteropResolver(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc, const XMLCh * baseURI);
+    ~XencInteropResolver();
 
-	// Interface functions
+    // Interface functions
 
-	virtual XSECCryptoKey * resolveKey(DSIGKeyInfoList * lst);
-	virtual XSECKeyInfoResolver * clone(void) const;
+    virtual XSECCryptoKey * resolveKey(DSIGKeyInfoList * lst);
+    virtual XSECKeyInfoResolver * clone(void) const;
 
-	// Internal functions
+    // Internal functions
 
 private:
 
-	XSECCryptoSymmetricKey * makeSymmetricKey(XSECCryptoSymmetricKey::SymmetricKeyType);
+    XSECCryptoSymmetricKey * makeSymmetricKey(XSECCryptoSymmetricKey::SymmetricKeyType);
 
-	XMLCh *			mp_baseURI;
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument 
-					*mp_doc;
+    XMLCh *         mp_baseURI;
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument 
+                    *mp_doc;
 
 #if defined (_WIN32)
-	_finddata_t		m_finder;
-	long			m_handle;
+    _finddata_t     m_finder;
+    long            m_handle;
 #else
     glob_t          m_globbuf;
     int             m_fcount;

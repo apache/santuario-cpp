@@ -20,6 +20,9 @@
 #if defined (XSEC_HAVE_OPENSSL)
 #include <openssl/evp.h>
 #include <openssl/dsa.h>
+#if defined (XSEC_OPENSSL_HAVE_EC)
+#include <openssl/ecdsa.h>
+#endif
 
 // Our own helper functions
 const BIGNUM *DSA_get0_pubkey(const DSA *dsa);
@@ -33,8 +36,22 @@ int DSA_set0_key(DSA *d, BIGNUM *pub_key, BIGNUM *priv_key);
 void DSA_get0_pqg(const DSA *d,
                   const BIGNUM **p, const BIGNUM **q, const BIGNUM **g);
 int DSA_set0_pqg(DSA *d, BIGNUM *p, BIGNUM *q, BIGNUM *g);
+void DSA_SIG_get0(const DSA_SIG *sig, const BIGNUM **pr, const BIGNUM **ps);
+int DSA_SIG_set0(DSA_SIG *sig, BIGNUM *r, BIGNUM *s);
+
+
+#if defined (XSEC_OPENSSL_HAVE_EC)
+
+int ECDSA_SIG_set0(ECDSA_SIG *sig, BIGNUM *r, BIGNUM *s);
+void ECDSA_SIG_get0(const ECDSA_SIG *sig, const BIGNUM **pr, const BIGNUM **ps);
+
+#endif
 
 DSA *EVP_PKEY_get0_DSA(EVP_PKEY *pkey);
+
+#define EVP_PKEY_id(_evp_) ((_evp_)->type)
+#define EVP_PKEY_get0_EC_KEY(_evp_) ((_evp_)->pkey.ec)
+#define EVP_PKEY_get0_RSA(_evp_) ((_evp_)->pkey.rsa)
 
 #endif
 

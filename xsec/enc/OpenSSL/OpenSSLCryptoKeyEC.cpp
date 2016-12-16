@@ -33,6 +33,8 @@
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyEC.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoProvider.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
+
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSECCryptoUtils.hpp>
 #include <xsec/enc/XSCrypt/XSCryptCryptoBase64.hpp>
@@ -128,10 +130,10 @@ OpenSSLCryptoKeyEC::OpenSSLCryptoKeyEC(EVP_PKEY *k) {
 
     // Create a new key to be loaded as we go
 
-    if (k == NULL || k->type != EVP_PKEY_EC)
+    if (k == NULL || EVP_PKEY_id(k) != EVP_PKEY_EC)
         return; // Nothing to do with us
 
-    mp_ecKey = EC_KEY_dup(k->pkey.ec);
+    mp_ecKey = EC_KEY_dup(EVP_PKEY_get0_EC_KEY(k));
 }
 
 // --------------------------------------------------------------------------------
@@ -188,15 +190,17 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
 
     // Translate to BNs by splitting in half, and thence to ECDSA_SIG
 
-    ECDSA_SIG * dsa_sig = ECDSA_SIG_new();
-    dsa_sig->r = BN_bin2bn(sigVal, sigValLen / 2, NULL);
-    dsa_sig->s = BN_bin2bn(&sigVal[sigValLen / 2], sigValLen / 2, NULL);
+    ECDSA_SIG * ecdsa_sig = ECDSA_SIG_new();
+    BIGNUM *newR = BN_bin2bn(sigVal, sigValLen / 2, NULL);
+    BIGNUM *newS =  BN_bin2bn(&sigVal[sigValLen / 2], sigValLen / 2, NULL);
+
+    ECDSA_SIG_set0(ecdsa_sig, newR, newS);
 
     // Now we have a signature and a key - lets check
 
-    int err = ECDSA_do_verify(hashBuf, hashLen, dsa_sig, mp_ecKey);
+    int err = ECDSA_do_verify(hashBuf, hashLen, ecdsa_sig, mp_ecKey);
 
-    ECDSA_SIG_free(dsa_sig);
+    ECDSA_SIG_free(ecdsa_sig);
 
     if (err < 0) {
 
@@ -225,11 +229,11 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
             "OpenSSL:EC - Attempt to sign data with empty key");
     }
 
-    ECDSA_SIG * dsa_sig;
+    ECDSA_SIG * ecdsa_sig;
 
-    dsa_sig = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
+    ecdsa_sig = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
 
-    if (dsa_sig == NULL) {
+    if (ecdsa_sig == NULL) {
         throw XSECCryptoException(XSECCryptoException::ECError,
             "OpenSSL:EC - Error signing data");
     }
@@ -263,14 +267,18 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
     memset(rawSigBuf, 0, keyLen * 2);
     ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
 
-    unsigned int rawLen = (BN_num_bits(dsa_sig->r) + 7) / 8;
-    if (BN_bn2bin(dsa_sig->r, rawSigBuf + keyLen - rawLen) <= 0) {
+    const BIGNUM *sigR;
+    const BIGNUM *sigS;
+    ECDSA_SIG_get0(ecdsa_sig, &sigR, &sigS);
+
+    unsigned int rawLen = (BN_num_bits(sigR) + 7) / 8;
+    if (BN_bn2bin(sigR, rawSigBuf + keyLen - rawLen) <= 0) {
         throw XSECCryptoException(XSECCryptoException::ECError,
             "OpenSSL:EC - Error copying signature 'r' value to buffer");
     }
 
-    rawLen = (BN_num_bits(dsa_sig->s) + 7) / 8;
-    if (BN_bn2bin(dsa_sig->s, rawSigBuf + keyLen + keyLen - rawLen) <= 0) {
+    rawLen = (BN_num_bits(sigS) + 7) / 8;
+    if (BN_bn2bin(sigS, rawSigBuf + keyLen + keyLen - rawLen) <= 0) {
         throw XSECCryptoException(XSECCryptoException::ECError,
             "OpenSSL:EC - Error copying signature 's' value to buffer");
     }

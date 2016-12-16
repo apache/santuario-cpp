@@ -36,6 +36,7 @@
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSECCryptoUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 
 #include <openssl/err.h>
 #include <openssl/rand.h>
@@ -369,33 +370,34 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) {
 
     mp_rsaKey = RSA_new();
 
-    if (k == NULL || k->type != EVP_PKEY_RSA)
+    if (k == NULL || EVP_PKEY_id(k) != EVP_PKEY_RSA)
         return; // Nothing to do with us
 
-    if (k->pkey.rsa->n)
-        mp_rsaKey->n = BN_dup(k->pkey.rsa->n);
+    RSA *rsa = EVP_PKEY_get0_RSA(k);
 
-    if (k->pkey.rsa->e)
-        mp_rsaKey->e = BN_dup(k->pkey.rsa->e);
+    if (rsa->n)
+        mp_rsaKey->n = BN_dup(rsa->n);
 
-    if (k->pkey.rsa->d)
-        mp_rsaKey->d = BN_dup(k->pkey.rsa->d);
+    if (rsa->e)
+        mp_rsaKey->e = BN_dup(rsa->e);
 
-    if (k->pkey.rsa->p)
-        mp_rsaKey->p = BN_dup(k->pkey.rsa->p);
+    if (rsa->d)
+        mp_rsaKey->d = BN_dup(rsa->d);
 
-    if (k->pkey.rsa->q)
-        mp_rsaKey->q = BN_dup(k->pkey.rsa->q);
+    if (rsa->p)
+        mp_rsaKey->p = BN_dup(rsa->p);
 
-    if (k->pkey.rsa->dmp1)
-        mp_rsaKey->dmp1 = BN_dup(k->pkey.rsa->dmp1);
+    if (rsa->q)
+        mp_rsaKey->q = BN_dup(rsa->q);
 
-    if (k->pkey.rsa->dmq1)
-        mp_rsaKey->dmq1 = BN_dup(k->pkey.rsa->dmq1);
+    if (rsa->dmp1)
+        mp_rsaKey->dmp1 = BN_dup(rsa->dmp1);
 
-    if (k->pkey.rsa->iqmp)
-        mp_rsaKey->iqmp = BN_dup(k->pkey.rsa->iqmp);
+    if (rsa->dmq1)
+        mp_rsaKey->dmq1 = BN_dup(rsa->dmq1);
 
+    if (rsa->iqmp)
+        mp_rsaKey->iqmp = BN_dup(rsa->iqmp);
 }
 
 // --------------------------------------------------------------------------------

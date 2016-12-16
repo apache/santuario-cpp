@@ -625,7 +625,7 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
                 XMLCh * G = BN2b64(otherG);
 				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
 				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
-                XMLCh * Y = BN2b64(otherPub);
+                XMLCh * Y = BN2b64((BIGNUM*)otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -642,8 +642,12 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
                 sig = lr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
                 sig->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
@@ -918,8 +922,12 @@ XKMSMessageAbstractType * createValidateRequest(XSECProvider &prov, DOMDocument 
                 sig = vr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+                RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
                 sig->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
@@ -1273,9 +1281,13 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
-                sig->appendRSAKeyValue(mod, exp);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
+				sig->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
 
@@ -1374,9 +1386,13 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 proofOfPossessionKey = new OpenSSLCryptoKeyRSA(pkey);
                 proofOfPossessionSm = SIGNATURE_RSA;
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
-                pkb->appendRSAKeyValue(mod, exp);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
+				pkb->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
 
@@ -1650,7 +1666,7 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
 				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
                 XMLCh * P = BN2b64(otherP);
                 XMLCh * Q = BN2b64(otherQ);
@@ -1674,9 +1690,13 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                 sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
-                sig->appendRSAKeyValue(mod, exp);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
+				sig->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
 
@@ -1747,7 +1767,7 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                     return NULL;
                 }
 
-                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
 				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
                 XMLCh * P = BN2b64(otherP);
                 XMLCh * Q = BN2b64(otherQ);
@@ -1769,8 +1789,12 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                     exit (1);
                 }
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
                 rkb->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
@@ -2037,9 +2061,13 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
-                sig->appendRSAKeyValue(mod, exp);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
+				sig->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
 
@@ -2113,7 +2141,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 proofOfPossessionKey = new OpenSSLCryptoKeyDSA(pkey);
                 proofOfPossessionSm = SIGNATURE_DSA;
 
-                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
 				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
                 XMLCh * P = BN2b64(otherP);
                 XMLCh * Q = BN2b64(otherQ);
@@ -2138,9 +2166,13 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 proofOfPossessionKey = new OpenSSLCryptoKeyRSA(pkey);
                 proofOfPossessionSm = SIGNATURE_RSA;
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
-                pkb->appendRSAKeyValue(mod, exp);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
+				pkb->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
 
@@ -2415,7 +2447,7 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
 				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
                 XMLCh * P = BN2b64(otherP);
                 XMLCh * Q = BN2b64(otherQ);
@@ -2439,8 +2471,12 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                 sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
                 sig->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
@@ -2534,9 +2570,13 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                     exit (1);
                 }
 
-                XMLCh * mod = BN2b64(pkey->pkey.rsa->n);
-                XMLCh * exp = BN2b64(pkey->pkey.rsa->e);
-                rkb->appendRSAKeyValue(mod, exp);
+				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
+
+                XMLCh * mod = BN2b64(n);
+                XMLCh * exp = BN2b64(e);
+
+				rkb->appendRSAKeyValue(mod, exp);
                 XSEC_RELEASE_XMLCH(mod);
                 XSEC_RELEASE_XMLCH(exp);
 
@@ -3294,14 +3334,19 @@ int doRegisterResultDump(XKMSRegisterResult *msg) {
 
                 // Create the RSA key file
                 RSA * rsa = RSA_new();
-                rsa->n = OpenSSLCryptoBase64::b642BN(sModulus, (unsigned int) strlen(sModulus));
-                rsa->e = OpenSSLCryptoBase64::b642BN(sExponent, (unsigned int) strlen(sExponent));
-                rsa->d = OpenSSLCryptoBase64::b642BN(sD, (unsigned int) strlen(sD));
-                rsa->p = OpenSSLCryptoBase64::b642BN(sP, (unsigned int) strlen(sP));
-                rsa->q = OpenSSLCryptoBase64::b642BN(sQ, (unsigned int) strlen(sQ));
-                rsa->dmp1 = OpenSSLCryptoBase64::b642BN(sDP, (unsigned int) strlen(sDP));
-                rsa->dmq1 = OpenSSLCryptoBase64::b642BN(sDQ, (unsigned int) strlen(sDQ));
-                rsa->iqmp = OpenSSLCryptoBase64::b642BN(sInverseQ, (unsigned int) strlen(sInverseQ));
+
+                RSA_set0_key(rsa, 
+                             OpenSSLCryptoBase64::b642BN(sModulus, (unsigned int) strlen(sModulus)),
+                             OpenSSLCryptoBase64::b642BN(sExponent, (unsigned int) strlen(sExponent)),
+                             OpenSSLCryptoBase64::b642BN(sD, (unsigned int) strlen(sD)));
+                RSA_set0_factors(rsa,
+                                 OpenSSLCryptoBase64::b642BN(sP, (unsigned int) strlen(sP)),
+                                 OpenSSLCryptoBase64::b642BN(sQ, (unsigned int) strlen(sQ)));
+
+                RSA_set0_crt_params(rsa,
+                                    OpenSSLCryptoBase64::b642BN(sDP, (unsigned int) strlen(sDP)), 
+                                    OpenSSLCryptoBase64::b642BN(sDQ, (unsigned int) strlen(sDQ)), 
+                                    OpenSSLCryptoBase64::b642BN(sInverseQ, (unsigned int) strlen(sInverseQ)));
 
                 // Write it to disk
                 BIO *out;
@@ -3410,14 +3455,20 @@ int doRecoverResultDump(XKMSRecoverResult *msg) {
 
                 // Create the RSA key file
                 RSA * rsa = RSA_new();
-                rsa->n = OpenSSLCryptoBase64::b642BN(sModulus, (unsigned int) strlen(sModulus));
-                rsa->e = OpenSSLCryptoBase64::b642BN(sExponent, (unsigned int) strlen(sExponent));
-                rsa->d = OpenSSLCryptoBase64::b642BN(sD, (unsigned int) strlen(sD));
-                rsa->p = OpenSSLCryptoBase64::b642BN(sP, (unsigned int) strlen(sP));
-                rsa->q = OpenSSLCryptoBase64::b642BN(sQ, (unsigned int) strlen(sQ));
-                rsa->dmp1 = OpenSSLCryptoBase64::b642BN(sDP, (unsigned int) strlen(sDP));
-                rsa->dmq1 = OpenSSLCryptoBase64::b642BN(sDQ, (unsigned int) strlen(sDQ));
-                rsa->iqmp = OpenSSLCryptoBase64::b642BN(sInverseQ, (unsigned int) strlen(sInverseQ));
+
+                RSA_set0_key(rsa, 
+                             OpenSSLCryptoBase64::b642BN(sModulus, (unsigned int) strlen(sModulus)),
+                             OpenSSLCryptoBase64::b642BN(sExponent, (unsigned int) strlen(sExponent)),
+                             OpenSSLCryptoBase64::b642BN(sD, (unsigned int) strlen(sD)));
+
+                RSA_set0_factors(rsa,
+                                 OpenSSLCryptoBase64::b642BN(sP, (unsigned int) strlen(sP)),
+                                 OpenSSLCryptoBase64::b642BN(sQ, (unsigned int) strlen(sQ)));
+
+                RSA_set0_crt_params(rsa,
+                                    OpenSSLCryptoBase64::b642BN(sDP, (unsigned int) strlen(sDP)), 
+                                    OpenSSLCryptoBase64::b642BN(sDQ, (unsigned int) strlen(sDQ)), 
+                                    OpenSSLCryptoBase64::b642BN(sInverseQ, (unsigned int) strlen(sInverseQ)));
 
                 // Write it to disk
                 BIO *out;

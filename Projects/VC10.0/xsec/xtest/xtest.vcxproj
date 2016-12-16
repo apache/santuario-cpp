@@ -115,42 +115,42 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/xtestObj/</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug No Xalan|Win32">
@@ -115,42 +115,35 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
+    <IntDir>$(SolutionDir)../../../Build/$(Platform)/VC10/$(Configuration)/threadTestObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../../../Build/$(Platform)/VC10/$(Configuration)/</OutDir>
-    <IntDir>../../../../Build/$(Platform)/VC10/$(Configuration)/obj/</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

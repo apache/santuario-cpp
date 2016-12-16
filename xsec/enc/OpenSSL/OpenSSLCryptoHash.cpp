@@ -38,7 +38,17 @@
 
 // Constructors/Destructors
 
-OpenSSLCryptoHash::OpenSSLCryptoHash(HashType alg) {
+OpenSSLCryptoHash::OpenSSLCryptoHash(HashType alg) :
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    mp_mdctx(&m_mdctx_store)
+#else
+    mp_mdctx(EVP_MD_CTX_new())
+#endif
+	, m_mdLen(0)
+ {
+    if (!mp_mdctx)
+        throw XSECCryptoException(XSECCryptoException::ECError, "OpenSSL:CryptoCryptoHash - cannot allocate contexts");
+
 
     switch (alg) {
 
@@ -104,15 +114,18 @@ OpenSSLCryptoHash::OpenSSLCryptoHash(HashType alg) {
             "OpenSSL:Hash - Error loading Message Digest"); 
     }
 
-    EVP_DigestInit(&m_mdctx, mp_md);
+    EVP_DigestInit(mp_mdctx, mp_md);
     m_hashType = alg;
 
 }
 
 
 OpenSSLCryptoHash::~OpenSSLCryptoHash() {
-
-    EVP_MD_CTX_cleanup(&m_mdctx);
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    EVP_MD_CTX_cleanup(mp_mdctx);
+#else
+    EVP_MD_CTX_free(mp_mdctx);
+#endif
 
 }
 
@@ -121,16 +134,17 @@ OpenSSLCryptoHash::~OpenSSLCryptoHash() {
 // Hashing Activities
 void OpenSSLCryptoHash::reset(void) {
 
-    EVP_MD_CTX_cleanup(&m_mdctx);
-
-    EVP_DigestInit(&m_mdctx, mp_md);
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    EVP_MD_CTX_cleanup(mp_mdctx);
+#endif
+    EVP_DigestInit(mp_mdctx, mp_md);
 
 }
 
 void OpenSSLCryptoHash::hash(unsigned char * data, 
                                  unsigned int length) {
 
-    EVP_DigestUpdate(&m_mdctx, data, length);
+    EVP_DigestUpdate(mp_mdctx, data, length);
 
 }
 unsigned int OpenSSLCryptoHash::finish(unsigned char * hash,
@@ -140,7 +154,7 @@ unsigned int OpenSSLCryptoHash::finish(unsigned char * hash,
 
     // Finish up and copy out hash, returning the length
 
-    EVP_DigestFinal(&m_mdctx, m_mdValue, &m_mdLen);
+    EVP_DigestFinal(mp_mdctx, m_mdValue, &m_mdLen);
 
     // Copy to output buffer
     

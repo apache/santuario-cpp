@@ -33,6 +33,7 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/enc/XSECCryptoBase64.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 
 // OpenSSL
 #if defined (XSEC_HAVE_OPENSSL)
@@ -66,8 +67,8 @@ class DSIG_EXPORT OpenSSLCryptoBase64 : public XSECCryptoBase64 {
 public :
 
     
-    OpenSSLCryptoBase64() {};
-    virtual ~OpenSSLCryptoBase64() {};
+    OpenSSLCryptoBase64();
+    virtual ~OpenSSLCryptoBase64();
 
     /** @name Decoding Functions */
     //@{
@@ -189,21 +190,25 @@ public :
      * \brief Get OpenSSL encode context structure
      */
 
-    EVP_ENCODE_CTX * getOpenSSLEncodeEVP_ENCODE_CTX(void) {return &m_ectx;}
+    EVP_ENCODE_CTX * getOpenSSLEncodeEVP_ENCODE_CTX(void) {return mp_ectx;}
 
     /**
      * \brief Get OpenSSL encode context structure
      */
 
-    EVP_ENCODE_CTX * getOpenSSLDecodeEVP_ENCODE_CTX(void) {return &m_dctx;}
+    EVP_ENCODE_CTX * getOpenSSLDecodeEVP_ENCODE_CTX(void) {return mp_dctx;}
 
     //@}
 
 private :
 
-    EVP_ENCODE_CTX m_ectx;              // Encode context
-    EVP_ENCODE_CTX m_dctx;              // Decode context
+    EVP_ENCODE_CTX *mp_ectx;              // Encode context
+    EVP_ENCODE_CTX *mp_dctx;              // Decode context
 
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    EVP_ENCODE_CTX m_ectx_store;
+    EVP_ENCODE_CTX m_dctx_store;
+#endif 
 };
 
 /*\@}*/

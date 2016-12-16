@@ -164,9 +164,15 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
     unsigned char* sigVal = new unsigned char[sigLen + 1];
     ArrayJanitor<unsigned char> j_sigVal(sigVal);
 
-    EVP_ENCODE_CTX m_dctx;
-    EVP_DecodeInit(&m_dctx);
-    int rc = EVP_DecodeUpdate(&m_dctx,
+    EvpEncodeCtxRAII dctx;
+
+    if (!dctx.of()) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - allocation fail during Context Creation");
+    }
+
+    EVP_DecodeInit(dctx.of());
+    int rc = EVP_DecodeUpdate(dctx.of(),
                           sigVal,
                           &sigValLen,
                           (unsigned char *) cleanedBase64Signature,
@@ -179,7 +185,7 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
     }
     int t = 0;
 
-    EVP_DecodeFinal(&m_dctx, &sigVal[sigValLen], &t);
+    EVP_DecodeFinal(dctx.of(), &sigVal[sigValLen], &t);
 
     sigValLen += t;
 

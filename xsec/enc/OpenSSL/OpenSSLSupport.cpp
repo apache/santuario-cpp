@@ -273,4 +273,20 @@ int ECDSA_SIG_set0(ECDSA_SIG *sig, BIGNUM *r, BIGNUM *s)
 
 #endif
 
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+EvpEncodeCtxRAII::EvpEncodeCtxRAII() : mp_ctx(&mp_ctx_store) { };
+EvpEncodeCtxRAII::~EvpEncodeCtxRAII() { }
+#else
+EvpEncodeCtxRAII::EvpEncodeCtxRAII() : mp_ctx(EVP_ENCODE_CTX_new()) { };
+EvpEncodeCtxRAII::~EvpEncodeCtxRAII() {
+    if (mp_ctx) 
+        EVP_ENCODE_CTX_free(mp_ctx);
+}
+#endif
+
+EVP_ENCODE_CTX
+*EvpEncodeCtxRAII::of()  {
+    return mp_ctx;
+}
+
 #endif

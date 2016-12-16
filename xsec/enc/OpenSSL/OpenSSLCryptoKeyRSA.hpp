@@ -307,6 +307,13 @@ private:
 	unsigned int					m_oaepParamsLen;
     maskGenerationFunc              m_mgf;
 
+    BIGNUM                          * mp_accumE, *mp_accumN;
+    void setEBase(BIGNUM *eBase);
+    void setNBase(BIGNUM *nBase);
+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+    void commitEN();
+#endif
+
 };
 
 #endif /* XSEC_HAVE_OPENSSL */

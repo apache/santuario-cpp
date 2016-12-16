@@ -314,7 +314,6 @@ XSECCryptoKey * OpenSSLCryptoKeyEC::clone() const {
 
     XSECnew(ret, OpenSSLCryptoKeyEC);
 
-    ret->m_keyType = m_keyType;
     if (mp_ecKey)
         ret->mp_ecKey = EC_KEY_dup(mp_ecKey);
 

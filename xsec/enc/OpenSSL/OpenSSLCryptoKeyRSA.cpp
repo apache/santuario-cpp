@@ -263,6 +263,8 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
 mp_rsaKey(NULL),
 mp_oaepParams(NULL),
 m_oaepParamsLen(0),
+mp_accumE(NULL),
+mp_accumN(NULL),
 m_mgf(MGF1_SHA1) {
 };
 
@@ -277,6 +279,11 @@ OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {
     if (mp_oaepParams != NULL)
         delete[] mp_oaepParams;
 
+    if (mp_accumE)
+        BN_free(mp_accumE);
+
+    if (mp_accumN)
+        BN_free(mp_accumN);
 };
 
 void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int paramsLen) {
@@ -327,13 +334,16 @@ XSECCryptoKey::KeyType OpenSSLCryptoKeyRSA::getKeyType() const {
     if (mp_rsaKey == NULL)
         return KEY_NONE;
 
-    if (mp_rsaKey->n != NULL && mp_rsaKey->d != NULL)
+    const BIGNUM *n, *d;
+    RSA_get0_key(mp_rsaKey, &n, NULL, &d);
+
+    if (n != NULL && d != NULL)
         return KEY_RSA_PAIR;
 
-    if (mp_rsaKey->d != NULL)
+    if (d != NULL)
         return KEY_RSA_PRIVATE;
 
-    if (mp_rsaKey->n != NULL)
+    if (n != NULL)
         return KEY_RSA_PUBLIC;
 
     return KEY_NONE;
@@ -342,31 +352,80 @@ XSECCryptoKey::KeyType OpenSSLCryptoKeyRSA::getKeyType() const {
 
 void OpenSSLCryptoKeyRSA::loadPublicModulusBase64BigNums(const char * b64, unsigned int len) {
 
+    setNBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
+
+}
+
+void OpenSSLCryptoKeyRSA::setNBase(BIGNUM *nBase) {
+
     if (mp_rsaKey == NULL)
         mp_rsaKey = RSA_new();
 
-    mp_rsaKey->n = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
 
+    mp_rsaKey->n = nBase;
+
+#else
+
+    if (mp_accumN)
+        BN_free(mp_accumN);
+
+    mp_accumE = nBase;
+    commitEN();
+#endif
 }
+
 
 void OpenSSLCryptoKeyRSA::loadPublicExponentBase64BigNums(const char * b64, unsigned int len) {
 
-    if (mp_rsaKey == NULL)
-        mp_rsaKey = RSA_new();
-
-    mp_rsaKey->e = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+    setEBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
 
 }
 
+
+void OpenSSLCryptoKeyRSA::setEBase(BIGNUM *eBase) {
+
+    if (mp_rsaKey == NULL)
+        mp_rsaKey = RSA_new();
+
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    mp_rsaKey->e = eBase;
+#else
+
+    if (mp_accumE)
+        BN_free(mp_accumE);
+
+    mp_accumE = eBase;
+    commitEN();
+#endif
+}
+
+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+void OpenSSLCryptoKeyRSA::commitEN() {
+
+    if (NULL == mp_accumN || NULL == mp_accumE)
+        return;
+
+
+    RSA_set0_key(mp_rsaKey, mp_accumN, mp_accumE, NULL);
+
+    mp_accumN = NULL;
+    mp_accumE = NULL;
+}
+#endif
+
 // "Hidden" OpenSSL functions
 
-OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) {
+OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) :
+mp_rsaKey(NULL),
+mp_oaepParams(NULL),
+m_oaepParamsLen(0),
+mp_accumE(NULL),
+mp_accumN(NULL),
+m_mgf(MGF1_SHA1)
+{
 
     // Create a new key to be loaded as we go
-
-    mp_oaepParams = NULL;
-    m_oaepParamsLen = 0;
-    m_mgf = MGF1_SHA1;
 
     mp_rsaKey = RSA_new();
 
@@ -375,29 +434,20 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) {
 
     RSA *rsa = EVP_PKEY_get0_RSA(k);
 
-    if (rsa->n)
-        mp_rsaKey->n = BN_dup(rsa->n);
+    const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+    RSA_get0_key(rsa, &n, &e, &d);
+    if (n && e) // Do not dup unless setter will work
+        RSA_set0_key(mp_rsaKey, DUP_NON_NULL(n), DUP_NON_NULL(e), DUP_NON_NULL(d));
 
-    if (rsa->e)
-        mp_rsaKey->e = BN_dup(rsa->e);
+    const BIGNUM *p=NULL, *q=NULL;
+    RSA_get0_factors(rsa, &p, &q);
+    if (p && q)
+        RSA_set0_factors(mp_rsaKey, DUP_NON_NULL(p), DUP_NON_NULL(q));
 
-    if (rsa->d)
-        mp_rsaKey->d = BN_dup(rsa->d);
-
-    if (rsa->p)
-        mp_rsaKey->p = BN_dup(rsa->p);
-
-    if (rsa->q)
-        mp_rsaKey->q = BN_dup(rsa->q);
-
-    if (rsa->dmp1)
-        mp_rsaKey->dmp1 = BN_dup(rsa->dmp1);
-
-    if (rsa->dmq1)
-        mp_rsaKey->dmq1 = BN_dup(rsa->dmq1);
-
-    if (rsa->iqmp)
-        mp_rsaKey->iqmp = BN_dup(rsa->iqmp);
+    const BIGNUM *dmp1=NULL, *dmq1=NULL, *iqmp=NULL;
+    RSA_get0_crt_params(rsa, &dmp1, &dmq1, &iqmp);
+    if (dmp1 && dmq1 &&  iqmp)
+        RSA_set0_crt_params(mp_rsaKey, DUP_NON_NULL(dmp1), DUP_NON_NULL(dmq1), DUP_NON_NULL(iqmp));
 }
 
 // --------------------------------------------------------------------------------
@@ -980,30 +1030,20 @@ XSECCryptoKey * OpenSSLCryptoKeyRSA::clone() const {
     }
 
     // Duplicate parameters
+    const BIGNUM *n=NULL, *e=NULL, *d=NULL;
+    RSA_get0_key(mp_rsaKey, &n, &e, &d);
+    if (n && e) // Do not dup unless setter will work
+        RSA_set0_key(ret->mp_rsaKey, DUP_NON_NULL(n), DUP_NON_NULL(e), DUP_NON_NULL(d));
 
-    if (mp_rsaKey->n)
-        ret->mp_rsaKey->n = BN_dup(mp_rsaKey->n);
+    const BIGNUM *p=NULL, *q=NULL;
+    RSA_get0_factors(mp_rsaKey, &p, &q);
+    if (p && q)
+        RSA_set0_factors(ret->mp_rsaKey, DUP_NON_NULL(p), DUP_NON_NULL(q));
 
-    if (mp_rsaKey->e)
-        ret->mp_rsaKey->e = BN_dup(mp_rsaKey->e);
-
-    if (mp_rsaKey->d)
-        ret->mp_rsaKey->d = BN_dup(mp_rsaKey->d);
-
-    if (mp_rsaKey->p)
-        ret->mp_rsaKey->p = BN_dup(mp_rsaKey->p);
-
-    if (mp_rsaKey->q)
-        ret->mp_rsaKey->q = BN_dup(mp_rsaKey->q);
-
-    if (mp_rsaKey->dmp1)
-        ret->mp_rsaKey->dmp1 = BN_dup(mp_rsaKey->dmp1);
-
-    if (mp_rsaKey->dmq1)
-        ret->mp_rsaKey->dmq1 = BN_dup(mp_rsaKey->dmq1);
-
-    if (mp_rsaKey->iqmp)
-        ret->mp_rsaKey->iqmp = BN_dup(mp_rsaKey->iqmp);
+    const BIGNUM *dmp1=NULL, *dmq1=NULL, *iqmp=NULL;
+    RSA_get0_crt_params(mp_rsaKey, &dmp1, &dmq1, &iqmp);
+    if (dmp1 && dmq1 && iqmp)
+        RSA_set0_crt_params(ret->mp_rsaKey, DUP_NON_NULL(dmp1), DUP_NON_NULL(dmq1), DUP_NON_NULL(iqmp));
 
     return ret;
 

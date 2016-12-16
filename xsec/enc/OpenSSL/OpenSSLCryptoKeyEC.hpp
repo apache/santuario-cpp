@@ -180,7 +180,6 @@ public :
 
 private:
 
-	XSECCryptoKey::KeyType			m_keyType;
 	EC_KEY					        * mp_ecKey;
 	
 };

@@ -283,13 +283,13 @@ public :
      * \brief Get OpenSSL cipher context structure
      */
 
-    EVP_CIPHER_CTX * getOpenSSLEVP_CIPHER_CTX(void) {return &m_ctx;}
+    EVP_CIPHER_CTX * getOpenSSLEVP_CIPHER_CTX(void) {return mp_ctx;}
 
     /**
      * \brief Get OpenSSL cipher context structure
      */
 
-    const EVP_CIPHER_CTX * getOpenSSLEVP_CIPHER_CTX(void) const {return &m_ctx;}
+    const EVP_CIPHER_CTX * getOpenSSLEVP_CIPHER_CTX(void) const {return mp_ctx;}
 
     //@}
 
@@ -307,7 +307,10 @@ private:
     // Private variables
     SymmetricKeyType                m_keyType;
     SymmetricKeyMode                m_keyMode;
-    EVP_CIPHER_CTX                  m_ctx;          // OpenSSL Cipher Context structure
+    EVP_CIPHER_CTX                  *mp_ctx;        // OpenSSL Cipher Context structure
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    EVP_CIPHER_CTX                  m_ctx_space;    // OpenSSL Cipher Context structure - store
+#endif
     safeBuffer                      m_keyBuf;       // Holder of the key
     safeBuffer                      m_tagBuf;       // Holder of authentication tag
     unsigned int                    m_keyLen;

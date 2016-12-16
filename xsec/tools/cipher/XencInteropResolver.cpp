@@ -521,7 +521,8 @@ XSECCryptoKey * XencInteropResolver::resolveKey(DSIGKeyInfoList * lst) {
                     X509 * x509 = OSSLX509->getOpenSSLX509();
 
                     // Check the serial number
-                    BIGNUM * bnserial = ASN1_INTEGER_to_BN(x509->cert_info->serialNumber, NULL);
+
+                    BIGNUM * bnserial = ASN1_INTEGER_to_BN(X509_get_serialNumber(x509), NULL);
                     BN_free(bnserial);
 
                     BIO * rsaFile = createFileBIO(mp_baseURI, "rsa.p8");

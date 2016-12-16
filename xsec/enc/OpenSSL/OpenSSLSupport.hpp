@@ -64,6 +64,7 @@ DSA *EVP_PKEY_get0_DSA(EVP_PKEY *pkey);
 #define EVP_PKEY_id(_evp_) ((_evp_)->type)
 #define EVP_PKEY_get0_EC_KEY(_evp_) ((_evp_)->pkey.ec)
 #define EVP_PKEY_get0_RSA(_evp_) ((_evp_)->pkey.rsa)
+#define X509_get0_extensions(_x509_) ((_x509_)->cert_info->extensions)
 
 #endif
 

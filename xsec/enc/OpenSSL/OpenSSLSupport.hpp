@@ -20,6 +20,7 @@
 #if defined (XSEC_HAVE_OPENSSL)
 #include <openssl/evp.h>
 #include <openssl/dsa.h>
+#include <openssl/rsa.h>
 #if defined (XSEC_OPENSSL_HAVE_EC)
 #include <openssl/ecdsa.h>
 #endif
@@ -39,6 +40,15 @@ int DSA_set0_pqg(DSA *d, BIGNUM *p, BIGNUM *q, BIGNUM *g);
 void DSA_SIG_get0(const DSA_SIG *sig, const BIGNUM **pr, const BIGNUM **ps);
 int DSA_SIG_set0(DSA_SIG *sig, BIGNUM *r, BIGNUM *s);
 
+int RSA_set0_key(RSA *r, BIGNUM *n, BIGNUM *e, BIGNUM *d);
+int RSA_set0_factors(RSA *r, BIGNUM *p, BIGNUM *q);
+int RSA_set0_crt_params(RSA *r, BIGNUM *dmp1, BIGNUM *dmq1, BIGNUM *iqmp);
+void RSA_get0_key(const RSA *r,
+                  const BIGNUM **n, const BIGNUM **e, const BIGNUM **d);
+void RSA_get0_factors(const RSA *r, const BIGNUM **p, const BIGNUM **q);
+void RSA_get0_crt_params(const RSA *r,
+                         const BIGNUM **dmp1, const BIGNUM **dmq1,
+                         const BIGNUM **iqmp);
 
 #if defined (XSEC_OPENSSL_HAVE_EC)
 
@@ -52,8 +62,10 @@ DSA *EVP_PKEY_get0_DSA(EVP_PKEY *pkey);
 #define EVP_PKEY_id(_evp_) ((_evp_)->type)
 #define EVP_PKEY_get0_EC_KEY(_evp_) ((_evp_)->pkey.ec)
 #define EVP_PKEY_get0_RSA(_evp_) ((_evp_)->pkey.rsa)
-
 #endif
+
+#define DUP_NON_NULL(_what_) ((_what_)?BN_dup((_what_)):NULL)
+
 
 
 #endif

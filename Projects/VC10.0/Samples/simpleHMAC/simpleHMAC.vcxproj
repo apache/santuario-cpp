@@ -103,26 +103,19 @@
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">obj\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">obj\</IntDir>
+    <IntDir>$(SolutionDir)../../../Build/$(Platform)/VC10/$(Configuration)/simpleHMACobj/</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">obj\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">obj\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|Win32'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|x64'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|Win32'">obj\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|x64'">obj\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|Win32'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|x64'">true</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|Win32'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|x64'">$(SolutionDir)\..\..\..\Build\$(Platform)\VC10\$(Configuration)\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|Win32'">obj\</IntDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|x64'">obj\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|Win32'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release No Xalan|x64'">false</LinkIncremental>
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug No Xalan|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>

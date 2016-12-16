@@ -39,6 +39,7 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 
 #include <xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 
 #include <xercesc/util/Janitor.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
@@ -47,7 +48,7 @@ XERCES_CPP_NAMESPACE_USE
 
 #include <iostream>
 
-#if defined (XSEC_HAVE_OPENSSL) 
+#if defined (XSEC_HAVE_OPENSSL)
 
 InteropResolver::InteropResolver(const XMLCh * baseURI) {
 
@@ -318,7 +319,7 @@ bool InteropResolver::checkMatch(DSIGKeyInfoList * lst, X509 * x) {
                 char * cserial = XMLString::transcode(serial);
                 char * xserial;
 
-                BIGNUM * bnserial = ASN1_INTEGER_to_BN(x->cert_info->serialNumber, NULL);
+                BIGNUM * bnserial = ASN1_INTEGER_to_BN(X509_get_serialNumber(x), NULL);
                 xserial = BN_bn2dec(bnserial);
                 BN_free(bnserial);
 
@@ -360,8 +361,8 @@ bool InteropResolver::checkMatch(DSIGKeyInfoList * lst, X509 * x) {
                 if (xlen != 0) {
 
                     // Have a buffer with a number in it
-                    STACK_OF(X509_EXTENSION) *exts;
-                    exts = x->cert_info->extensions;
+                    const STACK_OF(X509_EXTENSION) *exts;
+                    exts = X509_get0_extensions(x);
 
                     if (exts != NULL) {
 
@@ -379,8 +380,9 @@ bool InteropResolver::checkMatch(DSIGKeyInfoList * lst, X509 * x) {
                             memcpy(&octxski[2], xski, xlen);
                             
                             ext = sk_X509_EXTENSION_value(exts,extn);
-                            ASN1_OCTET_STRING *skid = ext->value;
-                            ASN1_OCTET_STRING * xskid = M_ASN1_OCTET_STRING_new();
+                            ASN1_OCTET_STRING *skid = X509_EXTENSION_get_data(ext);
+                            ASN1_OCTET_STRING * xskid = ASN1_OCTET_STRING_new();
+
                             ASN1_STRING_set(xskid, octxski, xlen+2);
                             
                             if (ASN1_OCTET_STRING_cmp(xskid, skid) == 0) {
@@ -602,12 +604,13 @@ XSECCryptoKey * InteropResolver::resolveKey(DSIGKeyInfoList * lst) {
         // Now check if the cert is in the CRL (code lifted from OpenSSL x509_vfy.c
 
         int idx;
-        X509_REVOKED rtmp;
+        X509_REVOKED *rtmp = X509_REVOKED_new();
 
         /* Look for serial number of certificate in CRL */
-        
-        rtmp.serialNumber = X509_get_serialNumber(x);
-        idx = sk_X509_REVOKED_find(c->crl->revoked, &rtmp);
+        X509_REVOKED_set_serialNumber(rtmp, X509_get_serialNumber(x));
+        idx = sk_X509_REVOKED_find(X509_CRL_get_REVOKED(c), rtmp);
+
+        X509_REVOKED_free(rtmp);
         
         /* Not found: OK */
         

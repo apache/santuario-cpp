@@ -170,7 +170,8 @@ opensslinclude_HEADERS = \
   enc/OpenSSL/OpenSSLCryptoKeyDSA.hpp \
   enc/OpenSSL/OpenSSLCryptoKeyEC.hpp \
   enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp \
-  enc/OpenSSL/OpenSSLCryptoHash.hpp 
+  enc/OpenSSL/OpenSSLCryptoHash.hpp \
+  enc/OpenSSL/OpenSSLSupport.hpp
 
 nssinclude_HEADERS = \
   enc/NSS/NSSCryptoX509.hpp \
@@ -575,8 +576,9 @@ openssl_sources = \
   enc/OpenSSL/OpenSSLCryptoKeyDSA.cpp \
   enc/OpenSSL/OpenSSLCryptoKeyEC.cpp \
   enc/OpenSSL/OpenSSLCryptoSymmetricKey.cpp \
-  enc/OpenSSL/OpenSSLCryptoKeyHMAC.cpp
-  
+  enc/OpenSSL/OpenSSLCryptoKeyHMAC.cpp \
+  enc/OpenSSL/OpenSSLSupport.cpp
+
 nss_sources = \
   enc/NSS/NSSCryptoX509.cpp \
   enc/NSS/NSSCryptoHashHMAC.cpp \

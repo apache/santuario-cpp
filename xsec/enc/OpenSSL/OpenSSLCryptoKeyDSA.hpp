@@ -219,10 +219,25 @@ public :
 
 
 private:
-
-    XSECCryptoKey::KeyType          m_keyType;
     DSA                             * mp_dsaKey;
-    
+
+    /**
+     * \brief storage for accumulating p/q/r
+     *
+     * In OpenSSL 1.1 the DSA structure is opaque and there is only
+     * a setter for p + q + g and they all must be non NULL.
+     *
+     * We have setters for each one individually, so we have to store them and
+     * then when they are all set we can call OpenSSL's setter.
+     */
+    BIGNUM *mp_accumP, *mp_accumQ, *mp_accumG;
+
+    void setPBase(BIGNUM *pBase);
+    void setQBase(BIGNUM *pBase);
+    void setGBase(BIGNUM *pBase);
+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+    void commitPQG();
+#endif
 };
 
 #endif /* XSEC_HAVE_OPENSSL */

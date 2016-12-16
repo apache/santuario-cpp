@@ -166,8 +166,9 @@
 
 // #define XSEC_HAVE_OPENSSL 1
 
+#ifndef SUPPRESS_XSEC_HAVE_WINCAPI
 #define XSEC_HAVE_WINCAPI 1
-
+#endif
 // NSS Code is currently alpha.  It should work, but you will also
 // need to include the NSS libraries during the link.
 

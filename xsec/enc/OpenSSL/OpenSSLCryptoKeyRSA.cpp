@@ -370,7 +370,7 @@ void OpenSSLCryptoKeyRSA::setNBase(BIGNUM *nBase) {
     if (mp_accumN)
         BN_free(mp_accumN);
 
-    mp_accumE = nBase;
+    mp_accumN = nBase;
     commitEN();
 #endif
 }

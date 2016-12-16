@@ -54,9 +54,21 @@ m_keyMode(MODE_NONE),
 m_keyBuf(""),
 m_tagBuf(""),
 m_keyLen(0),
-m_initialised(false) {
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+mp_ctx(&m_ctx_space),
+#else
+mp_ctx(EVP_CIPHER_CTX_new()),
+#endif
+m_initialised(false),
+m_blockSize(0),
+m_ivSize(0),
+m_bytesInLastBlock(0),
+m_ivSent(false),
+m_doPad(false) {
+    if (!mp_ctx)
+        throw XSECCryptoException(XSECCryptoException::ECError, "OpenSSL::CryptoSymmetricKey - cannot allocate contexts");
 
-	EVP_CIPHER_CTX_init(&m_ctx);
+	EVP_CIPHER_CTX_init(mp_ctx);
 	m_keyBuf.isSensitive();
 
 }
@@ -65,7 +77,10 @@ OpenSSLCryptoSymmetricKey::~OpenSSLCryptoSymmetricKey() {
 
 	// Clean up the context
 
-	EVP_CIPHER_CTX_cleanup(&m_ctx);
+	EVP_CIPHER_CTX_cleanup(mp_ctx);
+#if (OPENSSL_VERSION_NUMBER >= 0x10100000L)
+    EVP_CIPHER_CTX_free(mp_ctx);
+#endif
 }
 
 // --------------------------------------------------------------------------------
@@ -149,17 +164,17 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
 			   with 0.9.6 */
 
 #if defined(XSEC_OPENSSL_CONST_BUFFERS)
-			EVP_DecryptInit(&m_ctx, EVP_des_ede3_cbc(),m_keyBuf.rawBuffer(), iv);
+			EVP_DecryptInit(mp_ctx, EVP_des_ede3_cbc(),m_keyBuf.rawBuffer(), iv);
 #else
-			EVP_DecryptInit(&m_ctx, EVP_des_ede3_cbc(),(unsigned char *) m_keyBuf.rawBuffer(), (unsigned char *) iv);
+			EVP_DecryptInit(mp_ctx, EVP_des_ede3_cbc(),(unsigned char *) m_keyBuf.rawBuffer(), (unsigned char *) iv);
 #endif
 			m_ivSize = 8;
 		}
 		else if (m_keyMode == MODE_ECB) {
 #if defined(XSEC_OPENSSL_CONST_BUFFERS)
-			EVP_DecryptInit(&m_ctx, EVP_des_ecb(), m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit(mp_ctx, EVP_des_ecb(), m_keyBuf.rawBuffer(), NULL);
 #else
-			EVP_DecryptInit(&m_ctx, EVP_des_ecb(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit(mp_ctx, EVP_des_ecb(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
 #endif
 			m_ivSize = 0;
 		}
@@ -184,7 +199,7 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
 				return 0;	// Cannot initialise without an IV
 			}
 
-			EVP_DecryptInit_ex(&m_ctx, EVP_aes_128_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
+			EVP_DecryptInit_ex(mp_ctx, EVP_aes_128_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
 
 		}
 #if defined (XSEC_OPENSSL_HAVE_GCM)
@@ -207,15 +222,15 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
             }
 
             // We have everything, so we can fully init.
-            EVP_CipherInit(&m_ctx, EVP_aes_128_gcm(), NULL, NULL, 0);
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
-            EVP_CipherInit(&m_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+            EVP_CipherInit(mp_ctx, EVP_aes_128_gcm(), NULL, NULL, 0);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
+            EVP_CipherInit(mp_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
 		}
 #endif
 		else if (m_keyMode == MODE_ECB) {
 
-			EVP_DecryptInit_ex(&m_ctx, EVP_aes_128_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit_ex(mp_ctx, EVP_aes_128_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
         else {
@@ -236,7 +251,7 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
 				return 0;	// Cannot initialise without an IV
 			}
 
-			EVP_DecryptInit_ex(&m_ctx, EVP_aes_192_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
+			EVP_DecryptInit_ex(mp_ctx, EVP_aes_192_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
 
 		}
 #if defined (XSEC_OPENSSL_HAVE_GCM)
@@ -259,16 +274,16 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
             }
 
             // We have everything, so we can fully init.
-            EVP_CipherInit(&m_ctx, EVP_aes_192_gcm(), NULL, NULL, 0);
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
-            EVP_CipherInit(&m_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+            EVP_CipherInit(mp_ctx, EVP_aes_192_gcm(), NULL, NULL, 0);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
+            EVP_CipherInit(mp_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
 
 		}
 #endif
 		else if (m_keyMode == MODE_ECB) {
 
-			EVP_DecryptInit_ex(&m_ctx, EVP_aes_192_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit_ex(mp_ctx, EVP_aes_192_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
         else {
@@ -289,7 +304,7 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
 				return 0;	// Cannot initialise without an IV
 			}
 
-			EVP_DecryptInit_ex(&m_ctx, EVP_aes_256_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
+			EVP_DecryptInit_ex(mp_ctx, EVP_aes_256_cbc(), NULL, m_keyBuf.rawBuffer(), iv);
 
 		}
 #if defined (XSEC_OPENSSL_HAVE_GCM)
@@ -312,16 +327,16 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
             }
 
             // We have everything, so we can fully init.
-            EVP_CipherInit(&m_ctx, EVP_aes_256_gcm(), NULL, NULL, 0);
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
-            EVP_CipherInit(&m_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+            EVP_CipherInit(mp_ctx, EVP_aes_256_gcm(), NULL, NULL, 0);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
+            EVP_CipherInit(mp_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
 
 		}
 #endif
 		else if (m_keyMode == MODE_ECB) {
 
-			EVP_DecryptInit_ex(&m_ctx, EVP_aes_256_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
+			EVP_DecryptInit_ex(mp_ctx, EVP_aes_256_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
         else {
@@ -371,7 +386,7 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
 	// Disable OpenSSL padding - The interop samples have broken PKCS padding - AARGHH
 
 #if defined (XSEC_OPENSSL_CANSET_PADDING)
-	EVP_CIPHER_CTX_set_padding(&m_ctx, 0);
+	EVP_CIPHER_CTX_set_padding(mp_ctx, 0);
 #endif
 
 	// Return number of bytes chewed up by IV
@@ -439,9 +454,9 @@ unsigned int OpenSSLCryptoSymmetricKey::decrypt(const unsigned char * inBuf,
 	}
 
 #if defined (XSEC_OPENSSL_CONST_BUFFERS)
-	if (EVP_DecryptUpdate(&m_ctx, &plainBuf[m_bytesInLastBlock], &outl, &inBuf[offset], inLength - offset) == 0) {
+	if (EVP_DecryptUpdate(mp_ctx, &plainBuf[m_bytesInLastBlock], &outl, &inBuf[offset], inLength - offset) == 0) {
 #else
-	if (EVP_DecryptUpdate(&m_ctx, &plainBuf[m_bytesInLastBlock], &outl, (unsigned char *) &inBuf[offset], inLength - offset) == 0) {
+	if (EVP_DecryptUpdate(mp_ctx, &plainBuf[m_bytesInLastBlock], &outl, (unsigned char *) &inBuf[offset], inLength - offset) == 0) {
 #endif
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"OpenSSL:SymmetricKey - Error during OpenSSL decrypt"); 
@@ -476,7 +491,7 @@ unsigned int OpenSSLCryptoSymmetricKey::decryptFinish(unsigned char * plainBuf,
 
 #if defined (XSEC_OPENSSL_CANSET_PADDING)
 
-	if (EVP_DecryptFinal(&m_ctx, plainBuf, &outl) == 0) {
+	if (EVP_DecryptFinal(mp_ctx, plainBuf, &outl) == 0) {
 
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"OpenSSL:SymmetricKey - Error during OpenSSL decrypt finalisation"); 
@@ -544,7 +559,7 @@ unsigned int OpenSSLCryptoSymmetricKey::decryptFinish(unsigned char * plainBuf,
        We can then clean that up ourselves
 	*/
 
-	if (EVP_DecryptUpdate(&m_ctx, &scrPlainBuf[offset], &outl, cipherBuf, m_blockSize) == 0) {
+	if (EVP_DecryptUpdate(mp_ctx, &scrPlainBuf[offset], &outl, cipherBuf, m_blockSize) == 0) {
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 			"OpenSSL:SymmetricKey - Error cecrypting final block during OpenSSL");
 	} 
@@ -641,16 +656,16 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
             }
 
 #if defined (XSEC_OPENSSL_CONST_BUFFERS)
-			EVP_EncryptInit(&m_ctx, EVP_des_ede3_cbc(), m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit(mp_ctx, EVP_des_ede3_cbc(), m_keyBuf.rawBuffer(), usedIV);
 #else
-			EVP_EncryptInit(&m_ctx, EVP_des_ede3_cbc(), (unsigned char *) m_keyBuf.rawBuffer(), (unsigned char *) usedIV);
+			EVP_EncryptInit(mp_ctx, EVP_des_ede3_cbc(), (unsigned char *) m_keyBuf.rawBuffer(), (unsigned char *) usedIV);
 #endif
 		}
 		else if (m_keyMode == MODE_ECB) {
 #if defined (XSEC_OPENSSL_CONST_BUFFERS)
-			EVP_EncryptInit(&m_ctx, EVP_des_ede3_ecb(), m_keyBuf.rawBuffer(), NULL);
+			EVP_EncryptInit(mp_ctx, EVP_des_ede3_ecb(), m_keyBuf.rawBuffer(), NULL);
 #else
-			EVP_EncryptInit(&m_ctx, EVP_des_ede3(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
+			EVP_EncryptInit(mp_ctx, EVP_des_ede3(), (unsigned char *) m_keyBuf.rawBuffer(), NULL);
 #endif
 		}
         else {
@@ -684,11 +699,11 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			else
 				usedIV = iv;
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_128_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_128_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
 		}
 		else if (m_keyMode == MODE_ECB) {
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_128_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_128_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
 #ifdef XSEC_OPENSSL_HAVE_GCM
@@ -708,7 +723,7 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			else
 				usedIV = iv;
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_128_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_128_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
 		}
 #endif
         else {
@@ -739,7 +754,7 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			else
 				usedIV = iv;
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_192_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_192_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
 
 		}
 #ifdef XSEC_OPENSSL_HAVE_GCM
@@ -759,12 +774,12 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			else
 				usedIV = iv;
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_192_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_192_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
 		}
 #endif
 		else if (m_keyMode == MODE_ECB) {
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_192_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_192_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 		}
         else {
 		    throw XSECCryptoException(XSECCryptoException::SymmetricError,
@@ -793,7 +808,7 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			else
 				usedIV = iv;
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_256_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_256_cbc(), NULL, m_keyBuf.rawBuffer(), usedIV);
 
 		}
 #ifdef XSEC_OPENSSL_HAVE_GCM
@@ -813,12 +828,12 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 			else
 				usedIV = iv;
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_256_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_256_gcm(), NULL, m_keyBuf.rawBuffer(), usedIV);
 		}
 #endif
 		else if (m_keyMode == MODE_ECB) {
 
-			EVP_EncryptInit_ex(&m_ctx, EVP_aes_256_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
+			EVP_EncryptInit_ex(mp_ctx, EVP_aes_256_ecb(), NULL, m_keyBuf.rawBuffer(), NULL);
 
 		}
         else {
@@ -864,10 +879,10 @@ bool OpenSSLCryptoSymmetricKey::encryptInit(bool doPad,
 #if defined (XSEC_OPENSSL_CANSET_PADDING)
 	// Setup padding
 	if (m_doPad) {
-		EVP_CIPHER_CTX_set_padding(&m_ctx, 1);
+		EVP_CIPHER_CTX_set_padding(mp_ctx, 1);
 	}
 	else {
-		EVP_CIPHER_CTX_set_padding(&m_ctx, 0);
+		EVP_CIPHER_CTX_set_padding(mp_ctx, 0);
 	}
 #endif
 
@@ -908,9 +923,9 @@ unsigned int OpenSSLCryptoSymmetricKey::encrypt(const unsigned char * inBuf,
 
 	}
 #if defined (XSEC_OPENSSL_CONST_BUFFERS)
-	if (EVP_EncryptUpdate(&m_ctx, &cipherBuf[offset], &outl, inBuf, inLength) == 0) {
+	if (EVP_EncryptUpdate(mp_ctx, &cipherBuf[offset], &outl, inBuf, inLength) == 0) {
 #else
-	if (EVP_EncryptUpdate(&m_ctx, &cipherBuf[offset], &outl, (unsigned char *) inBuf, inLength) == 0) {
+	if (EVP_EncryptUpdate(mp_ctx, &cipherBuf[offset], &outl, (unsigned char *) inBuf, inLength) == 0) {
 #endif
 
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
@@ -929,7 +944,7 @@ unsigned int OpenSSLCryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
 	int outl = maxOutLength;
 	m_initialised = false;
 
-	if (EVP_EncryptFinal(&m_ctx, cipherBuf, &outl) == 0) {
+	if (EVP_EncryptFinal(mp_ctx, cipherBuf, &outl) == 0) {
 
 		throw XSECCryptoException(XSECCryptoException::SymmetricError,
 		  "OpenSSLSymmetricKey::encryptFinish - Error during OpenSSL decrypt finalisation"); 
@@ -962,7 +977,7 @@ unsigned int OpenSSLCryptoSymmetricKey::encryptFinish(unsigned char * cipherBuf,
         }
         if (m_keyMode == MODE_GCM) {
 #ifdef XSEC_OPENSSL_HAVE_GCM
-            EVP_CIPHER_CTX_ctrl(&m_ctx, EVP_CTRL_GCM_GET_TAG, taglen, cipherBuf + outl);
+            EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_GET_TAG, taglen, cipherBuf + outl);
             outl += taglen;
 #else
 		    throw XSECCryptoException(XSECCryptoException::SymmetricError,

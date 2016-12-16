@@ -142,6 +142,7 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\..\..\..\xsec\tools\xklient\xklient.cpp
+SOURCE=..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"

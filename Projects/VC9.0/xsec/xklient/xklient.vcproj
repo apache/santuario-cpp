@@ -679,6 +679,10 @@
 				RelativePath="..\..\..\..\xsec\tools\xklient\xklient.cpp"
 				>
 			</File>
+			<File
+				RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

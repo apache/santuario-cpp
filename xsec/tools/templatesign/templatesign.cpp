@@ -52,12 +52,14 @@
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
+#   include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 
 #   include <openssl/bio.h>
 #   include <openssl/dsa.h>
 #   include <openssl/err.h>
 #   include <openssl/evp.h>
 #   include <openssl/pem.h>
+
 #endif
 
 #if defined(XSEC_HAVE_WINCAPI)
@@ -726,7 +728,7 @@ int main(int argc, char **argv) {
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -739,7 +741,7 @@ int main(int argc, char **argv) {
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_EC) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_EC) {
                     cerr << "EC Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -749,7 +751,7 @@ int main(int argc, char **argv) {
             }
 #   endif
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }

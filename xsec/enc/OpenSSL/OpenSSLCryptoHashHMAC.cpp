@@ -40,7 +40,17 @@
 
 // Constructors/Destructors
 
-OpenSSLCryptoHashHMAC::OpenSSLCryptoHashHMAC(HashType alg) {
+OpenSSLCryptoHashHMAC::OpenSSLCryptoHashHMAC(HashType alg) : m_mdLen(0),
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+    mp_hctx(&m_hctx_store)
+#else
+    mp_hctx(HMAC_CTX_new())
+#endif
+	, m_keyLen(0)
+ {
+
+    if (!mp_hctx)
+        throw XSECCryptoException(XSECCryptoException::ECError, "OpenSSL::CryptoHashHMAC - cannot allocate contexts");
 
     // Initialise the digest
 
@@ -127,7 +137,7 @@ void OpenSSLCryptoHashHMAC::setKey(XSECCryptoKey *key) {
     m_keyLen = ((XSECCryptoKeyHMAC *) key)->getKey(m_keyBuf);
 
 
-    HMAC_Init(&m_hctx, 
+    HMAC_Init(mp_hctx, 
         m_keyBuf.rawBuffer(),
         m_keyLen,
         mp_md);
@@ -138,8 +148,12 @@ void OpenSSLCryptoHashHMAC::setKey(XSECCryptoKey *key) {
 
 OpenSSLCryptoHashHMAC::~OpenSSLCryptoHashHMAC() {
 
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
     if (m_initialised)
-        HMAC_CTX_cleanup(&m_hctx);
+        HMAC_CTX_cleanup(mp_hctx);
+#else
+    HMAC_CTX_free(mp_hctx);
+#endif
 
 }
 
@@ -151,9 +165,10 @@ void OpenSSLCryptoHashHMAC::reset(void) {
 
     if (m_initialised) {
 
-        HMAC_CTX_cleanup(&m_hctx);
-
-        HMAC_Init(&m_hctx, 
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+        HMAC_CTX_cleanup(mp_hctx);
+#endif
+        HMAC_Init(mp_hctx, 
             m_keyBuf.rawBuffer(),
             m_keyLen,
             mp_md);
@@ -170,7 +185,7 @@ void OpenSSLCryptoHashHMAC::hash(unsigned char * data,
             "OpenSSL:HashHMAC - hash called prior to setKey");
 
 
-    HMAC_Update(&m_hctx, data, (int) length);
+    HMAC_Update(mp_hctx, data, (int) length);
 
 }
 
@@ -181,7 +196,7 @@ unsigned int OpenSSLCryptoHashHMAC::finish(unsigned char * hash,
 
     // Finish up and copy out hash, returning the length
 
-    HMAC_Final(&m_hctx, m_mdValue, &m_mdLen);
+    HMAC_Final(mp_hctx, m_mdValue, &m_mdLen);
 
     // Copy to output buffer
     

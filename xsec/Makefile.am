@@ -105,8 +105,8 @@ cipher_SOURCES = \
 
 tools += xklient
 xklient_SOURCES = \
-  tools/xklient/xklient.cpp
-
+  tools/xklient/xklient.cpp \
+  enc/OpenSSL/OpenSSLSupport.hpp
 
 lib_LTLIBRARIES = libxml-security-c.la
 

@@ -135,6 +135,7 @@ XALAN_USING_XALAN(XalanTransformer)
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
+#   include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 
 #   include <openssl/bio.h>
 #   include <openssl/dsa.h>
@@ -286,7 +287,7 @@ XSECCryptoX509 * loadX509(const char * infile) {
 
 #if defined (XSEC_HAVE_OPENSSL)
 
-XMLCh * BN2b64(BIGNUM * bn) {
+XMLCh * BN2b64(const BIGNUM * bn) {
 
     int bytes = BN_num_bytes(bn);
     unsigned char * binbuf = new unsigned char[bytes + 1];
@@ -608,7 +609,7 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -617,10 +618,14 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -630,7 +635,7 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -880,7 +885,7 @@ XKMSMessageAbstractType * createValidateRequest(XSECProvider &prov, DOMDocument 
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -889,10 +894,14 @@ XKMSMessageAbstractType * createValidateRequest(XSECProvider &prov, DOMDocument 
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -902,7 +911,7 @@ XKMSMessageAbstractType * createValidateRequest(XSECProvider &prov, DOMDocument 
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -1231,7 +1240,7 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -1240,10 +1249,14 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -1253,7 +1266,7 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -1328,7 +1341,7 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -1336,10 +1349,14 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 proofOfPossessionKey = new OpenSSLCryptoKeyDSA(pkey);
                 proofOfPossessionSm = SIGNATURE_DSA;
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 pkb->appendDSAKeyValue(P,Q,G,Y);
 
@@ -1349,7 +1366,7 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -1624,7 +1641,7 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -1633,10 +1650,14 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -1646,7 +1667,7 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -1721,15 +1742,19 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 rkb->appendDSAKeyValue(P,Q,G,Y);
 
@@ -1739,7 +1764,7 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -1979,7 +2004,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -1988,10 +2013,14 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -2001,7 +2030,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -2076,7 +2105,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -2084,10 +2113,14 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 proofOfPossessionKey = new OpenSSLCryptoKeyDSA(pkey);
                 proofOfPossessionSm = SIGNATURE_DSA;
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 pkb->appendDSAKeyValue(P,Q,G,Y);
 
@@ -2097,7 +2130,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -2373,7 +2406,7 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
@@ -2382,10 +2415,14 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+                const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 sig->appendDSAKeyValue(P,Q,G,Y);
 
@@ -2395,7 +2432,7 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
@@ -2470,15 +2507,19 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
 
                 // Check type is correct
 
-                if (pkey->type != EVP_PKEY_DSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_DSA) {
                     cerr << "DSA Key requested, but OpenSSL loaded something else\n";
                     return NULL;
                 }
 
-                XMLCh * P = BN2b64(pkey->pkey.dsa->p);
-                XMLCh * Q = BN2b64(pkey->pkey.dsa->q);
-                XMLCh * G = BN2b64(pkey->pkey.dsa->g);
-                XMLCh * Y = BN2b64(pkey->pkey.dsa->pub_key);
+				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
+                XMLCh * P = BN2b64(otherP);
+                XMLCh * Q = BN2b64(otherQ);
+                XMLCh * G = BN2b64(otherG);
+				const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+				DSA_get0_key(EVP_PKEY_get0_DSA(pkey), &otherPub, &otherPriv);
+                XMLCh * Y = BN2b64(otherPub);
 
                 rkb->appendDSAKeyValue(P,Q,G,Y);
 
@@ -2488,7 +2529,7 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                 XSEC_RELEASE_XMLCH(Y);
             }
             else {
-                if (pkey->type != EVP_PKEY_RSA) {
+                if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }

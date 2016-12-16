@@ -301,6 +301,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.cpp" />
     <ClCompile Include="..\..\..\..\xsec\tools\xklient\xklient.cpp" />
   </ItemGroup>
   <ItemGroup>

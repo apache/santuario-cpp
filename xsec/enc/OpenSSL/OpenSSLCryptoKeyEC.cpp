@@ -53,11 +53,11 @@ OpenSSLCryptoKeyEC::OpenSSLCryptoKeyEC() : mp_ecKey(NULL) {
 OpenSSLCryptoKeyEC::~OpenSSLCryptoKeyEC() {
 
 
-	// If we have a EC_KEY, delete it
-	// OpenSSL will ensure the memory holding any private key is freed.
+    // If we have a EC_KEY, delete it
+    // OpenSSL will ensure the memory holding any private key is freed.
 
-	if (mp_ecKey)
-		EC_KEY_free(mp_ecKey);
+    if (mp_ecKey)
+        EC_KEY_free(mp_ecKey);
 
 };
 
@@ -65,20 +65,20 @@ OpenSSLCryptoKeyEC::~OpenSSLCryptoKeyEC() {
 
 XSECCryptoKey::KeyType OpenSSLCryptoKeyEC::getKeyType() const {
 
-	// Find out what we have
-	if (mp_ecKey == NULL)
-		return KEY_NONE;
+    // Find out what we have
+    if (mp_ecKey == NULL)
+        return KEY_NONE;
 
-	if (EC_KEY_get0_private_key(mp_ecKey) && EC_KEY_get0_public_key(mp_ecKey))
-		return KEY_EC_PAIR;
+    if (EC_KEY_get0_private_key(mp_ecKey) && EC_KEY_get0_public_key(mp_ecKey))
+        return KEY_EC_PAIR;
 
-	if (EC_KEY_get0_private_key(mp_ecKey))
-		return KEY_EC_PRIVATE;
+    if (EC_KEY_get0_private_key(mp_ecKey))
+        return KEY_EC_PRIVATE;
 
-	if (EC_KEY_get0_public_key(mp_ecKey))
-		return KEY_EC_PUBLIC;
+    if (EC_KEY_get0_public_key(mp_ecKey))
+        return KEY_EC_PUBLIC;
 
-	return KEY_NONE;
+    return KEY_NONE;
 
 }
 
@@ -91,18 +91,18 @@ void OpenSSLCryptoKeyEC::loadPublicKeyBase64(const char* curveName, const char *
 
     EC_KEY* key = EC_KEY_new_by_curve_name(static_cast<OpenSSLCryptoProvider*>(XSECPlatformUtils::g_cryptoProvider)->curveNameToNID(curveName));
 
-	int bufLen = len;
-	unsigned char * outBuf;
-	XSECnew(outBuf, unsigned char[len + 1]);
-	ArrayJanitor<unsigned char> j_outBuf(outBuf);
+    int bufLen = len;
+    unsigned char * outBuf;
+    XSECnew(outBuf, unsigned char[len + 1]);
+    ArrayJanitor<unsigned char> j_outBuf(outBuf);
 
-	XSCryptCryptoBase64 *b64;
-	XSECnew(b64, XSCryptCryptoBase64);
-	Janitor<XSCryptCryptoBase64> j_b64(b64);
+    XSCryptCryptoBase64 *b64;
+    XSECnew(b64, XSCryptCryptoBase64);
+    Janitor<XSCryptCryptoBase64> j_b64(b64);
 
-	b64->decodeInit();
-	bufLen = b64->decode((unsigned char *) buf, len, outBuf, len);
-	bufLen += b64->decodeFinish(&outBuf[bufLen], len-bufLen);
+    b64->decodeInit();
+    bufLen = b64->decode((unsigned char *) buf, len, outBuf, len);
+    bufLen += b64->decodeFinish(&outBuf[bufLen], len-bufLen);
 
     if (bufLen > 0) {
         if (o2i_ECPublicKey(&key, (const unsigned char **) &outBuf, bufLen) == NULL) {
@@ -111,12 +111,12 @@ void OpenSSLCryptoKeyEC::loadPublicKeyBase64(const char* curveName, const char *
         }
     }
 
-	if (key == NULL) {
+    if (key == NULL) {
 
-		throw XSECCryptoException(XSECCryptoException::ECError,
-		"OpenSSL:EC - Error translating Base64 octets into OpenSSL EC_KEY structure");
+        throw XSECCryptoException(XSECCryptoException::ECError,
+        "OpenSSL:EC - Error translating Base64 octets into OpenSSL EC_KEY structure");
 
-	}
+    }
 
     mp_ecKey = key;
 }
@@ -126,10 +126,10 @@ void OpenSSLCryptoKeyEC::loadPublicKeyBase64(const char* curveName, const char *
 
 OpenSSLCryptoKeyEC::OpenSSLCryptoKeyEC(EVP_PKEY *k) {
 
-	// Create a new key to be loaded as we go
+    // Create a new key to be loaded as we go
 
-	if (k == NULL || k->type != EVP_PKEY_EC)
-		return;	// Nothing to do with us
+    if (k == NULL || k->type != EVP_PKEY_EC)
+        return; // Nothing to do with us
 
     mp_ecKey = EC_KEY_dup(k->pkey.ec);
 }
@@ -139,72 +139,72 @@ OpenSSLCryptoKeyEC::OpenSSLCryptoKeyEC(EVP_PKEY *k) {
 // --------------------------------------------------------------------------------
 
 bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
-								 unsigned int hashLen,
-								 char * base64Signature,
-								 unsigned int sigLen) {
+                                 unsigned int hashLen,
+                                 char * base64Signature,
+                                 unsigned int sigLen) {
 
-	// Use the currently loaded key to validate the Base64 encoded signature
+    // Use the currently loaded key to validate the Base64 encoded signature
 
-	if (mp_ecKey == NULL) {
+    if (mp_ecKey == NULL) {
 
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Attempt to validate signature with empty key");
-	}
-
-	char * cleanedBase64Signature;
-	unsigned int cleanedBase64SignatureLen = 0;
-
-	cleanedBase64Signature =
-		XSECCryptoBase64::cleanBuffer(base64Signature, sigLen, cleanedBase64SignatureLen);
-	ArrayJanitor<char> j_cleanedBase64Signature(cleanedBase64Signature);
-
-	int sigValLen;
-	unsigned char* sigVal = new unsigned char[sigLen + 1];
-    ArrayJanitor<unsigned char> j_sigVal(sigVal);
-
-	EVP_ENCODE_CTX m_dctx;
-	EVP_DecodeInit(&m_dctx);
-	int rc = EVP_DecodeUpdate(&m_dctx,
-						  sigVal,
-						  &sigValLen,
-						  (unsigned char *) cleanedBase64Signature,
-						  cleanedBase64SignatureLen);
-
-	if (rc < 0) {
-
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error during Base64 Decode");
-	}
-	int t = 0;
-
-	EVP_DecodeFinal(&m_dctx, &sigVal[sigValLen], &t);
-
-	sigValLen += t;
-
-    if (sigValLen <= 0 || sigValLen % 2 != 0) {
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Signature length was odd");
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Attempt to validate signature with empty key");
     }
 
-	// Translate to BNs by splitting in half, and thence to ECDSA_SIG
+    char * cleanedBase64Signature;
+    unsigned int cleanedBase64SignatureLen = 0;
 
-	ECDSA_SIG * dsa_sig = ECDSA_SIG_new();
-	dsa_sig->r = BN_bin2bn(sigVal, sigValLen / 2, NULL);
-	dsa_sig->s = BN_bin2bn(&sigVal[sigValLen / 2], sigValLen / 2, NULL);
+    cleanedBase64Signature =
+        XSECCryptoBase64::cleanBuffer(base64Signature, sigLen, cleanedBase64SignatureLen);
+    ArrayJanitor<char> j_cleanedBase64Signature(cleanedBase64Signature);
 
-	// Now we have a signature and a key - lets check
+    int sigValLen;
+    unsigned char* sigVal = new unsigned char[sigLen + 1];
+    ArrayJanitor<unsigned char> j_sigVal(sigVal);
 
-	int err = ECDSA_do_verify(hashBuf, hashLen, dsa_sig, mp_ecKey);
+    EVP_ENCODE_CTX m_dctx;
+    EVP_DecodeInit(&m_dctx);
+    int rc = EVP_DecodeUpdate(&m_dctx,
+                          sigVal,
+                          &sigValLen,
+                          (unsigned char *) cleanedBase64Signature,
+                          cleanedBase64SignatureLen);
 
-	ECDSA_SIG_free(dsa_sig);
+    if (rc < 0) {
 
-	if (err < 0) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Error during Base64 Decode");
+    }
+    int t = 0;
 
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error validating signature");
-	}
+    EVP_DecodeFinal(&m_dctx, &sigVal[sigValLen], &t);
 
-	return (err == 1);
+    sigValLen += t;
+
+    if (sigValLen <= 0 || sigValLen % 2 != 0) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Signature length was odd");
+    }
+
+    // Translate to BNs by splitting in half, and thence to ECDSA_SIG
+
+    ECDSA_SIG * dsa_sig = ECDSA_SIG_new();
+    dsa_sig->r = BN_bin2bn(sigVal, sigValLen / 2, NULL);
+    dsa_sig->s = BN_bin2bn(&sigVal[sigValLen / 2], sigValLen / 2, NULL);
+
+    // Now we have a signature and a key - lets check
+
+    int err = ECDSA_do_verify(hashBuf, hashLen, dsa_sig, mp_ecKey);
+
+    ECDSA_SIG_free(dsa_sig);
+
+    if (err < 0) {
+
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Error validating signature");
+    }
+
+    return (err == 1);
 
 }
 
@@ -214,25 +214,25 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
 
 
 unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
-		unsigned int hashLen,
-		char * base64SignatureBuf,
-		unsigned int base64SignatureBufLen) {
+        unsigned int hashLen,
+        char * base64SignatureBuf,
+        unsigned int base64SignatureBufLen) {
 
-	// Sign a pre-calculated hash using this key
+    // Sign a pre-calculated hash using this key
 
-	if (mp_ecKey == NULL) {
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Attempt to sign data with empty key");
-	}
+    if (mp_ecKey == NULL) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Attempt to sign data with empty key");
+    }
 
-	ECDSA_SIG * dsa_sig;
+    ECDSA_SIG * dsa_sig;
 
-	dsa_sig = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
+    dsa_sig = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
 
-	if (dsa_sig == NULL) {
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error signing data");
-	}
+    if (dsa_sig == NULL) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Error signing data");
+    }
 
     // To encode the signature properly, we need to know the "size of the
     // base point order of the curve in bytes", which seems to correspond to the
@@ -254,63 +254,63 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
 
     if (keyLen == 0) {
         throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error caclulating signature size");
+            "OpenSSL:EC - Error caclulating signature size");
     }
 
-	// Now turn the signature into a raw octet string, half r and half s.
+    // Now turn the signature into a raw octet string, half r and half s.
 
-	unsigned char* rawSigBuf = new unsigned char[keyLen * 2];
+    unsigned char* rawSigBuf = new unsigned char[keyLen * 2];
     memset(rawSigBuf, 0, keyLen * 2);
     ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
 
     unsigned int rawLen = (BN_num_bits(dsa_sig->r) + 7) / 8;
     if (BN_bn2bin(dsa_sig->r, rawSigBuf + keyLen - rawLen) <= 0) {
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error copying signature 'r' value to buffer");
-	}
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Error copying signature 'r' value to buffer");
+    }
 
-	rawLen = (BN_num_bits(dsa_sig->s) + 7) / 8;
+    rawLen = (BN_num_bits(dsa_sig->s) + 7) / 8;
     if (BN_bn2bin(dsa_sig->s, rawSigBuf + keyLen + keyLen - rawLen) <= 0) {
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error copying signature 's' value to buffer");
-	}
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Error copying signature 's' value to buffer");
+    }
 
-	// Now convert to Base 64
+    // Now convert to Base 64
 
-	BIO * b64 = BIO_new(BIO_f_base64());
-	BIO * bmem = BIO_new(BIO_s_mem());
+    BIO * b64 = BIO_new(BIO_f_base64());
+    BIO * bmem = BIO_new(BIO_s_mem());
 
-	BIO_set_mem_eof_return(bmem, 0);
-	b64 = BIO_push(b64, bmem);
+    BIO_set_mem_eof_return(bmem, 0);
+    b64 = BIO_push(b64, bmem);
 
-	BIO_write(b64, rawSigBuf, keyLen * 2);
-	BIO_flush(b64);
+    BIO_write(b64, rawSigBuf, keyLen * 2);
+    BIO_flush(b64);
 
-	unsigned int sigValLen = BIO_read(bmem, base64SignatureBuf, base64SignatureBufLen);
+    unsigned int sigValLen = BIO_read(bmem, base64SignatureBuf, base64SignatureBufLen);
 
-	BIO_free_all(b64);
+    BIO_free_all(b64);
 
-	if (sigValLen <= 0) {
-		throw XSECCryptoException(XSECCryptoException::ECError,
-			"OpenSSL:EC - Error base64 encoding signature");
-	}
+    if (sigValLen <= 0) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Error base64 encoding signature");
+    }
 
-	return sigValLen;
+    return sigValLen;
 }
 
 
 
 XSECCryptoKey * OpenSSLCryptoKeyEC::clone() const {
 
-	OpenSSLCryptoKeyEC * ret;
+    OpenSSLCryptoKeyEC * ret;
 
-	XSECnew(ret, OpenSSLCryptoKeyEC);
+    XSECnew(ret, OpenSSLCryptoKeyEC);
 
-	ret->m_keyType = m_keyType;
+    ret->m_keyType = m_keyType;
     if (mp_ecKey)
         ret->mp_ecKey = EC_KEY_dup(mp_ecKey);
 
-	return ret;
+    return ret;
 
 }
 

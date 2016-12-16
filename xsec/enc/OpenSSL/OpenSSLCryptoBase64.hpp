@@ -36,7 +36,7 @@
 
 // OpenSSL
 #if defined (XSEC_HAVE_OPENSSL)
-#	include <openssl/evp.h>
+#   include <openssl/evp.h>
 
 /**
  * @ingroup opensslcrypto
@@ -65,144 +65,144 @@ class DSIG_EXPORT OpenSSLCryptoBase64 : public XSECCryptoBase64 {
 
 public :
 
-	
-	OpenSSLCryptoBase64() {};
-	virtual ~OpenSSLCryptoBase64() {};
+    
+    OpenSSLCryptoBase64() {};
+    virtual ~OpenSSLCryptoBase64() {};
 
-	/** @name Decoding Functions */
-	//@{
+    /** @name Decoding Functions */
+    //@{
 
-	/**
-	 * \brief Initialise the base64 object.
-	 *
-	 * Initialises the OpenSSL decode context and gets ready for data
-	 * to be decoded.
-	 *
-	 */
+    /**
+     * \brief Initialise the base64 object.
+     *
+     * Initialises the OpenSSL decode context and gets ready for data
+     * to be decoded.
+     *
+     */
 
-	virtual void decodeInit(void);
+    virtual void decodeInit(void);
 
-	/**
-	 * \brief Decode some passed in data.
-	 *
-	 * Pass the encoded data through the OpenSSL base64 decode function
-	 * and place the data in the outData buffer.
-	 *
-	 * @note The OpenSSL library is very unkind if the output buffer is
-	 * not large enough.  It is the responsibility of the caller to ensure
-	 * the buffer will take the data.
-	 *
-	 * @param inData Pointer to the buffer holding encoded data.
-	 * @param inLength Length of the encoded data in the buffer
-	 * @param outData Buffer to place decoded data into
-	 * @param outLength Maximum amount of data that can be placed in
-	 *        the buffer.
-	 * @returns The number of bytes placed in the outData buffer.
-	 */
+    /**
+     * \brief Decode some passed in data.
+     *
+     * Pass the encoded data through the OpenSSL base64 decode function
+     * and place the data in the outData buffer.
+     *
+     * @note The OpenSSL library is very unkind if the output buffer is
+     * not large enough.  It is the responsibility of the caller to ensure
+     * the buffer will take the data.
+     *
+     * @param inData Pointer to the buffer holding encoded data.
+     * @param inLength Length of the encoded data in the buffer
+     * @param outData Buffer to place decoded data into
+     * @param outLength Maximum amount of data that can be placed in
+     *        the buffer.
+     * @returns The number of bytes placed in the outData buffer.
+     */
 
-	virtual unsigned int decode(const unsigned char * inData, 
-						 	    unsigned int inLength,
-								unsigned char * outData,
-								unsigned int outLength);
-
-
-	/**
-	 * \brief Finish off a decode.
-	 *
-	 * Clean out any extra data in the OpenSSL decode context 
-	 * variable into the outData buffer.
-	 *
-	 * @param outData Buffer to place any remaining decoded data
-	 * @param outLength Max amount of data to be placed in the buffer.
-	 * @returns Amount of data placed in the outData buffer
-	 */
-
-	virtual unsigned int decodeFinish(unsigned char * outData,
-							 	      unsigned int outLength);
-
-	//@}
-
-	/** @name Encoding Functions */
-	//@{
-
-	/**
-	 * \brief Initialise the base64 object for encoding
-	 *
-	 * Get the context variable ready for a base64 decode
-	 *
-	 */
-
-	virtual void		 encodeInit(void);
-
-	/**
-	 * \brief Encode some passed in data.
-	 *
-	 * Pass the data through the OpenSSL Base64 encoder and place
-	 * the output in the outData buffer.  Will keep any "overhang"
-	 * data in the context buffer ready for the next pass of input 
-	 * data.
-	 *
-	 * @param inData Pointer to the buffer holding data to be encoded.
-	 * @param inLength Length of the data in the buffer
-	 * @param outData Buffer to place encoded data into
-	 * @param outLength Maximum amount of data that can be placed in
-	 *        the buffer.
-	 * @returns The number of bytes placed in the outData buffer.
-	 */
-
-	virtual unsigned int encode(const unsigned char * inData, 
-						 	    unsigned int inLength,
-								unsigned char * outData,
-								unsigned int outLength);
-
-	/**
-	 * \brief Finish off an encode.
-	 *
-	 * Take any data left in the context variable, and create the
-	 * tail of the base64 encoding.
-	 *
-	 * @param outData Buffer to place any remaining encoded data
-	 * @param outLength Max amount of data to be placed in the buffer.
-	 * @returns Amount of data placed in the outData buffer
-	 */
-
-	virtual unsigned int encodeFinish(unsigned char * outData,
-							 	      unsigned int outLength);	// Finish
+    virtual unsigned int decode(const unsigned char * inData, 
+                                unsigned int inLength,
+                                unsigned char * outData,
+                                unsigned int outLength);
 
 
-	//@}
+    /**
+     * \brief Finish off a decode.
+     *
+     * Clean out any extra data in the OpenSSL decode context 
+     * variable into the outData buffer.
+     *
+     * @param outData Buffer to place any remaining decoded data
+     * @param outLength Max amount of data to be placed in the buffer.
+     * @returns Amount of data placed in the outData buffer
+     */
 
-	/** @name Library Specific Functions */
-	//@{
+    virtual unsigned int decodeFinish(unsigned char * outData,
+                                      unsigned int outLength);
 
-	/**
-	 * \brief Translate a base64 encoded BN to a bignum
-	 *
-	 * Take a ds:CryptoBinary number and translate to an OpenSSL
-	 * representation of a "big number" BIGNUM.
-	 *
-	 */
-	
-	static BIGNUM * b642BN(char * b64in, unsigned int len);
+    //@}
 
-	/**
-	 * \brief Get OpenSSL encode context structure
-	 */
+    /** @name Encoding Functions */
+    //@{
 
-	EVP_ENCODE_CTX * getOpenSSLEncodeEVP_ENCODE_CTX(void) {return &m_ectx;}
+    /**
+     * \brief Initialise the base64 object for encoding
+     *
+     * Get the context variable ready for a base64 decode
+     *
+     */
 
-	/**
-	 * \brief Get OpenSSL encode context structure
-	 */
+    virtual void         encodeInit(void);
 
-	EVP_ENCODE_CTX * getOpenSSLDecodeEVP_ENCODE_CTX(void) {return &m_dctx;}
+    /**
+     * \brief Encode some passed in data.
+     *
+     * Pass the data through the OpenSSL Base64 encoder and place
+     * the output in the outData buffer.  Will keep any "overhang"
+     * data in the context buffer ready for the next pass of input 
+     * data.
+     *
+     * @param inData Pointer to the buffer holding data to be encoded.
+     * @param inLength Length of the data in the buffer
+     * @param outData Buffer to place encoded data into
+     * @param outLength Maximum amount of data that can be placed in
+     *        the buffer.
+     * @returns The number of bytes placed in the outData buffer.
+     */
 
-	//@}
+    virtual unsigned int encode(const unsigned char * inData, 
+                                unsigned int inLength,
+                                unsigned char * outData,
+                                unsigned int outLength);
+
+    /**
+     * \brief Finish off an encode.
+     *
+     * Take any data left in the context variable, and create the
+     * tail of the base64 encoding.
+     *
+     * @param outData Buffer to place any remaining encoded data
+     * @param outLength Max amount of data to be placed in the buffer.
+     * @returns Amount of data placed in the outData buffer
+     */
+
+    virtual unsigned int encodeFinish(unsigned char * outData,
+                                      unsigned int outLength);  // Finish
+
+
+    //@}
+
+    /** @name Library Specific Functions */
+    //@{
+
+    /**
+     * \brief Translate a base64 encoded BN to a bignum
+     *
+     * Take a ds:CryptoBinary number and translate to an OpenSSL
+     * representation of a "big number" BIGNUM.
+     *
+     */
+    
+    static BIGNUM * b642BN(char * b64in, unsigned int len);
+
+    /**
+     * \brief Get OpenSSL encode context structure
+     */
+
+    EVP_ENCODE_CTX * getOpenSSLEncodeEVP_ENCODE_CTX(void) {return &m_ectx;}
+
+    /**
+     * \brief Get OpenSSL encode context structure
+     */
+
+    EVP_ENCODE_CTX * getOpenSSLDecodeEVP_ENCODE_CTX(void) {return &m_dctx;}
+
+    //@}
 
 private :
 
-	EVP_ENCODE_CTX m_ectx;				// Encode context
-	EVP_ENCODE_CTX m_dctx;				// Decode context
+    EVP_ENCODE_CTX m_ectx;              // Encode context
+    EVP_ENCODE_CTX m_dctx;              // Decode context
 
 };
 

@@ -50,108 +50,108 @@ class DSIG_EXPORT OpenSSLCryptoX509 : public XSECCryptoX509 {
 
 public :
 
-	/** @name Constructors and Destructors */
-	//@{
+    /** @name Constructors and Destructors */
+    //@{
 
-	OpenSSLCryptoX509();
-	virtual ~OpenSSLCryptoX509();
+    OpenSSLCryptoX509();
+    virtual ~OpenSSLCryptoX509();
 
-	//@}
+    //@}
 
 
-	//@}
-	/** @name Key Interface methods */
-	//@{
-
-	/**
-	 * \brief Return the type of the key stored in the certificate.
-	 *
-	 * Will extract the key from the certificate to return the appropriate
-	 * type
-	 *
-	 */
-
-	virtual XSECCryptoKey::KeyType getPublicKeyType() const;
-
-	/**
-	 * \brief Returns a string that identifies the crypto owner of this library.
-	 */
-
-	virtual const XMLCh * getProviderName() const;
-
-	/**
-	 * \brief Get a copy of the public key.
-	 *
-	 * Extracts the public key from the certificate and returns the appropriate
-	 * OpenSSLCryrptoKey (DSA or RSA) object
-	 *
-	 */
-
-	virtual XSECCryptoKey * clonePublicKey() const;
-
-	//@}
-
-	/** @name Load and Get the certificate */
-	//@{
-
-	/**
-	 * \brief Load a certificate into the object.
-	 *
-	 * Take a base64 DER encoded certificate and load.
-	 *
-	 * @param buf A buffer containing the Base64 encoded certificate
-	 * @param len The number of bytes of data in the certificate.
-	 */
-
-	virtual void loadX509Base64Bin(const char * buf, unsigned int len);
-
-	/**
-	 * \brief Get a Base64 DER encoded copy of the certificate
-	 *
-	 * @returns A safeBuffer containing the DER encoded certificate
-	 */
-
-	virtual safeBuffer &getDEREncodingSB(void) {return m_DERX509;}
+    //@}
+    /** @name Key Interface methods */
+    //@{
 
     /**
-	 * \brief Get a Base64 DER encoded copy of the certificate
-	 *
-	 * @returns A safeBuffer containing the DER encoded certificate
-	 */
+     * \brief Return the type of the key stored in the certificate.
+     *
+     * Will extract the key from the certificate to return the appropriate
+     * type
+     *
+     */
 
-	virtual const safeBuffer &getDEREncodingSB(void) const {return m_DERX509;}
-
-	//@}
-
-	/** @name OpenSSL Library Specific functions */
-	//@{
-
-	/**
-	 * \brief OpenSSL specific constructor 
-	 *
-	 * Construct the object around an existing X509 certificate
-	 */
-
-	OpenSSLCryptoX509(X509 * x);
-
-	/**
-	 * \brief Get OpenSSL certificate structure
-	 */
-
-	X509 * getOpenSSLX509(void) {return mp_X509;}
+    virtual XSECCryptoKey::KeyType getPublicKeyType() const;
 
     /**
-	 * \brief Get OpenSSL certificate structure
-	 */
+     * \brief Returns a string that identifies the crypto owner of this library.
+     */
 
-	const X509 * getOpenSSLX509(void) const {return mp_X509;}
+    virtual const XMLCh * getProviderName() const;
 
-	//@}
+    /**
+     * \brief Get a copy of the public key.
+     *
+     * Extracts the public key from the certificate and returns the appropriate
+     * OpenSSLCryrptoKey (DSA or RSA) object
+     *
+     */
+
+    virtual XSECCryptoKey * clonePublicKey() const;
+
+    //@}
+
+    /** @name Load and Get the certificate */
+    //@{
+
+    /**
+     * \brief Load a certificate into the object.
+     *
+     * Take a base64 DER encoded certificate and load.
+     *
+     * @param buf A buffer containing the Base64 encoded certificate
+     * @param len The number of bytes of data in the certificate.
+     */
+
+    virtual void loadX509Base64Bin(const char * buf, unsigned int len);
+
+    /**
+     * \brief Get a Base64 DER encoded copy of the certificate
+     *
+     * @returns A safeBuffer containing the DER encoded certificate
+     */
+
+    virtual safeBuffer &getDEREncodingSB(void) {return m_DERX509;}
+
+    /**
+     * \brief Get a Base64 DER encoded copy of the certificate
+     *
+     * @returns A safeBuffer containing the DER encoded certificate
+     */
+
+    virtual const safeBuffer &getDEREncodingSB(void) const {return m_DERX509;}
+
+    //@}
+
+    /** @name OpenSSL Library Specific functions */
+    //@{
+
+    /**
+     * \brief OpenSSL specific constructor 
+     *
+     * Construct the object around an existing X509 certificate
+     */
+
+    OpenSSLCryptoX509(X509 * x);
+
+    /**
+     * \brief Get OpenSSL certificate structure
+     */
+
+    X509 * getOpenSSLX509(void) {return mp_X509;}
+
+    /**
+     * \brief Get OpenSSL certificate structure
+     */
+
+    const X509 * getOpenSSLX509(void) const {return mp_X509;}
+
+    //@}
 
 private:
 
-	X509			* mp_X509;				// The X509 structure
-	safeBuffer		m_DERX509;
+    X509            * mp_X509;              // The X509 structure
+    safeBuffer      m_DERX509;
 };
 
 #endif /* XSEC_HAVE_OPENSSL */

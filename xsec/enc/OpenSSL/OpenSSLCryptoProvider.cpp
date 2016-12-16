@@ -59,10 +59,10 @@ XSEC_USING_XERCES(Janitor);
 
 OpenSSLCryptoProvider::OpenSSLCryptoProvider() {
 
-	OpenSSL_add_all_algorithms();		// Initialise Openssl
-	ERR_load_crypto_strings();
+    OpenSSL_add_all_algorithms();       // Initialise Openssl
+    ERR_load_crypto_strings();
 
-	//SSLeay_add_all_algorithms();
+    //SSLeay_add_all_algorithms();
 #ifdef XSEC_OPENSSL_HAVE_EC
     // Populate curve names.
     m_namedCurveMap["urn:oid:1.3.132.0.6"] = NID_secp112r1;
@@ -144,15 +144,15 @@ OpenSSLCryptoProvider::OpenSSLCryptoProvider() {
 
 OpenSSLCryptoProvider::~OpenSSLCryptoProvider() {
 
-	EVP_cleanup();
-	ERR_free_strings();
-	/* As suggested by Jesse Pelton */
+    EVP_cleanup();
+    ERR_free_strings();
+    /* As suggested by Jesse Pelton */
 #if defined(XSEC_OPENSSL_HAVE_CRYPTO_CLEANUP_ALL_EX_DATA)
-	CRYPTO_cleanup_all_ex_data();
+    CRYPTO_cleanup_all_ex_data();
 #endif
-	RAND_cleanup();
-	X509_TRUST_cleanup();
-	ERR_remove_state(0);
+    RAND_cleanup();
+    X509_TRUST_cleanup();
+    ERR_remove_state(0);
 }
 
 #ifdef XSEC_OPENSSL_HAVE_EC
@@ -160,8 +160,8 @@ int OpenSSLCryptoProvider::curveNameToNID(const char* curveName) const {
 
     std::map<std::string,int>::const_iterator i = m_namedCurveMap.find(curveName);
     if (i == m_namedCurveMap.end())
-   		throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-			"OpenSSLCryptoProvider::curveNameToNID - curve name not recognized");
+        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+            "OpenSSLCryptoProvider::curveNameToNID - curve name not recognized");
     return i->second;
 
 }
@@ -169,127 +169,127 @@ int OpenSSLCryptoProvider::curveNameToNID(const char* curveName) const {
 
 const XMLCh * OpenSSLCryptoProvider::getProviderName() const {
 
-	return DSIGConstants::s_unicodeStrPROVOpenSSL;
+    return DSIGConstants::s_unicodeStrPROVOpenSSL;
 
 }
-	// Hashing classes
+    // Hashing classes
 
-XSECCryptoHash	* OpenSSLCryptoProvider::hashSHA1() const {
+XSECCryptoHash  * OpenSSLCryptoProvider::hashSHA1() const {
 
-	OpenSSLCryptoHash * ret;
+    OpenSSLCryptoHash * ret;
 
-	XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA1));
+    XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA1));
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoHash * OpenSSLCryptoProvider::hashHMACSHA1() const {
 
-	OpenSSLCryptoHashHMAC * ret;
+    OpenSSLCryptoHashHMAC * ret;
 
-	XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
+    XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
 
-	return ret;
+    return ret;
 
 }
 
-XSECCryptoHash	* OpenSSLCryptoProvider::hashSHA(int length) const {
+XSECCryptoHash  * OpenSSLCryptoProvider::hashSHA(int length) const {
 
 
-	OpenSSLCryptoHash * ret;
+    OpenSSLCryptoHash * ret;
 
-	switch (length) {
+    switch (length) {
 
-	case 160: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA1));
-		break;
-	case 224: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA224));
-		break;
-	case 256: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA256));
-		break;
-	case 384: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA384));
-		break;
-	case 512: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA512));
-		break;
-	default:
-		ret = NULL;
-	}
+    case 160: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA1));
+        break;
+    case 224: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA224));
+        break;
+    case 256: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA256));
+        break;
+    case 384: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA384));
+        break;
+    case 512: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA512));
+        break;
+    default:
+        ret = NULL;
+    }
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoHash * OpenSSLCryptoProvider::hashHMACSHA(int length) const {
 
-	OpenSSLCryptoHashHMAC * ret;
+    OpenSSLCryptoHashHMAC * ret;
 
-	switch (length) {
+    switch (length) {
 
-	case 160: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
-		break;
-	case 224: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA224));
-		break;
-	case 256: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA256));
-		break;
-	case 384: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA384));
-		break;
-	case 512: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA512));
-		break;
-	default:
-		ret = NULL;
-	}
+    case 160: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
+        break;
+    case 224: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA224));
+        break;
+    case 256: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA256));
+        break;
+    case 384: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA384));
+        break;
+    case 512: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA512));
+        break;
+    default:
+        ret = NULL;
+    }
 
-	return ret;
+    return ret;
 
 }
 
-XSECCryptoHash	* OpenSSLCryptoProvider::hashMD5() const {
+XSECCryptoHash  * OpenSSLCryptoProvider::hashMD5() const {
 
-	OpenSSLCryptoHash * ret;
+    OpenSSLCryptoHash * ret;
 
-	XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_MD5));
+    XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_MD5));
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoHash * OpenSSLCryptoProvider::hashHMACMD5() const {
 
-	OpenSSLCryptoHashHMAC * ret;
+    OpenSSLCryptoHashHMAC * ret;
 
-	XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_MD5));
+    XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_MD5));
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoKeyHMAC * OpenSSLCryptoProvider::keyHMAC(void) const {
 
-	OpenSSLCryptoKeyHMAC * ret;
-	XSECnew(ret, OpenSSLCryptoKeyHMAC);
+    OpenSSLCryptoKeyHMAC * ret;
+    XSECnew(ret, OpenSSLCryptoKeyHMAC);
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoKeyDSA * OpenSSLCryptoProvider::keyDSA() const {
-	
-	OpenSSLCryptoKeyDSA * ret;
+    
+    OpenSSLCryptoKeyDSA * ret;
 
-	XSECnew(ret, OpenSSLCryptoKeyDSA());
+    XSECnew(ret, OpenSSLCryptoKeyDSA());
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoKeyEC * OpenSSLCryptoProvider::keyEC() const {
-	
+    
 #ifdef XSEC_OPENSSL_HAVE_EC
-	OpenSSLCryptoKeyEC * ret;
+    OpenSSLCryptoKeyEC * ret;
 
-	XSECnew(ret, OpenSSLCryptoKeyEC());
+    XSECnew(ret, OpenSSLCryptoKeyEC());
 
-	return ret;
+    return ret;
 #else
     throw XSECCryptoException(XSECCryptoException::UnsupportedError,
         "OpenSSLCryptoProvider::keyEC - EC support not available");
@@ -297,12 +297,12 @@ XSECCryptoKeyEC * OpenSSLCryptoProvider::keyEC() const {
 }
 
 XSECCryptoKeyRSA * OpenSSLCryptoProvider::keyRSA() const {
-	
-	OpenSSLCryptoKeyRSA * ret;
+    
+    OpenSSLCryptoKeyRSA * ret;
 
-	XSECnew(ret, OpenSSLCryptoKeyRSA());
+    XSECnew(ret, OpenSSLCryptoKeyRSA());
 
-	return ret;
+    return ret;
 
 }
 
@@ -311,21 +311,21 @@ XSECCryptoKey* OpenSSLCryptoProvider::keyDER(const char* buf, unsigned long len,
     EVP_PKEY* pkey = NULL;
 
     if (base64) {
-	    int bufLen = len;
-	    unsigned char * outBuf;
-	    XSECnew(outBuf, unsigned char[len + 1]);
-	    ArrayJanitor<unsigned char> j_outBuf(outBuf);
+        int bufLen = len;
+        unsigned char * outBuf;
+        XSECnew(outBuf, unsigned char[len + 1]);
+        ArrayJanitor<unsigned char> j_outBuf(outBuf);
 
-	    /* Had to move to our own Base64 decoder because it handles non-wrapped b64
-	       better.  Grrr. */
+        /* Had to move to our own Base64 decoder because it handles non-wrapped b64
+           better.  Grrr. */
 
-	    XSCryptCryptoBase64 *b64;
-	    XSECnew(b64, XSCryptCryptoBase64);
-	    Janitor<XSCryptCryptoBase64> j_b64(b64);
+        XSCryptCryptoBase64 *b64;
+        XSECnew(b64, XSCryptCryptoBase64);
+        Janitor<XSCryptCryptoBase64> j_b64(b64);
 
-	    b64->decodeInit();
-	    bufLen = b64->decode((unsigned char *) buf, len, outBuf, len);
-	    bufLen += b64->decodeFinish(&outBuf[bufLen], len-bufLen);
+        b64->decodeInit();
+        bufLen = b64->decode((unsigned char *) buf, len, outBuf, len);
+        bufLen += b64->decodeFinish(&outBuf[bufLen], len-bufLen);
 
         BIO* b = BIO_new_mem_buf((void*)outBuf, bufLen);
         pkey = d2i_PUBKEY_bio(b, NULL);
@@ -369,121 +369,121 @@ XSECCryptoKey* OpenSSLCryptoProvider::keyDER(const char* buf, unsigned long len,
     }
 
     throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-		"OpenSSLCryptoProvider::keyDER - Error decoding public key"); 
+        "OpenSSLCryptoProvider::keyDER - Error decoding public key"); 
 }
 
 
 XSECCryptoX509 * OpenSSLCryptoProvider::X509() const {
 
-	OpenSSLCryptoX509 * ret;
+    OpenSSLCryptoX509 * ret;
 
-	XSECnew(ret, OpenSSLCryptoX509());
+    XSECnew(ret, OpenSSLCryptoX509());
 
-	return ret;
+    return ret;
 
 }
 
 XSECCryptoBase64 * OpenSSLCryptoProvider::base64() const {
 
 #if 0
-	OpenSSLCryptoBase64 * ret;
+    OpenSSLCryptoBase64 * ret;
 
-	XSECnew(ret, OpenSSLCryptoBase64());
+    XSECnew(ret, OpenSSLCryptoBase64());
 #else
-	XSCryptCryptoBase64 *ret;
-	XSECnew(ret, XSCryptCryptoBase64);
+    XSCryptCryptoBase64 *ret;
+    XSECnew(ret, XSCryptCryptoBase64);
 
 #endif
-	return ret;
+    return ret;
 
 }
 
 bool OpenSSLCryptoProvider::algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
 
-	switch (alg) {
+    switch (alg) {
 
-	case (XSECCryptoSymmetricKey::KEY_AES_128) :
-	case (XSECCryptoSymmetricKey::KEY_AES_192) :
-	case (XSECCryptoSymmetricKey::KEY_AES_256) :
+    case (XSECCryptoSymmetricKey::KEY_AES_128) :
+    case (XSECCryptoSymmetricKey::KEY_AES_192) :
+    case (XSECCryptoSymmetricKey::KEY_AES_256) :
 
 #if !defined (XSEC_OPENSSL_HAVE_AES)
-		return false;
+        return false;
 #endif
-	case (XSECCryptoSymmetricKey::KEY_3DES_192) :
+    case (XSECCryptoSymmetricKey::KEY_3DES_192) :
 
-		return true;
+        return true;
 
-	default:
+    default:
 
-		return false;
+        return false;
 
-	}
+    }
 
-	return false;
+    return false;
 
 }
 
 bool OpenSSLCryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) const {
 
-	switch (alg) {
+    switch (alg) {
 
-	case (XSECCryptoHash::HASH_SHA1) :
-	case (XSECCryptoHash::HASH_MD5) :
-		return true;
+    case (XSECCryptoHash::HASH_SHA1) :
+    case (XSECCryptoHash::HASH_MD5) :
+        return true;
 
-	case (XSECCryptoHash::HASH_SHA224) :
-	case (XSECCryptoHash::HASH_SHA256) :
+    case (XSECCryptoHash::HASH_SHA224) :
+    case (XSECCryptoHash::HASH_SHA256) :
 #if defined(XSEC_OPENSSL_HAVE_SHA2) && !defined(OPENSSL_NO_SHA256)
-	    return true;
+        return true;
 #else
         return false;
 #endif
 
-	case (XSECCryptoHash::HASH_SHA384) :
-	case (XSECCryptoHash::HASH_SHA512) :
+    case (XSECCryptoHash::HASH_SHA384) :
+    case (XSECCryptoHash::HASH_SHA512) :
 #if defined(XSEC_OPENSSL_HAVE_SHA2) && !defined(OPENSSL_NO_SHA512)
-		return true;
+        return true;
 #else
-		return false;
+        return false;
 #endif
 
-	default:
-		return false;
-	}
+    default:
+        return false;
+    }
 
-	return false;
+    return false;
 
 }
 
 
-XSECCryptoSymmetricKey	* OpenSSLCryptoProvider::keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
+XSECCryptoSymmetricKey  * OpenSSLCryptoProvider::keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
 
-	OpenSSLCryptoSymmetricKey * ret;
+    OpenSSLCryptoSymmetricKey * ret;
 
-	XSECnew(ret, OpenSSLCryptoSymmetricKey(alg));
+    XSECnew(ret, OpenSSLCryptoSymmetricKey(alg));
 
-	return ret;
+    return ret;
 
 }
 
 unsigned int OpenSSLCryptoProvider::getRandom(unsigned char * buffer, unsigned int numOctets) const {
 
-	if (RAND_status() != 1) {
+    if (RAND_status() != 1) {
 
-		throw XSECCryptoException(XSECCryptoException::GeneralError,
-			"OpenSSLCryptoProvider::getRandom - OpenSSL random not properly initialised"); 
-	}
+        throw XSECCryptoException(XSECCryptoException::GeneralError,
+            "OpenSSLCryptoProvider::getRandom - OpenSSL random not properly initialised"); 
+    }
 
-	int res = RAND_bytes(buffer, numOctets);
+    int res = RAND_bytes(buffer, numOctets);
 
-	if (res == 0) {
+    if (res == 0) {
 
-		throw XSECCryptoException(XSECCryptoException::GeneralError,
-			"OpenSSLCryptoProvider::getRandom - Error obtaining random octets"); 
-	
-	}
+        throw XSECCryptoException(XSECCryptoException::GeneralError,
+            "OpenSSLCryptoProvider::getRandom - Error obtaining random octets"); 
+    
+    }
 
-	return numOctets;
+    return numOctets;
 
 }
 

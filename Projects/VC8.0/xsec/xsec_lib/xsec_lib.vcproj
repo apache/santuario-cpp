@@ -1046,6 +1046,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.hpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoBase64.hpp"
 					>
 				</File>

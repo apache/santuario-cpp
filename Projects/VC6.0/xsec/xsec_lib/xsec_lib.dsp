@@ -401,6 +401,22 @@ SOURCE=..\..\..\..\xsec\enc\openssl\OpenSSLCryptoBase64.hpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\xsec\enc\openssl\OpenSSLCryptoBase64.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\xsec\enc\openssl\OpenSSLCryptoBase64.hpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\xsec\enc\openssl\OpenSSSupport.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\xsec\enc\openssl\OpenSSLSupport.hpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\xsec\enc\openssl\OpenSSLCryptoHash.cpp
 # End Source File
 # Begin Source File

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug No Xalan|Win32">
@@ -489,6 +489,7 @@
     <ClCompile Include="..\..\..\..\xsec\dsig\DSIGXPathFilterExpr.cpp" />
     <ClCompile Include="..\..\..\..\xsec\dsig\DSIGXPathHere.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoBase64.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoException.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoProvider.cpp" />
@@ -637,6 +638,7 @@
     <ClInclude Include="..\..\..\..\xsec\dsig\DSIGXPathFilterExpr.hpp" />
     <ClInclude Include="..\..\..\..\xsec\dsig\DSIGXPathHere.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\XSECCryptoKeyEC.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\resource.h" />
     <ClInclude Include="..\..\..\..\xsec\enc\XSECCryptoBase64.hpp" />

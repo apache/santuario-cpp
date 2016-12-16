@@ -30,6 +30,7 @@
 #include <xsec/framework/XSECDefs.hpp>
 #if defined (XSEC_HAVE_OPENSSL)
 
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyDSA.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
@@ -42,7 +43,8 @@ XSEC_USING_XERCES(ArrayJanitor);
 
 #include <openssl/dsa.h>
 
-OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA() : mp_dsaKey(NULL) {
+
+OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA() : mp_dsaKey(NULL), mp_accumP(NULL), mp_accumQ(NULL), mp_accumG(NULL) {
 };
 
 OpenSSLCryptoKeyDSA::~OpenSSLCryptoKeyDSA() {
@@ -54,6 +56,14 @@ OpenSSLCryptoKeyDSA::~OpenSSLCryptoKeyDSA() {
     if (mp_dsaKey)
         DSA_free(mp_dsaKey);
 
+    if (mp_accumG)
+        BN_free(mp_accumG);
+
+    if (mp_accumP)
+        BN_free(mp_accumP);
+
+    if (mp_accumQ)
+        BN_free(mp_accumQ);
 };
 
 // Generic key functions
@@ -64,53 +74,126 @@ XSECCryptoKey::KeyType OpenSSLCryptoKeyDSA::getKeyType() const {
     if (mp_dsaKey == NULL)
         return KEY_NONE;
 
-    if (mp_dsaKey->priv_key != NULL && mp_dsaKey->pub_key != NULL)
+    if (DSA_get0_privkey(mp_dsaKey) != NULL && DSA_get0_pubkey(mp_dsaKey) != NULL)
         return KEY_DSA_PAIR;
 
-    if (mp_dsaKey->priv_key != NULL)
+    if (DSA_get0_privkey(mp_dsaKey) != NULL)
         return KEY_DSA_PRIVATE;
 
-    if (mp_dsaKey->pub_key != NULL)
+    if (DSA_get0_pubkey(mp_dsaKey) != NULL)
         return KEY_DSA_PUBLIC;
 
     return KEY_NONE;
 
 }
 
-void OpenSSLCryptoKeyDSA::loadPBase64BigNums(const char * b64, unsigned int len) {
+void OpenSSLCryptoKeyDSA::loadPBase64BigNums(const char * b64, unsigned int len)  {
+
+    setPBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
+
+}
+
+void OpenSSLCryptoKeyDSA::setPBase(BIGNUM  * p) {
 
     if (mp_dsaKey == NULL)
         mp_dsaKey = DSA_new();
 
-    mp_dsaKey->p = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+
+    // Do it immediately
+    mp_dsaKey->p = p;
+
+#else
+    // Save it for later
+    if (mp_accumP == NULL)
+        BN_free(mp_accumP);
+
+    mp_accumP = p;
+
+    commitPQG();
+
+#endif
 
 }
 
 void OpenSSLCryptoKeyDSA::loadQBase64BigNums(const char * b64, unsigned int len) {
 
+    setQBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
+
+}
+
+void OpenSSLCryptoKeyDSA::setQBase(BIGNUM  * q) {
+
     if (mp_dsaKey == NULL)
         mp_dsaKey = DSA_new();
 
-    mp_dsaKey->q = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+#if (OPENSSL_VERSION_NUMBER <   0x10100000L)
+
+    mp_dsaKey->q = q;
+
+#else
+    if (mp_accumQ == NULL)
+        BN_free(mp_accumQ);
+
+    mp_accumQ = q;
+    commitPQG();
+
+#endif
 
 }
+
 
 void OpenSSLCryptoKeyDSA::loadGBase64BigNums(const char * b64, unsigned int len) {
 
+    setGBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
+
+}
+
+void OpenSSLCryptoKeyDSA::setGBase(BIGNUM  * g) {
+
     if (mp_dsaKey == NULL)
         mp_dsaKey = DSA_new();
 
-    mp_dsaKey->g = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+#if (OPENSSL_VERSION_NUMBER <   0x10100000L)
+
+    mp_dsaKey->g = g;
+
+#else
+    if (mp_accumG == NULL)
+        BN_free(mp_accumG);
+
+    mp_accumG = g;
+    commitPQG();
+
+#endif
 
 }
+
+#if (OPENSSL_VERSION_NUMBER >=  0x10100000L)
+void OpenSSLCryptoKeyDSA::commitPQG() {
+
+
+    if (mp_accumP != NULL && mp_accumQ != NULL && mp_accumG != NULL) {
+
+        DSA_set0_pqg(mp_dsaKey, mp_accumP, mp_accumQ, mp_accumG);
+        mp_accumP = NULL;
+        mp_accumQ = NULL;
+        mp_accumG = NULL;
+
+    }
+}
+#endif
 
 void OpenSSLCryptoKeyDSA::loadYBase64BigNums(const char * b64, unsigned int len) {
 
     if (mp_dsaKey == NULL)
         mp_dsaKey = DSA_new();
 
-    mp_dsaKey->pub_key = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+    BIGNUM *newPub = OpenSSLCryptoBase64::b642BN((char *) b64, len);
+    const BIGNUM *oldPriv;
+    DSA_get0_key(mp_dsaKey, NULL, &oldPriv);
 
+    DSA_set0_key(mp_dsaKey, newPub, (oldPriv?BN_dup(oldPriv):NULL));
 }
 
 void OpenSSLCryptoKeyDSA::loadJBase64BigNums(const char * b64, unsigned int len) {
@@ -124,27 +207,35 @@ void OpenSSLCryptoKeyDSA::loadJBase64BigNums(const char * b64, unsigned int len)
 
 // "Hidden" OpenSSL functions
 
-OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA(EVP_PKEY *k) {
+OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA(EVP_PKEY *k) : mp_accumP(NULL), mp_accumQ(NULL), mp_accumG(NULL) {
 
     // Create a new key to be loaded as we go
 
     mp_dsaKey = DSA_new();
 
-    if (k == NULL || k->type != EVP_PKEY_DSA)
+    if (k == NULL || EVP_PKEY_id(k) != EVP_PKEY_DSA)
         return; // Nothing to do with us
 
+    const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
+    DSA_get0_pqg(EVP_PKEY_get0_DSA(k), &otherP, &otherQ, &otherG);
 
-    if (k->pkey.dsa->p)
-        mp_dsaKey->p = BN_dup(k->pkey.dsa->p);
-    if (k->pkey.dsa->q)
-        mp_dsaKey->q = BN_dup(k->pkey.dsa->q);
-    if (k->pkey.dsa->g)
-        mp_dsaKey->g = BN_dup(k->pkey.dsa->g);
-    if (k->pkey.dsa->pub_key)
-        mp_dsaKey->pub_key = BN_dup(k->pkey.dsa->pub_key);
-    if (k->pkey.dsa->priv_key)
-        mp_dsaKey->priv_key = BN_dup(k->pkey.dsa->priv_key);
+    if (otherP != NULL && otherQ != NULL && otherG != NULL) {
+        DSA_set0_pqg(EVP_PKEY_get0_DSA(k), BN_dup(otherP), BN_dup(otherQ), BN_dup(otherG));
+    }
 
+    const BIGNUM *otherPriv = NULL, *otherPub = NULL;
+    DSA_get0_key(EVP_PKEY_get0_DSA(k), &otherPub, &otherPriv);
+
+    if (otherPub != NULL) {
+
+        BIGNUM *newPriv = NULL;
+
+        if (otherPriv != NULL)
+            newPriv = BN_dup(otherPriv);
+
+        DSA_set0_key(EVP_PKEY_get0_DSA(k), BN_dup(otherPub), newPriv);
+
+    }
 }
 
 // --------------------------------------------------------------------------------
@@ -335,23 +426,27 @@ XSECCryptoKey * OpenSSLCryptoKeyDSA::clone() const {
 
     XSECnew(ret, OpenSSLCryptoKeyDSA);
 
-    ret->m_keyType = m_keyType;
     ret->mp_dsaKey = DSA_new();
 
     // Duplicate parameters
-    if (mp_dsaKey->p)
-        ret->mp_dsaKey->p = BN_dup(mp_dsaKey->p);
-    if (mp_dsaKey->q)
-        ret->mp_dsaKey->q = BN_dup(mp_dsaKey->q);
-    if (mp_dsaKey->g)
-        ret->mp_dsaKey->g = BN_dup(mp_dsaKey->g);
-    if (mp_dsaKey->pub_key)
-        ret->mp_dsaKey->pub_key = BN_dup(mp_dsaKey->pub_key);
-    if (mp_dsaKey->priv_key)
-        ret->mp_dsaKey->priv_key = BN_dup(mp_dsaKey->priv_key);
 
+    const BIGNUM *p=NULL, *q=NULL, *g=NULL;
+    DSA_get0_pqg(mp_dsaKey, &p, &q, &g);
+
+    if (p && q && g) // DSA_set0_pqg only works if all three params are non zero
+        DSA_set0_pqg(ret->mp_dsaKey, BN_dup(p), BN_dup(q), BN_dup(g));
+
+    const BIGNUM *oldPub= NULL, *oldPriv=NULL;
+    DSA_get0_key(mp_dsaKey, &oldPub, &oldPriv);
+
+    if (oldPub) {
+
+        // DSA_setKey requires non-null Public
+
+        DSA_set0_key(ret->mp_dsaKey, BN_dup(oldPub), (oldPriv?BN_dup(oldPriv):NULL));
+
+    }
     return ret;
-
 }
 
 #endif /* XSEC_HAVE_OPENSSL */

@@ -222,10 +222,10 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
             }
 
             // We have everything, so we can fully init.
-            EVP_CipherInit(mp_ctx, EVP_aes_128_gcm(), NULL, NULL, 0);
+            EVP_CipherInit_ex(mp_ctx, EVP_aes_128_gcm(), NULL, NULL, NULL, 0);
             EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
             EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
-            EVP_CipherInit(mp_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+            EVP_CipherInit_ex(mp_ctx, NULL, NULL, m_keyBuf.rawBuffer(), iv, 0);
 		}
 #endif
 		else if (m_keyMode == MODE_ECB) {
@@ -274,10 +274,10 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
             }
 
             // We have everything, so we can fully init.
-            EVP_CipherInit(mp_ctx, EVP_aes_192_gcm(), NULL, NULL, 0);
+            EVP_CipherInit_ex(mp_ctx, EVP_aes_192_gcm(), NULL, NULL, NULL, 0);
             EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
             EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
-            EVP_CipherInit(mp_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+            EVP_CipherInit_ex(mp_ctx, NULL, NULL, m_keyBuf.rawBuffer(), iv, 0);
 
 		}
 #endif
@@ -327,10 +327,10 @@ int OpenSSLCryptoSymmetricKey::decryptCtxInit(const unsigned char* iv, const uns
             }
 
             // We have everything, so we can fully init.
-            EVP_CipherInit(mp_ctx, EVP_aes_256_gcm(), NULL, NULL, 0);
+            EVP_CipherInit_ex(mp_ctx, EVP_aes_256_gcm(), NULL, NULL, NULL, 0);
             EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_IVLEN, 12, NULL);
             EVP_CIPHER_CTX_ctrl(mp_ctx, EVP_CTRL_GCM_SET_TAG, 16, (void*)m_tagBuf.rawBuffer());
-            EVP_CipherInit(mp_ctx, NULL, m_keyBuf.rawBuffer(), iv, 0);
+            EVP_CipherInit_ex(mp_ctx, NULL, NULL, m_keyBuf.rawBuffer(), iv, 0);
 
 		}
 #endif

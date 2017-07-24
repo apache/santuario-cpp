@@ -592,7 +592,7 @@ nss_sources = \
 #
 # Now the library specific build items
 #
-libxml_security_c_la_LDFLAGS = -version-info 17:3:0
+libxml_security_c_la_LDFLAGS = -version-info 18:0:0
 
 install-exec-hook:
 	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done
@@ -619,5 +619,3 @@ EXTRA_DIST = \
   enc/WinCAPI/WinCAPICryptoProvider.hpp \
   enc/WinCAPI/WinCAPICryptoSymmetricKey.cpp \
   enc/WinCAPI/WinCAPICryptoKeyHMAC.cpp
-
-	

@@ -1,5 +1,5 @@
 Name:           xml-security-c
-Version:        1.7.3
+Version:        1.8.0
 Release:        1
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
@@ -38,13 +38,13 @@ XPath and XSLT transforms.
 
 This package contains the utility programs.
 
-%package -n libxml-security-c17
+%package -n libxml-security-c18
 Summary:    Apache XML security C++ library
 Group:      Development/Libraries/C and C++
 Provides:   xml-security-c = %{version}-%{release}
 Obsoletes:  xml-security-c < %{version}-%{release}
 
-%description -n libxml-security-c17
+%description -n libxml-security-c18
 The xml-security-c library is a C++ implementation of the XML Digital Signature
 and Encryption specifications. The library makes use of the Apache XML project's
 Xerces-C XML Parser and Xalan-C XSLT processor. The latter is used for processing
@@ -55,7 +55,7 @@ This package contains just the shared library.
 %package -n libxml-security-c-devel
 Summary:	Development files for the Apache C++ XML security library
 Group:		Development/Libraries/C and C++
-Requires:	libxml-security-c17 = %{version}-%{release}
+Requires:	libxml-security-c18 = %{version}-%{release}
 Requires:	openssl-devel
 %if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
 Requires:       xerces-c-devel
@@ -90,18 +90,18 @@ This package includes files needed for development with xml-security-c.
 
 
 %ifnos solaris2.8 solaris2.9 solaris2.10
-%post -n libxml-security-c17 -p /sbin/ldconfig
+%post -n libxml-security-c18 -p /sbin/ldconfig
 %endif
 
 %ifnos solaris2.8 solaris2.9 solaris2.10
-%postun -n libxml-security-c17 -p /sbin/ldconfig
+%postun -n libxml-security-c18 -p /sbin/ldconfig
 %endif
 
 %files -n xml-security-c-bin
 %defattr(-,root,root,-)
 %{_bindir}/*
 
-%files -n libxml-security-c17
+%files -n libxml-security-c18
 %defattr(-,root,root,-)
 %{_libdir}/*.so.*
 
@@ -112,6 +112,9 @@ This package includes files needed for development with xml-security-c.
 %{_libdir}/*.a
 
 %changelog
+* Thu Jun 29 2017 Scott Cantor <cantor.2@osu.edu> 1.8.0-1
+- update to 1.8.0
+
 * Wed Jan 28 2015 Scott Cantor <cantor.2@osu.edu> 1.7.3-1
 - update to 1.7.3
 - remove support for dead Xerces versions

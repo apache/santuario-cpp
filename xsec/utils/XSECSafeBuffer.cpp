@@ -661,7 +661,7 @@ void safeBuffer::sbXMLChCat(const char * str) {
 
 	assert (t != NULL);
 
-	len += XMLString::stringLen(t);
+	len += XMLString::stringLen(t) * size_XMLCh;
 	len += (xsecsize_t) (2 * size_XMLCh);
 
 	checkAndExpand(len);

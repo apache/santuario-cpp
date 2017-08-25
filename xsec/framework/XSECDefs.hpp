@@ -170,7 +170,7 @@
 #endif
 
 #ifdef XSEC_LIBRARY_BUILD
-#   ifdef XSEC_HAVE_STRCASECMP
+#   ifdef HAVE_STRCASECMP
 #       define _stricmp(x,y) strcasecmp(x,y)
 #   else
 #       define _stricmp(x,y) stricmp(x,y)

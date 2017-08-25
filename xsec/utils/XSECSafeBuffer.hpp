@@ -108,17 +108,10 @@ public:
 	int sbStrcmp(const char * inStr) const;
 	int sbStrcmp(const safeBuffer & inStr) const;
 
-#ifdef XSEC_XERCES_64BITSAFE
 	long sbStrstr(const char * inStr) const;
 	long sbOffsetStrstr(const char * inStr, xsecsize_t offset) const;
 	// XMLCh versions
 	long sbStrstr(const XMLCh * inStr) const;
-#else
-    int sbStrstr(const char * inStr) const;
-    int sbOffsetStrstr(const char * inStr, xsecsize_t offset) const;
-    // XMLCh versions
-    int sbStrstr(const XMLCh * inStr) const;
-#endif
     void sbStrinsIn(const XMLCh * inStr, xsecsize_t offset);
 
 	// XMLCh and char common functions

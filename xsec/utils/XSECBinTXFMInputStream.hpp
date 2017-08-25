@@ -112,11 +112,7 @@ public :
 	 * @returns Bytes already returned.
 	 */
 
-#ifdef XSEC_XERCES_64BITSAFE
     virtual XMLFilePos curPos() const;
-#else
-    virtual unsigned int curPos() const;
-#endif
 
 	/**
 	 * \brief Retrieve the required number of bytes and return

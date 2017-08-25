@@ -387,11 +387,7 @@ int safeBuffer::sbOffsetStrncmp(const char * inStr, xsecsize_t offset, xsecsize_
 
 }
 
-#ifdef XSEC_XERCES_64BITSAFE
 long safeBuffer::sbStrstr(const char * inStr) const {
-#else
-int safeBuffer::sbStrstr(const char * inStr) const {
-#endif
 
 	checkBufferType(BUFFER_CHAR);
 	char* p = strstr((char *) buffer, inStr);
@@ -407,11 +403,7 @@ int safeBuffer::sbStrstr(const char * inStr) const {
 
 }
 
-#ifdef XSEC_XERCES_64BITSAFE
 long safeBuffer::sbStrstr(const XMLCh * inStr) const {
-#else
-int safeBuffer::sbStrstr(const XMLCh * inStr) const {
-#endif
 
 	checkBufferType(BUFFER_UNICODE);
 	XMLCh* p = XMLString::findAny((XMLCh *) buffer, inStr);
@@ -427,11 +419,7 @@ int safeBuffer::sbStrstr(const XMLCh * inStr) const {
 
 }
 
-#ifdef XSEC_XERCES_64BITSAFE
 long safeBuffer::sbOffsetStrstr(const char * inStr, xsecsize_t offset) const {
-#else
-int safeBuffer::sbOffsetStrstr(const char * inStr, xsecsize_t offset) const {
-#endif
 
 	checkBufferType(BUFFER_CHAR);
 	xsecsize_t bl = (xsecsize_t) strlen((char *) buffer);

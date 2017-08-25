@@ -99,13 +99,14 @@ AC_CHECK_HEADER([xercesc/dom/DOM.hpp],,AC_MSG_ERROR([unable to find xerces heade
 AC_MSG_CHECKING([Xerces version])
 AC_PREPROC_IFELSE(
     [AC_LANG_PROGRAM([#include <xercesc/util/XercesVersion.hpp>],
-[#if  _XERCES_VERSION >= 20000
+[#if  _XERCES_VERSION >= 30000
 int i = 0;
 #else
-#error cannot use version 1.x
+#error cannot use version 1.x or 2.x
 #endif])],
     [AC_MSG_RESULT(OK)],
-    [AC_MSG_FAILURE([Xerces-C 2.x or 3.x is required])])
+    [AC_MSG_FAILURE([Xerces-C 3 is required])])
+
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/PlatformUtils.hpp>]], [[xercesc::XMLPlatformUtils::Initialize()]])],
     [],[AC_MSG_ERROR([unable to link with Xerces])])
 
@@ -127,13 +128,6 @@ CFLAGS="${CFLAGS} -DXSEC_LIBRARY_BUILD"
 CXXFLAGS="${CXXFLAGS} -DXSEC_LIBRARY_BUILD"
 
 # Find out some properties of the version of Xerces we have
-
-AC_MSG_CHECKING([whether Xerces is 64-bit clean])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/framework/MemBufInputSource.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-      XMLFilePos testvar;
-    ]])],[AC_MSG_RESULT([yes])
-    AC_DEFINE([XSEC_XERCES_64BITSAFE],[1],[Define to 1 if Xerces has a 64-bit-safe API.])],
-    [AC_MSG_RESULT([no])])
 
 AC_MSG_CHECKING([whether Xerces BinInputStream requires getContentType])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/BinMemInputStream.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;

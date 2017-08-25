@@ -75,12 +75,7 @@ XSECBinTXFMInputStream::~XSECBinTXFMInputStream() {
 
 void XSECBinTXFMInputStream::reset(void) {}
 
-#ifdef XSEC_XERCES_64BITSAFE
-XMLFilePos
-#else
-unsigned int
-#endif
-XSECBinTXFMInputStream::curPos() const {
+XMLFilePos XSECBinTXFMInputStream::curPos() const {
 	return m_currentIndex;
 }
 

@@ -69,11 +69,7 @@ public :
     XSECBinHTTPURIInputStream(const XERCES_CPP_NAMESPACE_QUALIFIER XMLUri&  urlSource);
     ~XSECBinHTTPURIInputStream();
 
-#ifdef XSEC_XERCES_64BITSAFE
     XMLFilePos curPos() const;
-#else
-    unsigned int curPos() const;
-#endif
     xsecsize_t readBytes
     (
                 XMLByte* const  toFill
@@ -113,13 +109,7 @@ private :
 };
 
 
-inline
-#ifdef XSEC_XERCES_64BITSAFE
-XMLFilePos
-#else
-unsigned int
-#endif
-XSECBinHTTPURIInputStream::curPos() const
+inline XMLFilePos XSECBinHTTPURIInputStream::curPos() const
 {
     return fBytesProcessed;
 }

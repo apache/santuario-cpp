@@ -71,7 +71,7 @@ AC_CHECK_LIB(socket, getservent,)
 # Check for required includes
 AC_CHECK_HEADERS([unistd.h direct.h])
 
-AC_CHECK_DECL(strcasecmp,[AC_DEFINE([XSEC_HAVE_STRCASECMP],[1],[Define to 1 if strcasecmp present.])],,[#include <string.h>]) 
+AC_CHECK_FUNCS([strcasecmp])
 
 # Check whether getcwd can dynamically allocate memory.
 AC_MSG_CHECKING([whether getcwd(NULL, 0) works])

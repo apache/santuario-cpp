@@ -6,9 +6,6 @@
 /* Define if OpenSSL is in use. */
 #undef XSEC_HAVE_OPENSSL
 
-/* Define to 1 if strcasecmp present. */
-#undef XSEC_HAVE_STRCASECMP
-
 /* Define to 1 if getcwd(NULL, 0) works. */
 #undef XSEC_HAVE_GETCWD_DYN
 

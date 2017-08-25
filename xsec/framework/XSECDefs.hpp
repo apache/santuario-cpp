@@ -63,11 +63,8 @@
 #include <xercesc/util/XercesDefs.hpp>
 
 // Define "sizes" of data to correspond to Xerces APIs
-#ifdef XSEC_XERCES_64BITSAFE
-    typedef XMLSize_t xsecsize_t;
-#else
-    typedef unsigned int xsecsize_t;
-#endif
+// TODO: just drop this out
+typedef XMLSize_t xsecsize_t;
 
 // Pending API change, compile in a limit for Xerces SecurityManager entity expansion
 #define XSEC_ENTITY_EXPANSION_LIMIT 1000

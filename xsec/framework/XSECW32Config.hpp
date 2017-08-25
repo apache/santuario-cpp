@@ -54,10 +54,6 @@
 
 #	define XSEC_XERCES_DOMENTITYINPUTENCODING 1
 
-/* 3.0 now 64-bit safe */
-
-#   define XSEC_XERCES_64BITSAFE 1
-
 /* 3.0 InputStream must expose content type */
 
 #   define XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE 1

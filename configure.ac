@@ -163,15 +163,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/XMLString.hpp>]], [[
 	AC_DEFINE([XSEC_XERCES_XMLSTRING_HAS_RELEASE],[1],[Define to 1 if Xerces XMLString has release method.])],
 	[AC_MSG_RESULT([no])])
 
-# For Xerces 3.x we now have a stricter DOM L3 implementation
-AC_MSG_CHECKING([whether Xerces DOMImplementationLS has DOMLSSerializer])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/dom/DOM.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-        DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(NULL);
-        DOMLSSerializer *ls = ((DOMImplementationLS*)impl)->createLSSerializer();
-    ]])],[AC_MSG_RESULT([yes])
-    AC_DEFINE([XSEC_XERCES_DOMLSSERIALIZER],[1],[Define to 1 if Xerces has DOMLSSerializer.])],
-    [AC_MSG_RESULT([no])])
-
 AC_MSG_CHECKING([whether Xerces DOMEntity uses getInputEncoding()])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/dom/DOM.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
         DOMEntity *t;

@@ -216,9 +216,6 @@ void outputDoc(DOMDocument * doc) {
 
     cerr << endl;
 
-#if defined (XSEC_XERCES_DOMLSSERIALIZER)
-
-    // DOM L3 version as per Xerces 3.0 API
     DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
 
     // Get the config so we can set up pretty printing
@@ -233,18 +230,6 @@ void outputDoc(DOMDocument * doc) {
     theOutput->setByteStream(formatTarget);
 
     theSerializer->write(doc, theOutput);
-
-#else
-
-    DOMWriter         *theSerializer = ((DOMImplementationLS*)impl)->createDOMWriter();
-
-    theSerializer->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
-    if (theSerializer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, false))
-        theSerializer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, false);
-
-    theSerializer->writeNode(formatTarget, *doc);
-    
-#endif
 
     cout << endl;
 

@@ -108,31 +108,21 @@ void outputDoc (DOMImplementation *impl, DOMDocument * doc) {
 
 	XMLFormatTarget *formatTarget = new StdOutFormatTarget();
 
-    // Output a doc to stdout
-#if defined (XSEC_XERCES_DOMLSSERIALIZER)
-    // DOM L3 version as per Xerces 3.0 API
-    DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
+	// Output a doc to stdout
+	DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
 
-    // Get the config so we can set up pretty printing
-    DOMConfiguration *dc = theSerializer->getDomConfig();
-    dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
+	// Get the config so we can set up pretty printing
+	DOMConfiguration *dc = theSerializer->getDomConfig();
+	dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, true);
 
-    // Now create an output object to format to UTF-8
-    DOMLSOutput *theOutput = ((DOMImplementationLS*)impl)->createLSOutput();
-    Janitor<DOMLSOutput> j_theOutput(theOutput);
+	// Now create an output object to format to UTF-8
+	DOMLSOutput *theOutput = ((DOMImplementationLS*)impl)->createLSOutput();
+	Janitor<DOMLSOutput> j_theOutput(theOutput);
 
-    theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
-    theOutput->setByteStream(formatTarget);
-    
-    theSerializer->write(doc, theOutput);
-#else
-    DOMWriter         *theSerializer = ((DOMImplementationLS*)impl)->createDOMWriter();
+	theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
+	theOutput->setByteStream(formatTarget);
 
-	theSerializer->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
-	if (theSerializer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true))
-		theSerializer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, true);
-	theSerializer->writeNode(formatTarget, *doc);
-#endif
+	theSerializer->write(doc, theOutput);
 
 	cout << endl;
 
@@ -147,31 +137,21 @@ void addDocToQueue (DOMImplementation *impl, DOMDocument * doc) {
 
 	MemBufFormatTarget *formatTarget = new MemBufFormatTarget();
 
-#if defined (XSEC_XERCES_DOMLSSERIALIZER)
-    // DOM L3 version as per Xerces 3.0 API
-    DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
+	// DOM L3 version as per Xerces 3.0 API
+	DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
 
-    // Get the config so we can set up pretty printing
-    DOMConfiguration *dc = theSerializer->getDomConfig();
-    dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, false);
+	// Get the config so we can set up pretty printing
+	DOMConfiguration *dc = theSerializer->getDomConfig();
+	dc->setParameter(XMLUni::fgDOMWRTFormatPrettyPrint, false);
 
-    // Now create an output object to format to UTF-8
-    DOMLSOutput *theOutput = ((DOMImplementationLS*)impl)->createLSOutput();
-    Janitor<DOMLSOutput> j_theOutput(theOutput);
+	// Now create an output object to format to UTF-8
+	DOMLSOutput *theOutput = ((DOMImplementationLS*)impl)->createLSOutput();
+	Janitor<DOMLSOutput> j_theOutput(theOutput);
 
-    theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
-    theOutput->setByteStream(formatTarget);
-    
-    theSerializer->write(doc, theOutput);
-#else
-	DOMWriter         *theSerializer = ((DOMImplementationLS*)impl)->createDOMWriter();
+	theOutput->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
+	theOutput->setByteStream(formatTarget);
 
-	theSerializer->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
-	if (theSerializer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, false))
-		theSerializer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, false);
-
-	theSerializer->writeNode(formatTarget, *doc);
-#endif
+	theSerializer->write(doc, theOutput);
 
 	// Copy to a new buffer
 	xsecsize_t len = formatTarget->getLen();

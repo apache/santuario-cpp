@@ -40,11 +40,6 @@
 #if (XERCES_VERSION_MAJOR >= 3)
 
 
-/* 3.0 no longer supports DOMWriter, must use DOMLSSerializer instead
-*/
-
-#	define XSEC_XERCES_DOMLSSERIALIZER 1
-
 /* 3.0 now uses getInputEncoding rather than getEncoding to determine
    encoding that was found in input document */
 

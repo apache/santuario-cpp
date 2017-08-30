@@ -766,8 +766,6 @@ int evaluate(int argc, char ** argv) {
 
             DOMImplementation *impl = DOMImplementationRegistry::getDOMImplementation(core);
 
-#if defined (XSEC_XERCES_DOMLSSERIALIZER)
-            // DOM L3 version as per Xerces 3.0 API
             DOMLSSerializer   *theSerializer = ((DOMImplementationLS*)impl)->createLSSerializer();
             Janitor<DOMLSSerializer> j_theSerializer(theSerializer);
             
@@ -784,16 +782,6 @@ int evaluate(int argc, char ** argv) {
 
             theSerializer->write(doc, theOutput);
 
-#else           
-            DOMWriter         *theSerializer = ((DOMImplementationLS*)impl)->createDOMWriter();
-            Janitor<DOMWriter> j_theSerializer(theSerializer);
-
-            theSerializer->setEncoding(MAKE_UNICODE_STRING("UTF-8"));
-            if (theSerializer->canSetFeature(XMLUni::fgDOMWRTFormatPrettyPrint, false))
-                theSerializer->setFeature(XMLUni::fgDOMWRTFormatPrettyPrint, false);
-
-            theSerializer->writeNode(formatTarget, *doc);
-#endif  
             cout << endl;
 
         }

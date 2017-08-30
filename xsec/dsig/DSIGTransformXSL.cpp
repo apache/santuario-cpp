@@ -65,26 +65,16 @@ XSECDomToSafeBuffer::XSECDomToSafeBuffer(DOMNode* node)
     MemBufFormatTarget* target = new MemBufFormatTarget;
     Janitor<MemBufFormatTarget> j_target(target);
 
-#if defined (XSEC_XERCES_DOMLSSERIALIZER)
-    // DOM L3 version as per Xerces 3.0 API
     DOMLSSerializer* theSerializer = impl->createLSSerializer();
     Janitor<DOMLSSerializer> j_theSerializer(theSerializer);
 
     DOMLSOutput *theOutput = impl->createLSOutput();
     Janitor<DOMLSOutput> j_theOutput(theOutput);
     theOutput->setByteStream(target);
-#else
-    DOMWriter* theSerializer = impl->createDOMWriter();
-    Janitor<DOMWriter> j_theSerializer(theSerializer);
-#endif
 
     try
     {
-#if defined (XSEC_XERCES_DOMLSSERIALIZER)
         theSerializer->write(node, theOutput);
-#else
-        theSerializer->writeNode(target, *node);
-#endif
         m_buffer.sbMemcpyIn(0, target->getRawBuffer(), target->getLen());
     }
     catch(const XMLException&)

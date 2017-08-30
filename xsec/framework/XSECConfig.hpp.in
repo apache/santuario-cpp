@@ -48,9 +48,6 @@
 /* Define to 1 if Xerces DOMEntity has getInputEncoding. */
 #undef XSEC_XERCES_DOMENTITYINPUTENCODING
 
-/* Define to 1 if Xerces has DOMLSSerializer. */
-#undef XSEC_XERCES_DOMLSSERIALIZER
-
 /* Define to 1 if Xerces XMLFormatter requires version. */
 #undef XSEC_XERCES_FORMATTER_REQUIRES_VERSION
 

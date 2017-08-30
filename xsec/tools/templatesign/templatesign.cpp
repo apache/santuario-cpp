@@ -1353,12 +1353,7 @@ int main(int argc, char **argv) {
     DOMNode *aNode = doc->getFirstChild();
     if (aNode->getNodeType() == DOMNode::ENTITY_NODE)
     {
-        const XMLCh* aStr = 
-#if defined XSEC_XERCES_DOMENTITYINPUTENCODING
-            ((DOMEntity *)aNode)->getInputEncoding();
-#else
-            ((DOMEntity *)aNode)->getEncoding();
-#endif
+        const XMLCh* aStr = ((DOMEntity *)aNode)->getInputEncoding();
         if (!strEquals(aStr, ""))
         {
             encNameStr = aStr;

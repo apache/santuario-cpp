@@ -39,10 +39,6 @@
 
 #if (XERCES_VERSION_MAJOR >= 3)
 
-/* Is it possible to setIdAttributes? - DOM level 3 call.  V3.x
-   API Version */
-
-#	define XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE 1
 
 /* 3.0 no longer supports DOMWriter, must use DOMLSSerializer instead
 */
@@ -75,13 +71,6 @@
 /* Does XMLString::release() exist */
 
 #	define XSEC_XERCES_XMLSTRING_HAS_RELEASE 1
-
-#	if (XERCES_VERSION_MAJOR < 3)
-		/* Is it possible to setIdAttributes? - DOM level 3 call.  V2.x API */
-
-#		define XSEC_XERCES_HAS_SETIDATTRIBUTE 1
-
-#	endif
 
 #else
 /*

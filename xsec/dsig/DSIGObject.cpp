@@ -136,11 +136,7 @@ void DSIGObject::load(void) {
 
 	mp_idAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_Id);
 	if (mp_idAttr) {
-#if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
-	    ((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id);
-#elif defined (XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE)
 		((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id, true);
-#endif
 	}
 
 	mp_mimeTypeAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_MimeType);
@@ -225,11 +221,7 @@ void DSIGObject::setId(const XMLCh * id) {
 
 		((DOMElement *) mp_objectNode)->setAttributeNS(NULL, s_Id, id);
 		// Mark as an ID
-#if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
-		((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id);
-#elif defined (XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE)
 		((DOMElement *) mp_objectNode)->setIdAttributeNS(NULL, s_Id, true);
-#endif
 		mp_idAttr = ((DOMElement *) mp_objectNode)->getAttributeNodeNS(NULL, s_Id);
 
 	}

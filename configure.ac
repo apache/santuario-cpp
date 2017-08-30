@@ -163,26 +163,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/XMLString.hpp>]], [[
 	AC_DEFINE([XSEC_XERCES_XMLSTRING_HAS_RELEASE],[1],[Define to 1 if Xerces XMLString has release method.])],
 	[AC_MSG_RESULT([no])])
 
-AC_MSG_CHECKING([whether Xerces XMLElement has ::setIdAttribute(XMLCh*)])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/dom/DOM.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-		DOMElement * elt;
-		elt->setIdAttribute(NULL);
-	]])],[AC_MSG_RESULT([yes])
-    xerces_has_setidattribute=yes
-	AC_DEFINE([XSEC_XERCES_HAS_SETIDATTRIBUTE],[1],[Define to 1 if Xerces has legacy setIdAttribute.])],
-	[AC_MSG_RESULT([no])])
-
-if test -z "$xerces_has_setidattribute" ; then
-  AC_MSG_CHECKING([whether Xerces XMLElement has ::setIdAttribute(XMLCh*, bool)])
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/dom/DOM.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-		  DOMElement * elt;
-		  elt->setIdAttribute(NULL, false);
-	  ]])],[AC_MSG_RESULT([yes])
-      xerces_has_setidattribute=yes
-	  AC_DEFINE([XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE],[1],[Define to 1 if Xerces DOM ID methods take extra parameter.])],
-	  [AC_MSG_RESULT([no])])
-fi
-
 # For Xerces 3.x we now have a stricter DOM L3 implementation
 AC_MSG_CHECKING([whether Xerces DOMImplementationLS has DOMLSSerializer])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/dom/DOM.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;

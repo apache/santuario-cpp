@@ -709,9 +709,7 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
 		sig->setPrettyPrint(true);
-#if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
 		sig->setIdByAttributeName(false);		// Do not search by name
-#endif
 		sigNode = sig->createBlankSignature(doc, 
 			DSIGConstants::s_unicodeStrURIC14N_COM,
 			DSIGConstants::s_unicodeStrURIHMAC_SHA1);
@@ -1629,9 +1627,7 @@ void unitTestCipherReference(DOMImplementation * impl) {
 		DOMElement * cipherVal = doc->createElement(MAKE_UNICODE_STRING("MyCipherValue"));
 		rootElem->appendChild(cipherVal);
 		cipherVal->setAttributeNS(NULL, MAKE_UNICODE_STRING("Id"), MAKE_UNICODE_STRING("CipherText"));
-#if defined(XSEC_XERCES_HAS_SETIDATTRIBUTE)
-		cipherVal->setIdAttribute(MAKE_UNICODE_STRING("Id"));
-#endif
+		cipherVal->setIdAttributeNS(NULL, MAKE_UNICODE_STRING("Id"), true);
 
 		cipherVal->appendChild(doc->createTextNode(MAKE_UNICODE_STRING((char *) s_tstBase64EncodedString)));
 

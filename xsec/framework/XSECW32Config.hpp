@@ -39,12 +39,6 @@
 
 #if (XERCES_VERSION_MAJOR >= 3)
 
-
-/* 3.0 now uses getInputEncoding rather than getEncoding to determine
-   encoding that was found in input document */
-
-#	define XSEC_XERCES_DOMENTITYINPUTENCODING 1
-
 /* 3.0 InputStream must expose content type */
 
 #   define XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE 1

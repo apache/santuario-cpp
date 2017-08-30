@@ -45,9 +45,6 @@
 /* Define to 1 if Xalan XercesParserLiaison ctor takes XercesDOMSupport. */
 #undef XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT
 
-/* Define to 1 if Xerces DOMEntity has getInputEncoding. */
-#undef XSEC_XERCES_DOMENTITYINPUTENCODING
-
 /* Define to 1 if Xerces XMLFormatter requires version. */
 #undef XSEC_XERCES_FORMATTER_REQUIRES_VERSION
 

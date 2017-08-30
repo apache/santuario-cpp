@@ -163,14 +163,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/XMLString.hpp>]], [[
 	AC_DEFINE([XSEC_XERCES_XMLSTRING_HAS_RELEASE],[1],[Define to 1 if Xerces XMLString has release method.])],
 	[AC_MSG_RESULT([no])])
 
-AC_MSG_CHECKING([whether Xerces DOMEntity uses getInputEncoding()])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/dom/DOM.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-        DOMEntity *t;
-        t->getInputEncoding();
-    ]])],[AC_MSG_RESULT([yes])
-    AC_DEFINE([XSEC_XERCES_DOMENTITYINPUTENCODING],[1],[Define to 1 if Xerces DOMEntity has getInputEncoding.])],
-    [AC_MSG_RESULT([no])])
-
 
 # Now check for Xalan
 

@@ -375,9 +375,7 @@ void XKMSKeyBindingAbstractTypeImpl::setId(const XMLCh * id) {
 	mp_keyBindingAbstractTypeElement->setAttributeNS(NULL, XKMSConstants::s_tagId, id ? id : myId);
 	if (id == NULL)
 	    XSEC_RELEASE_XMLCH(myId);
-#if defined (XSEC_XERCES_HAS_SETIDATTRIBUTE)
-	mp_keyBindingAbstractTypeElement->setIdAttributeNS(NULL, XKMSConstants::s_tagId);
-#endif
+	mp_keyBindingAbstractTypeElement->setIdAttributeNS(NULL, XKMSConstants::s_tagId, true);
 	mp_idAttr = 
 		mp_keyBindingAbstractTypeElement->getAttributeNodeNS(NULL, XKMSConstants::s_tagId);
 

@@ -54,12 +54,6 @@
 /* Define to 1 if Xerces XMLFormatter requires version. */
 #undef XSEC_XERCES_FORMATTER_REQUIRES_VERSION
 
-/* Define to 1 if Xerces DOM ID methods take extra parameter. */
-#undef XSEC_XERCES_HAS_BOOLSETIDATTRIBUTE
-
-/* Define to 1 if Xerces has legacy setIdAttribute. */
-#undef XSEC_XERCES_HAS_SETIDATTRIBUTE
-
 /* Define to 1 if Xerces InputStream class requires getContentType. */
 #undef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
 

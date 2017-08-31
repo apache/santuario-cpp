@@ -155,40 +155,10 @@ BinInputStream * XSECURIResolverGenericWin32::resolveURI(const XMLCh * uri) {
 
 	// Create the appropriate XMLUri objects
 	if (mp_baseURI != NULL) {
-		XMLUri	* turi;
-
-#if defined(XSEC_XERCES_BROKEN_XMLURI)
-
-		// XMLUri relative paths are broken, so we need to strip out ".."
-		// Doesn't fix the whole problem, but gets us somewhere
-
-		XSECAutoPtrXMLCh b(mp_baseURI);
-		XSECAutoPtrXMLCh r(uri);
-
-		int index = 0;
-		while (XMLString::startsWith(&(r.get()[index]), DOTDOT_SLASH)) {
-
-			// Strip the last segment of the base
-
-			int lastIndex = XMLString::lastIndexOf(b.get(), XERCES_CPP_NAMESPACE_QUALIFIER chForwardSlash);
-			if (lastIndex > 0)
-				const_cast<XMLCh*>(b.get())[lastIndex] = 0;
-
-			index += 3;
-
-		}
-
-		XSECnew(turi, XMLUri(b.get()));
-		Janitor<XMLUri> j_turi(turi);
-		XSECnew(xmluri, XMLUri(turi, &(r.get()[index])));
-
-#else
-		turi = new XMLUri(mp_baseURI);
+		XMLUri* turi = new XMLUri(mp_baseURI);
 		Janitor<XMLUri> j_turi(turi);
 
 		xmluri = new XMLUri(turi, uri);
-#endif
-
 	}
 	else {
 		xmluri = new XMLUri(uri);

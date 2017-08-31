@@ -355,23 +355,16 @@ XMLCh * transcodeFromUTF8(const unsigned char * src) {
 	// Grab a transcoder
 	XMLTransService::Codes failReason;
 
-#if defined(XSEC_XERCES_REQUIRES_MEMMGR)
 	XMLTranscoder* t =
 		XMLPlatformUtils::fgTransService->makeNewTranscoderFor("UTF-8",
-															   failReason,
-															   2*1024,
-															   XMLPlatformUtils::fgMemoryManager);
-#else
-	XMLTranscoder* t =
-		XMLPlatformUtils::fgTransService->makeNewTranscoderFor("UTF-8",
-															   failReason,
-															   2*1024);
-#endif
+					   failReason,
+					   2*1024,
+					   XMLPlatformUtils::fgMemoryManager);
 	Janitor<XMLTranscoder> j_t(t);
 
 	// Need to loop through, 2K at a time
 	xsecsize_t bytesEaten, bytesEatenCounter;
-    xsecsize_t charactersEaten;
+	xsecsize_t charactersEaten;
 	xsecsize_t totalBytesEaten = 0;
 	xsecsize_t bytesToEat = XMLString::stringLen((char *) src);
 
@@ -417,18 +410,11 @@ char DSIG_EXPORT * transcodeToUTF8(const XMLCh * src) {
 	// Grab a transcoder
 	XMLTransService::Codes failReason;
 
-#if defined(XSEC_XERCES_REQUIRES_MEMMGR)
 	XMLTranscoder* t =
 		XMLPlatformUtils::fgTransService->makeNewTranscoderFor("UTF-8",
-															   failReason,
-															   2*1024,
-															   XMLPlatformUtils::fgMemoryManager);
-#else
-	XMLTranscoder* t =
-		XMLPlatformUtils::fgTransService->makeNewTranscoderFor("UTF-8",
-															   failReason,
-															   2*1024);
-#endif
+						   failReason,
+						   2*1024,
+						   XMLPlatformUtils::fgMemoryManager);
 	Janitor<XMLTranscoder> j_t(t);
 
 	// Need to loop through, 2K at a time
@@ -438,7 +424,7 @@ char DSIG_EXPORT * transcodeToUTF8(const XMLCh * src) {
 
 	while (totalCharsEaten < charsToEat) {
 
-	    xsecsize_t toEat = charsToEat - totalCharsEaten;
+		xsecsize_t toEat = charsToEat - totalCharsEaten;
 
 		if (toEat > 2048)
 			toEat = 2048;

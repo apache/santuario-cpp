@@ -38,17 +38,6 @@
  */
 
 #if (XERCES_VERSION_MAJOR == 3) || ((XERCES_VERSION_MAJOR == 2) && (XERCES_VERSION_MINOR >= 3))
-/*
- * As of version 2.3, xerces requires a version parameter in XMLFormatter
- * constructors
- */
-#	define XSEC_XERCES_FORMATTER_REQUIRES_VERSION 1
-
- /* 2.3 and above use a user defined Memory Manager.  In some cases, this
-   actually needs to be passed to functions
-*/
-
-#	define XSEC_XERCES_REQUIRES_MEMMGR 1
 
 /* Does XMLString::release() exist */
 

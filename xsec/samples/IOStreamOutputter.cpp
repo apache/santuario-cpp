@@ -924,13 +924,8 @@ void docSetup(DOMDocument *doc) {
 
 	
 	
-#if defined(XSEC_XERCES_FORMATTER_REQUIRES_VERSION)
-	gFormatter = new XMLFormatter("UTF-8", 0, formatTarget,
-                                          XMLFormatter::NoEscapes, gUnRepFlags);
-#else
-	gFormatter = new XMLFormatter("UTF-8", formatTarget,
-                                          XMLFormatter::NoEscapes, gUnRepFlags);
-#endif
+    gFormatter = new XMLFormatter("UTF-8", 0, formatTarget,
+                                   XMLFormatter::NoEscapes, gUnRepFlags);
 }
 
 // --------------------------------------------------------------------------------

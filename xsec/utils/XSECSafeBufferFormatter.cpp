@@ -43,18 +43,11 @@ XSECSafeBufferFormatter::XSECSafeBufferFormatter(
 	sbf = new sbFormatTarget();
 	sbf->setBuffer(&formatBuffer);
 
-#if defined(XSEC_XERCES_FORMATTER_REQUIRES_VERSION)
 	formatter = new XMLFormatter(outEncoding,
-									0,
-									sbf,
-									escapeFlags,
-									unrepFlags);
-#else
-	XSECnew(formatter, XMLFormatter(outEncoding,
-									sbf,
-									escapeFlags,
-									unrepFlags));
-#endif
+					0,
+					sbf,
+					escapeFlags,
+					unrepFlags);
 }
 
 
@@ -62,26 +55,18 @@ XSECSafeBufferFormatter::XSECSafeBufferFormatter(
 
 
 XSECSafeBufferFormatter::XSECSafeBufferFormatter(
-						const char * const			outEncoding,
+						const char * const outEncoding,
 						const XMLFormatter::EscapeFlags	escapeFlags,
 						const XMLFormatter::UnRepFlags unrepFlags) {
 
 	sbf = new sbFormatTarget();
 	sbf->setBuffer(&formatBuffer);
 
-#if defined(XSEC_XERCES_FORMATTER_REQUIRES_VERSION)
 	formatter = new XMLFormatter(outEncoding,
-									0,
-									sbf,
-									escapeFlags,
-									unrepFlags);
-#else
-	XSECnew(formatter, XMLFormatter(outEncoding,
-									sbf,
-									escapeFlags,
-									unrepFlags));
-#endif
-
+					0,
+					sbf,
+					escapeFlags,
+					unrepFlags);
 }
 
 // Destructor

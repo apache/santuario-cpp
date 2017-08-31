@@ -45,12 +45,6 @@
 /* Define to 1 if Xalan XercesParserLiaison ctor takes XercesDOMSupport. */
 #undef XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT
 
-/* Define to 1 if Xerces XMLFormatter requires version. */
-#undef XSEC_XERCES_FORMATTER_REQUIRES_VERSION
-
-/* Define to 1 if Xerces XMLFormatter requires MemoryManager. */
-#undef XSEC_XERCES_REQUIRES_MEMMGR
-
 /* Define to 1 if Xerces XMLString has release method. */
 #undef XSEC_XERCES_XMLSTRING_HAS_RELEASE
 

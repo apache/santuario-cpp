@@ -128,23 +128,6 @@ CFLAGS="${CFLAGS} -DXSEC_LIBRARY_BUILD"
 CXXFLAGS="${CXXFLAGS} -DXSEC_LIBRARY_BUILD"
 
 # Find out some properties of the version of Xerces we have
-
-AC_MSG_CHECKING([whether Xerces XMLFormatter requires a version])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/framework/XMLFormatter.hpp>
-	#include <xercesc/util/XercesDefs.hpp>
-	#include <xercesc/util/XMLUniDefs.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-	  XMLCh s_encoding[] = {
-		chLatin_U, chLatin_T, chLatin_F, chDash, chDigit_8, chNull
-	  };
-	  XMLFormatter f(s_encoding,
-		NULL,
-		NULL, 
-		XMLFormatter::NoEscapes, 
-		XMLFormatter::UnRep_CharRef);
-	]])],[AC_MSG_RESULT([yes])
-	AC_DEFINE([XSEC_XERCES_REQUIRES_MEMMGR],[1],[Define to 1 if Xerces XMLFormatter requires MemoryManager.])
-	AC_DEFINE([XSEC_XERCES_FORMATTER_REQUIRES_VERSION],[1],[Define to 1 if Xerces XMLFormatter requires version.])],
-	[AC_MSG_RESULT([no])])
 	
 AC_MSG_CHECKING([whether Xerces XMLString has ::release])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/XMLString.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;

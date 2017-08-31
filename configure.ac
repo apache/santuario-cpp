@@ -184,17 +184,6 @@ fi
 # Check for handling of XSLException types
 if test "$xalan_found" = "yes" ; then
 
-  AC_MSG_CHECKING([whether XSLException::getType() returns XalanDOMString])
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xalanc/PlatformSupport/XSLException.hpp>]], [[ try {
-          int x = 1;
-      } 
-      catch (XALAN_CPP_NAMESPACE_QUALIFIER XSLException &e) {
-        e.getType().c_str();
-      }
-    ]])],[AC_MSG_RESULT([yes])
-    AC_DEFINE([XSEC_XSLEXCEPTION_RETURNS_DOMSTRING],[1],[Define to 1 if Xalan XSLException returns XalanDOMString.])],
-    [AC_MSG_RESULT([no])]);
-
   AC_MSG_CHECKING([whether XercesParserLiaison ctor takes XercesDOMSupport])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xalanc/XercesParserLiaison/XercesDOMSupport.hpp>
     #include <xalanc/XercesParserLiaison/XercesParserLiaison.hpp>]], [[ 	XALAN_CPP_NAMESPACE_QUALIFIER XercesDOMSupport 

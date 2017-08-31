@@ -76,9 +76,7 @@ public :
         , const xsecsize_t    maxToRead
     );
 
-#ifdef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
     const XMLCh* getContentType() const;
-#endif
 
 private :
     // -----------------------------------------------------------------------

@@ -129,15 +129,6 @@ CXXFLAGS="${CXXFLAGS} -DXSEC_LIBRARY_BUILD"
 
 # Find out some properties of the version of Xerces we have
 
-AC_MSG_CHECKING([whether Xerces BinInputStream requires getContentType])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/BinMemInputStream.hpp>]], [[using namespace XERCES_CPP_NAMESPACE;
-      XMLByte buf[1024];
-      BinMemInputStream in(buf,1024);
-      in.getContentType();
-    ]])],[AC_MSG_RESULT([yes])
-    AC_DEFINE([XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE],[1],[Define to 1 if Xerces InputStream class requires getContentType.])],
-    [AC_MSG_RESULT([no])])
-
 AC_MSG_CHECKING([whether Xerces XMLFormatter requires a version])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/framework/XMLFormatter.hpp>
 	#include <xercesc/util/XercesDefs.hpp>

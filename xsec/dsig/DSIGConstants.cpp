@@ -39,11 +39,7 @@ XERCES_CPP_NAMESPACE_USE
 
 #undef XSEC_RELEASE_XMLCH
 
-#if defined (XSEC_XERCES_XMLSTRING_HAS_RELEASE)
-#    define XSEC_RELEASE_XMLCH(x) XMLString::release((XMLCh **) &x)
-#else
-#    define XSEC_RELEASE_XMLCH(x) delete[] x;
-#endif
+#define XSEC_RELEASE_XMLCH(x) XMLString::release((XMLCh **) &x)
 
 // --------------------------------------------------------------------------------
 //			Some useful defines
@@ -259,15 +255,15 @@ void DSIGConstants::create() {
 
 	s_unicodeStrURIRawX509 = XMLString::transcode(URI_ID_RAWX509);
 	s_unicodeStrURIDSIG = XMLString::transcode(URI_ID_DSIG);
-    s_unicodeStrURIDSIG11 = XMLString::transcode(URI_ID_DSIG11);
+	s_unicodeStrURIDSIG11 = XMLString::transcode(URI_ID_DSIG11);
 	s_unicodeStrURIEC = XMLString::transcode(URI_ID_EC);
 	s_unicodeStrURIXPF = XMLString::transcode(URI_ID_XPF);
 	s_unicodeStrURIXENC = XMLString::transcode(URI_ID_XENC);
-    s_unicodeStrURIXENC11 = XMLString::transcode(URI_ID_XENC11);
+	s_unicodeStrURIXENC11 = XMLString::transcode(URI_ID_XENC11);
 
 	s_unicodeStrURISIGBASE = XMLString::transcode(URI_ID_SIG_BASE);
 	s_unicodeStrURISIGBASEMORE = XMLString::transcode(URI_ID_SIG_BASEMORE);
-    s_unicodeStrURISIGBASE11 = XMLString::transcode(URI_ID_SIG_BASE11);
+	s_unicodeStrURISIGBASE11 = XMLString::transcode(URI_ID_SIG_BASE11);
 
 	s_unicodeStrURISHA1 = XMLString::transcode(URI_ID_SHA1);
 	s_unicodeStrURISHA224 = XMLString::transcode(URI_ID_SHA224);
@@ -281,13 +277,13 @@ void DSIGConstants::create() {
 	s_unicodeStrURIENVELOPE = XMLString::transcode(URI_ID_ENVELOPE);
 	s_unicodeStrURIC14N_NOC = XMLString::transcode(URI_ID_C14N_NOC);
 	s_unicodeStrURIC14N_COM = XMLString::transcode(URI_ID_C14N_COM);
-    s_unicodeStrURIC14N11_NOC = XMLString::transcode(URI_ID_C14N11_NOC);
-    s_unicodeStrURIC14N11_COM = XMLString::transcode(URI_ID_C14N11_COM);
+	s_unicodeStrURIC14N11_NOC = XMLString::transcode(URI_ID_C14N11_NOC);
+	s_unicodeStrURIC14N11_COM = XMLString::transcode(URI_ID_C14N11_COM);
 	s_unicodeStrURIEXC_C14N_NOC = XMLString::transcode(URI_ID_EXC_C14N_NOC);
 	s_unicodeStrURIEXC_C14N_COM = XMLString::transcode(URI_ID_EXC_C14N_COM);
 
 	s_unicodeStrURIDSA_SHA1 = XMLString::transcode(URI_ID_DSA_SHA1);
-    s_unicodeStrURIDSA_SHA256 = XMLString::transcode(URI_ID_DSA_SHA256);
+	s_unicodeStrURIDSA_SHA256 = XMLString::transcode(URI_ID_DSA_SHA256);
 
 	s_unicodeStrURIRSA_MD5 = XMLString::transcode(URI_ID_RSA_MD5);
 	s_unicodeStrURIRSA_SHA1 = XMLString::transcode(URI_ID_RSA_SHA1);
@@ -297,7 +293,7 @@ void DSIGConstants::create() {
 	s_unicodeStrURIRSA_SHA512 = XMLString::transcode(URI_ID_RSA_SHA512);
 
 	s_unicodeStrURIECDSA_SHA1 = XMLString::transcode(URI_ID_ECDSA_SHA1);
-    s_unicodeStrURIECDSA_SHA224 = XMLString::transcode(URI_ID_ECDSA_SHA224);
+	s_unicodeStrURIECDSA_SHA224 = XMLString::transcode(URI_ID_ECDSA_SHA224);
 	s_unicodeStrURIECDSA_SHA256 = XMLString::transcode(URI_ID_ECDSA_SHA256);
 	s_unicodeStrURIECDSA_SHA384 = XMLString::transcode(URI_ID_ECDSA_SHA384);
 	s_unicodeStrURIECDSA_SHA512 = XMLString::transcode(URI_ID_ECDSA_SHA512);
@@ -316,20 +312,20 @@ void DSIGConstants::create() {
 	s_unicodeStrURIAES192_CBC	= XMLString::transcode(URI_ID_AES192_CBC);
 	s_unicodeStrURIAES256_CBC	= XMLString::transcode(URI_ID_AES256_CBC);
 	s_unicodeStrURIAES128_GCM	= XMLString::transcode(URI_ID_AES128_GCM);
-    s_unicodeStrURIAES192_GCM	= XMLString::transcode(URI_ID_AES192_GCM);
-    s_unicodeStrURIAES256_GCM	= XMLString::transcode(URI_ID_AES256_GCM);
+	s_unicodeStrURIAES192_GCM	= XMLString::transcode(URI_ID_AES192_GCM);
+	s_unicodeStrURIAES256_GCM	= XMLString::transcode(URI_ID_AES256_GCM);
 	s_unicodeStrURIKW_3DES = XMLString::transcode(URI_ID_KW_3DES);
-    s_unicodeStrURIKW_AES128 = XMLString::transcode(URI_ID_KW_AES128);
+	s_unicodeStrURIKW_AES128 = XMLString::transcode(URI_ID_KW_AES128);
 	s_unicodeStrURIKW_AES192 = XMLString::transcode(URI_ID_KW_AES192);
 	s_unicodeStrURIKW_AES256 = XMLString::transcode(URI_ID_KW_AES256);
-    s_unicodeStrURIKW_AES128_PAD = XMLString::transcode(URI_ID_KW_AES128_PAD);
+	s_unicodeStrURIKW_AES128_PAD = XMLString::transcode(URI_ID_KW_AES128_PAD);
 	s_unicodeStrURIKW_AES192_PAD = XMLString::transcode(URI_ID_KW_AES192_PAD);
 	s_unicodeStrURIKW_AES256_PAD = XMLString::transcode(URI_ID_KW_AES256_PAD);
 	s_unicodeStrURIRSA_1_5 = XMLString::transcode(URI_ID_RSA_1_5);
 	s_unicodeStrURIRSA_OAEP_MGFP1 = XMLString::transcode(URI_ID_RSA_OAEP_MGFP1);
-    s_unicodeStrURIRSA_OAEP = XMLString::transcode(URI_ID_RSA_OAEP);
+	s_unicodeStrURIRSA_OAEP = XMLString::transcode(URI_ID_RSA_OAEP);
 
-    s_unicodeStrURIMGF1_BASE = XMLString::transcode(URI_ID_MGF1_BASE);
+	s_unicodeStrURIMGF1_BASE = XMLString::transcode(URI_ID_MGF1_BASE);
 	s_unicodeStrURIMGF1_SHA1 = XMLString::transcode(URI_ID_MGF1_SHA1);
 	s_unicodeStrURIMGF1_SHA224 = XMLString::transcode(URI_ID_MGF1_SHA224);
 	s_unicodeStrURIMGF1_SHA256 = XMLString::transcode(URI_ID_MGF1_SHA256);
@@ -341,7 +337,7 @@ void DSIGConstants::create() {
 
 	s_unicodeStrPROVOpenSSL = XMLString::transcode(PROV_OPENSSL);
 	s_unicodeStrPROVWinCAPI = XMLString::transcode(PROV_WINCAPI);
-    s_unicodeStrPROVNSS = XMLString::transcode(PROV_NSS);
+	s_unicodeStrPROVNSS = XMLString::transcode(PROV_NSS);
 
 }
 
@@ -357,15 +353,15 @@ void DSIGConstants::destroy() {
 
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRawX509);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIDSIG);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIDSIG11);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIDSIG11);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIEC);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIXPF);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC11);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIXENC11);
 
 	XSEC_RELEASE_XMLCH(s_unicodeStrURISIGBASE);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURISIGBASEMORE);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURISIGBASE11);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURISIGBASE11);
 
 	XSEC_RELEASE_XMLCH(s_unicodeStrURISHA1);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURISHA224);
@@ -379,12 +375,12 @@ void DSIGConstants::destroy() {
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIENVELOPE);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIC14N_NOC);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIC14N_COM);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIC14N11_NOC);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIC14N11_COM);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIC14N11_NOC);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIC14N11_COM);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIEXC_C14N_NOC);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIEXC_C14N_COM);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIDSA_SHA1);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIDSA_SHA256);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIDSA_SHA256);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_MD5);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_SHA1);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_SHA224);
@@ -392,7 +388,7 @@ void DSIGConstants::destroy() {
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_SHA384);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_SHA512);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA1);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA224);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA224);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA256);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA384);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIECDSA_SHA512);
@@ -420,9 +416,9 @@ void DSIGConstants::destroy() {
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIKW_AES256_PAD);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_1_5);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_OAEP_MGFP1);
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_OAEP);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIRSA_OAEP);
 
-    XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_BASE);
+	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_BASE);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA1);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA224);
 	XSEC_RELEASE_XMLCH(s_unicodeStrURIMGF1_SHA256);

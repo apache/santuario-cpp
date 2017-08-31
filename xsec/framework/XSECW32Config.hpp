@@ -43,11 +43,6 @@
 
 #	define XSEC_XERCES_XMLSTRING_HAS_RELEASE 1
 
-#else
-/*
- * In version 2.2, the XMLUri class was broken for relative URI de-referencing
- */
-#	define XSEC_XERCES_BROKEN_XMLURI 1
 #endif
 
 

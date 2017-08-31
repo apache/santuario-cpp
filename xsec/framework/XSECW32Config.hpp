@@ -44,16 +44,7 @@
 
 #	include <xalanc/Include/XalanVersion.hpp>
 
-#	if (_XALAN_VERSION <= 10800)
-#		define XSEC_XSLEXCEPTION_RETURNS_DOMSTRING	1
-#	endif
 #	if (_XALAN_VERSION >= 10900)
-
-		/* 1.9 and above have XSLException::getType() returns XalanDOMChar *, not
-			XalanDOMString
-		*/
-
-#		undef XSEC_XSLEXCEPTION_RETURNS_DOMSTRING
 
 		/* 1.9 and above do not take a XercesDOMSupport as input to the ctor */
 
@@ -70,11 +61,6 @@
 
 #		define XSEC_XALAN_REQS_MEMORYMANAGER
 #	else
-		/* 1.9 and above have XSLException::getType() returns XalanDOMChar *, not
-			XalanDOMString
-		*/
-
-#		define XSEC_XSLEXCEPTION_RETURNS_DOMSTRING 1
 
 		/* 1.9 and above do not take a XercesDOMSupport as input to the ctor */
 

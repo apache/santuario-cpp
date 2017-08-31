@@ -37,13 +37,6 @@
  * numbers to understand library idiosycracies
  */
 
-#if (XERCES_VERSION_MAJOR >= 3)
-
-/* 3.0 InputStream must expose content type */
-
-#   define XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE 1
-#endif
-
 #if (XERCES_VERSION_MAJOR == 3) || ((XERCES_VERSION_MAJOR == 2) && (XERCES_VERSION_MINOR >= 3))
 /*
  * As of version 2.3, xerces requires a version parameter in XMLFormatter

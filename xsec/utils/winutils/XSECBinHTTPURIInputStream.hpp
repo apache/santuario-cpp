@@ -82,15 +82,13 @@ class DSIG_EXPORT XSECBinHTTPURIInputStream : public XERCES_CPP_NAMESPACE_QUALIF
 {
 public :
 
-    XSECBinHTTPURIInputStream(const XERCES_CPP_NAMESPACE_QUALIFIER XMLUri&  urlSource);
-    ~XSECBinHTTPURIInputStream();
+	XSECBinHTTPURIInputStream(const XERCES_CPP_NAMESPACE_QUALIFIER XMLUri&  urlSource);
+	~XSECBinHTTPURIInputStream();
 
-    XMLFilePos curPos() const;
-    xsecsize_t readBytes(XMLByte* const  toFill, const xsecsize_t    maxToRead);
+	XMLFilePos curPos() const;
+	xsecsize_t readBytes(XMLByte* const  toFill, const xsecsize_t    maxToRead);
 
-#ifdef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
-    const XMLCh* getContentType() const;
-#endif
+	const XMLCh* getContentType() const;
 
 	static void Cleanup();
 

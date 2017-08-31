@@ -591,8 +591,6 @@ xsecsize_t XSECBinHTTPURIInputStream::readBytes(XMLByte* const    toFill
     return len;
 }
 
-#ifdef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
 const XMLCh* XSECBinHTTPURIInputStream::getContentType() const {
     return NULL;
 }
-#endif

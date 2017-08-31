@@ -48,9 +48,6 @@
 /* Define to 1 if Xerces XMLFormatter requires version. */
 #undef XSEC_XERCES_FORMATTER_REQUIRES_VERSION
 
-/* Define to 1 if Xerces InputStream class requires getContentType. */
-#undef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
-
 /* Define to 1 if Xerces XMLFormatter requires MemoryManager. */
 #undef XSEC_XERCES_REQUIRES_MEMMGR
 

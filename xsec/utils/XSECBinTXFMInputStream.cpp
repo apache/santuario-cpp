@@ -108,8 +108,6 @@ xsecsize_t XSECBinTXFMInputStream::readBytes(XMLByte* const  toFill,
 
 }
 
-#ifdef XSEC_XERCES_INPUTSTREAM_HAS_CONTENTTYPE
 const XMLCh* XSECBinTXFMInputStream::getContentType() const {
     return NULL;
 }
-#endif

@@ -30,22 +30,6 @@
  *
  */
 
-#include <xercesc/util/XercesVersion.hpp>
-
-/*
- * Because we don't have a configure script, we need to rely on version
- * numbers to understand library idiosycracies
- */
-
-#if (XERCES_VERSION_MAJOR == 3) || ((XERCES_VERSION_MAJOR == 2) && (XERCES_VERSION_MINOR >= 3))
-
-/* Does XMLString::release() exist */
-
-#	define XSEC_XERCES_XMLSTRING_HAS_RELEASE 1
-
-#endif
-
-
 
 /*
  * The following defines whether Xalan integration is required.

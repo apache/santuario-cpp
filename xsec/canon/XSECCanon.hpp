@@ -28,6 +28,10 @@
  * $Id$
  */
 
+
+#ifndef XSECCanon_INCLUDE
+#define XSECCanon_INCLUDE
+
 // XSEC includes
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/utils/XSECSafeBuffer.hpp>
@@ -99,3 +103,4 @@ protected:
 
 };
 
+ #endif /* XSECCanon_INCLUDE */ 

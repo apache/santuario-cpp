@@ -482,7 +482,7 @@ void TXFMXPath::evaluateExpr(DOMNode *h, safeBuffer inexpr) {
 		}
 	}
 
-	catch (XSLException &e) {
+	catch (const XSLException &e) {
 
 		safeBuffer msg;
 

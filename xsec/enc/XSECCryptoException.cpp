@@ -101,13 +101,13 @@ XSECCryptoException::~XSECCryptoException() {
 
 }
 
-const char * XSECCryptoException::getMsg(void) {
+const char * XSECCryptoException::getMsg(void) const {
 
 	return msg;
 
 }
 
-XSECCryptoException::XSECCryptoExceptionType XSECCryptoException::getType(void) {
+XSECCryptoException::XSECCryptoExceptionType XSECCryptoException::getType(void) const {
 
 	return type;
 

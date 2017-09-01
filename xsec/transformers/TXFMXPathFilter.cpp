@@ -320,7 +320,7 @@ XSECXPathNodeList * TXFMXPathFilter::evaluateSingleExpr(DSIGXPathFilterExpr *exp
 
 	}
 
-	catch (XSLException &e) {
+	catch (const XSLException &e) {
 
 		safeBuffer msg;
 

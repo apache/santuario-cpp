@@ -127,7 +127,7 @@ unsigned int TXFMURL::readBytes(XMLByte * const toFill, unsigned int maxToFill) 
 	try {
 		ret = (unsigned int) is->readBytes(toFill, maxToFill);
 	}
-	catch (NetAccessorException e) {
+	catch (const NetAccessorException& e) {
 
 		// Naieve - but assume this means the socket has closed (end of stream)
 		ret = 0;

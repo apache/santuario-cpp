@@ -84,13 +84,13 @@ XSECException::~XSECException() {
 
 }
 
-const XMLCh * XSECException::getMsg(void) {
+const XMLCh * XSECException::getMsg(void) const {
 
 	return msg;
 
 }
 
-XSECException::XSECExceptionType XSECException::getType(void) {
+XSECException::XSECExceptionType XSECException::getType(void) const {
 
 	return type;
 

@@ -382,7 +382,7 @@ XSECCryptoKey * XENCCipherImpl::decryptKeyFromKeyInfoList(DSIGKeyInfoList * kil)
                 }
             }
 
-            catch (XSECCryptoException &) {
+            catch (const XSECCryptoException&) {
                 /* Do nothing - this is likely to be a bad decrypt on a public key */
             } catch (...) {
                 memset((void *) buffer, 0, 1024);

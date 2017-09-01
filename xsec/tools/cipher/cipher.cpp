@@ -783,7 +783,7 @@ int evaluate(int argc, char ** argv) {
         }
     }
 
-    catch (XSECException &e) {
+    catch (const XSECException &e) {
         char * msg = XMLString::transcode(e.getMsg());
         cerr << "An error occured during encryption/decryption operation\n   Message: "
         << msg << endl;
@@ -794,7 +794,7 @@ int evaluate(int argc, char ** argv) {
         doc->release();
         return 2;
     }
-    catch (XSECCryptoException &e) {
+    catch (const XSECCryptoException &e) {
         cerr << "An error occured during encryption/decryption operation\n   Message: "
         << e.getMsg() << endl;
         errorsOccured = true;

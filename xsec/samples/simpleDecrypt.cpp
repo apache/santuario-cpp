@@ -169,7 +169,7 @@ int main (int argc, char **argv) {
 
 	}
 
-	catch (XSECException &e)
+	catch (const XSECException &e)
 	{
 		char * msg = XMLString::transcode(e.getMsg());
 		cerr << "An error occurred during an encryption operation\n   Message: "

@@ -59,11 +59,11 @@ extern const char * XSECExceptionStrings [];
 			throw XSECException (XSECException::MemoryAllocationFail); \
 		}\
 	} \
-	catch (XSECCryptoException &e) \
+	catch (const XSECCryptoException &e) \
 	{\
 		throw XSECException (XSECException::InternalError, e.getMsg()); \
 	} \
-	catch (std::bad_alloc&) { \
+	catch (const std::bad_alloc&) { \
 		throw XSECException (XSECException::MemoryAllocationFail); \
 	}
 
@@ -75,11 +75,11 @@ extern const char * XSECExceptionStrings [];
 			throw XSECException (XSECException::MemoryAllocationFail); \
 		} \
 	} \
-	catch (XSECCryptoException &e) \
+	catch (const XSECCryptoException &e) \
 	{\
 		throw XSECException (XSECException::InternalError, e.getMsg()); \
 	} \
-	catch (std::bad_alloc&) { \
+	catch (const std::bad_alloc&) { \
 		throw XSECException (XSECException::MemoryAllocationFail); \
 	}
 

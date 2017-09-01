@@ -753,7 +753,7 @@ XMLCh * cleanURIEscapes(const XMLCh * uriPath) {
         delete[] utf8Path;
         return unicodePath;
     }
-    catch (XMLException&) {
+    catch (const XMLException&) {
     }
 
     delete[] utf8Path;

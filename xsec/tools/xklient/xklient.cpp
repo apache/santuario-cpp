@@ -3766,7 +3766,7 @@ int doMsgDump(XKMSMessageAbstractType * msg) {
 
         }
     
-        catch (XSECException &e) {
+        catch (const XSECException &e) {
             cout << "Bad!.  Caught exception : " << endl;
             char * msg = XMLString::transcode(e.getMsg());
             cout << msg << endl;
@@ -3909,7 +3909,7 @@ int doParsedMsgDump(DOMDocument * doc) {
 
     }
 
-    catch (XSECException &e) {
+    catch (const XSECException &e) {
         char * msg = XMLString::transcode(e.getMsg());
         cerr << "An error occured during message loading\n   Message: "
         << msg << endl;
@@ -3917,7 +3917,7 @@ int doParsedMsgDump(DOMDocument * doc) {
         errorsOccured = true;
         return 2;
     }
-    catch (XSECCryptoException &e) {
+    catch (const XSECCryptoException &e) {
         cerr << "An error occured during encryption/signature processing\n   Message: "
         << e.getMsg() << endl;
         errorsOccured = true;
@@ -4349,7 +4349,7 @@ int doRequest(int argc, char ** argv, int paramCount) {
         }
 
     }
-    catch (XSECException &e) {
+    catch (const XSECException &e) {
 
         char * m = XMLString::transcode(e.getMsg());
         cerr << "Error sending request: " << m << endl;

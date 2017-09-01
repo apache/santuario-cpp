@@ -360,7 +360,7 @@ XSECCryptoKey* OpenSSLCryptoProvider::keyDER(const char* buf, unsigned long len,
 #endif
             }
         }
-        catch (XSECCryptoException&) {
+        catch (const XSECCryptoException&) {
             EVP_PKEY_free(pkey);
             throw;
         }

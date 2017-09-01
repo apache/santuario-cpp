@@ -61,68 +61,68 @@ public:
 
 	enum XSECExceptionType {
 
-		None						= 0,
+		None				= 0,
 		MemoryAllocationFail		= 1,
 		NoHashFoundInDigestValue	= 2,
 		UnknownDSIGAttribute		= 3,
 		ExpectedDSIGChildNotFound	= 4,
-		UnknownTransform			= 5,
+		UnknownTransform		= 5,
 		TransformInputOutputFail	= 6,
-		IDNotFoundInDOMDoc			= 7,
+		IDNotFoundInDOMDoc		= 7,
 		UnsupportedXpointerExpr		= 8,
-		XPathError					= 9,
-		XSLError					= 10,
-		Unsupported					= 11,
-		LoadEmptySignature			= 12,
-		LoadNonSignature			= 13,
+		XPathError			= 9,
+		XSLError			= 10,
+		Unsupported			= 11,
+		LoadEmptySignature		= 12,
+		LoadNonSignature		= 13,
 		UnknownCanonicalization		= 14,
 		UnknownSignatureAlgorithm	= 15,
-		LoadEmptyX509				= 16,
-		LoadNonX509					= 17,
-		OpenSSLError				= 18,
-		SigVfyError					= 19,
-		LoadEmptySignedInfo			= 20,
-		LoadNonSignedInfo			= 21,
+		LoadEmptyX509			= 16,
+		LoadNonX509			= 17,
+		OpenSSLError			= 18,
+		SigVfyError			= 19,
+		LoadEmptySignedInfo		= 20,
+		LoadNonSignedInfo		= 21,
 		ExpectedReferenceURI		= 22,
-		NotLoaded					= 23,
-		CryptoProviderError			= 24,
-		KeyInfoError				= 25,
-		SigningError				= 26,
-		LoadEmptyInfoName			= 27,
-		LoadNonInfoName				= 28,
-		UnknownKeyValue				= 29,
+		NotLoaded			= 23,
+		CryptoProviderError		= 24,
+		KeyInfoError			= 25,
+		SigningError			= 26,
+		LoadEmptyInfoName		= 27,
+		LoadNonInfoName			= 28,
+		UnknownKeyValue			= 29,
 		SignatureCreationError		= 30,
-		ErrorOpeningURI				= 31,
-		ProviderError				= 32,
-		InternalError				= 33,
-		EnvelopeError				= 34,
-		UnsupportedFunction			= 35,
-		TransformError				= 36,
-		SafeBufferError				= 37,
-		HTTPURIInputStreamError     = 38,
+		ErrorOpeningURI			= 31,
+		ProviderError			= 32,
+		InternalError			= 33,
+		EnvelopeError			= 34,
+		UnsupportedFunction		= 35,
+		TransformError			= 36,
+		SafeBufferError			= 37,
+		HTTPURIInputStreamError		= 38,
 		LoadEmptyXPathFilter		= 39,
-		XPathFilterError			= 40,
-		DNameDecodeError			= 41,
+		XPathFilterError		= 40,
+		DNameDecodeError		= 41,
 
 		// Encryption errors
-		EncryptedTypeError			= 42,
+		EncryptedTypeError		= 42,
 		ExpectedXENCChildNotFound	= 43,
-		CipherDataError				= 44,
-		CipherValueError			= 45,
-		CipherError					= 46,
+		CipherDataError			= 44,
+		CipherValueError		= 45,
+		CipherError			= 46,
 		AlgorithmMapperError		= 47,
 		EncryptionMethodError		= 48,
 		CipherReferenceError		= 49,
-		ObjectError					= 50,
+		ObjectError			= 50,
 
 		// XKMS Error
-		XKMSError					= 51,
+		XKMSError			= 51,
 		ExpectedXKMSChildNotFound	= 52,
 		MessageAbstractTypeError	= 53,
 		RequestAbstractTypeError	= 54,
-		ResultTypeError				= 55,
-		StatusError 				= 56,
-		UnknownError				= 58		// Must be last!
+		ResultTypeError			= 55,
+		StatusError 			= 56,
+		UnknownError			= 58		// Must be last!
 
 	};
 
@@ -179,7 +179,7 @@ public:
 	 * @returns A pointer to the buffer within the exception that holds the
 	 * error message */
 
-	const XMLCh * getMsg(void);
+	const XMLCh * getMsg(void) const;
 
 	/**
 	 * \brief Get error type
@@ -190,11 +190,11 @@ public:
 	 * @returns The excetpion type
 	 */
 
-	XSECExceptionType getType(void);
+	XSECExceptionType getType(void) const;
 
 private:
 
-	XMLCh				* msg;				// Message to the caller
+	XMLCh			* msg;				// Message to the caller
 	XSECExceptionType	type;				// Type of exception
 	
 	/* Unimplemented Constructor */

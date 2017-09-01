@@ -964,7 +964,7 @@ bool DSIGReference::verifyReferenceList(DSIGReferenceList * lst, safeBuffer &err
 
 			}
 		}
-		catch (NetAccessorException e) {
+		catch (const NetAccessorException& e) {
 
 			res = false;
 
@@ -973,7 +973,7 @@ bool DSIGReference::verifyReferenceList(DSIGReferenceList * lst, safeBuffer &err
 			errStr.sbXMLChCat("\".  Reference failed to verify\n");
 
 		}
-		catch (XSECException e) {
+		catch (const XSECException& e) {
 
 			if (e.getType() != XSECException::HTTPURIInputStreamError)
 				throw;

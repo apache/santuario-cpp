@@ -239,14 +239,14 @@ int main (int argc, char **argv) {
 
 	}
 
-	catch (XSECException &e)
+	catch (const XSECException &e)
 	{
 		cerr << "An error occured during a signature load\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 		
 	}
-	catch (XSECCryptoException &e) {
+	catch (const XSECCryptoException &e) {
 		cerr << "An error occured in the XML-Security-C Crypto routines\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);

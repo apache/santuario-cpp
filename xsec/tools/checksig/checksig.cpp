@@ -528,7 +528,7 @@ int evaluate(int argc, char ** argv) {
 			result = sig->verify();
 	}
 
-	catch (XSECException &e) {
+	catch (const XSECException &e) {
 		char * msg = XMLString::transcode(e.getMsg());
 		cerr << "An error occured during signature verification\n   Message: "
 		<< msg << endl;
@@ -536,7 +536,7 @@ int evaluate(int argc, char ** argv) {
 		errorsOccured = true;
 		return 2;
 	}
-	catch (XSECCryptoException &e) {
+	catch (const XSECCryptoException &e) {
 		cerr << "An error occured during signature verification\n   Message: "
 		<< e.getMsg() << endl;
 		errorsOccured = true;

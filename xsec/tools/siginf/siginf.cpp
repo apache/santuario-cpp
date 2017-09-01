@@ -495,7 +495,7 @@ int evaluate(int argc, char ** argv) {
 //			result = sig->verify();
 	}
 
-	catch (XSECException &e) {
+	catch (const XSECException &e) {
 		char * msg = XMLString::transcode(e.getMsg());
 		cerr << "An error occured during signature loading\n   Message: "
 		<< msg << endl;

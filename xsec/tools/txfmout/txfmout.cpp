@@ -306,7 +306,7 @@ void outputReferenceList (DSIGReferenceList * lst, outputter & theOutputter, int
 			try {
 				is = ref->makeBinInputStream();
 			}
-			catch (NetAccessorException& e) {
+			catch (const NetAccessorException& e) {
 
 				cerr << "Network error in reference " << theOutputter.getIndex() << endl;
 				is = 0;
@@ -567,7 +567,7 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	catch (XSECException &e) {
+	catch (const XSECException &e) {
 		char * m = XMLString::transcode(e.getMsg());
 		cerr << "An error occured during signature processing\n   Message: "
 		<< m << endl;

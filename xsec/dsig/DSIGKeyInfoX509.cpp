@@ -165,7 +165,7 @@ void DSIGKeyInfoX509::load(void) {
 	                    h->mp_cryptoX509 = cryptoX509;
 	                    break;
 				    }
-				    catch (XSECCryptoException&) {
+			catch (const XSECCryptoException&) {
 	                    certElt = findNextChildOfType(certElt, DOMNode::TEXT_NODE);
 	                    if (!certElt) {
 	                        delete cryptoX509;

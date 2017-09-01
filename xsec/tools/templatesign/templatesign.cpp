@@ -1281,7 +1281,7 @@ int main(int argc, char **argv) {
         } /* certCount > 0 */
     }
 
-    catch (XSECException &e) {
+    catch (const XSECException &e) {
         char * m = XMLString::transcode(e.getMsg());
         cerr << "An error occured during signing operation\n   Message: "
         << m << endl;
@@ -1290,14 +1290,14 @@ int main(int argc, char **argv) {
         exit (1);
     }
 
-    catch (XSECCryptoException &e) {
+    catch (const XSECCryptoException &e) {
         cerr << "A cryptographic error occured during signature operation\n   Message: "
         << e.getMsg() << endl;
         errorsOccured = true;
         exit(1);
     }
 
-    catch (NetAccessorException) {
+    catch (const NetAccessorException&) {
         cerr << "A network error occurred during signing operation\n" << endl;
         errorsOccured = true;
         exit(1);

@@ -42,7 +42,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMNamedNodeMap);
 
 // Xalan
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 #include <xalanc/XalanDOM/XalanDocument.hpp>
 #include <xalanc/XercesParserLiaison/XercesDocumentWrapper.hpp>
@@ -58,7 +58,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMNamedNodeMap);
 
 #endif
 
-#ifndef XSEC_NO_XPATH
+#ifdef XSEC_HAVE_XPATH
 
 /**
  * \brief Transformer to handle XPath transforms

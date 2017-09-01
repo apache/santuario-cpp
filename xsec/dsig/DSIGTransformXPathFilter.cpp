@@ -88,7 +88,7 @@ void DSIGTransformXPathFilter::appendTransformer(TXFMChain * input) {
 
 	}
 
-#ifdef XSEC_NO_XPATH
+#ifndef XSEC_HAVE_XPATH
 
 	throw XSECException(XSECException::UnsupportedFunction,
 		"XPath transforms are not supported in this compilation of the XSEC library");

@@ -34,7 +34,7 @@
 
 // Xalan
 
-#ifndef XSEC_NO_XPATH
+#ifdef XSEC_HAVE_XPATH
 
 #include <xalanc/XalanDOM/XalanDocument.hpp>
 #include <xalanc/XercesParserLiaison/XercesDOMSupport.hpp>
@@ -51,7 +51,7 @@ XALAN_USING_XALAN(XalanTransformer)
 
 #endif
 
-#ifndef XSEC_NO_XSLT
+#ifdef XSEC_HAVE_XSLT
 
 /**
  * \brief Transformer to handle XSLT transforms

@@ -28,7 +28,7 @@
 
 #include <xsec/dsig/DSIGXPathHere.hpp>
 
-#ifndef XSEC_NO_XPATH
+#ifdef XSEC_HAVE_XPATH
 
 XALAN_USING_XALAN(XalanCopyConstruct);
 
@@ -84,4 +84,4 @@ XObjectPtr DSIGXPathHere::execute(
 		return theBuffer;
 	}
 
-#endif /* NO_XPATH */
+#endif /* XSEC_HAVE_XPATH */

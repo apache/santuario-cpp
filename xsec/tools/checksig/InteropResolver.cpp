@@ -648,7 +648,7 @@ XSECCryptoKey * InteropResolver::resolveKey(DSIGKeyInfoList * lst) {
 
     }
 
-    return false;
+    return NULL;
 
 }
 

@@ -78,7 +78,7 @@ transformType DSIGTransformXPath::getTransformType() {
 
 void DSIGTransformXPath::appendTransformer(TXFMChain * input) {
 
-#ifdef XSEC_NO_XPATH
+#ifndef XSEC_HAVE_XPATH
 
 	throw XSECException(XSECException::UnsupportedFunction,
 		"XPath transforms are not supported in this compilation of the XSEC library");
@@ -96,7 +96,7 @@ void DSIGTransformXPath::appendTransformer(TXFMChain * input) {
 	x->setNameSpace(mp_NSMap);
 	x->evaluateExpr(mp_txfmNode, m_expr);
 	
-#endif /* NO_XPATH */
+#endif /* XSEC_HAVE_XPATH */
 
 }
 

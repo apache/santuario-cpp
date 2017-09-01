@@ -30,7 +30,7 @@
 #include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/framework/XSECError.hpp>
 
-#ifndef XSEC_NO_XSLT
+#ifdef XSEC_HAVE_XSLT
 
 // Xerces
 #include <xercesc/dom/DOM.hpp>
@@ -247,4 +247,4 @@ const XMLCh * TXFMXSL::getFragmentId() {
 
 }
 
-#endif /* NO_XSLT */
+#endif /* XSEC_HAVE_XSLT */

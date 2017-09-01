@@ -67,7 +67,6 @@ private:
     _finddata_t     m_finder;
     long            m_handle;
 #else
-    glob_t          m_globbuf;
     int             m_fcount;
 #endif
 

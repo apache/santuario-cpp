@@ -45,7 +45,7 @@
 
 // Xalan
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 #include <xalanc/XalanTransformer/XalanTransformer.hpp>
 XALAN_USING_XALAN(XalanTransformer)
 #endif
@@ -108,7 +108,7 @@ int main (int argc, char **argv) {
 
 	try {
 		XMLPlatformUtils::Initialize();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 		XalanTransformer::initialize();
 #endif
 		XSECPlatformUtils::Initialise();

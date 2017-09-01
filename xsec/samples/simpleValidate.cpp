@@ -50,13 +50,9 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-#ifndef XSEC_NO_XALAN
-
-// Xalan
-
+#ifdef XSEC_HAVE_XALAN
 #include <xalanc/XalanTransformer/XalanTransformer.hpp>
 XALAN_USING_XALAN(XalanTransformer)
-
 #endif
 
 char docToValidate [4096] = "\
@@ -115,7 +111,7 @@ int main (int argc, char **argv) {
 
 	try {
 		XMLPlatformUtils::Initialize();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 		XalanTransformer::initialize();
 #endif
 		XSECPlatformUtils::Initialise();

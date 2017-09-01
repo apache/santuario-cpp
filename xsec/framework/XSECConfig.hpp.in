@@ -9,8 +9,8 @@
 /* Define to 1 if getcwd(NULL, 0) works. */
 #undef XSEC_HAVE_GETCWD_DYN
 
-/* Define to 1 if Xalan is unavailable. */
-#undef XSEC_NO_XALAN
+/* Define to 1 if Xalan is available. */
+#undef XSEC_HAVE_XALAN
 
 /* Define to 1 if OpenSSL has EVP_CIPHER_CTX_set_padding. */
 #undef XSEC_OPENSSL_CANSET_PADDING

@@ -503,11 +503,9 @@ int XSECC14n20010315::XPathSelectNodes(const char * XPathExpr) {
 	XalanDOMString ed = XalanDOMString(XPathExpr);
 	const XalanDOMChar * expr = ed.c_str();
 
-#if defined XSEC_SELECTNODELIST_REQS_NODEREFLIST
-
 	NodeRefList output;
 
-	NodeRefList	theResult(
+	NodeRefList theResult(
 		theEvaluator.selectNodeList(
 		output,
 		theDOMSupport,
@@ -515,18 +513,7 @@ int XSECC14n20010315::XPathSelectNodes(const char * XPathExpr) {
 		expr,
 		theDoc->getElementById(XalanDOMString("ns"))));
 
-#else
 
-	NodeRefList	theResult(
-		theEvaluator.selectNodeList(
-		theDOMSupport,
-		theContextNode,
-		expr,
-		theDoc->getElementById(XalanDOMString("ns"))));
-		//theDoc->getDocumentElement()));
-#endif
-
-	//XercesDocumentBridge *theBridge = theParserLiaison.mapDocument(theDoc);
 	XercesDocumentWrapper *theWrapper = theParserLiaison.mapDocumentToWrapper(theDoc);
 	XercesWrapperNavigator theWrapperNavigator(theWrapper);
 

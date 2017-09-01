@@ -36,7 +36,4 @@
 /* Define to 1 if OpenSSL has SHA2 support. */
 #undef XSEC_OPENSSL_HAVE_SHA2
 
-/* Define to 1 if Xalan XPathEvaluator requires NodeRefList. */
-#undef XSEC_SELECTNODELIST_REQS_NODEREFLIST
-
 #include <xsec/framework/XSECVersion.hpp>

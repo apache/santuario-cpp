@@ -528,7 +528,7 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -537,7 +537,7 @@ bool reValidateSig(DOMImplementation *impl, DOMDocument * inDoc, XSECCryptoKey *
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -640,7 +640,7 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -649,7 +649,7 @@ void unitTestEnvelopingSignature(DOMImplementation * impl) {
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -751,7 +751,7 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -760,7 +760,7 @@ void unitTestBase64NodeSignature(DOMImplementation * impl) {
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -921,7 +921,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -930,7 +930,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -1037,7 +1037,7 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -1046,7 +1046,7 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -1530,7 +1530,7 @@ count(ancestor-or-self::dsig:Signature)");
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -1539,7 +1539,7 @@ count(ancestor-or-self::dsig:Signature)");
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -1634,7 +1634,7 @@ void unitTestCipherReference(DOMImplementation * impl) {
 	catch (const XSECException &e)
 	{
 		cerr << "failed\n";
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -1644,7 +1644,7 @@ void unitTestCipherReference(DOMImplementation * impl) {
 	catch (const XSECCryptoException &e)
 	{
 		cerr << "failed\n";
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -1744,7 +1744,7 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 	}
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during encryption processing\n   Message: ";
+		cerr << "An error occurred during encryption processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -1753,7 +1753,7 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during encryption processing\n   Message: "
+		cerr << "A cryptographic error occurred during encryption processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -1853,7 +1853,7 @@ void unitTestSmallElement(DOMImplementation *impl) {
 	}
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during encryption processing\n   Message: ";
+		cerr << "An error occurred during encryption processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -1862,7 +1862,7 @@ void unitTestSmallElement(DOMImplementation *impl) {
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during encryption processing\n   Message: "
+		cerr << "A cryptographic error occurred during encryption processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -1948,7 +1948,7 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMe
 	catch (const XSECException &e)
 	{
 		cerr << "failed\n";
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -1958,7 +1958,7 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMe
 	catch (const XSECCryptoException &e)
 	{
 		cerr << "failed\n";
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -2152,7 +2152,7 @@ void unitTestEncrypt(DOMImplementation *impl) {
 	catch (const XSECCryptoException &e)
 	{
 		cerr << "failed\n";
-		cerr << "A cryptographic error occured during encryption unit tests\n   Message: "
+		cerr << "A cryptographic error occurred during encryption unit tests\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}
@@ -2402,7 +2402,7 @@ void testEncrypt(DOMImplementation *impl) {
 	}
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during signature processing\n   Message: ";
+		cerr << "An error occurred during signature processing\n   Message: ";
 		char * ce = XMLString::transcode(e.getMsg());
 		cerr << ce << endl;
 		delete ce;
@@ -2411,7 +2411,7 @@ void testEncrypt(DOMImplementation *impl) {
 	}	
 	catch (const XSECCryptoException &e)
 	{
-		cerr << "A cryptographic error occured during signature processing\n   Message: "
+		cerr << "A cryptographic error occurred during signature processing\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 	}

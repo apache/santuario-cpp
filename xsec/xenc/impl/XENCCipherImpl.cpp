@@ -313,7 +313,7 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
     parser.parse(memIS);
     xsecsize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
-        throw XSECException(XSECException::CipherError, "Errors occured during de-serialisation of decrypted element content");
+        throw XSECException(XSECException::CipherError, "Errors occurred during de-serialisation of decrypted element content");
 
     DOMDocument * doc = parser.getDocument();
 

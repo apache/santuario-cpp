@@ -3911,14 +3911,14 @@ int doParsedMsgDump(DOMDocument * doc) {
 
     catch (const XSECException &e) {
         char * msg = XMLString::transcode(e.getMsg());
-        cerr << "An error occured during message loading\n   Message: "
+        cerr << "An error occurred during message loading\n   Message: "
         << msg << endl;
         XSEC_RELEASE_XMLCH(msg);
         errorsOccured = true;
         return 2;
     }
     catch (const XSECCryptoException &e) {
-        cerr << "An error occured during encryption/signature processing\n   Message: "
+        cerr << "An error occurred during encryption/signature processing\n   Message: "
         << e.getMsg() << endl;
         errorsOccured = true;
 
@@ -3935,7 +3935,7 @@ int doParsedMsgDump(DOMDocument * doc) {
     }
     catch (...) {
 
-        cerr << "Unknown Exception type occured.  Cleaning up and exitting\n" << endl;
+        cerr << "Unknown Exception type occurred.  Cleaning up and exitting\n" << endl;
         return 2;
 
     }
@@ -4530,7 +4530,7 @@ int doMsgDump(int argc, char ** argv, int paramCount) {
     catch (const XMLException& e)
     {
         char * msg = XMLString::transcode(e.getMessage());
-        cerr << "An error occured during parsing\n   Message: "
+        cerr << "An error occurred during parsing\n   Message: "
              << msg << endl;
         XSEC_RELEASE_XMLCH(msg);
         errorsOccured = true;
@@ -4539,7 +4539,7 @@ int doMsgDump(int argc, char ** argv, int paramCount) {
 
     catch (const DOMException& e)
     {
-       cerr << "A DOM error occured during parsing\n   DOMException code: "
+       cerr << "A DOM error occurred during parsing\n   DOMException code: "
              << e.code << endl;
         errorsOccured = true;
     }

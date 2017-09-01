@@ -156,7 +156,7 @@ int main (int argc, char **argv) {
 
 	catch (const XSECException &e)
 	{
-		cerr << "An error occured during a signature load\n   Message: "
+		cerr << "An error occurred during a signature load\n   Message: "
 		<< e.getMsg() << endl;
 		exit(1);
 		

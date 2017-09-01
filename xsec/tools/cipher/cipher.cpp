@@ -582,7 +582,7 @@ int evaluate(int argc, char ** argv) {
 
         catch (const XMLException& e)
         {
-            cerr << "An error occured during parsing\n   Message: "
+            cerr << "An error occurred during parsing\n   Message: "
                  << e.getMessage() << endl;
             errorsOccured = true;
         }
@@ -590,7 +590,7 @@ int evaluate(int argc, char ** argv) {
 
         catch (const DOMException& e)
         {
-           cerr << "A DOM error occured during parsing\n   DOMException code: "
+           cerr << "A DOM error occurred during parsing\n   DOMException code: "
                  << e.code << endl;
             errorsOccured = true;
         }
@@ -785,7 +785,7 @@ int evaluate(int argc, char ** argv) {
 
     catch (const XSECException &e) {
         char * msg = XMLString::transcode(e.getMsg());
-        cerr << "An error occured during encryption/decryption operation\n   Message: "
+        cerr << "An error occurred during encryption/decryption operation\n   Message: "
         << msg << endl;
         XSEC_RELEASE_XMLCH(msg);
         errorsOccured = true;
@@ -795,7 +795,7 @@ int evaluate(int argc, char ** argv) {
         return 2;
     }
     catch (const XSECCryptoException &e) {
-        cerr << "An error occured during encryption/decryption operation\n   Message: "
+        cerr << "An error occurred during encryption/decryption operation\n   Message: "
         << e.getMsg() << endl;
         errorsOccured = true;
         if (formatTarget != NULL)

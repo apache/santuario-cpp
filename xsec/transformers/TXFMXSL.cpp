@@ -194,7 +194,7 @@ void TXFMXSL::evaluateStyleSheet(const safeBuffer &sbStyleSheet) {
 	parser->parse(*memIS);
     errorCount = parser->getErrorCount();
     if (errorCount > 0)
-		throw XSECException(XSECException::XSLError, "Errors occured when XSL result was parsed back to DOM_Nodes");
+		throw XSECException(XSECException::XSLError, "Errors occurred when XSL result was parsed back to DOM_Nodes");
 
     docOut = parser->adoptDocument();
 

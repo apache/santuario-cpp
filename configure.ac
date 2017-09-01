@@ -181,26 +181,6 @@ if test "${xalan_found}" = "yes" ; then
   LIBS=${old_libs}]);
 fi
 
-# Check for handling of XSLException types
-if test "$xalan_found" = "yes" ; then
-
-  AC_MSG_CHECKING([whether XPathEvaluator::selectNodeList requires NodeRefList])
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xalanc/XercesParserLiaison/XercesDOMSupport.hpp>
-	#include <xalanc/XPath/XPathEvaluator.hpp>
-	#include <xalanc/XPath/NodeRefList.hpp>
-    #include <xalanc/XercesParserLiaison/XercesParserLiaison.hpp>]], [[ 	XALAN_CPP_NAMESPACE_QUALIFIER XercesDOMSupport 
-           theDOMSupport;
-		XALAN_CPP_NAMESPACE_QUALIFIER XPathEvaluator	theEvaluator;
-		XALAN_CPP_NAMESPACE_QUALIFIER NodeRefList	theResult(
-			theEvaluator.selectNodeList(
-			theDOMSupport,
-			NULL,
-			NULL,
-			NULL));
-	]])],[AC_MSG_RESULT([no])],
-	[AC_MSG_RESULT([yes])
-	AC_DEFINE([XSEC_SELECTNODELIST_REQS_NODEREFLIST],[1],[Define to 1 if Xalan XPathEvaluator requires NodeRefList.])]);
-fi
 
 # Crypto provider options (OpenSSL / NSS)
 

@@ -40,29 +40,6 @@
 
 #define XSEC_NO_XALAN
 
-#if !defined (XSEC_NO_XALAN)
-
-#	include <xalanc/Include/XalanVersion.hpp>
-
-#	if (_XALAN_VERSION >= 10900)
-
-		/* 1.9 and above require a NodeRefList as input to XPathEvaluator::
-		   selectNodeList
-		*/
-
-#		define XSEC_SELECTNODELIST_REQS_NODEREFLIST
-
-#	else
-
-		/* 1.9 and above require a NodeRefList as input to XPathEvaluator::
-		   selectNodeList
-		*/
-
-#		undef XSEC_SELECTNODELIST_REQS_NODEREFLIST
-
-#	endif
-
-#endif
 
 /*
  * Define presence of cryptographic providers

@@ -46,7 +46,7 @@ void XSECCryptoX509::loadX509PEM(const char * buf, unsigned int len) {
 		b = b1;
 	}
 
-	const char *p = strstr(buf, "-----BEGIN CERTIFICATE-----");
+	const char *p = strstr(b, "-----BEGIN CERTIFICATE-----");
 
 	if (p == NULL) {
 

@@ -39,10 +39,4 @@
 /* Define to 1 if Xalan XPathEvaluator requires NodeRefList. */
 #undef XSEC_SELECTNODELIST_REQS_NODEREFLIST
 
-/* Define to 1 if Xalan requires MemoryManager */
-#undef XSEC_XALAN_REQS_MEMORYMANAGER
-
-/* Define to 1 if Xalan XercesParserLiaison ctor takes XercesDOMSupport. */
-#undef XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT
-
 #include <xsec/framework/XSECVersion.hpp>

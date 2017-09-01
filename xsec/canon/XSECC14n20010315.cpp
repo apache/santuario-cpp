@@ -461,11 +461,7 @@ int XSECC14n20010315::XPathSelectNodes(const char * XPathExpr) {
 	XercesDOMSupport theDOMSupport(theParserLiaison);
 #else
 	XercesDOMSupport theDOMSupport;
-#if defined XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT
-	XercesParserLiaison theParserLiaison(theDOMSupport);
-#else
 	XercesParserLiaison theParserLiaison;
-#endif
 #endif // XALAN_VERSION_MAJOR == 1 && XALAN_VERSION_MINOR > 10
 
 	if (mp_doc == 0) {

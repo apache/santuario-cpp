@@ -108,11 +108,7 @@ TXFMXSL::TXFMXSL(DOMDocument *doc) :
 #if XALAN_VERSION_MAJOR == 1 && XALAN_VERSION_MINOR > 10
 xds(xpl)
 #else
-#if defined XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT
-xpl(xds) 
-#else
 xpl()
-#endif
 #endif
 {
 

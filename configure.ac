@@ -184,16 +184,6 @@ fi
 # Check for handling of XSLException types
 if test "$xalan_found" = "yes" ; then
 
-  AC_MSG_CHECKING([whether XercesParserLiaison ctor takes XercesDOMSupport])
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xalanc/XercesParserLiaison/XercesDOMSupport.hpp>
-    #include <xalanc/XercesParserLiaison/XercesParserLiaison.hpp>]], [[ 	XALAN_CPP_NAMESPACE_QUALIFIER XercesDOMSupport 
-           theDOMSupport;
-	    XALAN_CPP_NAMESPACE_QUALIFIER XercesParserLiaison 
-           theParserLiaison(theDOMSupport);
-	]])],[AC_MSG_RESULT([yes])
-	AC_DEFINE([XSEC_XERCESPARSERLIAISON_REQS_DOMSUPPORT],[1],[Define to 1 if Xalan XercesParserLiaison ctor takes XercesDOMSupport.])],
-	[AC_MSG_RESULT([no])]);
-
   AC_MSG_CHECKING([whether XPathEvaluator::selectNodeList requires NodeRefList])
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <xalanc/XercesParserLiaison/XercesDOMSupport.hpp>
 	#include <xalanc/XPath/XPathEvaluator.hpp>
@@ -210,85 +200,6 @@ if test "$xalan_found" = "yes" ; then
 	]])],[AC_MSG_RESULT([no])],
 	[AC_MSG_RESULT([yes])
 	AC_DEFINE([XSEC_SELECTNODELIST_REQS_NODEREFLIST],[1],[Define to 1 if Xalan XPathEvaluator requires NodeRefList.])]);
-
-  AC_MSG_CHECKING([whether Xalan classes require MemoryManager])
-  AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
- 	#include <xalanc/XPath/XPathDefinitions.hpp>
-    #include <xalanc/XPath/Function.hpp>]], [[
-    }
-	XALAN_CPP_NAMESPACE_BEGIN
-
-	class FunctionTest : public Function
-	{
-		public:
- 	       typedef Function        ParentType;
-
-    	    FunctionTest();
-
-        	virtual ~FunctionTest();      
-	        virtual XObjectPtr
-    	    execute(
-        	   XPathExecutionContext& executionContext,
-               XalanNode* context,
-               const XObjectArgVectorType& args,
-               const LocatorType* locator) const;
-
-            XObjectPtr
-            execute(
-                XPathExecutionContext&          executionContext,
-                XalanNode*                                      context,
-                const XObjectPtr                        arg1,
-                const XObjectPtr                        arg2,
-                const LocatorType*                      locator) const;
-
-            XObjectPtr
-            execute(
-                XPathExecutionContext&          executionContext,
-                XalanNode*                                      context,
-                   
-                const XObjectPtr                        arg1,
-                const XObjectPtr                        arg2,
-                const XObjectPtr                        arg3,
-                const LocatorType*                      locator) const;
-
-	#if !defined(XALAN_NO_USING_DECLARATION)
-        using ParentType::execute;
-	#endif
-
-	#if defined(XALAN_NO_COVARIANT_RETURN_TYPE)
-        virtual Function*
-	#else
-        virtual FunctionTest*
-	#endif
-        clone() const;
-
-	protected:
-
-        virtual const XalanDOMString
-        getError() const;
-
-    private:
-
-        // Not implemented...
-        FunctionTest&
-        operator=(const FunctionTest&);
-
-        bool
-        operator==(const FunctionTest&) const;
-	};
-
-  void main2(void){
-
-	FunctionTest t;
-
-  }
-
-XALAN_CPP_NAMESPACE_END
-  int main3(void) {
-
-	]])],[AC_MSG_RESULT([no])],
-	[AC_MSG_RESULT([yes])
-	AC_DEFINE([XSEC_XALAN_REQS_MEMORYMANAGER],[1],[Define to 1 if Xalan requires MemoryManager])]);
 fi
 
 # Crypto provider options (OpenSSL / NSS)

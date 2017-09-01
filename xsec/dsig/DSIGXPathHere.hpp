@@ -61,12 +61,7 @@ XALAN_USING_XALAN(XalanNode);
 XALAN_USING_XALAN(XPathExecutionContext);
 XALAN_USING_XALAN(XalanDOMString);
 XALAN_USING_XALAN(XObjectPtr);
-//XALAN_USING_XALAN(StaticStringToDOMString);
-
-#if defined XSEC_XALAN_REQS_MEMORYMANAGER
-// Xalan 1.9 and above
-    XALAN_USING_XALAN(MemoryManagerType);
-#endif
+XALAN_USING_XALAN(MemoryManagerType);
 
 XSEC_USING_XERCES(Locator);
 
@@ -110,21 +105,11 @@ public:
 #else
 	virtual DSIGXPathHere*
 #endif
-#if defined (XSEC_XALAN_REQS_MEMORYMANAGER)
 	clone(MemoryManagerType& theManager) const;
-#else
-    clone() const;
-#endif
 
 protected:
 
-	const XalanDOMString
-#if defined (XSEC_XALAN_REQS_MEMORYMANAGER)
-    // We cheat - the memory manager happened at the same time as the string
-	&getError(XalanDOMString& theBuffer) const;
-#else
-    getError() const;
-#endif
+	const XalanDOMString& getError(XalanDOMString& theBuffer) const;
 
 private:
 
@@ -139,11 +124,4 @@ private:
 #endif
 
 #endif
-
-
-
-
-
-
-
 

@@ -30,10 +30,7 @@
 
 #ifndef XSEC_NO_XPATH
 
-#if defined XSEC_XALAN_REQS_MEMORYMANAGER
-// Xalan 1.9 and above
-    XALAN_USING_XALAN(XalanCopyConstruct);
-#endif
+XALAN_USING_XALAN(XalanCopyConstruct);
 
 DSIGXPathHere::DSIGXPathHere() {
 
@@ -71,48 +68,20 @@ XObjectPtr DSIGXPathHere::execute(
 }
 
 
-
-
 #if defined(XSEC_NO_COVARIANT_RETURN_TYPE)
 	Function*
 #else
 	DSIGXPathHere*
 #endif
-#if defined (XSEC_XALAN_REQS_MEMORYMANAGER)
-	DSIGXPathHere::clone(MemoryManagerType& theManager)
-#else
-	DSIGXPathHere::clone()
-#endif
-	const {
-
-#if defined (XSEC_XALAN_REQS_MEMORYMANAGER)
+	DSIGXPathHere::clone(MemoryManagerType& theManager) const {
 		return XalanCopyConstruct(theManager, *this);
-#else
-		DSIGXPathHere *ret;
-
-		ret = new DSIGXPathHere(*this);
-		ret->XalanHereNode = XalanHereNode;
-		return ret;
-#endif
 	}
 		
 	const XalanDOMString
-#if defined XSEC_XALAN_REQS_MEMORYMANAGER
-    // We cheat - the memory manager happened at the same time as the string
-	&DSIGXPathHere::getError(XalanDOMString& theBuffer)
-#else
-	DSIGXPathHere::getError() 
-#endif
-    const {
+	&DSIGXPathHere::getError(XalanDOMString& theBuffer) const {
 
-#if defined XSEC_XALAN_REQS_MEMORYMANAGER
-        theBuffer = "The here() function takes no arguments!";
+		theBuffer = "The here() function takes no arguments!";
 		return theBuffer;
-#else
-		return StaticStringToDOMString(XALAN_STATIC_UCODE_STRING("The here() function takes no arguments!"));
-#endif
-
 	}
-
 
 #endif /* NO_XPATH */

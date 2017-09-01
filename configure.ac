@@ -24,6 +24,8 @@ AC_CONFIG_MACRO_DIR(m4)
 AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_LIBTOOL
 
+AC_SYS_LARGEFILE
+
 AC_ARG_ENABLE(debug,
     AS_HELP_STRING([--enable-debug],[Have GCC compile with symbols (Default = no)]),
     enable_debug=$enableval, enable_debug=no)

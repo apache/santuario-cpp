@@ -1072,7 +1072,7 @@ int main(int argc, char **argv) {
 
     catch (const XMLException& e)
     {
-        cerr << "An error occured during parsing\n   Message: "
+        cerr << "An error occurred during parsing\n   Message: "
              << e.getMessage() << endl;
         errorsOccured = true;
     }
@@ -1080,7 +1080,7 @@ int main(int argc, char **argv) {
 
     catch (const DOMException& e)
     {
-       cerr << "A DOM error occured during parsing\n   DOMException code: "
+       cerr << "A DOM error occurred during parsing\n   DOMException code: "
              << e.code << endl;
         errorsOccured = true;
     }
@@ -1283,7 +1283,7 @@ int main(int argc, char **argv) {
 
     catch (const XSECException &e) {
         char * m = XMLString::transcode(e.getMsg());
-        cerr << "An error occured during signing operation\n   Message: "
+        cerr << "An error occurred during signing operation\n   Message: "
         << m << endl;
         XSEC_RELEASE_XMLCH(m);
         errorsOccured = true;
@@ -1291,7 +1291,7 @@ int main(int argc, char **argv) {
     }
 
     catch (const XSECCryptoException &e) {
-        cerr << "A cryptographic error occured during signature operation\n   Message: "
+        cerr << "A cryptographic error occurred during signature operation\n   Message: "
         << e.getMsg() << endl;
         errorsOccured = true;
         exit(1);

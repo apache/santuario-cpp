@@ -421,7 +421,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		if (b64Len <= 0) {
 
 			throw XSECException(XSECException::AlgorithmMapperError,
-				"Unknown error occured during a DSA Signing operation");
+				"Unknown error occurred during a DSA Signing operation");
 
 		}
 		else if (b64Len >= MAXB64BUFSIZE) {
@@ -458,7 +458,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		if (b64Len <= 0) {
 
 			throw XSECException(XSECException::AlgorithmMapperError,
-				"Unknown error occured during a RSA Signing operation");
+				"Unknown error occurred during a RSA Signing operation");
 
 		}
         else if (b64Len >= MAXB64BUFSIZE) {
@@ -496,7 +496,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		if (b64Len <= 0) {
 
 			throw XSECException(XSECException::AlgorithmMapperError,
-				"Unknown error occured during an ECDSA Signing operation");
+				"Unknown error occurred during an ECDSA Signing operation");
 
 		}
         else if (b64Len >= MAXB64BUFSIZE) {

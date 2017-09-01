@@ -123,7 +123,7 @@ void TXFMParser::setInput(TXFMBase *newInput) {
 	parser.parse(is);
     xsecsize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
-		throw XSECException(XSECException::XSLError, "Errors occured parsing BYTE STREAM");
+		throw XSECException(XSECException::XSLError, "Errors occurred parsing BYTE STREAM");
 
     mp_parsedDoc = parser.adoptDocument();
 

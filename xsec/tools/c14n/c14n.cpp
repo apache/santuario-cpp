@@ -140,7 +140,7 @@ int main(int argc, char **argv) {
 
     catch (const XMLException& e)
     {
-        cerr << "An error occured during parsing\n   Message: "
+        cerr << "An error occurred during parsing\n   Message: "
              << e.getMessage() << endl;
         errorsOccured = true;
     }
@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
 
     catch (const DOMException& e)
     {
-       cerr << "A DOM error occured during parsing\n   DOMException code: "
+       cerr << "A DOM error occurred during parsing\n   DOMException code: "
              << e.code << endl;
         errorsOccured = true;
     }

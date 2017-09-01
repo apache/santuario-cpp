@@ -69,44 +69,45 @@ tools =
 
 # xtest
 
-tools += xtest
-xtest_SOURCES = \
-  tools/xtest/xtest.cpp
+tools += xsec-xtest
+xsec_xtest_SOURCES = \
+   tools/xtest/xtest.cpp
 
-tools += c14n
-c14n_SOURCES = \
-  tools/c14n/c14n.cpp
+tools += xsec-c14n
+xsec_c14n_SOURCES = \
+   tools/c14n/c14n.cpp
+ 
+tools += xsec-checksig
+xsec_checksig_SOURCES = \
+   tools/checksig/checksig.cpp \
+   tools/checksig/AnonymousResolver.hpp \
+   tools/checksig/AnonymousResolver.cpp \
+   tools/checksig/InteropResolver.hpp \
+   tools/checksig/InteropResolver.cpp
 
-tools += checksig
-checksig_SOURCES = \
-  tools/checksig/checksig.cpp \
-  tools/checksig/AnonymousResolver.hpp \
-  tools/checksig/AnonymousResolver.cpp \
-  tools/checksig/InteropResolver.hpp \
-  tools/checksig/InteropResolver.cpp
+tools += xsec-templatesign
+xsec_templatesign_SOURCES = \
+   tools/templatesign/templatesign.cpp
 
-tools += templatesign
-templatesign_SOURCES = \
-  tools/templatesign/templatesign.cpp
+tools += xsec-txfmout
+xsec_txfmout_SOURCES = \
+   tools/txfmout/txfmout.cpp
 
-tools += txfmout
-txfmout_SOURCES = \
-  tools/txfmout/txfmout.cpp
+tools += xsec-siginf
+xsec_siginf_SOURCES = \
+   tools/siginf/siginf.cpp
 
-tools += siginf
-siginf_SOURCES = \
-  tools/siginf/siginf.cpp
+tools += xsec-cipher
+xsec_cipher_SOURCES = \
+   tools/cipher/cipher.cpp \
+   tools/cipher/XencInteropResolver.hpp \
+   tools/cipher/XencInteropResolver.cpp
 
-tools += cipher
-cipher_SOURCES = \
-  tools/cipher/cipher.cpp \
-  tools/cipher/XencInteropResolver.hpp \
-  tools/cipher/XencInteropResolver.cpp
-
-tools += xklient
-xklient_SOURCES = \
-  tools/xklient/xklient.cpp \
+tools += xsec-xklient
+xsec_xklient_SOURCES = \
+   tools/xklient/xklient.cpp \
   enc/OpenSSL/OpenSSLSupport.hpp
+
 
 lib_LTLIBRARIES = libxml-security-c.la
 

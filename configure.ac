@@ -21,7 +21,7 @@ AC_INIT([[XML-Security-C]],[1.8.0],[dev@santuario.apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
 AC_PROG_LIBTOOL
 
 AC_ARG_ENABLE(debug,

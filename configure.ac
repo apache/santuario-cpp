@@ -152,22 +152,13 @@ if test x"$use_xalan" != x"no" ; then
   if test -z "$xalan_found" ; then
 
     AC_MSG_CHECKING([for Xalan in system includes])
-    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <xalanc/Include/XalanVersion.hpp>]])],[xalan_found=yes 
-      LIBS="${LIBS} -lxalan-c"
-      AC_MSG_RESULT([found])],
-      [AC_DEFINE([XSEC_NO_XALAN],[1],[Define to 1 if Xalan is unavailable.]) 
-      AC_MSG_RESULT([no - WARNING - configuring for no Xalan])
-      ]);
+    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <xalanc/Include/XalanVersion.hpp>]])],
+        [xalan_found=yes 
+        LIBS="${LIBS} -lxalan-c"
+        AC_MSG_RESULT([found])],
+      [AC_MSG_RESULT([no - WARNING - configuring without Xalan])]);
 
   fi
-
-else
-
-  # NO_XALAN is defined - so we skip
-
-  AC_MSG_NOTICE([Warning - Xalan being configured out - XPath and XSLT will not be available])
-  AC_DEFINE([XSEC_NO_XALAN],[1],[Define to 1 if Xalan is unavailable.])
-
 fi
 
 if test "${xalan_found}" = "yes" ; then
@@ -191,7 +182,11 @@ int i = 0;
     int test=1;
   ]])],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)
   LIBS=${old_libs}]);
+  
+  AC_DEFINE([XSEC_HAVE_XALAN],[1],[Define to 1 if Xalan is available.])
 
+else
+  AC_MSG_NOTICE([Xalan not included in build - XPath and XSLT will not be available])
 fi
 
 
@@ -291,7 +286,7 @@ if test x"$use_openssl" != "xno" ; then
 fi
 
 AC_ARG_WITH(nss,
-    AS_HELP_STRING([--with-nss],[Use NSS.  Values = 'yes' or installation directory (Default = no)]),
+    AS_HELP_STRING([--with-nss],[Use NSS (no longer officially supported). Values = 'yes' or installation directory (Default = no)]),
     use_nss=$withval, use_nss=no)
 
 if test x"$use_nss" != "xno" ; then
@@ -338,6 +333,8 @@ if test x"$use_nss" != "xno" ; then
     
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <nss.h>]], [[NSS_NoDB_Init(NULL);]])],,
         [AC_MSG_ERROR([Unable to link with NSS])])
+        
+    AC_MSG_WARN([NSS is no longer officially supported])
 fi
 
 # Populate the Makefile conditionals

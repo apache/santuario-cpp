@@ -118,7 +118,7 @@ transformType DSIGTransformXSL::getTransformType() {
 void DSIGTransformXSL::appendTransformer(TXFMChain * input) {
 
 
-#ifdef XSEC_NO_XSLT
+#ifndef XSEC_HAVE_XSLT
 
 	throw XSECException(XSECException::UnsupportedFunction,
 		"XSLT Transforms not supported in this compilation of the library");
@@ -147,9 +147,9 @@ void DSIGTransformXSL::appendTransformer(TXFMChain * input) {
 	input->appendTxfm(x);
 	
 	// Patch to avoid c14n of stylesheet
-    XSECDomToSafeBuffer sbStyleSheet(mp_stylesheetNode);
-    x->evaluateStyleSheet(sbStyleSheet);
-#endif /* NO_XSLT */
+	XSECDomToSafeBuffer sbStyleSheet(mp_stylesheetNode);
+	x->evaluateStyleSheet(sbStyleSheet);
+#endif /* XSEC_HAVE_XSLT */
 
 }
 

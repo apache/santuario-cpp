@@ -145,16 +145,14 @@ typedef XMLSize_t xsecsize_t;
 
 // Given the configuration - what should we set?
 
-#ifdef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
-// Xalan is not available!
+#	define XSEC_HAVE_XPATH
+#	define XSEC_HAVE_XSLT
 
-#	define XSEC_NO_XPATH
-#	define XSEC_NO_XSLT
+#endif
 
-#endif	/* XSEC_NO_XALAN */
-
-#ifdef XSEC_NO_XPATH
+#ifndef XSEC_HAVE_XPATH
 
 #	ifdef XSEC_USE_XPATH_ENVELOPE
 #		undef XSEC_USE_XPATH_ENVELOPE

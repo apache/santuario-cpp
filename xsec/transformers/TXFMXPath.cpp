@@ -33,7 +33,7 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 #if defined(_MSC_VER)
 #	pragma warning(disable: 4267)
@@ -71,7 +71,7 @@ XALAN_USING_XALAN(XSLException)
 
 XERCES_CPP_NAMESPACE_USE
 
-#if !defined(XSEC_NO_XPATH)
+#ifdef XSEC_HAVE_XPATH
 
 #include <iostream>
 
@@ -80,10 +80,10 @@ XERCES_CPP_NAMESPACE_USE
 // Helper function
 
 void setXPathNS(DOMDocument *d, 
-				DOMNamedNodeMap *xAtts, 
-			    XSECXPathNodeList &addedNodes,
-				XSECSafeBufferFormatter *formatter,
-				XSECNameSpaceExpander * nse) {
+		DOMNamedNodeMap *xAtts, 
+		XSECXPathNodeList &addedNodes,
+		XSECSafeBufferFormatter *formatter,
+		XSECNameSpaceExpander * nse) {
 
 	// if set then set the name spaces in the attribute list else clear them
 
@@ -589,4 +589,4 @@ XSECXPathNodeList	& TXFMXPath::getXPathNodeList() {
 
 }
 
-#endif /* NO_XPATH */
+#endif /* XSEC_HAVE_XPATH */

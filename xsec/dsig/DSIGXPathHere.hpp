@@ -33,7 +33,7 @@
 
 #include <xercesc/util/PlatformUtils.hpp>
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 #if defined(_MSC_VER)
 #	pragma warning(disable: 4267)
@@ -67,7 +67,7 @@ XSEC_USING_XERCES(Locator);
 
 #endif
 
-#ifndef XSEC_NO_XPATH
+#ifdef XSEC_HAVE_XPATH
 
 // If there is no XPath then let's not even bother with this class.
 

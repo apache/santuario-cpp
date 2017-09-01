@@ -52,7 +52,7 @@ struct filterSetHolder {
 };
 
 
-#ifndef XSEC_NO_XPATH
+#ifdef XSEC_HAVE_XPATH
 
 /**
  * \brief Transformer to handle XPath transforms

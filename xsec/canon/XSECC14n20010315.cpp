@@ -44,7 +44,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 // Xalan includes
 #include <xalanc/XalanDOM/XalanDocument.hpp>
@@ -445,7 +445,7 @@ bool XSECC14n20010315::getCommentsProcessing(void) {
 
 int XSECC14n20010315::XPathSelectNodes(const char * XPathExpr) {
 
-#ifdef XSEC_NO_XPATH
+#ifndef XSEC_HAVE_XPATH
 
 	throw XSECException(XSECException::UnsupportedFunction,
 		"This library has been compiled without XPath support");

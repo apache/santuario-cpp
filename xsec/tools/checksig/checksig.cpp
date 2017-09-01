@@ -83,7 +83,7 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 // XALAN
 
@@ -119,7 +119,7 @@ XALAN_USING_XALAN(XalanTransformer)
 
 #include <time.h>
 
-#ifdef XSEC_NO_XALAN
+#ifndef XSEC_HAVE_XALAN
 
 std::ostream& operator<< (std::ostream& target, const XMLCh * s)
 {
@@ -610,7 +610,7 @@ int main(int argc, char **argv) {
 	try {
 
 		XMLPlatformUtils::Initialize();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 		XPathEvaluator::initialize();
 		XalanTransformer::initialize();
 #endif
@@ -628,7 +628,7 @@ int main(int argc, char **argv) {
 	retResult = evaluate(argc, argv);
 
 	XSECPlatformUtils::Terminate();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 	XalanTransformer::terminate();
 	XPathEvaluator::terminate();
 #endif

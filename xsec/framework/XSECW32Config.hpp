@@ -38,22 +38,20 @@
  * Activate this #define if Xalan is not required (or desired)
  */
 
-#define XSEC_NO_XALAN
+// #define XSEC_HAVE_XALAN 1
 
 
 /*
- * Define presence of cryptographic providers
+ * Define presence of cryptographic providers.
+ *
+ * WARNING: Neither WinCAPI nor NSS are officially supported by the sole remanining
+ * maintainer of this library. Use at your own risk, or contact the project if you're
+ * interested in assisting with maintenance and support of that code.
  */
 
 // #define XSEC_HAVE_OPENSSL 1
-
-#ifndef SUPPRESS_XSEC_HAVE_WINCAPI
-#define XSEC_HAVE_WINCAPI 1
-#endif
-// NSS Code is currently alpha.  It should work, but you will also
-// need to include the NSS libraries during the link.
-
-/* #define XSEC_HAVE_NSS 1 */
+// #define XSEC_HAVE_WINCAPI 1
+// #define XSEC_HAVE_NSS 1
 
 
 /*

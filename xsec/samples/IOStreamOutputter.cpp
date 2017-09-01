@@ -58,29 +58,6 @@ static XMLFormatter::UnRepFlags gUnRepFlags            = XMLFormatter::UnRep_Cha
 static const XMLCh  gEndElement[] = { chOpenAngle, chForwardSlash, chNull };
 static const XMLCh  gEndPI[] = { chQuestion, chCloseAngle, chNull};
 static const XMLCh  gStartPI[] = { chOpenAngle, chQuestion, chNull };
-static const XMLCh  gXMLDecl1[] =
-{
-        chOpenAngle, chQuestion, chLatin_x, chLatin_m, chLatin_l
-    ,   chSpace, chLatin_v, chLatin_e, chLatin_r, chLatin_s, chLatin_i
-    ,   chLatin_o, chLatin_n, chEqual, chDoubleQuote, chNull
-};
-static const XMLCh  gXMLDecl2[] =
-{
-        chDoubleQuote, chSpace, chLatin_e, chLatin_n, chLatin_c
-    ,   chLatin_o, chLatin_d, chLatin_i, chLatin_n, chLatin_g, chEqual
-    ,   chDoubleQuote, chNull
-};
-static const XMLCh  gXMLDecl3[] =
-{
-        chDoubleQuote, chSpace, chLatin_s, chLatin_t, chLatin_a
-    ,   chLatin_n, chLatin_d, chLatin_a, chLatin_l, chLatin_o
-    ,   chLatin_n, chLatin_e, chEqual, chDoubleQuote, chNull
-};
-static const XMLCh  gXMLDecl4[] =
-{
-        chDoubleQuote, chQuestion, chCloseAngle
-    ,   chLF, chNull
-};
 
 static const XMLCh  gStartCDATA[] =
 {
@@ -452,7 +429,7 @@ public:
     
 	unsigned char * buffer;		// Buffer to write to
 
-	DOMMemFormatTarget()  {};
+	DOMMemFormatTarget() : buffer(NULL)  {};
     ~DOMMemFormatTarget() {};
 
 	void setBuffer (unsigned char * toSet) {buffer = toSet;};
@@ -463,8 +440,8 @@ public:
     // -----------------------------------------------------------------------
 
     void writeChars(const   XMLByte* const  toWrite,
-                    const   unsigned int    count,
-                            XMLFormatter * const formatter)
+                    const   XMLSize_t    count,
+					XMLFormatter * const formatter)
     {
         // Surprisingly, Solaris was the only platform on which
         // required the char* cast to print out the string correctly.

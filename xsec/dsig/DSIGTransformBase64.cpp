@@ -75,7 +75,7 @@ void DSIGTransformBase64::appendTransformer(TXFMChain * input) {
 
 		if (input->getLastTxfm()->getNodeType() != TXFMBase::DOM_NODE_XPATH_NODESET) {
 
-#ifdef XSEC_NO_XPATH
+#ifndef XSEC_HAVE_XPATH
 
 			throw XSECException(XSECException::UnsupportedFunction,
 				"Unable to extract Base64 text from Nodes without XPath support");

@@ -58,7 +58,7 @@
 
 // XALAN
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 #include <xalanc/XPath/XPathEvaluator.hpp>
 #include <xalanc/XalanTransformer/XalanTransformer.hpp>
@@ -128,10 +128,10 @@ XERCES_CPP_NAMESPACE_USE
 //           Global variables
 // --------------------------------------------------------------------------------
 
-bool	g_printDocs = false;
-bool	g_useWinCAPI = false;
-bool	g_useNSS = false;
-bool    g_haveAES = true;
+bool	 g_printDocs = false;
+bool	 g_useWinCAPI = false;
+bool	 g_useNSS = false;
+bool g_haveAES = true;
 
 // --------------------------------------------------------------------------------
 //           Known "Good" Values
@@ -1147,7 +1147,7 @@ void unitTestSignature(DOMImplementation * impl) {
 
 	// Test an enveloping signature
 	unitTestEnvelopingSignature(impl);
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 	unitTestBase64NodeSignature(impl);
 #else
 	cerr << "Skipping base64 node test (Requires XPath)" << endl;
@@ -1247,7 +1247,7 @@ void testSignature(DOMImplementation *impl) {
 			DSIGConstants::s_unicodeStrURIEXC_C14N_COM);
 		ce->addInclusiveNamespace("foo");
 
-#ifdef XSEC_NO_XALAN
+#ifndef XSEC_HAVE_XALAN
 
 		cerr << "WARNING : No testing of XPath being performed as Xalan not present" << endl;
 		refCount = 7;
@@ -2135,7 +2135,7 @@ void unitTestEncrypt(DOMImplementation *impl) {
 		cerr << "Unit testing 3DES CBC encryption" << endl;
 		unitTestElementContentEncrypt(impl, ks->clone(), ENCRYPT_3DES_CBC, false);
 		unitTestElementContentEncrypt(impl, ks, ENCRYPT_3DES_CBC, true);
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 		if (g_haveAES) {
 			cerr << "Unit testing CipherReference creation and decryption" << endl;
 			unitTestCipherReference(impl);
@@ -2591,7 +2591,7 @@ int main(int argc, char **argv) {
 	try {
 
 		XMLPlatformUtils::Initialize();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 		XPathEvaluator::initialize();
 		XalanTransformer::initialize();
 #endif
@@ -2698,7 +2698,7 @@ int main(int argc, char **argv) {
 	}
 
 	XSECPlatformUtils::Terminate();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 	XalanTransformer::terminate();
 	XPathEvaluator::terminate();
 #endif

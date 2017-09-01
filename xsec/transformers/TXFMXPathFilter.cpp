@@ -39,7 +39,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 #if defined(_MSC_VER)
 #	pragma warning(disable: 4267)
@@ -90,7 +90,7 @@ XALAN_USING_XALAN(XSLException)
 
 #endif
 
-#if !defined(XSEC_NO_XPATH)
+#ifdef XSEC_HAVE_XPATH
 
 #include <iostream>
 
@@ -745,7 +745,7 @@ XSECXPathNodeList	& TXFMXPathFilter::getXPathNodeList() {
 
 }
 
-#endif /* NO_XPATH */
+#endif /* XSEC_HAVE_XPATH */
 
 
 

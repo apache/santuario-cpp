@@ -81,7 +81,7 @@ using std::cerr;
 using std::endl;
 using std::ofstream;
 
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 
 // XALAN
 
@@ -91,9 +91,7 @@ using std::ofstream;
 XALAN_USING_XALAN(XPathEvaluator)
 XALAN_USING_XALAN(XalanTransformer)
 
-#endif
-
-#ifdef XSEC_NO_XALAN
+#else
 
 std::ostream& operator<< (std::ostream& target, const XMLCh * s)
 {
@@ -308,11 +306,10 @@ void outputReferenceList (DSIGReferenceList * lst, outputter & theOutputter, int
 			try {
 				is = ref->makeBinInputStream();
 			}
-			catch (NetAccessorException e) {
+			catch (NetAccessorException& e) {
 
 				cerr << "Network error in reference " << theOutputter.getIndex() << endl;
 				is = 0;
-				
 			}
 
 
@@ -410,7 +407,7 @@ int main(int argc, char **argv) {
 	try {
 
 		XMLPlatformUtils::Initialize();
-#ifndef XSEC_NO_XALAN
+#ifdef XSEC_HAVE_XALAN
 		XPathEvaluator::initialize();
 		XalanTransformer::initialize();
 #endif

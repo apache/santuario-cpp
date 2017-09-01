@@ -456,13 +456,8 @@ int XSECC14n20010315::XPathSelectNodes(const char * XPathExpr) {
 
 	// We use Xalan to process the Xerces DOM tree and get the XPath nodes
 
-#if XALAN_VERSION_MAJOR == 1 && XALAN_VERSION_MINOR > 10
 	XercesParserLiaison theParserLiaison;
 	XercesDOMSupport theDOMSupport(theParserLiaison);
-#else
-	XercesDOMSupport theDOMSupport;
-	XercesParserLiaison theParserLiaison;
-#endif // XALAN_VERSION_MAJOR == 1 && XALAN_VERSION_MINOR > 10
 
 	if (mp_doc == 0) {
 		throw XSECException(XSECException::UnsupportedFunction,

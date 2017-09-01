@@ -171,6 +171,18 @@ else
 fi
 
 if test "${xalan_found}" = "yes" ; then
+
+AC_MSG_CHECKING([Xalan version])
+AC_PREPROC_IFELSE(
+    [AC_LANG_PROGRAM([#include <xalanc/Include/XalanVersion.hpp>],
+[#if  _XALAN_VERSION >= 11100
+int i = 0;
+#else
+#error requires Xalan version 1.11+
+#endif])],
+    [AC_MSG_RESULT(OK)],
+    [AC_MSG_FAILURE([Xalan-C 1.11+ is required])])
+
   # Do we need xalanMsg.so?
   AC_MSG_CHECKING([if libxalanMsg is required])
   old_libs=$LIBS
@@ -179,6 +191,7 @@ if test "${xalan_found}" = "yes" ; then
     int test=1;
   ]])],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)
   LIBS=${old_libs}]);
+
 fi
 
 

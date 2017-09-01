@@ -187,11 +187,7 @@ XSECXPathNodeList * TXFMXPathFilter::evaluateSingleExpr(DSIGXPathFilterExpr *exp
 
 	XPathProcessorImpl	xppi;					// The processor
 	XercesParserLiaison xpl;
-#if XALAN_VERSION_MAJOR == 1 && XALAN_VERSION_MINOR > 10
 	XercesDOMSupport	xds(xpl);
-#else
-	XercesDOMSupport	xds;
-#endif
 	XPathEvaluator		xpe;
 	XPathFactoryDefault xpf;
 	XPathConstructionContextDefault xpcc;

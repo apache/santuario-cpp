@@ -151,7 +151,6 @@ private:
 	bool m_returnedFromChild;						// Did we get to this node from below?
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * mp_firstElementNode;			// The root element of the document
 	bool			m_firstElementProcessed;		// Has the first node been handled?
-	unsigned char	* mp_charBuffer;
 
 	// For XPath evaluation
 	bool			  m_XPathSelection;				// Are we doing an XPath?

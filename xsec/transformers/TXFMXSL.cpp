@@ -104,12 +104,7 @@ void TXFMXSL::expandNameSpaces(void) {
 
 
 TXFMXSL::TXFMXSL(DOMDocument *doc) : 
-	TXFMBase(doc),
-#if XALAN_VERSION_MAJOR == 1 && XALAN_VERSION_MINOR > 10
-xds(xpl)
-#else
-xpl()
-#endif
+	TXFMBase(doc), xds(xpl)
 {
 
 	// Zeroise all the pointers

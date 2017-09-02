@@ -158,7 +158,6 @@ void XSECNameSpaceExpander::expandNameSpaces(void) {
 	DOMElement	*docElt;		// The document element - do not expand it's namespaces
 	
 	docElt = mp_fragment; //mp_doc->getDocumentElement();
-	int count = attNodeCount(docElt);
 
 	DOMNode *c;
 
@@ -172,8 +171,6 @@ void XSECNameSpaceExpander::expandNameSpaces(void) {
 
 	m_expanded = true;
 
-	count = attNodeCount(docElt);
-
 }
 
 
@@ -181,9 +178,6 @@ void XSECNameSpaceExpander::deleteAddedNamespaces(void) {
 
 	NameSpaceEntryListVectorType::size_type size = m_lst.size();
 	XSECNameSpaceEntry *e;
-
-	DOMElement *docElt = mp_fragment; //mp_doc->getDocumentElement();
-	int 	count = attNodeCount(docElt);
 
 	NameSpaceEntryListVectorType::size_type i;
 
@@ -206,7 +200,6 @@ void XSECNameSpaceExpander::deleteAddedNamespaces(void) {
 	// Now done - empty everything
 	m_lst.clear();
 	m_expanded = false;
-	count = attNodeCount(docElt);
 
 }
 

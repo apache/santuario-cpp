@@ -478,14 +478,14 @@ XMLCh * encodeDName(const XMLCh * toEncode) {
 	// Find where the trailing whitespace starts
 	const XMLCh * ws = &toEncode[XMLString::stringLen(toEncode)];
 
-	*ws--;
+	ws--;
 	while (ws != toEncode &&
 		(*ws == '\t' || *ws == '\r' || *ws ==' ' || *ws == '\n'))
-		*ws--;
+		ws--;
 
 	// Set to first white space character, if we didn't get back to the start
 	if (toEncode != ws)
-		*ws++;
+		ws++;
 
 	// Now run through each character and encode if necessary
 
@@ -523,9 +523,9 @@ XMLCh * encodeDName(const XMLCh * toEncode) {
 
 			// Determine if this is an RDN separator
 			const XMLCh *j = i;
-			*j++;
+			j++;
 			while (*j != chComma && *j != chEqual && *j != chNull)
-				*j++;
+				j++;
 
 			if (*j != chEqual)
 				result.sbXMLChAppendCh(chBackSlash);
@@ -550,7 +550,7 @@ XMLCh * encodeDName(const XMLCh * toEncode) {
 
 		}
 
-		*i++;
+		i++;
 
 	}
 
@@ -562,7 +562,7 @@ XMLCh * encodeDName(const XMLCh * toEncode) {
 		else
 			result.sbXMLChAppendCh(*i);
 
-		*i++;
+		i++;
 
 	}
 
@@ -589,8 +589,8 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 	if (*i == chBackSlash && i[1] == chPound) {
 
 		result.sbXMLChAppendCh(chPound);
-		*i++;
-		*i++;
+		i++;
+		i++;
 
 	}
 
@@ -598,11 +598,11 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 
 		if (*i == chBackSlash) {
 
-			*i++;
+			i++;
 
 			if (*i == chDigit_0) {
 
-				*i++;
+				i++;
 
 				if (*i >= chDigit_0 && *i <= chDigit_9) {
 					result.sbXMLChAppendCh(*i - chDigit_0);
@@ -621,7 +621,7 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 
 			else if (*i == chDigit_1) {
 
-				*i++;
+				i++;
 
 				if (*i >= chDigit_0 && *i <= chDigit_9) {
 					result.sbXMLChAppendCh(16 + *i - chDigit_0);
@@ -640,7 +640,7 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 
 			else if (*i == chDigit_2) {
 
-				*i++;
+				i++;
 
 				if (*i == '0') {
 					result.sbXMLChAppendCh(' ');
@@ -671,7 +671,7 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 
 			}
 
-			*i++;
+			i++;
 
 		}
 

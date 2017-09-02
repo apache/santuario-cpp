@@ -324,8 +324,8 @@ XENCEncryptedData * XKMSRegisterResultImpl::setRSAKeyPair(const char * passPhras
 		}
 		uri = algorithmSB.sbStrToXMLCh();
 	}
-    else
-        uri = algorithmURI;
+	else
+		uri = algorithmURI;
 
 	// Find if we can get an algorithm for this URI
 	XSECAlgorithmHandler *handler;
@@ -342,10 +342,10 @@ XENCEncryptedData * XKMSRegisterResultImpl::setRSAKeyPair(const char * passPhras
 	unsigned char kbuf[XSEC_MAX_HASH_SIZE];
 	unsigned int len = CalculateXKMSKEK((unsigned char *) passPhrase, (int) strlen(passPhrase), kbuf, XSEC_MAX_HASH_SIZE);
 
-    if (len == 0) {
+	if (len == 0) {
 		throw XSECException(XSECException::XKMSError,
 			"XKMSRegisterResult::setRSAKeyPair - error deriving KEK");
-    }
+	}
 
 
 	XSECCryptoKey * sk = handler->createKeyForURI(

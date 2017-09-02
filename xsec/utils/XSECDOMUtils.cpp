@@ -695,9 +695,9 @@ XMLCh * decodeDName(const XMLCh * toDecode) {
 
 static bool isHexDigit(const XMLCh toCheck)
 {
-    if ((toCheck >= chDigit_0) && (toCheck <= chDigit_9)
-    ||  (toCheck >= chLatin_A) && (toCheck <= chLatin_F)
-    ||  (toCheck >= chLatin_a) && (toCheck <= chLatin_f))
+    if ((toCheck >= chDigit_0 && toCheck <= chDigit_9)
+    ||  (toCheck >= chLatin_A && toCheck <= chLatin_F)
+    ||  (toCheck >= chLatin_a && toCheck <= chLatin_f))
     {
         return true;
     }

@@ -3891,7 +3891,6 @@ int doParsedMsgDump(DOMDocument * doc) {
     // Get an XKMS Message Factory
     XSECProvider prov;
     XKMSMessageFactory * factory = prov.getXKMSMessageFactory();
-    int errorsOccured;
 
     try {
 
@@ -3914,13 +3913,11 @@ int doParsedMsgDump(DOMDocument * doc) {
         cerr << "An error occurred during message loading\n   Message: "
         << msg << endl;
         XSEC_RELEASE_XMLCH(msg);
-        errorsOccured = true;
         return 2;
     }
     catch (const XSECCryptoException &e) {
         cerr << "An error occurred during encryption/signature processing\n   Message: "
         << e.getMsg() << endl;
-        errorsOccured = true;
 
 #if defined (XSEC_HAVE_OPENSSL)
         ERR_load_crypto_strings();

@@ -324,15 +324,13 @@ XENCEncryptedData * XKMSRecoverResultImpl::setRSAKeyPair(const char * passPhrase
 		}
 		uri = algorithmSB.sbStrToXMLCh();
 	}
-    else
-        uri = algorithmURI;
+	else {
+		uri = algorithmURI;
+	}
 
 	// Find if we can get an algorithm for this URI
-	XSECAlgorithmHandler *handler;
-
-	handler = 
-		XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
-			uri);
+	XSECAlgorithmHandler *handler =
+			XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(uri);
 
 	if (handler == NULL) {
 		throw XSECException(XSECException::XKMSError,

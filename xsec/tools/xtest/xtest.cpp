@@ -952,7 +952,6 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 		XSECProvider prov;
 		DSIGSignature *sig;
 		DOMElement *sigNode;
-		DSIGReference *ref[4];
 		
 		sig = prov.newSignature();
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
@@ -971,10 +970,6 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 		// Create a text node
 		DOMText * txt= doc->createTextNode(MAKE_UNICODE_STRING("A test string"));
 		obj->appendChild(txt);
-
-		// Add a Reference
-		ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
-			DSIGConstants::s_unicodeStrURISHA1);
 
 		// Get a key
 		cerr << "signing ... ";
@@ -2497,7 +2492,6 @@ int main(int argc, char **argv) {
 	bool		doEncryptionUnitTests = true;
 	bool		doSignatureTest = true;
 	bool		doSignatureUnitTests = true;
-	bool		doXKMSTest = true;
 
 	// Testing for which Crypto API to use by default - only really useful on windows
 #if !defined(XSEC_HAVE_OPENSSL)
@@ -2535,28 +2529,24 @@ int main(int argc, char **argv) {
 			doEncryptionTest = false;
 			doEncryptionUnitTests = false;
 			doSignatureUnitTests = false;
-			doXKMSTest = false;
 			paramCount++;
 		}
 		else if (_stricmp(argv[paramCount], "--encryption-only") == 0 || _stricmp(argv[paramCount], "-e") == 0) {
 			doSignatureTest = false;
 			doEncryptionUnitTests = false;
 			doSignatureUnitTests = false;
-			doXKMSTest = false;
 			paramCount++;
 		}
 		else if (_stricmp(argv[paramCount], "--encryption-unit-only") == 0 || _stricmp(argv[paramCount], "-u") == 0) {
 			doEncryptionTest = false;
 			doSignatureTest = false;
 			doSignatureUnitTests = false;
-			doXKMSTest = false;
 			paramCount++;
 		}
 		else if (_stricmp(argv[paramCount], "--signature-unit-only") == 0 || _stricmp(argv[paramCount], "-t") == 0) {
 			doEncryptionTest = false;
 			doSignatureTest = false;
 			doEncryptionUnitTests = false;
-			doXKMSTest = false;
 			paramCount++;
 		}
 /*		else if (stricmp(argv[paramCount], "--xkms-only") == 0 || stricmp(argv[paramCount], "-x") == 0) {
@@ -2682,17 +2672,6 @@ int main(int argc, char **argv) {
 
 			unitTestEncrypt(impl);
 		}
-/*
-		// Running XKMS Base test
-		if (doXKMSTest) {
-			cerr << endl << "====================================";
-			cerr << endl << "Performing XKMS Function";
-			cerr << endl << "====================================";
-			cerr << endl << endl;
-
-			testXKMS(impl);
-		}
-*/
 		cerr << endl << "All tests passed" << endl;
 
 	}

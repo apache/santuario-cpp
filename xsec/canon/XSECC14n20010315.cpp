@@ -735,9 +735,9 @@ bool XSECC14n20010315::checkRenderNameSpaceNode(DOMNode *e, DOMNode *a) {
 	if (m_XPathSelection && ! m_XPathMap.hasNode(a))
 		return false;
 
-    // BUGFIX: we need to skip xmlns:xml if the value is http://www.w3.org/XML/1998/namespace
-    if (strEquals(a->getLocalName(), "xml") && strEquals(a->getNodeValue(), "http://www.w3.org/XML/1998/namespace"))
-        return false;
+	// BUGFIX: we need to skip xmlns:xml if the value is http://www.w3.org/XML/1998/namespace
+	if (strEquals(a->getLocalName(), "xml") && strEquals(a->getNodeValue(), "http://www.w3.org/XML/1998/namespace"))
+		return false;
 
 	// First - are we exclusive?
 

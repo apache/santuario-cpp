@@ -1306,10 +1306,10 @@ unsigned int DSIGReference::calculateHash(XMLByte *toFill, unsigned int maxToFil
 
 	}
 
-    // Check for debugging sink for the data
-    TXFMBase* sink = XSECPlatformUtils::GetReferenceLoggingSink(d);
-    if (sink)
-        chain->appendTxfm(sink);
+	// Check for debugging sink for the data
+	TXFMBase* sink = XSECPlatformUtils::GetReferenceLoggingSink(d);
+	if (sink)
+		chain->appendTxfm(sink);
 
 
 	// Get the mapping for the hash transform

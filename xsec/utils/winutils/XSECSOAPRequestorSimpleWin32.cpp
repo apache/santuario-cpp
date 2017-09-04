@@ -49,6 +49,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <string>
+#include <sstream>
+
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/framework/XMLFormatter.hpp>
@@ -60,6 +63,9 @@
 #include <xercesc/util/XMLUniDefs.hpp>
 
 XERCES_CPP_NAMESPACE_USE
+using std::string;
+using std::ostringstream;
+
 
 // --------------------------------------------------------------------------------
 //           Constructors and Destructors
@@ -68,8 +74,8 @@ XERCES_CPP_NAMESPACE_USE
 
 XSECSOAPRequestorSimple::XSECSOAPRequestorSimple(const XMLCh * uri) : m_uri(uri) {
 
-	XSECBinHTTPURIInputStream::ExternalInitialize();
-	m_envelopeType = ENVELOPE_SOAP11;
+    XSECBinHTTPURIInputStream::ExternalInitialize();
+    m_envelopeType = ENVELOPE_SOAP11;
 
 }
 
@@ -82,13 +88,9 @@ XSECSOAPRequestorSimple::XSECSOAPRequestorSimple(const XMLCh * uri) : m_uri(uri)
 DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
 
 
-	char * content = wrapAndSerialise(request);
+    char* content = wrapAndSerialise(request);
 
-	// First we need to serialise
-
-    char                fBuffer[4000];
-    char *              fBufferEnd;
-    char *              fBufferPos;
+    // First we need to serialise
 
     //
     // Pull all of the parts of the URL out of th m_uri object, and transcode them
@@ -108,9 +110,9 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
 
     unsigned short      portNumber = (unsigned short) m_uri.getPort();
 
-	// If no number is set, go with port 80
-	if (portNumber == USHRT_MAX)
-		portNumber = 80;
+    // If no number is set, go with port 80
+    if (portNumber == USHRT_MAX)
+        portNumber = 80;
 
     //
     // Set up a socket.
@@ -126,8 +128,8 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
         {
             XSEC_RELEASE_XMLCH(content);
             // Call WSAGetLastError() to get the error number.
-	        throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported resolving IP address");
+            throw XSECException(XSECException::HTTPURIInputStreamError,
+                            "Error reported resolving IP address");
         }
         if ((hostEntPtr =
                 XSECBinHTTPURIInputStream::gethostbyaddr((const char *) &numAddress,
@@ -135,8 +137,8 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
         {
             XSEC_RELEASE_XMLCH(content);
             // Call WSAGetLastError() to get the error number.
-	        throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported resolving IP address");
+            throw XSECException(XSECException::HTTPURIInputStreamError,
+                            "Error reported resolving IP address");
         }
     }
 
@@ -151,16 +153,16 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
         XSEC_RELEASE_XMLCH(content);
         // Call WSAGetLastError() to get the error number.
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported creating socket");
+                            "Error reported creating socket");
     }
 
     if (XSECBinHTTPURIInputStream::connect((unsigned short) s, 
-		(struct sockaddr *) &sa, sizeof(sa)) == SOCKET_ERROR)
+        (struct sockaddr *) &sa, sizeof(sa)) == SOCKET_ERROR)
     {
         XSEC_RELEASE_XMLCH(content);
         // Call WSAGetLastError() to get the error number.
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported connecting to socket");
+                            "Error reported connecting to socket");
     }
 
 
@@ -172,142 +174,133 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     // To do:  We should really support http 1.1.  This implementation
     //         is weak.
 
-    memset(fBuffer, 0, sizeof(fBuffer));
+    ostringstream outBuffer;
 
-    strcpy(fBuffer, "POST ");
-    strcat(fBuffer, pathAsCharStar.get());
+    outBuffer << "POST " << pathAsCharStar.get();
 
     if (queryAsCharStar.get() != 0)
     {
         // Tack on a ? before the fragment
-        strcat(fBuffer,"?");
-        strcat(fBuffer, queryAsCharStar.get());
+        outBuffer << '?' << queryAsCharStar.get();
     }
 
     if (fragmentAsCharStar.get() != 0)
     {
-        strcat(fBuffer, fragmentAsCharStar.get());
+            outBuffer << fragmentAsCharStar.get();
     }
-    strcat(fBuffer, " HTTP/1.0\r\n");
 
-	strcat(fBuffer, "Content-Type: text/xml; charset=utf-8\r\n");
+    outBuffer << "HTTP/1.0\r\n"
+        << "Content-Type: text/xml; charset=utf-8\r\n";
 
-
-    strcat(fBuffer, "Host: ");
-    strcat(fBuffer, hostNameAsCharStar.get());
+    outBuffer << "Host: " << hostNameAsCharStar.get();
     if (portNumber != 80)
     {
-        strcat(fBuffer, ":");
-        int i = (int) strlen(fBuffer);
-        _itoa(portNumber, fBuffer+i, 10);
+            outBuffer << ':' << portNumber;
     }
-	strcat(fBuffer, "\r\n");
+    outBuffer << "\r\n";
 
-	strcat(fBuffer, "Content-Length: ");
-    int i = (int) strlen(fBuffer);
-    _itoa((int) strlen(content), fBuffer+i, 10);
-	strcat(fBuffer, "\r\n");
-	strcat(fBuffer, "SOAPAction: \"\"\r\n");
-
-/*	strcat(fBuffer, "Connection: Close\r\n");
-	strcat(fBuffer, "Cache-Control: no-cache\r\n");*/
-    strcat(fBuffer, "\r\n");
-
-	// Now the content
-//	strcat(fBuffer, content);
+    outBuffer << "Content-Length: " << strlen(content) << "\r\n"
+        << "SOAPAction: \"\"\r\n"
+        << "\r\n";
 
     // Send the http request
-    int lent = (int) strlen(fBuffer);
+    string ostr = outBuffer.str();
+    size_t lent = ostr.length();
     int  aLent = 0;
     if ((aLent = XSECBinHTTPURIInputStream::send((unsigned short) s, 
-		fBuffer, lent, 0)) != lent)
+        ostr.c_str(), lent, 0)) != lent)
     {
         XSEC_RELEASE_XMLCH(content);
         // Call WSAGetLastError() to get the error number.
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported writing to socket");
+                            "Error reported writing to socket");
     }
 
-	// Now the content
-    lent = (int) strlen(content);
+    // Now the content
+    lent = strlen(content);
     aLent = 0;
     if ((aLent = XSECBinHTTPURIInputStream::send((unsigned short) s, 
-		content, lent, 0)) != lent)
+        content, lent, 0)) != lent)
     {
         XSEC_RELEASE_XMLCH(content);
         // Call WSAGetLastError() to get the error number.
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported writing to socket");
+                            "Error reported writing to socket");
     }
     XSEC_RELEASE_XMLCH(content);
 
     //
     // get the response, check the http header for errors from the server.
     //
-    memset(fBuffer, 0, sizeof(fBuffer));
-    aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, fBuffer, sizeof(fBuffer)-1, 0);
-	if (aLent == SOCKET_ERROR || aLent == 0)
+
+    char inBuffer[4000];
+    char* inBufferEnd;
+    char* inBufferPos;
+
+    memset(inBuffer, 0, sizeof(inBuffer));
+    aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, inBuffer, sizeof(inBuffer)-1, 0);
+    if (aLent == SOCKET_ERROR || aLent == 0)
     {
         // Call WSAGetLastError() to get the error number.
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported reading socket");
+                            "Error reported reading socket");
     }
 
-    fBufferEnd = fBuffer+aLent;
-    *fBufferEnd = 0;
+    inBufferEnd = inBuffer+aLent;
+    *inBufferEnd = 0;
 
     do {
         // Find the break between the returned http header and any data.
         //  (Delimited by a blank line)
         // Hang on to any data for use by the first read from this XSECBinHTTPURIInputStream.
         //
-        fBufferPos = strstr(fBuffer, "\r\n\r\n");
-        if (fBufferPos != 0)
+        inBufferPos = strstr(inBuffer, "\r\n\r\n");
+        if (inBufferPos != 0)
         {
-            fBufferPos += 4;
-            *(fBufferPos-2) = 0;
+            inBufferPos += 4;
+            *(inBufferPos-2) = 0;
             fHeaderRead = true;
         }
         else
         {
-            fBufferPos = strstr(fBuffer, "\n\n");
-            if (fBufferPos != 0)
+            inBufferPos = strstr(inBuffer, "\n\n");
+            if (inBufferPos != 0)
             {
-                fBufferPos += 2;
-                *(fBufferPos-1) = 0;
+                inBufferPos += 2;
+                *(inBufferPos-1) = 0;
                 fHeaderRead = true;
             }
             else
             {
                 //
                 // Header is not yet read, do another recv() to get more data...
-                aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, fBufferEnd, ((int) sizeof(fBuffer) - 1) - (int)(fBufferEnd - fBuffer), 0);
+                aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, inBufferEnd, ((int) sizeof(inBuffer) - 1) - (int)(inBufferEnd - inBuffer), 0);
                 if (aLent == SOCKET_ERROR || aLent == 0)
                 {
                     // Call WSAGetLastError() to get the error number.
-			        throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported reading socket");
+                    throw XSECException(XSECException::HTTPURIInputStreamError,
+                            "Error reported reading socket");
                 }
-                fBufferEnd = fBufferEnd + aLent;
-                *fBufferEnd = 0;
+                inBufferEnd = inBufferEnd + aLent;
+                *inBufferEnd = 0;
             }
         }
     } while(fHeaderRead == false);
 
     // Make sure the header includes an HTTP 200 OK response.
     //
-    char *p = strstr(fBuffer, "HTTP");
+    char *p = strstr(inBuffer, "HTTP");
     if (p == 0)
     {
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported reading socket");
+                            "Error reported reading socket");
     }
 
     p = strchr(p, ' ');
     if (p == 0)
     {
         throw XSECException(XSECException::HTTPURIInputStreamError,
-							"XSECSOAPRequestorSimple - Error reported reading socket");
+                            "XSECSOAPRequestorSimple - Error reported reading socket");
     }
 
     int httpResponse = atoi(p);
@@ -323,113 +316,82 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
         p = strstr(p, "Location:");
         if (p == 0)
         {
-	        throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported reading socket");
+            throw XSECException(XSECException::HTTPURIInputStreamError,
+                            "Error reported reading socket");
         }
         p = strchr(p, ' ');
-		if (p == 0)
-		{
-	        throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Error reported reading socket");
-		}
-		
-		// Now read
-		p++;
-		for (q=0; q < 255 && p[q] != '\r' && p[q] !='\n'; ++q)
-			redirectBuf[q] = p[q];
-		
-		redirectBuf[q] = '\0';
-		
-		// Try to find this location
-		m_uri = XMLUri(XMLString::transcode(redirectBuf));
+        if (p == 0)
+        {
+            throw XSECException(XSECException::HTTPURIInputStreamError,
+                            "Error reported reading socket");
+        }
 
-		return doRequest(request);
+        // Now read
+        p++;
+        for (q=0; q < 255 && p[q] != '\r' && p[q] !='\n'; ++q)
+            redirectBuf[q] = p[q];
 
-	}
+        redirectBuf[q] = '\0';
+
+        // Try to find this location
+        m_uri = XMLUri(XMLString::transcode(redirectBuf));
+
+        return doRequest(request);
+
+    }
     else if (httpResponse != 200)
     {
         // Most likely a 404 Not Found error.
         //   Should recognize and handle the forwarding responses.
         //
-		char * q = strstr(p, "\n");
-		if (q == NULL)
-			q = strstr(p, "\r");
-		if (q != NULL)
-			*q = '\0';
-		safeBuffer sb;
-		sb.sbStrcpyIn("SOAPRequestorSimple HTTP Error : ");
-		if (strlen(p) < 256)
-			sb.sbStrcatIn(p);
+        char * q = strstr(p, "\n");
+        if (q == NULL)
+            q = strstr(p, "\r");
+        if (q != NULL)
+            *q = '\0';
+        safeBuffer sb;
+        sb.sbStrcpyIn("SOAPRequestorSimple HTTP Error : ");
+        if (strlen(p) < 256)
+            sb.sbStrcatIn(p);
         throw XSECException(XSECException::HTTPURIInputStreamError, sb.rawCharBuffer());
     }
 
-	/* Now find out how long the return is */
+    /* Now find out how long the return is */
 
-	p = strstr(fBuffer, "Content-Length:");
-	int responseLength;
+    p = strstr(inBuffer, "Content-Length:");
+    int responseLength;
 
-	if (p == NULL) {
-		// Need to work it out from the amount of data returned
-		responseLength = -1;
-	}
-	else {
+    if (p == NULL) {
+        // Need to work it out from the amount of data returned
+        responseLength = -1;
+    }
+    else {
 
-		p = strchr(p, ' ');
-		p++;
+        p = strchr(p, ' ');
+        p++;
 
-		responseLength = atoi(p);
-	}
+        responseLength = atoi(p);
+    }
 
-	safeBuffer responseBuffer;
-	lent = (int) (fBufferEnd - fBufferPos);
-	responseBuffer.sbMemcpyIn(fBufferPos, lent);
+    safeBuffer responseBuffer;
+    lent = (int) (inBufferEnd - inBufferPos);
+    responseBuffer.sbMemcpyIn(inBufferPos, lent);
 
-	while (responseLength == -1 || lent < responseLength) {
-		aLent = XSECBinHTTPURIInputStream::recv((unsigned short)s, fBuffer, sizeof(fBuffer)-1, 0);
-		if (aLent > 0) {
-			responseBuffer.sbMemcpyIn(lent, fBuffer, aLent);
-			lent += aLent;
-		}
-		else {
-			responseLength = 0;
-		}
-	}
+    while (responseLength == -1 || lent < responseLength) {
+        aLent = XSECBinHTTPURIInputStream::recv((unsigned short)s, inBuffer, sizeof(inBuffer)-1, 0);
+        if (aLent > 0) {
+            responseBuffer.sbMemcpyIn(lent, inBuffer, aLent);
+            lent += aLent;
+        }
+        else {
+            responseLength = 0;
+        }
+    }
 
-	if (lent <= 0) {
+    if (lent <= 0) {
         throw XSECException(XSECException::HTTPURIInputStreamError,
-			"XSECSOAPRequestorSimple - Zero length response from server");
-	}
+            "XSECSOAPRequestorSimple - Zero length response from server");
+    }
 
-	return parseAndUnwrap(responseBuffer.rawCharBuffer(), lent);
-
-
-# if 0
-
-	p = strstr(fBuffer, "Content-Length:");
-	if (p == NULL) {
-        throw XSECException(XSECException::HTTPURIInputStreamError,
-							"Content-Length required in SOAP HTTP Response");
-	}
-
-	p = strchr(p, ' ');
-	p++;
-
-	int responseLength = atoi(p);
-
-	char * responseBuffer;
-	XSECnew(responseBuffer, char[responseLength]);
-	ArrayJanitor<char> j_responseBuffer(responseBuffer);
-
-	lent = fBufferEnd - fBufferPos;
-	memcpy(responseBuffer, fBufferPos, lent);
-	while (lent < responseLength) {
-	    aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, &responseBuffer[lent], responseLength - lent, 0);
-		lent += aLent;
-	}
-	
-    return parseAndUnwrap(responseBuffer, responseLength);
-#endif
+    return parseAndUnwrap(responseBuffer.rawCharBuffer(), lent);
 }
-
-
-

@@ -197,12 +197,12 @@ DOMNode * DSIGTransformXSL::setStylesheet(DOMNode * stylesheet) {
 	DOMNode * ret = mp_stylesheetNode;
 
 	if (mp_stylesheetNode) {
-	    if (stylesheet)
-	        mp_txfmNode->insertBefore(stylesheet, mp_stylesheetNode);
+		if (stylesheet)
+			mp_txfmNode->insertBefore(stylesheet, mp_stylesheetNode);
 		mp_txfmNode->removeChild(mp_stylesheetNode);
 	}
 	else if (stylesheet) {
-	    mp_txfmNode->appendChild(stylesheet);
+		mp_txfmNode->appendChild(stylesheet);
 	}
 
 	mp_stylesheetNode = stylesheet;

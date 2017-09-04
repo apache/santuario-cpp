@@ -856,9 +856,9 @@ unsigned int DSIGSignature::calculateSignedInfoHash(unsigned char * hashBuf,
 	Janitor<TXFMChain> j_chain(chain);
 
 	// Check for debugging sink for the data
-    TXFMBase* sink = XSECPlatformUtils::GetReferenceLoggingSink(mp_doc);
-    if (sink)
-        chain->appendTxfm(sink);
+	TXFMBase* sink = XSECPlatformUtils::GetReferenceLoggingSink(mp_doc);
+	if (sink)
+		chain->appendTxfm(sink);
 
 	// Setup Hash
 	// First find the appropriate handler for the URI

@@ -33,7 +33,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-extern const char * XSECCryptoExceptionStrings[] = {
+const char* XSECCryptoExceptionStrings[] = {
 
 	"No Error",
 	"General error occurred somewhere in cryptographic routines",

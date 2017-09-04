@@ -158,7 +158,7 @@ public :
 							 SymmetricKeyMode mode = MODE_CBC,
 							 const unsigned char * iv = NULL,
                              const unsigned char* tag = NULL,
-                             unsigned int taglen = NULL);
+                             unsigned int taglen = 0);
 
 	/**
 	 * \brief Continue an decrypt operation using this key.
@@ -325,18 +325,18 @@ private:
 	// Private variables
 	SymmetricKeyType				m_keyType;
 	SymmetricKeyMode				m_keyMode;		// ECB or CBC
-	safeBuffer						m_keyBuf;		// Holder of the key
+	safeBuffer					m_keyBuf;		// Holder of the key
 	unsigned int					m_keyLen;
 	bool							m_initialised;
 	bool							m_doPad;
 
-	unsigned char					m_lastBlock[WINCAPI_MAX_BLOCK_SIZE];
+	unsigned char				m_lastBlock[WINCAPI_MAX_BLOCK_SIZE];
 	unsigned int					m_bytesInLastBlock;
 	unsigned int					m_blockSize;
 	unsigned int					m_ivSize;
 
-	HCRYPTPROV						m_p;
-	HCRYPTKEY						m_k;
+	HCRYPTPROV					m_p;
+	HCRYPTKEY					m_k;
 
 };
 

@@ -149,7 +149,7 @@ public :
 							 SymmetricKeyMode mode = MODE_CBC,
 							 const unsigned char * iv = NULL,
                              const unsigned char* tag = NULL,
-                             unsigned int taglen = NULL);
+                             unsigned int taglen = 0);
 
 	/**
 	 * \brief Continue an decrypt operation using this key.
@@ -286,16 +286,16 @@ private:
 
 	SymmetricKeyType				m_keyType;
 	SymmetricKeyMode				m_keyMode;		// ECB or CBC
-	bool							  m_initialised;
+	bool							m_initialised;
 	bool							m_doPad; //Does we need it?  Yes we do - key wraps are unpadded for 3DES
 
-	unsigned char					m_lastBlock[NSS_MAX_BLOCK_SIZE];
+	unsigned char				m_lastBlock[NSS_MAX_BLOCK_SIZE];
 	unsigned int					m_blockSize;
-  bool							    m_ivSent;		// Has the IV been put in the stream
+	bool							m_ivSent;		// Has the IV been put in the stream
 	unsigned int					m_ivSize;
 
-  PK11Context *         mp_ctx;
-	PK11SymKey *				  mp_k;
+	PK11Context *				mp_ctx;
+	PK11SymKey *					mp_k;
 
 };
 

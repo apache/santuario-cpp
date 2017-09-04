@@ -93,8 +93,7 @@ bool compareBase64StringToRaw(const char * b64Str,
     d.rem = 0;
     d.quot = 0;
 
-	unsigned int maxCompareBytes, maxCompareBits;
-	maxCompareBits = 0;
+	unsigned int maxCompareBytes;
 
 	unsigned int size;
 

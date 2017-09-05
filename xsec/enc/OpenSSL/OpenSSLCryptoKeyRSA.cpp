@@ -482,7 +482,7 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
     EvpEncodeCtxRAII dctx;
 
     if (!dctx.of()) {
-        throw XSECCryptoException(XSECCryptoException::ECError,
+        throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - allocation fail during Context Creation");
     }
 
@@ -503,6 +503,16 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
     EVP_DecodeFinal(dctx.of(), &sigVal[sigValLen], &t);
 
     sigValLen += t;
+
+    // OpenSSL allows the signature size to be less than the key size.
+    // Java does not and the spec requires that this fail, so we have to
+    // perform this check.
+
+    int keySize = RSA_size(mp_rsaKey);
+    if (keySize != sigValLen) {
+    	    throw XSECCryptoException(XSECCryptoException::RSAError,
+    	        "OpenSSL:RSA - Signature size does not match key size");
+    }
 
     // Now decrypt
 

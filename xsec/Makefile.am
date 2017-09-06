@@ -103,10 +103,12 @@ xsec_cipher_SOURCES = \
    tools/cipher/XencInteropResolver.hpp \
    tools/cipher/XencInteropResolver.cpp
 
+if XSEC_AM_HAVE_XKMS
 tools += xsec-xklient
 xsec_xklient_SOURCES = \
    tools/xklient/xklient.cpp \
-  enc/OpenSSL/OpenSSLSupport.hpp
+   enc/OpenSSL/OpenSSLSupport.hpp
+endif
 
 
 lib_LTLIBRARIES = libxml-security-c.la
@@ -348,8 +350,9 @@ lib_sources += ${utils_sources}
 lib_sources += ${xenc_sources}
 
 # XML Key Management
-
-lib_sources += ${xkms_sources}
+if XSEC_AM_HAVE_XKMS
+  lib_sources += ${xkms_sources}
+endif
 
 #
 # The following blocks are conditionally added on the basis
@@ -450,7 +453,6 @@ txfm_sources = \
 # make.  Cygwin compiles use the UNIX utilities, not windows
 
 utils_sources = \
-  utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp \
   utils/unixutils/XSECURIResolverGenericUnix.cpp \
   utils/unixutils/XSECBinHTTPURIInputStream.cpp \
   utils/XSECBinTXFMInputStream.cpp \
@@ -459,9 +461,14 @@ utils_sources = \
   utils/XSECTXFMInputSource.cpp \
   utils/XSECDOMUtils.cpp \
   utils/XSECSafeBufferFormatter.cpp \
-  utils/XSECSOAPRequestorSimple.cpp \
   utils/XSECNameSpaceExpander.cpp \
   utils/XSECPlatformUtils.cpp
+
+if XSEC_AM_HAVE_XKMS
+utils_sources += \
+  utils/XSECSOAPRequestorSimple.cpp \
+  utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp
+endif
 
 # XML Encryption
 

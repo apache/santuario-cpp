@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSResultType.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSKeyBinding;
 
 /**
@@ -135,5 +137,7 @@ private:
 	XKMSReissueResult & operator = (const XKMSReissueResult &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSREISSUERESULT_INCLUDE */

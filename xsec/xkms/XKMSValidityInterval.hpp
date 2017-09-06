@@ -33,6 +33,8 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 /**
  * @ingroup xkms
  */
@@ -132,5 +134,7 @@ private:
 	XKMSValidityInterval & operator = (const XKMSValidityInterval &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSVALIDITYINTERVAL_INCLUDE */

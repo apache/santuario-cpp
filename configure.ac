@@ -339,9 +339,18 @@ if test x"$use_nss" != "xno" ; then
     AC_MSG_WARN([NSS is no longer officially supported])
 fi
 
+AC_ARG_ENABLE(xkms,
+    AS_HELP_STRING([--disable-xkms],[disable XKMS support]),
+    [have_xkms=${enableval}],
+    [have_xkms=yes])
+if test x"$have_xkms" = "xyes" ; then
+    AC_DEFINE([XSEC_XKMS_ENABLED],[1],[Define to 1 if XKMS support is included.])]
+fi
+
 # Populate the Makefile conditionals
 AM_CONDITIONAL(XSEC_AM_HAVE_OPENSSL, test x"$use_openssl" != "xno")
 AM_CONDITIONAL(XSEC_AM_HAVE_NSS, test x"$use_nss" != "xno")
+AM_CONDITIONAL(XSEC_AM_HAVE_XKMS, test x"$have_xkms" = "xyes")
 
 # output the Makefiles
 AC_OUTPUT

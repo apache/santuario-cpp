@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSKeyBindingAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSValidityInterval;
 
 /**
@@ -146,5 +148,7 @@ private:
 	XKMSPrototypeKeyBinding & operator = (const XKMSPrototypeKeyBinding &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSPROTOTYPEKEYBINDING_INCLUDE */

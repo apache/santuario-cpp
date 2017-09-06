@@ -110,6 +110,7 @@ const XMLCh * getXENC11LocalName(const DOMNode *node) {
 
 }
 
+#ifdef XSEC_XKMS_ENABLED
 const XMLCh * getXKMSLocalName(const DOMNode *node) {
 
 	// XKMS namespace node
@@ -120,7 +121,7 @@ const XMLCh * getXKMSLocalName(const DOMNode *node) {
 		return node->getLocalName();
 
 }
-
+#endif
 
 // --------------------------------------------------------------------------------
 //           Find a nominated DSIG node in a document

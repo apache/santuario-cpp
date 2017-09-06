@@ -33,6 +33,8 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 XSEC_DECLARE_XERCES_CLASS(DOMDocument);
 
 /**
@@ -97,6 +99,6 @@ public :
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XSECSOAPREQUESTOR_INCLUDE */
-

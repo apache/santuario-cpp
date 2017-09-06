@@ -109,7 +109,9 @@ void XSECPlatformUtils::Initialise(XSECCryptoProvider * p) {
 
 	// Set up necessary constants
 	DSIGConstants::create();
+#ifdef XSEC_XKMS_ENABLED
 	XKMSConstants::create();
+#endif
 
 	// Initialise the safeBuffer system
 	safeBuffer::init();
@@ -161,7 +163,9 @@ void XSECPlatformUtils::Terminate(void) {
 		delete g_cryptoProvider;
 
 	DSIGConstants::destroy();
+#ifdef XSEC_XKMS_ENABLED
 	XKMSConstants::destroy();
+#endif
 
 	// Destroy anything platform specific
 #if defined(_WIN32)

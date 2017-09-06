@@ -29,8 +29,10 @@
 #ifndef XKMSCONSTANTS_HEADER
 #define XKMSCONSTANTS_HEADER
 
-// Xerces
 #include <xsec/framework/XSECDefs.hpp>
+
+#ifdef XSEC_XKMS_ENABLED
+
 
 // Name Spaces
 
@@ -151,5 +153,6 @@ public:
 
 };
 
-#endif /* XKMSCONSTANTS_HEADER */
+#endif /* XSEC_XKMS_ENABLED */
 
+#endif /* XKMSCONSTANTS_HEADER */

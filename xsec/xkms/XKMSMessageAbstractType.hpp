@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class DSIGSignature;
 
 XSEC_DECLARE_XERCES_CLASS(DOMElement);
@@ -303,5 +305,7 @@ private:
 	XKMSMessageAbstractType & operator = (const XKMSMessageAbstractType &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSMESSAGEABSTRACTTYPE_INCLUDE */

@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSMessageAbstractType.hpp>
 #include <xsec/xkms/XKMSResultType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class DSIGSignature;
 class XKMSCompoundRequest;
 class XKMSCompoundResult;
@@ -1038,5 +1040,7 @@ private:
 	XKMSMessageFactory & operator = (const XKMSMessageFactory &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSMESSAGEFACTORY_INCLUDE */

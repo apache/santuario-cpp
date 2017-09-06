@@ -98,6 +98,7 @@ const XMLCh s_defaultXENC11Prefix[] = {
 
 };
 
+#ifdef XSEC_XKMS_ENABLED
 const XMLCh s_defaultXKMSPrefix[] = {
 
 	chLatin_x,
@@ -107,6 +108,7 @@ const XMLCh s_defaultXKMSPrefix[] = {
 	chNull
 
 };
+#endif
 
 // --------------------------------------------------------------------------------
 //           Default Id names
@@ -145,8 +147,9 @@ XSECEnv::XSECEnv(DOMDocument *doc) {
 	mp_xpfPrefixNS = XMLString::replicate(s_defaultXPFPrefix);
 	mp_xencPrefixNS = XMLString::replicate(s_defaultXENCPrefix);
     mp_xenc11PrefixNS = XMLString::replicate(s_defaultXENC11Prefix);
+#ifdef XSEC_XKMS_ENABLED
 	mp_xkmsPrefixNS = XMLString::replicate(s_defaultXKMSPrefix);
-
+#endif
 	m_prettyPrintFlag = true;
 
 	mp_URIResolver = NULL;
@@ -173,8 +176,9 @@ XSECEnv::XSECEnv(const XSECEnv & theOther) {
 	mp_xpfPrefixNS = XMLString::replicate(theOther.mp_xpfPrefixNS);
 	mp_xencPrefixNS = XMLString::replicate(theOther.mp_xencPrefixNS);
     mp_xenc11PrefixNS = XMLString::replicate(s_defaultXENC11Prefix);
+#ifdef XSEC_XKMS_ENABLED
 	mp_xkmsPrefixNS = XMLString::replicate(theOther.mp_xkmsPrefixNS);
-
+#endif
 	m_prettyPrintFlag = theOther.m_prettyPrintFlag;
 
 	if (theOther.mp_URIResolver != NULL)
@@ -225,9 +229,11 @@ XSECEnv::~XSECEnv() {
 		XSEC_RELEASE_XMLCH(mp_xenc11PrefixNS);
 	}
 
+#ifdef XSEC_XKMS_ENABLED
 	if (mp_xkmsPrefixNS != NULL) {
 		XSEC_RELEASE_XMLCH(mp_xkmsPrefixNS);
 	}
+#endif
 
 	if (mp_URIResolver != NULL) {
 		delete mp_URIResolver;
@@ -329,6 +335,7 @@ void XSECEnv::setXENC11NSPrefix(const XMLCh * prefix) {
 
 }
 
+#ifdef XSEC_XKMS_ENABLED
 void XSECEnv::setXKMSNSPrefix(const XMLCh * prefix) {
 
 	if (mp_xkmsPrefixNS != NULL)
@@ -337,6 +344,7 @@ void XSECEnv::setXKMSNSPrefix(const XMLCh * prefix) {
 	mp_xkmsPrefixNS = XMLString::replicate(prefix);
 
 }
+#endif
 
 // --------------------------------------------------------------------------------
 //           Id Attribute Names Handling

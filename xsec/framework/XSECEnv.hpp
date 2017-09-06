@@ -167,6 +167,7 @@ public:
 
 	void setXENC11NSPrefix(const XMLCh * prefix);
 
+#ifdef XSEC_XKMS_ENABLED
 	/**
 	 * \brief Set prefix for XKMS nodes
 	 *
@@ -175,6 +176,7 @@ public:
 	 */
 
 	void setXKMSNSPrefix(const XMLCh * prefix);
+#endif
 
 	/**
 	 * \brief Get the NS Prefix being used for DSIG elements.
@@ -235,6 +237,7 @@ public:
 
 	const XMLCh * getXENC11NSPrefix() const {return mp_xenc11PrefixNS;}
 
+#ifdef XSEC_XKMS_ENABLED
 	/**
 	 * \brief Get namespace prefix for XKMS nodes
 	 *
@@ -245,6 +248,7 @@ public:
 	 */
 
 	const XMLCh * getXKMSNSPrefix(void) const {return mp_xkmsPrefixNS;}
+#endif
 	
 	//@}
 
@@ -549,8 +553,9 @@ private:
 	XMLCh						* mp_xpfPrefixNS;
 	XMLCh						* mp_xencPrefixNS;
 	XMLCh						* mp_xenc11PrefixNS;
+#ifdef XSEC_XKMS_ENABLED
 	XMLCh						* mp_xkmsPrefixNS;
-
+#endif
 	// Resolvers
 	XSECURIResolver				* mp_URIResolver;
 

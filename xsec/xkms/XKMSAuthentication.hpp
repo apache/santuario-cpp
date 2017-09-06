@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class DSIGSignature;
 class XKMSNotBoundAuthentication;
 
@@ -151,5 +153,7 @@ private:
 	XKMSAuthentication & operator = (const XKMSAuthentication &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSAUTHENTICATION_INCLUDE */

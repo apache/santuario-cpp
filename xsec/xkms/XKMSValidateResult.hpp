@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSResultType.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSKeyBinding;
 class XKMSUnverifiedKeyBinding;
 
@@ -136,5 +138,7 @@ private:
 	XKMSValidateResult & operator = (const XKMSValidateResult &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSVALIDATERESULT_INCLUDE */

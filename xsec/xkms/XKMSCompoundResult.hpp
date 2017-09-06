@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSResultType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSLocateResult;
 class XKMSLocateRequest;
 class XKMSValidateResult;
@@ -313,5 +315,7 @@ private:
 	XKMSCompoundResult & operator = (const XKMSCompoundResult &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSCOMPOUNDRESULT_INCLUDE */

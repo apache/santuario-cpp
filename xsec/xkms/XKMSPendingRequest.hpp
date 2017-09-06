@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRequestAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSQueryKeyBinding;
 
 /**
@@ -123,5 +125,7 @@ private:
 	XKMSPendingRequest & operator = (const XKMSPendingRequest &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSPENDINGREQUEST_INCLUDE */

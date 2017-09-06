@@ -43,6 +43,8 @@
 
 XERCES_CPP_NAMESPACE_USE
 
+#ifdef XSEC_AM_HAVE_XKMS
+
 // --------------------------------------------------------------------------------
 //           XKMS Limited-Use Shared Secret handling
 // --------------------------------------------------------------------------------
@@ -362,6 +364,8 @@ int DSIG_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned c
 	return bytesDone;
 
 }
+
+#endif
 
 // --------------------------------------------------------------------------------
 //           Some Base64 helpers

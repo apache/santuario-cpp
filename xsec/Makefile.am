@@ -30,32 +30,32 @@ samples =
 
 # HMAC sign
 
-samples += simpleHMAC
-simpleHMAC_SOURCES = \
+samples += xsec-simpleHMAC
+xsec_simpleHMAC_SOURCES = \
   samples/simpleHMAC.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
 
 # HMAC validate
 
-samples += simpleValidate
-simpleValidate_SOURCES = \
+samples += xsec-simpleValidate
+xsec_simpleValidate_SOURCES = \
   samples/simpleValidate.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
 
 # Encrypt
 
-samples += simpleEncrypt
-simpleEncrypt_SOURCES = \
+samples += xsec-simpleEncrypt
+xsec_simpleEncrypt_SOURCES = \
   samples/simpleEncrypt.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
 
 # Decrypt
 
-samples += simpleDecrypt
-simpleDecrypt_SOURCES = \
+samples += xsec-simpleDecrypt
+xsec_simpleDecrypt_SOURCES = \
   samples/simpleDecrypt.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp

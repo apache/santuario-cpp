@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSMessageAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 /**
  * @ingroup xkms
  */
@@ -118,5 +120,7 @@ private:
 	XKMSRespondWith & operator = (const XKMSRespondWith &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSRESPONDWITH_INCLUDE */

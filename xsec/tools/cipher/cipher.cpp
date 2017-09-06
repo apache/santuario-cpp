@@ -183,18 +183,20 @@ void printUsage(void) {
     cerr << "                  <filename> - for X509 PEM files (must be an RSA KEK certificate\n";
     cerr << "                  <filename> <password> - for RSA private key files (MUST be a KEK)\n";
     cerr << "                  <key-string> - For a string to use as the key for AES or DES keys\n";
+#ifdef XSEC_XKMS_ENABLED
     cerr << "     --xkms/-x\n";
     cerr << "         The key that follows on the command line is to be interpreted as\n";
     cerr << "         an XKMS RSAKeyPair encryption key\n";
+#endif
     cerr << "     --interop/-i\n";
     cerr << "         Use the interop resolver for Baltimore interop examples\n";
     cerr << "     --out-file/-o\n";
     cerr << "         Output the result to the indicated file (rather than stdout)\n";
-#if defined (XSEC_HAVE_WINCAPI)
+#ifdef XSEC_HAVE_WINCAPI
     cerr << "     --wincapi/-w\n";
     cerr << "         Force use of Windows Crypto API\n";
 #endif
-#if defined (XSEC_HAVE_NSS)
+#ifdef XSEC_HAVE_NSS
     cerr << "     --nss/-n\n";
     cerr << "         Force use of NSS Crypto API\n";
 #endif
@@ -218,7 +220,9 @@ int evaluate(int argc, char ** argv) {
     bool                    encryptFileAsData = false;
     bool                    parseXMLInput = true;
     bool                    doXMLOutput = false;
+#ifdef XSEC_XKMS_ENABLED
     bool                    isXKMSKey = false;
+#endif
     XSECCryptoKey           * kek = NULL;
     XSECCryptoKey           * key = NULL;
     int                     keyLen = 0;
@@ -285,12 +289,13 @@ int evaluate(int argc, char ** argv) {
             outfile = argv[paramCount];
             paramCount++;
         }
+#ifdef XSEC_XKMS_ENABLED
         else if (_stricmp(argv[paramCount], "--xkms") == 0 || _stricmp(argv[paramCount], "-x") == 0) {
             paramCount++;
             isXKMSKey = true;
         }
-
-#if defined (XSEC_HAVE_WINCAPI)
+#endif
+#ifdef XSEC_HAVE_WINCAPI
         else if (_stricmp(argv[paramCount], "--wincapi") == 0 || _stricmp(argv[paramCount], "-w") == 0) {
             // Use the interop key resolver
             WinCAPICryptoProvider * cp = new WinCAPICryptoProvider();
@@ -298,7 +303,7 @@ int evaluate(int argc, char ** argv) {
             paramCount++;
         }
 #endif
-#if defined (XSEC_HAVE_NSS)
+#ifdef XSEC_HAVE_NSS
         else if (_stricmp(argv[paramCount], "--nss") == 0 || _stricmp(argv[paramCount], "-n") == 0) {
             // NSS Crypto Provider
             NSSCryptoProvider * cp = new NSSCryptoProvider();
@@ -392,16 +397,20 @@ int evaluate(int argc, char ** argv) {
                 XSECCryptoSymmetricKey * sk = 
                     XSECPlatformUtils::g_cryptoProvider->keySymmetric(loadKeyAs);
 
+#ifdef XSEC_XKMS_ENABLED
                 if (isXKMSKey) {
                     unsigned char kbuf[XSEC_MAX_HASH_SIZE];
                     CalculateXKMSKEK((unsigned char *) argv[paramCount], (int) strlen(argv[paramCount]), kbuf, XSEC_MAX_HASH_SIZE);
                     sk->setKey(kbuf, keyLen);
                 }
                 else {
+#endif
                     memset(keyStr, 0, 64);
                     strcpy((char *) keyStr, argv[paramCount]);
                     sk->setKey(keyStr, keyLen);
+#ifdef XSEC_XKMS_ENABLED
                 }
+#endif
                 paramCount++;
                 if (isKEK)
                     kek = sk;
@@ -410,7 +419,7 @@ int evaluate(int argc, char ** argv) {
             }
 
 
-#if defined (XSEC_HAVE_OPENSSL)
+#ifdef XSEC_HAVE_OPENSSL
 
             else if (_stricmp(argv[paramCount], "RSA") == 0) {
                 // RSA private key file
@@ -638,7 +647,7 @@ int evaluate(int argc, char ** argv) {
             if (useInteropResolver == true) {
 
                 // Map out base path of the file
-#if XSEC_HAVE_GETCWD_DYN
+#ifdef XSEC_HAVE_GETCWD_DYN
                 char *path = getcwd(NULL, 0);
                 char *baseURI = (char*)malloc(strlen(path) + 8 + 1 + strlen(filename) + 1);
 #else
@@ -674,7 +683,7 @@ int evaluate(int argc, char ** argv) {
                 baseURI[lastSlash + 1] = '\0';
 
                 XMLCh * uriT = XMLString::transcode(baseURI);
-#if XSEC_HAVE_GETCWD_DYN
+#ifdef XSEC_HAVE_GETCWD_DYN
                 free(path);
                 free(baseURI);
 #endif
@@ -802,7 +811,7 @@ int evaluate(int argc, char ** argv) {
             delete formatTarget;
         doc->release();
 
-#if defined (XSEC_HAVE_OPENSSL)
+#ifdef XSEC_HAVE_OPENSSL
         ERR_load_crypto_strings();
         BIO * bio_err;
         if ((bio_err=BIO_new(BIO_s_file())) != NULL)

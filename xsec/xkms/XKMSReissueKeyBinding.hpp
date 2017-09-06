@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSKeyBindingAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 /**
  * @ingroup xkms
  */
@@ -94,5 +96,7 @@ private:
 	XKMSReissueKeyBinding & operator = (const XKMSReissueKeyBinding &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSREISSUEKEYBINDING_INCLUDE */

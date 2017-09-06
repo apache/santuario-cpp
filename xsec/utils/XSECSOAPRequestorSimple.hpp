@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/utils/XSECSOAPRequestor.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include <xercesc/util/XMLUri.hpp>
 
 XSEC_DECLARE_XERCES_CLASS(DOMDocument);
@@ -140,6 +142,6 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XSECSOAPREQUESTORSIMPLE_INCLUDE */
-

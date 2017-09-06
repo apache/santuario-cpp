@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRequestAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSQueryKeyBinding;
 
 /**
@@ -119,5 +121,7 @@ private:
 	XKMSStatusRequest & operator = (const XKMSStatusRequest &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSSTATUSREQUEST_INCLUDE */

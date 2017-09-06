@@ -53,6 +53,10 @@
 // #define XSEC_HAVE_WINCAPI 1
 // #define XSEC_HAVE_NSS 1
 
+/*
+ * Define if XKMS support is enabled.
+ */
+// #define XSEC_XKMS_ENABLED 1
 
 /*
  * Some settings for OpenSSL if we have it

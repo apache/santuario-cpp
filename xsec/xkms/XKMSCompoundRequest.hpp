@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRequestAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSLocateRequest;
 class XKMSValidateRequest;
 class XKMSRegisterRequest;
@@ -224,5 +226,7 @@ private:
 	XKMSCompoundRequest & operator = (const XKMSCompoundRequest &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSCOMPOUNDREQUEST_INCLUDE */

@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRequestAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class DSIGSignature;
 class XKMSAuthentication;
 class XKMSPrototypeKeyBinding;
@@ -181,5 +183,7 @@ private:
 	XKMSRegisterRequest & operator = (const XKMSRegisterRequest &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSREGISTERREQUEST_INCLUDE */

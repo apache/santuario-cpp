@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSRequestAbstractType.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class DSIGSignature;
 class XKMSAuthentication;
 class XKMSRevokeKeyBinding;
@@ -178,5 +180,7 @@ private:
 	XKMSRevokeRequest & operator = (const XKMSRevokeRequest &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSREVOKEREQUEST_INCLUDE */

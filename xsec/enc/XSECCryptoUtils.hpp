@@ -40,6 +40,7 @@
  * @ingroup crypto
  */
 
+#ifdef XSEC_XKMS_ENABLED
 // --------------------------------------------------------------------------------
 //           XKMS Limited-Use Shared Secret handling
 // --------------------------------------------------------------------------------
@@ -56,6 +57,7 @@ int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2(unsigned char * i
 /* Calculate encoding 2 - Input is encoding 1 */
 int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
 int DSIG_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
+#endif
 
 // --------------------------------------------------------------------------------
 //           Some Base64 helpers

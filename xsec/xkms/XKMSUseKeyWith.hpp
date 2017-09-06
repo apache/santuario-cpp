@@ -33,6 +33,8 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 /**
  * @ingroup xkms
  */
@@ -129,5 +131,7 @@ private:
 	XKMSUseKeyWith & operator = (const XKMSUseKeyWith &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSUSEKEYWITH_INCLUDE */

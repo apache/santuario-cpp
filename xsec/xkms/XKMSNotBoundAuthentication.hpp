@@ -33,6 +33,7 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
 
 /**
  * @ingroup xkms
@@ -128,5 +129,7 @@ private:
 	XKMSNotBoundAuthentication & operator = (const XKMSNotBoundAuthentication &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSNOTBOUNDAUTHENTICATION_INCLUDE */

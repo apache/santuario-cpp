@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSKeyBindingAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 /**
  * @ingroup xkms
  */
@@ -84,5 +86,7 @@ private:
 	XKMSUnverifiedKeyBinding & operator = (const XKMSUnverifiedKeyBinding &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSUNVERIFIEDKEYBINDING_INCLUDE */

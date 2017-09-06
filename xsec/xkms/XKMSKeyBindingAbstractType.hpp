@@ -33,6 +33,8 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class DSIGKeyInfoList;
 class DSIGKeyInfoMgmtData;
 class DSIGKeyInfoName;
@@ -368,5 +370,7 @@ private:
 	XKMSKeyBindingAbstractType & operator = (const XKMSKeyBindingAbstractType &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSKEYBINDINGABSTRACTTYPE_INCLUDE */

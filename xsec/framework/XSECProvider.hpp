@@ -198,6 +198,7 @@ public:
 
 	//@}
 
+#ifdef XSEC_XKMS_ENABLED
 	/** @name XKMS Functions */
 	//@{
 
@@ -213,6 +214,7 @@ public:
 	 */
 
 	XKMSMessageFactory * getXKMSMessageFactory(void);
+#endif
 
 	/** @name Environmental Options */
 	//@{
@@ -247,7 +249,9 @@ private:
 	SignatureListVectorType						m_activeSignatures;
 	CipherListVectorType						m_activeCiphers;
 
+#ifdef XSEC_XKMS_ENABLED
 	XKMSMessageFactory							* mp_xkmsMessageFactory;
+#endif
 
 	XSECURIResolver								* mp_URIResolver;
 	XERCES_CPP_NAMESPACE_QUALIFIER XMLMutex		m_providerMutex;

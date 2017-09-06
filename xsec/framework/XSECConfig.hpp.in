@@ -36,4 +36,7 @@
 /* Define to 1 if OpenSSL has SHA2 support. */
 #undef XSEC_OPENSSL_HAVE_SHA2
 
+/* Define to 1 if XKMS support is included. */
+#undef XSEC_XKMS_ENABLED
+
 #include <xsec/framework/XSECVersion.hpp>

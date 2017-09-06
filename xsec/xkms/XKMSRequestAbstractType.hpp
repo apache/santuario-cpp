@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSMessageAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSRespondWith;
 class XKMSResponseMechanism;
 
@@ -265,5 +267,7 @@ private:
 	XKMSRequestAbstractType & operator = (const XKMSRequestAbstractType &);
 
 };
+
+#endif /* XSEC_XKMS_ENABLED */
 
 #endif /* XKMSREQUESTABSTRACTTYPE_INCLUDE */

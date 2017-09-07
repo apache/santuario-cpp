@@ -2519,7 +2519,7 @@ int main(int argc, char **argv) {
 		}
 #endif
 #if defined(XSEC_HAVE_NSS)
-		else if (stricmp(argv[paramCount], "--nss") == 0 || stricmp(argv[paramCount], "-n") == 0) {
+		else if (_stricmp(argv[paramCount], "--nss") == 0 || _stricmp(argv[paramCount], "-n") == 0) {
 			g_useNSS = true;
 			paramCount++;
 		}

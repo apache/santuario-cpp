@@ -255,7 +255,7 @@ int NSSCryptoSymmetricKey::decryptCtxInit(const unsigned char * iv) {
             m_ivSize = 16;
 
 		}
-		else if (m_keyMode == MODE_ECB {
+		else if (m_keyMode == MODE_ECB) {
 
 			SECItem * secParam = PK11_ParamFromIV(CKM_AES_ECB, NULL);
 			mp_ctx = PK11_CreateContextBySymKey(CKM_AES_ECB, CKA_DECRYPT, mp_k, secParam);

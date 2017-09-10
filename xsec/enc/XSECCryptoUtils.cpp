@@ -43,7 +43,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-#ifdef XSEC_AM_HAVE_XKMS
+#ifdef XSEC_XKMS_ENABLED
 
 // --------------------------------------------------------------------------------
 //           XKMS Limited-Use Shared Secret handling

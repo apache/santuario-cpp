@@ -2415,31 +2415,6 @@ void testEncrypt(DOMImplementation *impl) {
 	doc->release();
 
 }
-
-// --------------------------------------------------------------------------------
-//           Test XKMS basics
-// --------------------------------------------------------------------------------
-#if 0
-void testXKMS(DOMImplementation *impl) {
-
-	// This is really a place holder
-
-	cerr << "Making POST call to server ...  " << endl;
-	
-	// Create a document
-    
-	DOMDocument * doc = createTestDoc(impl);
-	DOMNode * categoryNode = findNode(doc, MAKE_UNICODE_STRING("category"));
-
-	/*
-	XSECSOAPRequestorSimpleWin32 req(MAKE_UNICODE_STRING("http://zeus/post.php"));
-
-	req.doRequest(doc);
-	*/
-
-	doc->release();
-}
-#endif
 	
 // --------------------------------------------------------------------------------
 //           Print usage instructions
@@ -2469,9 +2444,6 @@ void printUsage(void) {
 	cerr << "         Only run basic encryption test\n\n";
 	cerr << "     --encryption-unit-only/-u\n";
 	cerr << "         Only run encryption unit tests\n\n";
-//	cerr << "     --xkms-only/-x\n";
-//	cerr << "         Only run basic XKMS test\n\n";
-
 }
 // --------------------------------------------------------------------------------
 //           Main

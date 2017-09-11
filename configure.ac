@@ -101,13 +101,13 @@ AC_CHECK_HEADER([xercesc/dom/DOM.hpp],,AC_MSG_ERROR([unable to find xerces heade
 AC_MSG_CHECKING([Xerces version])
 AC_PREPROC_IFELSE(
     [AC_LANG_PROGRAM([#include <xercesc/util/XercesVersion.hpp>],
-[#if  _XERCES_VERSION >= 30000
+[#if  _XERCES_VERSION >= 30200
 int i = 0;
 #else
 #error cannot use version 1.x or 2.x
 #endif])],
     [AC_MSG_RESULT(OK)],
-    [AC_MSG_FAILURE([Xerces-C 3 is required])])
+    [AC_MSG_FAILURE([Xerces-C 3.2+ is required])])
 
 AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/PlatformUtils.hpp>]], [[xercesc::XMLPlatformUtils::Initialize()]])],
     [],[AC_MSG_ERROR([unable to link with Xerces])])

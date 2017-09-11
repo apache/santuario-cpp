@@ -296,27 +296,6 @@ void safeBuffer::sbStrinsIn(const char * inStr, xsecsize_t offset) {
 
 }
 
-void safeBuffer::sbStrinsIn(const XMLCh * inStr, xsecsize_t offset) {
-
-    checkBufferType(BUFFER_UNICODE);
-
-    xsecsize_t bl = XMLString::stringLen((XMLCh *) buffer) * size_XMLCh;
-    xsecsize_t il = XMLString::stringLen((XMLCh *) inStr) * size_XMLCh;
-
-    xsecsize_t xoffset = offset * size_XMLCh;
-	if (xoffset > bl) {
-		throw XSECException(XSECException::SafeBufferError,
-			"Attempt to insert string after termination point");
-	}
-
-	checkAndExpand(bl + il + size_XMLCh);
-
-	memmove(&buffer[xoffset + il], &buffer[xoffset], bl - xoffset + size_XMLCh);
-	memcpy(&buffer[xoffset], inStr, il);
-
-}
-
-
 void safeBuffer::sbMemcpyOut(void *outBuf, xsecsize_t n) const {
 
 	// WARNING - JUST ASSUMES OUTPUT BUFFER LONG ENOUGH
@@ -373,17 +352,6 @@ int safeBuffer::sbOffsetStrcmp(const char * inStr, xsecsize_t offset) const {
 		return -1;
 
 	return (strcmp((char *) &buffer[offset], inStr));
-
-}
-
-int safeBuffer::sbOffsetStrncmp(const char * inStr, xsecsize_t offset, xsecsize_t n) const {
-
-    checkBufferType(BUFFER_CHAR);
-    xsecsize_t bl = (xsecsize_t) strlen((char *) buffer);
-	if (offset > bl)
-		return -1;
-
-	return (strncmp((char *) &buffer[offset], inStr, n));
 
 }
 

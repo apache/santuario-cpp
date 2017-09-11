@@ -104,14 +104,11 @@ public:
 
     int sbStrncmp(const char * inStr, xsecsize_t n) const;
     int sbOffsetStrcmp(const char * inStr, xsecsize_t offset) const;
-    int sbOffsetStrncmp(const char * inStr, xsecsize_t offset, xsecsize_t n) const;
     int sbStrcmp(const char * inStr) const;
     int sbStrcmp(const safeBuffer & inStr) const;
 
     xsecsize_t sbStrstr(const char * inStr) const;
     xsecsize_t sbOffsetStrstr(const char * inStr, xsecsize_t offset) const;
-	
-    void sbStrinsIn(const XMLCh * inStr, xsecsize_t offset);
 
 	// XMLCh and char common functions
 	void sbStrlwr(void);		// Lowercase the string

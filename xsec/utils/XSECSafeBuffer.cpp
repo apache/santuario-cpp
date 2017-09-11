@@ -387,39 +387,23 @@ int safeBuffer::sbOffsetStrncmp(const char * inStr, xsecsize_t offset, xsecsize_
 
 }
 
-long safeBuffer::sbStrstr(const char * inStr) const {
+xsecsize_t safeBuffer::sbStrstr(const char * inStr) const {
 
 	checkBufferType(BUFFER_CHAR);
-	char* p = strstr((char *) buffer, inStr);
+	const char* p = strstr((char *) buffer, inStr);
 
 	if (p == NULL)
 		return -1;
 
-	long d = (unsigned long) p - (unsigned long) buffer;
-	if (d < 0 || d > bufferSize)
+	xsecsize_t d = p - (char*) buffer;
+	if (d > bufferSize)
 		return -1;
 
 	return d;
 
 }
 
-long safeBuffer::sbStrstr(const XMLCh * inStr) const {
-
-	checkBufferType(BUFFER_UNICODE);
-	XMLCh* p = XMLString::findAny((XMLCh *) buffer, inStr);
-
-	if (p == NULL)
-		return -1;
-
-	long d = ((unsigned long) ((p - (unsigned long) buffer)) / size_XMLCh);
-	if (d < 0 || d > bufferSize)
-		return -1;
-
-	return d;
-
-}
-
-long safeBuffer::sbOffsetStrstr(const char * inStr, xsecsize_t offset) const {
+xsecsize_t safeBuffer::sbOffsetStrstr(const char * inStr, xsecsize_t offset) const {
 
 	checkBufferType(BUFFER_CHAR);
 	xsecsize_t bl = (xsecsize_t) strlen((char *) buffer);
@@ -427,13 +411,13 @@ long safeBuffer::sbOffsetStrstr(const char * inStr, xsecsize_t offset) const {
 	if (offset > bl)
 		return -1;
 
-	char* p = strstr((char *) &buffer[offset], inStr);
+	const char* p = strstr((char *) &buffer[offset], inStr);
 
 	if (p == NULL)
 		return -1;
 
-	long d = (unsigned long) p - (unsigned long) buffer;
-	if (d < 0 || d > bufferSize)
+	xsecsize_t d = p - (char*) buffer;
+	if (d > bufferSize)
 		return -1;
 
 	return d;

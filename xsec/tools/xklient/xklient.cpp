@@ -200,9 +200,9 @@ ostream & operator<<(ostream& target, X2C &x) {
 }
 
 inline
-void levelSet(int level) {
+void levelSet(unsigned int level) {
 
-    for (int i = 0; i < level; ++i)
+    for (unsigned int i = 0; i < level; ++i)
         cout << "    ";
 
 }
@@ -2780,7 +2780,7 @@ XKMSMessageAbstractType * createCompoundRequest(XSECProvider &prov, DOMDocument 
 //           MsgDump
 // --------------------------------------------------------------------------------
 
-void doMessageAbstractTypeDump(XKMSMessageAbstractType *msg, int level) {
+void doMessageAbstractTypeDump(XKMSMessageAbstractType *msg, unsigned int level) {
 
     cout << endl;
     levelSet(level);
@@ -2820,7 +2820,7 @@ void doMessageAbstractTypeDump(XKMSMessageAbstractType *msg, int level) {
     }
 }
 
-void doRequestAbstractTypeDump(XKMSRequestAbstractType *msg, int level) {
+void doRequestAbstractTypeDump(XKMSRequestAbstractType *msg, unsigned int level) {
 
     levelSet(level);
     int i = msg->getRespondWithSize();
@@ -2836,7 +2836,7 @@ void doRequestAbstractTypeDump(XKMSRequestAbstractType *msg, int level) {
     
 }
 
-void doResultTypeDump(XKMSResultType *msg, int level) {
+void doResultTypeDump(XKMSResultType *msg, unsigned int level) {
 
     const XMLCh * rid = msg->getRequestId();
     char * s;
@@ -2874,7 +2874,7 @@ void doResultTypeDump(XKMSResultType *msg, int level) {
     }
 }
 
-void doKeyInfoDump(DSIGKeyInfoList * l, int level) {
+void doKeyInfoDump(DSIGKeyInfoList * l, unsigned int level) {
 
 
     int size = (int) l->getSize();
@@ -2959,7 +2959,7 @@ void doKeyInfoDump(DSIGKeyInfoList * l, int level) {
 }
 
 
-void doKeyBindingAbstractDump(XKMSKeyBindingAbstractType * msg, int level) {
+void doKeyBindingAbstractDump(XKMSKeyBindingAbstractType * msg, unsigned int level) {
 
     levelSet(level);
     cout << "Key Binding found." << endl;
@@ -3016,7 +3016,7 @@ void doKeyBindingAbstractDump(XKMSKeyBindingAbstractType * msg, int level) {
 
 }
 
-void doUnverifiedKeyBindingDump(XKMSUnverifiedKeyBinding * ukb, int level) {
+void doUnverifiedKeyBindingDump(XKMSUnverifiedKeyBinding * ukb, unsigned int level) {
 
     doKeyBindingAbstractDump((XKMSKeyBindingAbstractType *) ukb, level);
 
@@ -3038,7 +3038,7 @@ void doStatusReasonDump(XKMSStatus::StatusValue v, XKMSStatus *s, int level) {
 
 }
 
-void doKeyBindingDump(XKMSKeyBinding * kb, int level) {
+void doKeyBindingDump(XKMSKeyBinding * kb, unsigned int level) {
 
     /* Dump the status */
 
@@ -3061,7 +3061,7 @@ void doKeyBindingDump(XKMSKeyBinding * kb, int level) {
 
 }
 
-void doRevokeKeyBindingDump(XKMSRevokeKeyBinding * kb, int level) {
+void doRevokeKeyBindingDump(XKMSRevokeKeyBinding * kb, unsigned int level) {
 
     /* Dump the status */
 
@@ -3084,7 +3084,7 @@ void doRevokeKeyBindingDump(XKMSRevokeKeyBinding * kb, int level) {
 
 }
 
-void doRecoverKeyBindingDump(XKMSRecoverKeyBinding * kb, int level) {
+void doRecoverKeyBindingDump(XKMSRecoverKeyBinding * kb, unsigned int level) {
 
     /* Dump the status */
 
@@ -3107,7 +3107,7 @@ void doRecoverKeyBindingDump(XKMSRecoverKeyBinding * kb, int level) {
 
 }
 
-void doReissueKeyBindingDump(XKMSReissueKeyBinding * kb, int level) {
+void doReissueKeyBindingDump(XKMSReissueKeyBinding * kb, unsigned int level) {
 
     /* Dump the status */
 
@@ -3130,7 +3130,7 @@ void doReissueKeyBindingDump(XKMSReissueKeyBinding * kb, int level) {
 
 }
 
-void doAuthenticationDump(XKMSAuthentication *a, int level) {
+void doAuthenticationDump(XKMSAuthentication *a, unsigned int level) {
 
 
     if (a == NULL)
@@ -3176,7 +3176,7 @@ void doAuthenticationDump(XKMSAuthentication *a, int level) {
 int doLocateRequestDump(XKMSLocateRequest *msg) {
 
     cout << endl << "This is a LocateRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);
@@ -3191,7 +3191,7 @@ int doLocateRequestDump(XKMSLocateRequest *msg) {
 int doStatusRequestDump(XKMSStatusRequest *msg) {
 
     cout << endl << "This is a StatusRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);
@@ -3202,7 +3202,7 @@ int doStatusRequestDump(XKMSStatusRequest *msg) {
 int doValidateRequestDump(XKMSValidateRequest *msg) {
 
     cout << endl << "This is a ValidateRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);
@@ -3217,7 +3217,7 @@ int doValidateRequestDump(XKMSValidateRequest *msg) {
 int doLocateResultDump(XKMSLocateResult *msg) {
 
     cout << endl << "This is a LocateResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3244,7 +3244,7 @@ int doLocateResultDump(XKMSLocateResult *msg) {
 int doValidateResultDump(XKMSValidateResult *msg) {
 
     cout << endl << "This is a ValidateResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3271,7 +3271,7 @@ int doValidateResultDump(XKMSValidateResult *msg) {
 int doRegisterResultDump(XKMSRegisterResult *msg) {
 
     cout << endl << "This is a RegisterResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3392,7 +3392,7 @@ int doRegisterResultDump(XKMSRegisterResult *msg) {
 int doRecoverResultDump(XKMSRecoverResult *msg) {
 
     cout << endl << "This is a RecoverResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3514,7 +3514,7 @@ int doRecoverResultDump(XKMSRecoverResult *msg) {
 int doRevokeResultDump(XKMSRevokeResult *msg) {
 
     cout << endl << "This is a RevokeResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3541,7 +3541,7 @@ int doRevokeResultDump(XKMSRevokeResult *msg) {
 int doReissueResultDump(XKMSReissueResult *msg) {
 
     cout << endl << "This is a ReissueResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3568,7 +3568,7 @@ int doReissueResultDump(XKMSReissueResult *msg) {
 int doStatusResultDump(XKMSStatusResult *msg) {
 
     cout << endl << "This is a StatusResult Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3579,7 +3579,7 @@ int doStatusResultDump(XKMSStatusResult *msg) {
 int doResultDump(XKMSResult *msg) {
 
     cout << endl << "This is a Result Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doResultTypeDump(msg, level);
@@ -3590,7 +3590,7 @@ int doResultDump(XKMSResult *msg) {
 int doRegisterRequestDump(XKMSRegisterRequest *msg) {
 
     cout << endl << "This is a RegisterRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);
@@ -3647,7 +3647,7 @@ int doRegisterRequestDump(XKMSRegisterRequest *msg) {
 int doRevokeRequestDump(XKMSRevokeRequest *msg) {
 
     cout << endl << "This is a RevokeRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);
@@ -3677,7 +3677,7 @@ int doRevokeRequestDump(XKMSRevokeRequest *msg) {
 int doRecoverRequestDump(XKMSRecoverRequest *msg) {
 
     cout << endl << "This is a RecoverRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);
@@ -3698,7 +3698,7 @@ int doRecoverRequestDump(XKMSRecoverRequest *msg) {
 int doReissueRequestDump(XKMSReissueRequest *msg) {
 
     cout << endl << "This is a ReiussueRequest Message" << endl;
-    int level = 1;
+    unsigned int level = 1;
     
     doMessageAbstractTypeDump(msg, level);
     doRequestAbstractTypeDump(msg, level);

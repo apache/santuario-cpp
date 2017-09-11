@@ -127,14 +127,14 @@ ostream & operator<<(ostream& target, X2C &x) {
 }
 
 inline
-void levelSet(int level) {
+void levelSet(unsigned int level) {
 
-	for (int i = 0; i < level; ++i)
+	for (unsigned int i = 0; i < level; ++i)
 		cout << "    ";
 
 }
 
-void outputTransform(DSIGTransform * t, int level) {
+void outputTransform(DSIGTransform * t, unsigned int level) {
 
 	switch (t->getTransformType()) {
 
@@ -260,7 +260,7 @@ void outputTransform(DSIGTransform * t, int level) {
 
 }
 		
-void outputReferences(DSIGReferenceList *rl, int level) {
+void outputReferences(DSIGReferenceList *rl, unsigned int level) {
 
 	int s = (int) rl->getSize();
 

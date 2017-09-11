@@ -249,7 +249,6 @@ XSECXPathNodeList * TXFMXPathFilter::evaluateSingleExpr(DSIGXPathFilterExpr *exp
 
 		// THIS IS A KLUDGE AND SHOULD BE DONE BETTER
 
-		int offset = 0;
 		safeBuffer k(KLUDGE_PREFIX);
 		k.sbStrcatIn(":");
 
@@ -257,7 +256,7 @@ XSECXPathNodeList * TXFMXPathFilter::evaluateSingleExpr(DSIGXPathFilterExpr *exp
 		safeBuffer exprSB;
 		exprSB << (*mp_formatter << expr->m_expr.rawXMLChBuffer());
 
-		offset = exprSB.sbStrstr("here()");
+		XMLSSize_t offset = exprSB.sbStrstr("here()");
 
 		while (offset >= 0) {
 

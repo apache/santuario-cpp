@@ -417,11 +417,10 @@ void TXFMXPath::evaluateExpr(DOMNode *h, safeBuffer inexpr) {
 
 		// THIS IS A KLUDGE AND SHOULD BE DONE BETTER
 
-		int offset = 0;
 		safeBuffer k(KLUDGE_PREFIX);
 		k.sbStrcatIn(":");
 
-		offset = inexpr.sbStrstr("here()");
+		XMLSSize_t offset = inexpr.sbStrstr("here()");
 
 		while (offset >= 0) {
 

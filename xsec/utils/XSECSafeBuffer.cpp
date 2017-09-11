@@ -355,7 +355,7 @@ int safeBuffer::sbOffsetStrcmp(const char * inStr, XMLSize_t offset) const {
 
 }
 
-XMLSize_t safeBuffer::sbStrstr(const char * inStr) const {
+XMLSSize_t safeBuffer::sbStrstr(const char * inStr) const {
 
 	checkBufferType(BUFFER_CHAR);
 	const char* p = strstr((char *) buffer, inStr);
@@ -363,18 +363,18 @@ XMLSize_t safeBuffer::sbStrstr(const char * inStr) const {
 	if (p == NULL)
 		return -1;
 
-	XMLSize_t d = p - (char*) buffer;
-	if (d > bufferSize)
+	XMLSSize_t d = p - (char*) buffer;
+	if (d > bufferSize || d < 0)
 		return -1;
 
 	return d;
 
 }
 
-XMLSize_t safeBuffer::sbOffsetStrstr(const char * inStr, XMLSize_t offset) const {
+XMLSSize_t safeBuffer::sbOffsetStrstr(const char * inStr, XMLSize_t offset) const {
 
 	checkBufferType(BUFFER_CHAR);
-	XMLSize_t bl = (XMLSize_t) strlen((char *) buffer);
+	XMLSize_t bl = strlen((char *) buffer);
 
 	if (offset > bl)
 		return -1;
@@ -384,8 +384,8 @@ XMLSize_t safeBuffer::sbOffsetStrstr(const char * inStr, XMLSize_t offset) const
 	if (p == NULL)
 		return -1;
 
-	XMLSize_t d = p - (char*) buffer;
-	if (d > bufferSize)
+	XMLSSize_t d = p - (char*) buffer;
+	if (d > bufferSize || d < 0)
 		return -1;
 
 	return d;

@@ -55,18 +55,18 @@ void safeBuffer::checkAndExpand(XMLSize_t size) {
 	// For a given size, check it will fit (with one byte spare)
 	// and expand if necessary
 
-	if (size + 2 < bufferSize)
+	if (bufferSize >= 2 && size < bufferSize - 2) {
 		return;
+	}
 
-	// Resize and add 1K for further growth
-	XMLSize_t newBufferSize = size + 1024;
-
-	// Did we overflow?
-	if (size + 2 > newBufferSize) {
+	if (size > XMLSIZE_MAX - DEFAULT_SAFE_BUFFER_SIZE) {
 		/* We've got a string that's too big to deal with */
 		throw XSECException(XSECException::SafeBufferError,
 			"Buffer has grown too large");
 	}
+
+	// Resize and add 1K for further growth
+	XMLSize_t newBufferSize = size + DEFAULT_SAFE_BUFFER_SIZE;
 
 	unsigned char * newBuffer = new unsigned char[newBufferSize];
 	if (newBuffer == NULL)

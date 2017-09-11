@@ -59,7 +59,7 @@ void safeBuffer::checkAndExpand(XMLSize_t size) {
 		return;
 	}
 
-	if (size > XMLSIZE_MAX - DEFAULT_SAFE_BUFFER_SIZE) {
+	if (size > XERCES_SIZE_MAX - DEFAULT_SAFE_BUFFER_SIZE) {
 		/* We've got a string that's too big to deal with */
 		throw XSECException(XSECException::SafeBufferError,
 			"Buffer has grown too large");

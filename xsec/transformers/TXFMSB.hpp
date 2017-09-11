@@ -42,8 +42,8 @@ class DSIG_EXPORT TXFMSB : public TXFMBase {
 private:
 
 	safeBuffer	sb;			// SafeBuffer to use
-	xsecsize_t toOutput;	// Amount left to output
-	xsecsize_t sbs;		    // Size of raw buffer
+	XMLSize_t toOutput;	// Amount left to output
+	XMLSize_t sbs;		    // Size of raw buffer
 
 public:
 

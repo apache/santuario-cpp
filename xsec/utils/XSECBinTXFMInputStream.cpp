@@ -79,13 +79,13 @@ XMLFilePos XSECBinTXFMInputStream::curPos() const {
 	return m_currentIndex;
 }
 
-xsecsize_t XSECBinTXFMInputStream::readBytes(XMLByte* const  toFill,
-					   const xsecsize_t maxToRead) {
+XMLSize_t XSECBinTXFMInputStream::readBytes(XMLByte* const  toFill,
+					   const XMLSize_t maxToRead) {
 
 	if (m_done == true)
 		return 0;
 
-	xsecsize_t bytesRead = mp_txfm->readBytes(toFill, maxToRead);
+	XMLSize_t bytesRead = mp_txfm->readBytes(toFill, maxToRead);
 
 	if (bytesRead == 0) {
 

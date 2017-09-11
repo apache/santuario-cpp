@@ -64,7 +64,7 @@ protected:
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode		* mp_startNode,	// Node to start processing from
 										*mp_nextNode;	// Next Node to be processeed
 	safeBuffer							m_buffer;		// Buffer holding parsed output
-	xsecsize_t							m_bufferLength,	// Length of input currently in buffer
+	XMLSize_t							m_bufferLength,	// Length of input currently in buffer
 										m_bufferPoint;	// Next "character" to copy out
 	bool								m_allNodesDone;	// Have we completed?
 
@@ -88,7 +88,7 @@ public:
 	// outputBuffer is used by all canonicalisers to output the next numBytes bytes of
 	// canonicalised XML to the nominated buffer
 
-	xsecsize_t outputBuffer(unsigned char *outBuffer, xsecsize_t numBytes);
+	XMLSize_t outputBuffer(unsigned char *outBuffer, XMLSize_t numBytes);
 	
 	// setStartNode sets the starting point for the output if it is a sub-document 
 	// that needs canonicalisation and we want to re-start
@@ -99,7 +99,7 @@ protected:
 
 	// processNextNode is the pure virtual function that must be implemented by all canons
 
-	virtual xsecsize_t processNextNode() = 0;
+	virtual XMLSize_t processNextNode() = 0;
 
 };
 

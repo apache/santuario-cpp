@@ -4517,7 +4517,7 @@ int doMsgDump(int argc, char ** argv, int paramCount) {
     }
 
     bool errorsOccured = false;
-    xsecsize_t errorCount = 0;
+    XMLSize_t errorCount = 0;
     try
     {
         parser->parse(inputFile);

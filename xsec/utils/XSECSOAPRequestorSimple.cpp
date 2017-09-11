@@ -208,7 +208,7 @@ DOMDocument * XSECSOAPRequestorSimple::parseAndUnwrap(const char * buf, unsigned
 	MemBufInputSource memIS((const XMLByte*) buf, len, "XSECMem");
 
 	parser.parse(memIS);
-	xsecsize_t errorCount = parser.getErrorCount();
+	XMLSize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
 		throw XSECException(XSECException::HTTPURIInputStreamError,
 							"Error parsing response message");

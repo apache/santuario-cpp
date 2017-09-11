@@ -76,8 +76,8 @@ public:
 
 	safeBuffer();
     safeBuffer(const safeBuffer & other);
-	safeBuffer(xsecsize_t initialSize);
-	safeBuffer(const char * inStr, xsecsize_t initialSize = DEFAULT_SAFE_BUFFER_SIZE);
+	safeBuffer(XMLSize_t initialSize);
+	safeBuffer(const char * inStr, XMLSize_t initialSize = DEFAULT_SAFE_BUFFER_SIZE);
 	~safeBuffer();
 
 	static void init(void);
@@ -86,51 +86,51 @@ public:
 
 	void sbStrcpyIn(const char * inStr);
 	void sbStrcpyIn(const safeBuffer & inStr);
-    void sbStrncpyIn(const char * inStr, xsecsize_t n);
-    void sbStrncpyIn(const safeBuffer & inStr, xsecsize_t n);
+    void sbStrncpyIn(const char * inStr, XMLSize_t n);
+    void sbStrncpyIn(const safeBuffer & inStr, XMLSize_t n);
 
 	void sbStrcatIn(const char * inStr);
 	void sbStrcatIn(const safeBuffer & inStr);
-    void sbStrncatIn(const char * inStr, xsecsize_t n);
-    void sbStrinsIn(const char * inStr, xsecsize_t offset);
+    void sbStrncatIn(const char * inStr, XMLSize_t n);
+    void sbStrinsIn(const char * inStr, XMLSize_t offset);
 
-    void sbMemcpyIn(const void * inBuf, xsecsize_t n);
-    void sbMemcpyIn(xsecsize_t offset, const void * inBuf, xsecsize_t n);
+    void sbMemcpyIn(const void * inBuf, XMLSize_t n);
+    void sbMemcpyIn(XMLSize_t offset, const void * inBuf, XMLSize_t n);
 
-    void sbMemcpyOut(void * outBuf, xsecsize_t n) const;
-    void sbMemshift(xsecsize_t toOffset, xsecsize_t fromOffset, xsecsize_t len);
+    void sbMemcpyOut(void * outBuf, XMLSize_t n) const;
+    void sbMemshift(XMLSize_t toOffset, XMLSize_t fromOffset, XMLSize_t len);
 
 	// Comparison functions
 
-    int sbStrncmp(const char * inStr, xsecsize_t n) const;
-    int sbOffsetStrcmp(const char * inStr, xsecsize_t offset) const;
+    int sbStrncmp(const char * inStr, XMLSize_t n) const;
+    int sbOffsetStrcmp(const char * inStr, XMLSize_t offset) const;
     int sbStrcmp(const char * inStr) const;
     int sbStrcmp(const safeBuffer & inStr) const;
 
-    xsecsize_t sbStrstr(const char * inStr) const;
-    xsecsize_t sbOffsetStrstr(const char * inStr, xsecsize_t offset) const;
+    XMLSize_t sbStrstr(const char * inStr) const;
+    XMLSize_t sbOffsetStrstr(const char * inStr, XMLSize_t offset) const;
 
 	// XMLCh and char common functions
 	void sbStrlwr(void);		// Lowercase the string
 
 	// Operators
 
-    unsigned char & operator[](xsecsize_t n);
+    unsigned char & operator[](XMLSize_t n);
 	safeBuffer & operator= (const safeBuffer & cpy);
 	safeBuffer & operator= (const XMLCh * inStr);
 	safeBuffer & operator << (TXFMBase * t);
 
 	// Get functions
 
-	xsecsize_t sbStrlen(void) const;
-	xsecsize_t sbRawBufferSize(void) const;
+	XMLSize_t sbStrlen(void) const;
+	XMLSize_t sbRawBufferSize(void) const;
 
 	// raw buffer manipulation
 
 	const unsigned char * rawBuffer() const;
 	const char * rawCharBuffer() const;
 	const XMLCh * rawXMLChBuffer() const;
-    void resize(xsecsize_t sz);                 // NOTE : Only grows
+    void resize(XMLSize_t sz);                 // NOTE : Only grows
 	void setBufferType(bufferType bt);		    // Use with care
 
 	// Unicode (UTF-16 manipulation)
@@ -152,11 +152,11 @@ private:
 	// Internal function that is used to get a string size and
 	// then re-allocate if necessary
 
-    void checkAndExpand(xsecsize_t size);
+    void checkAndExpand(XMLSize_t size);
 	void checkBufferType(bufferType bt) const;
 
 	unsigned char * buffer;
-	xsecsize_t      bufferSize;
+	XMLSize_t      bufferSize;
 	mutable XMLCh   * mp_XMLCh;
 	bufferType		m_bufferType;
 

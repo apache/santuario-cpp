@@ -299,7 +299,7 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
     XSEC_RELEASE_XMLCH(trailer);
 
     // Create an input source
-    xsecsize_t bytes = XMLString::stringLen(sbt.rawCharBuffer());
+    XMLSize_t bytes = XMLString::stringLen(sbt.rawCharBuffer());
     MemBufInputSource memIS((const XMLByte*) sbt.rawBuffer(), bytes, "XSECMem");
 
     XercesDOMParser parser;
@@ -311,7 +311,7 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
     parser.setSecurityManager(&securityManager);
 
     parser.parse(memIS);
-    xsecsize_t errorCount = parser.getErrorCount();
+    XMLSize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
         throw XSECException(XSECException::CipherError, "Errors occurred during de-serialisation of decrypted element content");
 

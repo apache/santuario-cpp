@@ -127,7 +127,7 @@ public:
 protected:
 
 	// Implementation of virtual function
-	xsecsize_t processNextNode();
+	XMLSize_t processNextNode();
 
 	// Test whether a name space is in the non-exclusive list
 	bool inNonExclNSList(safeBuffer &ns);

@@ -517,7 +517,7 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 	}
 
 	/* Check to see if we are one of the more exotic RSA signatures */
-	xsecsize_t cnt = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
+	XMLSize_t cnt = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
 
 	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURISIGBASEMORE, cnt) == 0) {
 
@@ -575,9 +575,9 @@ bool XSECmapURIToHashMethod(const XMLCh * URI,
 
 
 	// Check this is a known prefix on the URI.
-	xsecsize_t blen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASE);
-	xsecsize_t bmlen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
-	xsecsize_t belen = XMLString::stringLen(DSIGConstants::s_unicodeStrURIXENC);
+	XMLSize_t blen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASE);
+	XMLSize_t bmlen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
+	XMLSize_t belen = XMLString::stringLen(DSIGConstants::s_unicodeStrURIXENC);
 	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURISIGBASE, blen) == 0) {
 
 		// This is actually cheating - this will return SHA256 (as an example), even if
@@ -641,7 +641,7 @@ bool XSECmapURIToMaskGenerationFunc(const XMLCh * URI, maskGenerationFunc & mgf)
 
 
 	// Check this is a known prefix on the URI.
-	xsecsize_t len = XMLString::stringLen(DSIGConstants::s_unicodeStrURIMGF1_BASE);
+	XMLSize_t len = XMLString::stringLen(DSIGConstants::s_unicodeStrURIMGF1_BASE);
 	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURIMGF1_BASE, len) == 0) {
 
         hashMethod hm;

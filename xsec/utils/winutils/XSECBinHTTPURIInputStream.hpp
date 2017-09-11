@@ -86,7 +86,7 @@ public :
 	~XSECBinHTTPURIInputStream();
 
 	XMLFilePos curPos() const;
-	xsecsize_t readBytes(XMLByte* const  toFill, const xsecsize_t    maxToRead);
+	XMLSize_t readBytes(XMLByte* const  toFill, const XMLSize_t    maxToRead);
 
 	const XMLCh* getContentType() const;
 
@@ -138,7 +138,7 @@ private :
     // -----------------------------------------------------------------------
 
     unsigned int        fSocketHandle;
-    xsecsize_t          fBytesProcessed;
+    XMLSize_t          fBytesProcessed;
     char                fBuffer[4000];
     char *              fBufferEnd;
     char *              fBufferPos;

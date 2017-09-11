@@ -86,11 +86,11 @@ int SASLCleanXKMSPassPhrase(unsigned char * input, int inputLen, safeBuffer &out
 	inp[inputLen] = '\0';
 
 	XSECAutoPtrXMLCh uinput((char *) inp);
-	xsecsize_t l = XMLString::stringLen(uinput.get());
+	XMLSize_t l = XMLString::stringLen(uinput.get());
 	XMLCh* uoutput = new XMLCh[l + 1];
 	ArrayJanitor<XMLCh> j_uoutput(uoutput);
 
-	xsecsize_t i, j;
+	XMLSize_t i, j;
 	j = 0;
 
 	XMLCh ch1;

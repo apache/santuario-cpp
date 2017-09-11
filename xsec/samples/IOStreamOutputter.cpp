@@ -122,7 +122,7 @@ public:
     // -----------------------------------------------------------------------
 
     void writeChars(const   XMLByte* const  toWrite,
-                    const   xsecsize_t    count,
+                    const   XMLSize_t    count,
                             XMLFormatter * const formatter)
     {
         // Surprisingly, Solaris was the only platform on which
@@ -154,7 +154,7 @@ ostream& operator<<(ostream& target, DOMNode* toWrite)
     // Get the name and value out for convenience
     const XMLCh*   nodeName = toWrite->getNodeName();
     const XMLCh*   nodeValue = toWrite->getNodeValue();
-    xsecsize_t lent = XMLString::stringLen(nodeValue);
+    XMLSize_t lent = XMLString::stringLen(nodeValue);
 
     switch (toWrite->getNodeType())
     {
@@ -894,7 +894,7 @@ void docSetup(DOMDocument *doc) {
             encNameStr = aStr;
         }
     }
-    xsecsize_t lent = XMLString::stringLen(encNameStr);
+    XMLSize_t lent = XMLString::stringLen(encNameStr);
     gEncodingName = new XMLCh[lent + 1];
     XMLString::copyNString(gEncodingName, encNameStr, lent);
     gEncodingName[lent] = 0;

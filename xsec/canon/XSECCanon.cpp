@@ -71,15 +71,15 @@ XSECCanon::~XSECCanon() {};
 
 // Public Methods
 
-xsecsize_t XSECCanon::outputBuffer(unsigned char *outBuffer, xsecsize_t numBytes) {
+XMLSize_t XSECCanon::outputBuffer(unsigned char *outBuffer, XMLSize_t numBytes) {
 
 	// numBytes of data are required to be placed in outBuffer.
 
 	// Calculate amount left in buffer
 
-	xsecsize_t remaining = m_bufferLength - m_bufferPoint;
-	xsecsize_t bytesToGo = numBytes;
-	xsecsize_t i = 0;					// current point in outBuffer
+	XMLSize_t remaining = m_bufferLength - m_bufferPoint;
+	XMLSize_t bytesToGo = numBytes;
+	XMLSize_t i = 0;					// current point in outBuffer
 
 
 	// While we don't have enough, and have not completed - 

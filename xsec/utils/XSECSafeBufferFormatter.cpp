@@ -85,7 +85,7 @@ XSECSafeBufferFormatter::~XSECSafeBufferFormatter() {
 
 void  XSECSafeBufferFormatter::formatBuf (
 				 const XMLCh *const toFormat,
-				 const xsecsize_t count,
+				 const XMLSize_t count,
 				 const XMLFormatter::EscapeFlags escapeFlags,
 				 const XMLFormatter::UnRepFlags unrepFlags) {
 

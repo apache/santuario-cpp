@@ -129,7 +129,7 @@ int main(int argc, char **argv) {
 	// Now parse out file
 
 	bool errorsOccured = false;
-	xsecsize_t errorCount = 0;
+	XMLSize_t errorCount = 0;
     try
     {
     	parser->parse(argv[argc-1]);
@@ -194,7 +194,7 @@ int main(int argc, char **argv) {
 	// canon->XPathSelectNodes("(/descendant-or-self::node() | /descendant-or-self::node()/attribute::* | /descendant-or-self::node()/namespace::*)[ self::ietf:e1 or (parent::ietf:e1 and not(self::text() or self::e2)) or count (id(\"E3\") | ancestor-or-self::node()) = count (ancestor-or-self::node())]");
 
 	char buffer[512];
-	xsecsize_t res = canon->outputBuffer((unsigned char *) buffer, 128);
+	XMLSize_t res = canon->outputBuffer((unsigned char *) buffer, 128);
 
 
 	while (res != 0) {

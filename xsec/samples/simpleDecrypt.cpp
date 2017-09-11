@@ -132,7 +132,7 @@ int main (int argc, char **argv) {
 	MemBufInputSource* memIS = new MemBufInputSource ((const XMLByte*) letter, (unsigned int) strlen(letter), "XSECMem");
 
 	parser->parse(*memIS);
-    xsecsize_t errorCount = parser->getErrorCount();
+    XMLSize_t errorCount = parser->getErrorCount();
     if (errorCount > 0) {
 		cerr << "Error parsing input document\n";
 		exit (1);

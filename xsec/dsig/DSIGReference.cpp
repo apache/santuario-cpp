@@ -521,12 +521,12 @@ TXFMBase * DSIGReference::getURIBaseTXFM(DOMDocument * doc,
 				URI[12] == XERCES_CPP_NAMESPACE_QUALIFIER chOpenParen &&
 				URI[13] == XERCES_CPP_NAMESPACE_QUALIFIER chSingleQuote) {
 
-			xsecsize_t len = XMLString::stringLen(&URI[14]);
+			XMLSize_t len = XMLString::stringLen(&URI[14]);
 
 			XMLCh* tmp = new XMLCh[len + 1];
 			ArrayJanitor<XMLCh> j_tmp(tmp);
 
-			xsecsize_t j = 14, i = 0;
+			XMLSize_t j = 14, i = 0;
 
 			// Have an ID
 			while (i < len && URI[j] != '\'') {

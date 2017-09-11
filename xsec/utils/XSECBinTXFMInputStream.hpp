@@ -128,8 +128,8 @@ public :
 	 * @returns The number of bytes read or 0 if complete.
 	 */
 
-    virtual xsecsize_t readBytes(XMLByte* const  toFill,
-		const xsecsize_t maxToRead);
+    virtual XMLSize_t readBytes(XMLByte* const  toFill,
+		const XMLSize_t maxToRead);
 
 
     const XMLCh* getContentType() const;
@@ -141,7 +141,7 @@ private :
 	bool						m_deleteWhenDone;	// Do we delete?
 	bool						m_deleted;			// Have we deleted?
 	bool						m_done;				// Are we done?
-    xsecsize_t				    m_currentIndex;		// How much read?
+    XMLSize_t				    m_currentIndex;		// How much read?
 
 };
 

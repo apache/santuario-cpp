@@ -59,7 +59,7 @@ public:
     // -----------------------------------------------------------------------
 
     void writeChars(const   XMLByte* const  toWrite,
-                    const xsecsize_t    count,
+                    const XMLSize_t    count,
                     XERCES_CPP_NAMESPACE_QUALIFIER XMLFormatter * const formatter)
     {
          m_buffer->sbMemcpyIn(m_offset, (char *) toWrite, count);
@@ -76,7 +76,7 @@ private:
     void operator=(const sbFormatTarget& rhs);
 
 	safeBuffer					* m_buffer;		// Buffer to write to
-	xsecsize_t				      m_offset;
+	XMLSize_t				      m_offset;
 };
 
 /**
@@ -121,7 +121,7 @@ public:
 
 	void  formatBuf (
 		const XMLCh *const toFormat,
-		const xsecsize_t count,
+		const XMLSize_t count,
 		const XERCES_CPP_NAMESPACE_QUALIFIER XMLFormatter::EscapeFlags
 				escapeFlags=XERCES_CPP_NAMESPACE_QUALIFIER XMLFormatter::DefaultEscape,
 		const XERCES_CPP_NAMESPACE_QUALIFIER XMLFormatter::UnRepFlags

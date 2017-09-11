@@ -121,7 +121,7 @@ void TXFMParser::setInput(TXFMBase *newInput) {
 	parser.setSecurityManager(&securityManager);
 
 	parser.parse(is);
-    xsecsize_t errorCount = parser.getErrorCount();
+    XMLSize_t errorCount = parser.getErrorCount();
     if (errorCount > 0)
 		throw XSECException(XSECException::XSLError, "Errors occurred parsing BYTE STREAM");
 

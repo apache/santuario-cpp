@@ -154,7 +154,7 @@ void addDocToQueue (DOMImplementation *impl, DOMDocument * doc) {
 	theSerializer->write(doc, theOutput);
 
 	// Copy to a new buffer
-	xsecsize_t len = formatTarget->getLen();
+	XMLSize_t len = formatTarget->getLen();
 	char * buf = new char [len + 1];
 	memcpy(buf, formatTarget->getRawBuffer(), len);
 	buf[len] = '\0';

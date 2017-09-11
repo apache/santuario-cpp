@@ -559,11 +559,11 @@ XSECBinHTTPURIInputStream::~XSECBinHTTPURIInputStream()
 //
 //  readBytes
 //
-xsecsize_t XSECBinHTTPURIInputStream::readBytes(XMLByte* const    toFill
-                                    , const xsecsize_t    maxToRead)
+XMLSize_t XSECBinHTTPURIInputStream::readBytes(XMLByte* const    toFill
+                                    , const XMLSize_t    maxToRead)
 {
 
-    xsecsize_t len = (xsecsize_t) (fBufferEnd - fBufferPos);
+    XMLSize_t len = (XMLSize_t) (fBufferEnd - fBufferPos);
     if (len > 0)
     {
         // If there's any data left over in the buffer into which we first

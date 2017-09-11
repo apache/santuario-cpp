@@ -364,14 +364,14 @@ XMLCh * transcodeFromUTF8(const unsigned char * src) {
 	Janitor<XMLTranscoder> j_t(t);
 
 	// Need to loop through, 2K at a time
-	xsecsize_t bytesEaten, bytesEatenCounter;
-	xsecsize_t charactersEaten;
-	xsecsize_t totalBytesEaten = 0;
-	xsecsize_t bytesToEat = XMLString::stringLen((char *) src);
+	XMLSize_t bytesEaten, bytesEatenCounter;
+	XMLSize_t charactersEaten;
+	XMLSize_t totalBytesEaten = 0;
+	XMLSize_t bytesToEat = XMLString::stringLen((char *) src);
 
 	while (totalBytesEaten < bytesToEat) {
 
-	    xsecsize_t toEat = bytesToEat - totalBytesEaten;
+	    XMLSize_t toEat = bytesToEat - totalBytesEaten;
 
 
 		if (toEat > 2048)
@@ -419,13 +419,13 @@ char DSIG_EXPORT * transcodeToUTF8(const XMLCh * src) {
 	Janitor<XMLTranscoder> j_t(t);
 
 	// Need to loop through, 2K at a time
-	xsecsize_t charactersEaten, charactersOutput;
-	xsecsize_t totalCharsEaten = 0;
-	xsecsize_t charsToEat = XMLString::stringLen(src);
+	XMLSize_t charactersEaten, charactersOutput;
+	XMLSize_t totalCharsEaten = 0;
+	XMLSize_t charsToEat = XMLString::stringLen(src);
 
 	while (totalCharsEaten < charsToEat) {
 
-		xsecsize_t toEat = charsToEat - totalCharsEaten;
+		XMLSize_t toEat = charsToEat - totalCharsEaten;
 
 		if (toEat > 2048)
 			toEat = 2048;
@@ -723,11 +723,11 @@ static unsigned int xlatHexDigit(const XMLCh toXlat)
 XMLCh * cleanURIEscapes(const XMLCh * uriPath) {
 
     XMLByte *ptr, *utf8Path;
-    xsecsize_t len = XMLString::stringLen(uriPath);
+    XMLSize_t len = XMLString::stringLen(uriPath);
 
     ptr = utf8Path = new XMLByte[len + 1];
 
-    for (xsecsize_t i = 0; i < len; i++) {
+    for (XMLSize_t i = 0; i < len; i++) {
         unsigned int value = uriPath[i];
 
         if (value > 255) {

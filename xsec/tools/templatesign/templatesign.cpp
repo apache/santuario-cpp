@@ -224,7 +224,7 @@ ostream& operator<<(ostream& target, DOMNode* toWrite)
     // Get the name and value out for convenience
     const XMLCh*   nodeName = toWrite->getNodeName();
     const XMLCh*   nodeValue = toWrite->getNodeValue();
-    xsecsize_t lent = XMLString::stringLen(nodeValue);
+    XMLSize_t lent = XMLString::stringLen(nodeValue);
 
     switch (toWrite->getNodeType())
     {
@@ -1061,7 +1061,7 @@ int main(int argc, char **argv) {
     // Now parse out file
 
     bool errorsOccured = false;
-    xsecsize_t errorCount = 0;
+    XMLSize_t errorCount = 0;
     try
     {
         parser->parse(argv[argc - 1]);
@@ -1317,7 +1317,7 @@ int main(int argc, char **argv) {
             encNameStr = aStr;
         }
     }
-    xsecsize_t lent = XMLString::stringLen(encNameStr);
+    XMLSize_t lent = XMLString::stringLen(encNameStr);
     gEncodingName = new XMLCh[lent + 1];
     XMLString::copyNString(gEncodingName, encNameStr, lent);
     gEncodingName[lent] = 0;

@@ -524,7 +524,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		// Signature already created, so just translate to base 64 and enter string
 
         // FIX: CVE-2009-0217
-        if (outputLength > 0 && (outputLength > hashLen || outputLength < 80 || outputLength < hashLen / 2)) {
+        if (outputLength > 0 && (outputLength > (unsigned int)hashLen || outputLength < 80 || outputLength < (unsigned int)hashLen / 2)) {
             throw XSECException(XSECException::AlgorithmMapperError,
                 "HMACOutputLength set to unsafe value.");
         }
@@ -646,10 +646,10 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 
 	case (XSECCryptoKey::KEY_HMAC) :
 
-		// Already done - just compare calculated value with read value
+	// Already done - just compare calculated value with read value
 
         // FIX: CVE-2009-0217
-        if (outputLength > 0 && (outputLength > hashLen || outputLength < 80 || outputLength < hashLen / 2)) {
+        if (outputLength > 0 && (outputLength > (unsigned int)hashLen || outputLength < 80 || outputLength < (unsigned int)hashLen / 2)) {
             throw XSECException(XSECException::AlgorithmMapperError,
                 "HMACOutputLength set to unsafe value.");
         }

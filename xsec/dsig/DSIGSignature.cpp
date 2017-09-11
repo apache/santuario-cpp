@@ -903,7 +903,6 @@ unsigned int DSIGSignature::calculateSignedInfoAndReferenceHash(unsigned char * 
 bool DSIGSignature::verifySignatureOnlyInternal(void) {
 
 	unsigned char hash[4096];
-	int hashLen;
 
 	if (!m_loaded) {
 
@@ -949,7 +948,7 @@ bool DSIGSignature::verifySignatureOnlyInternal(void) {
 	TXFMChain * chain = getSignedInfoInput();
 	Janitor<TXFMChain> j_chain(chain);
 
-	hashLen = calculateSignedInfoHash(hash, 4096);
+	calculateSignedInfoHash(hash, 4096);
 
 	// Now set up to verify
 	// First find the appropriate handler for the URI

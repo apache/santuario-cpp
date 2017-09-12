@@ -64,7 +64,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMDocument);
  */
 
 
-class DSIG_EXPORT XSECSOAPRequestor {
+class XSEC_EXPORT XSECSOAPRequestor {
 
 public :
 

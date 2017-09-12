@@ -45,7 +45,7 @@
  */
 
 
-class DSIG_EXPORT TXFMDocObject : public TXFMBase {
+class XSEC_EXPORT TXFMDocObject : public TXFMBase {
 
 public:
 

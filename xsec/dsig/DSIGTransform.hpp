@@ -61,7 +61,7 @@ class TXFMChain;
  */
 
 
-class DSIG_EXPORT DSIGTransform {
+class XSEC_EXPORT DSIGTransform {
 
 public:
 

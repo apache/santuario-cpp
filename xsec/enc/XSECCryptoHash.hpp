@@ -56,7 +56,7 @@
  *
  */
 
-class DSIG_EXPORT XSECCryptoHash {
+class XSEC_EXPORT XSECCryptoHash {
 
 
 public :

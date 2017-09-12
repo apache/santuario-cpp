@@ -61,7 +61,7 @@
  *
  */
 
-class DSIG_EXPORT XSECKeyInfoResolverDefault : public XSECKeyInfoResolver {
+class XSEC_EXPORT XSECKeyInfoResolverDefault : public XSECKeyInfoResolver {
 
 public :
 

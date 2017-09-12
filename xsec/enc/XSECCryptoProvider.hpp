@@ -137,7 +137,7 @@
  * @see OpenSSLCryptoProvider
  */
 
-class DSIG_EXPORT XSECCryptoProvider {
+class XSEC_EXPORT XSECCryptoProvider {
 
 
 public :

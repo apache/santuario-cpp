@@ -58,7 +58,7 @@ XALAN_USING_XALAN(XalanTransformer)
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMXSL : public TXFMBase {
+class XSEC_EXPORT TXFMXSL : public TXFMBase {
 
 private:
 

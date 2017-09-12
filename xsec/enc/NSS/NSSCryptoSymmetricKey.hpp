@@ -52,7 +52,7 @@
  * crypto functions.
  */
 
-class DSIG_EXPORT NSSCryptoSymmetricKey : public XSECCryptoSymmetricKey {
+class XSEC_EXPORT NSSCryptoSymmetricKey : public XSECCryptoSymmetricKey {
 
 public :
 

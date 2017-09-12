@@ -52,7 +52,7 @@
  * knowing how to directly use it.
  */
 
-class DSIG_EXPORT XSECCryptoKey {
+class XSEC_EXPORT XSECCryptoKey {
 
 public :
 

@@ -49,7 +49,7 @@ class XSECAlgorithmHandler;
  *
  */
 
-class DSIG_EXPORT XSECAlgorithmMapper {
+class XSEC_EXPORT XSECAlgorithmMapper {
 
 public:
 	

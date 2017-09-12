@@ -64,7 +64,7 @@ extern const char * XSECCryptoExceptionStrings[];
  * provide more information to the caller.
  */
 
-class DSIG_EXPORT XSECCryptoException {
+class XSEC_EXPORT XSECCryptoException {
 
 public:
 

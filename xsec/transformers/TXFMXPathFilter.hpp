@@ -60,7 +60,7 @@ struct filterSetHolder {
  */
 
 
-class DSIG_EXPORT TXFMXPathFilter : public TXFMBase {
+class XSEC_EXPORT TXFMXPathFilter : public TXFMBase {
 
 public:
 

@@ -57,7 +57,7 @@ class XSECURIResolver;
  *
  */
 
-class DSIG_EXPORT XSECEnv {
+class XSEC_EXPORT XSECEnv {
 
 public:
     

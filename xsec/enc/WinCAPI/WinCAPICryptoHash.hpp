@@ -57,7 +57,7 @@ class WinCAPICryptoProvider;
  *
  */
 
-class DSIG_EXPORT WinCAPICryptoHash : public XSECCryptoHash {
+class XSEC_EXPORT WinCAPICryptoHash : public XSECCryptoHash {
 
 
 public :

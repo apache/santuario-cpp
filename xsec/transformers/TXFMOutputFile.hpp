@@ -48,7 +48,7 @@ using std::ofstream;
  */
 
 
-class DSIG_EXPORT TXFMOutputFile : public TXFMBase {
+class XSEC_EXPORT TXFMOutputFile : public TXFMBase {
 
 private:
 

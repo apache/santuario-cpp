@@ -86,7 +86,7 @@ private:
  * to perform encoding translations with a safeBuffer as a target
  */
 
-class CANON_EXPORT XSECSafeBufferFormatter {
+class XSEC_EXPORT XSECSafeBufferFormatter {
 
 	XERCES_CPP_NAMESPACE_QUALIFIER XMLFormatter
 						* formatter;		// To actually perform the formatting

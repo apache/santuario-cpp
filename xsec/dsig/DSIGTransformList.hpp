@@ -55,7 +55,7 @@ class DSIGTransform;
  */
 
 
-class DSIG_EXPORT DSIGTransformList {
+class XSEC_EXPORT DSIGTransformList {
 
 public:
 

@@ -49,7 +49,7 @@
 // --------------------------------------------------------------------------------
 
 
-class DSIG_EXPORT XMLT {
+class XSEC_EXPORT XMLT {
 
 public:
 
@@ -71,52 +71,52 @@ private:
 //           Utilities to manipulate namespaces
 // --------------------------------------------------------------------------------
 
-const XMLCh DSIG_EXPORT * getDSIGLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
-const XMLCh DSIG_EXPORT * getDSIG11LocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
-const XMLCh DSIG_EXPORT * getECLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
-const XMLCh DSIG_EXPORT * getXPFLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
-const XMLCh DSIG_EXPORT * getXENCLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
-const XMLCh DSIG_EXPORT * getXENC11LocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getDSIGLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getDSIG11LocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getECLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getXPFLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getXENCLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getXENC11LocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
 #ifdef XSEC_XKMS_ENABLED
-const XMLCh DSIG_EXPORT * getXKMSLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
+const XMLCh XSEC_EXPORT * getXKMSLocalName(const XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *node);
 #endif
 // --------------------------------------------------------------------------------
 //           Do UTF-8 <-> UTF-16 transcoding
 // --------------------------------------------------------------------------------
 
-XMLCh DSIG_EXPORT * transcodeFromUTF8(const unsigned char * src);
-char DSIG_EXPORT * transcodeToUTF8(const XMLCh * src);
+XMLCh XSEC_EXPORT * transcodeFromUTF8(const unsigned char * src);
+char XSEC_EXPORT * transcodeToUTF8(const XMLCh * src);
 
 // --------------------------------------------------------------------------------
 //           Find a nominated DSIG/XENC node in a document
 // --------------------------------------------------------------------------------
 
-XERCES_CPP_NAMESPACE_QUALIFIER DOMNode DSIG_EXPORT * findDSIGNode(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, const char * nodeName);
-XERCES_CPP_NAMESPACE_QUALIFIER DOMNode DSIG_EXPORT * findXENCNode(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, const char * nodeName);
+XERCES_CPP_NAMESPACE_QUALIFIER DOMNode XSEC_EXPORT * findDSIGNode(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, const char * nodeName);
+XERCES_CPP_NAMESPACE_QUALIFIER DOMNode XSEC_EXPORT * findXENCNode(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, const char * nodeName);
 
 // --------------------------------------------------------------------------------
 //           Find particular type of node child
 // --------------------------------------------------------------------------------
 
-XERCES_CPP_NAMESPACE_QUALIFIER DOMNode DSIG_EXPORT * findFirstChildOfType(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode::NodeType t);
-XERCES_CPP_NAMESPACE_QUALIFIER DOMNode DSIG_EXPORT * findNextChildOfType(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode::NodeType t);
+XERCES_CPP_NAMESPACE_QUALIFIER DOMNode XSEC_EXPORT * findFirstChildOfType(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode::NodeType t);
+XERCES_CPP_NAMESPACE_QUALIFIER DOMNode XSEC_EXPORT * findNextChildOfType(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode::NodeType t);
 
-XERCES_CPP_NAMESPACE_QUALIFIER DOMElement DSIG_EXPORT * findFirstElementChild(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n);
-XERCES_CPP_NAMESPACE_QUALIFIER DOMElement DSIG_EXPORT * findNextElementChild(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n);
+XERCES_CPP_NAMESPACE_QUALIFIER DOMElement XSEC_EXPORT * findFirstElementChild(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n);
+XERCES_CPP_NAMESPACE_QUALIFIER DOMElement XSEC_EXPORT * findNextElementChild(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n);
 
 // --------------------------------------------------------------------------------
 //           Make a QName
 // --------------------------------------------------------------------------------
 
-safeBuffer DSIG_EXPORT &makeQName(safeBuffer & qname, safeBuffer &prefix, const char * localName);
-safeBuffer DSIG_EXPORT &makeQName(safeBuffer & qname, const XMLCh *prefix, const char * localName);
-safeBuffer DSIG_EXPORT &makeQName(safeBuffer & qname, const XMLCh *prefix, const XMLCh * localName);
+safeBuffer XSEC_EXPORT &makeQName(safeBuffer & qname, safeBuffer &prefix, const char * localName);
+safeBuffer XSEC_EXPORT &makeQName(safeBuffer & qname, const XMLCh *prefix, const char * localName);
+safeBuffer XSEC_EXPORT &makeQName(safeBuffer & qname, const XMLCh *prefix, const XMLCh * localName);
 
 // --------------------------------------------------------------------------------
 //           Gather text from children
 // --------------------------------------------------------------------------------
 
-void DSIG_EXPORT gatherChildrenText(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * parent, safeBuffer &output);
+void XSEC_EXPORT gatherChildrenText(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * parent, safeBuffer &output);
 
 // --------------------------------------------------------------------------------
 //           String decode/encode
@@ -134,7 +134,7 @@ XMLCh * decodeDName(const XMLCh * toDecode);
 //           Generate Ids
 // --------------------------------------------------------------------------------
 
-XMLCh DSIG_EXPORT * generateId(unsigned int bytes = 16);
+XMLCh XSEC_EXPORT * generateId(unsigned int bytes = 16);
 
 // --------------------------------------------------------------------------------
 //           String Functions 

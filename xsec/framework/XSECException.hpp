@@ -48,7 +48,7 @@
  *
  */
 
-class DSIG_EXPORT XSECException {
+class XSEC_EXPORT XSECException {
 
 public:
 

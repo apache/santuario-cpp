@@ -44,7 +44,7 @@
  */
 
 
-class DSIG_EXPORT XSECCryptoKeyRSA : public XSECCryptoKey {
+class XSEC_EXPORT XSECCryptoKeyRSA : public XSECCryptoKey {
 
 public :
 

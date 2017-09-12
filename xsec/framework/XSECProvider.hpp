@@ -55,7 +55,7 @@
  */
 
 
-class DSIG_EXPORT XSECProvider {
+class XSEC_EXPORT XSECProvider {
 
 #if defined(XALAN_NO_NAMESPACES)
 	typedef vector<DSIGSignature *>			SignatureListVectorType;

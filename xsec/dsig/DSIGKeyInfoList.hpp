@@ -62,7 +62,7 @@ class DSIGSignature;
  * The library stores KeyInfo lists using this class.
  */
 
-class DSIG_EXPORT DSIGKeyInfoList {
+class XSEC_EXPORT DSIGKeyInfoList {
 
 public:
 

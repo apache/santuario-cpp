@@ -75,7 +75,7 @@
  * to plug in different classes for different schemes
  */
 
-class DSIG_EXPORT XSECURIResolverGenericUnix : public XSECURIResolver {
+class XSEC_EXPORT XSECURIResolverGenericUnix : public XSECURIResolver {
 
 public:
 

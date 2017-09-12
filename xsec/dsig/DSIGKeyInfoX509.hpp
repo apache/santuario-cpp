@@ -51,7 +51,7 @@ XSEC_USING_XERCES(DOMElement);
  */
 
 
-class DSIG_EXPORT DSIGKeyInfoX509 : public DSIGKeyInfo {
+class XSEC_EXPORT DSIGKeyInfoX509 : public DSIGKeyInfo {
 
 public:
 

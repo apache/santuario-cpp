@@ -52,7 +52,7 @@
  * providers for a particular algorithm.
  */
 
-class DSIG_EXPORT XSECCryptoSymmetricKey : public XSECCryptoKey {
+class XSEC_EXPORT XSECCryptoSymmetricKey : public XSECCryptoKey {
 
 public :
 

@@ -49,7 +49,7 @@
  *
  */
 
-class DSIG_EXPORT XSECURIResolverXerces : public XSECURIResolver {
+class XSEC_EXPORT XSECURIResolverXerces : public XSECURIResolver {
 
 public:
 

@@ -66,7 +66,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMNamedNodeMap);
  */
 
 
-class DSIG_EXPORT TXFMXPath : public TXFMBase {
+class XSEC_EXPORT TXFMXPath : public TXFMBase {
 
 private:
 

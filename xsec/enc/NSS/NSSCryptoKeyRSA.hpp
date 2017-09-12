@@ -50,7 +50,7 @@ class NSSCryptoProvider;
  * The library uses classes derived from this to process RSA keys.
  */
 
-class DSIG_EXPORT NSSCryptoKeyRSA : public XSECCryptoKeyRSA {
+class XSEC_EXPORT NSSCryptoKeyRSA : public XSECCryptoKeyRSA {
 
 public :
 

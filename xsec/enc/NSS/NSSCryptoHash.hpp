@@ -49,7 +49,7 @@
  *
  */
 
-class DSIG_EXPORT NSSCryptoHash : public XSECCryptoHash {
+class XSEC_EXPORT NSSCryptoHash : public XSECCryptoHash {
 
 
 public :

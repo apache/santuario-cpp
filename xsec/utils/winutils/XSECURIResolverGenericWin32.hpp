@@ -78,7 +78,7 @@
  * @todo Re-implement using the Windows Internet API
  */
 
-class DSIG_EXPORT XSECURIResolverGenericWin32 : public XSECURIResolver {
+class XSEC_EXPORT XSECURIResolverGenericWin32 : public XSECURIResolver {
 
 public:
 

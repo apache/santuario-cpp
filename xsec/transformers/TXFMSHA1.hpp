@@ -36,7 +36,7 @@
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMSHA1 : public TXFMBase {
+class XSEC_EXPORT TXFMSHA1 : public TXFMBase {
 
 private:
 

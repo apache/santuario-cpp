@@ -44,7 +44,7 @@
  *
  */
 
-class DSIG_EXPORT DSIGTransformC14n : public DSIGTransform {
+class XSEC_EXPORT DSIGTransformC14n : public DSIGTransform {
 
 public:
 

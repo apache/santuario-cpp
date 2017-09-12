@@ -62,7 +62,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMElement);
  */
 
 
-class DSIG_EXPORT DSIGKeyInfoValue : public DSIGKeyInfo {
+class XSEC_EXPORT DSIGKeyInfoValue : public DSIGKeyInfo {
 
 public:
 

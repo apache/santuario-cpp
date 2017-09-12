@@ -41,7 +41,7 @@ fi
 
 # Define the files we wish to generate
 
-AC_CONFIG_FILES([Makefile xsec/Makefile])
+AC_CONFIG_FILES([Makefile xsec/Makefile xml-security-c.pc])
 AC_CONFIG_HEADERS([config.h xsec/framework/XSECConfig.hpp])
 AH_BOTTOM([#include <xsec/framework/XSECVersion.hpp>])
 
@@ -119,12 +119,6 @@ if test x"$use_xalan" != "xyes" ; then
     XALANCROOT=$use_xalan
   fi
 fi
-
-# Ensure we are always compiling using library defs
-
-CFLAGS="${CFLAGS} -DXSEC_LIBRARY_BUILD"
-CXXFLAGS="${CXXFLAGS} -DXSEC_LIBRARY_BUILD"
-
 
 # Now check for Xalan
 

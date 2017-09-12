@@ -61,7 +61,7 @@ class TXFMBase;
  * pointer to a XMLCh * buffer is used by preference.
  */
 
-class CANON_EXPORT safeBuffer {
+class XSEC_EXPORT safeBuffer {
 
 public:
 

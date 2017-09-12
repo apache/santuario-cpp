@@ -63,7 +63,7 @@ class TXFMChain;
  */
 
 
-class DSIG_EXPORT TXFMBase {
+class XSEC_EXPORT TXFMBase {
 
 protected:
 

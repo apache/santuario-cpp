@@ -54,7 +54,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMDocument)
 // processing is done via the processNextNode virtual function that must be
 // implemented by all children classes.
 
-class CANON_EXPORT XSECCanon {
+class XSEC_EXPORT XSECCanon {
 
 protected:
 

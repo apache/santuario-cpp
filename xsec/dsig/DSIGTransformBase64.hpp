@@ -49,7 +49,7 @@
 
 
 
-class DSIG_EXPORT DSIGTransformBase64 : public DSIGTransform {
+class XSEC_EXPORT DSIGTransformBase64 : public DSIGTransform {
 
 public:
 

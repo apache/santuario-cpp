@@ -64,7 +64,7 @@ class XSECEnv;
  *
  */
 
-class DSIG_EXPORT DSIGSignedInfo {
+class XSEC_EXPORT DSIGSignedInfo {
 
 public:
 

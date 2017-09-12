@@ -61,7 +61,7 @@
  */
 
 
-class DSIG_EXPORT OpenSSLCryptoBase64 : public XSECCryptoBase64 {
+class XSEC_EXPORT OpenSSLCryptoBase64 : public XSECCryptoBase64 {
 
 
 public :

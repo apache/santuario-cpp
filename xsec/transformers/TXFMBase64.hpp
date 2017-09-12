@@ -36,7 +36,7 @@
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMBase64 : public TXFMBase {
+class XSEC_EXPORT TXFMBase64 : public TXFMBase {
 
 public:
 

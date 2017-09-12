@@ -53,7 +53,7 @@ class XSECEnv;
  *
  */
 
-class DSIG_EXPORT DSIGXPathFilterExpr {
+class XSEC_EXPORT DSIGXPathFilterExpr {
 
 public:
 

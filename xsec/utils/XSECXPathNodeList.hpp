@@ -58,7 +58,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMNode)
  *
  */
 
-class DSIG_EXPORT XSECXPathNodeList {
+class XSEC_EXPORT XSECXPathNodeList {
 
 public:
 

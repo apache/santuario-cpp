@@ -51,7 +51,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMNode);
  *
  */
 
-class DSIG_EXPORT DSIGTransformXPath : public DSIGTransform {
+class XSEC_EXPORT DSIGTransformXPath : public DSIGTransform {
 
 public:
 

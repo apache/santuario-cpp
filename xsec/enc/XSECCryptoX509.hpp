@@ -49,7 +49,7 @@
  */
 
 
-class DSIG_EXPORT XSECCryptoX509 {
+class XSEC_EXPORT XSECCryptoX509 {
 
 public :
 

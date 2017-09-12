@@ -86,7 +86,7 @@
  */
  /*\@{*/
 
-class DSIG_EXPORT WinCAPICryptoProvider : public XSECCryptoProvider {
+class XSEC_EXPORT WinCAPICryptoProvider : public XSECCryptoProvider {
 
 
 public :

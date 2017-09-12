@@ -72,10 +72,12 @@ tools =
 tools += xsec-xtest
 xsec_xtest_SOURCES = \
    tools/xtest/xtest.cpp
+xsec_xtest_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 
 tools += xsec-c14n
 xsec_c14n_SOURCES = \
    tools/c14n/c14n.cpp
+xsec_c14n_CPPFLAGS = -DXSEC_BUILDING_TOOLS
  
 tools += xsec-checksig
 xsec_checksig_SOURCES = \
@@ -84,30 +86,36 @@ xsec_checksig_SOURCES = \
    tools/checksig/AnonymousResolver.cpp \
    tools/checksig/InteropResolver.hpp \
    tools/checksig/InteropResolver.cpp
+xsec_checksig_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 
 tools += xsec-templatesign
 xsec_templatesign_SOURCES = \
    tools/templatesign/templatesign.cpp
+xsec_templatesign_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 
 tools += xsec-txfmout
 xsec_txfmout_SOURCES = \
    tools/txfmout/txfmout.cpp
+xsec_txfmout_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 
 tools += xsec-siginf
 xsec_siginf_SOURCES = \
    tools/siginf/siginf.cpp
+xsec_siginf_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 
 tools += xsec-cipher
 xsec_cipher_SOURCES = \
    tools/cipher/cipher.cpp \
    tools/cipher/XencInteropResolver.hpp \
    tools/cipher/XencInteropResolver.cpp
+xsec_cipher_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 
 if XSEC_AM_HAVE_XKMS
 tools += xsec-xklient
 xsec_xklient_SOURCES = \
    tools/xklient/xklient.cpp \
    enc/OpenSSL/OpenSSLSupport.hpp
+xsec_xklient_CPPFLAGS = -DXSEC_BUILDING_TOOLS
 endif
 
 libxml_security_c_la_CPPFLAGS = -DXSEC_BUILDING_LIBRARY

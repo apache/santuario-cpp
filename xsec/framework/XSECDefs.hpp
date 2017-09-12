@@ -48,7 +48,7 @@
 #	endif
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
-#elif XSEC_BUILDING_LIBRARY
+#elif defined(XSEC_BUILDING_LIBRARY) || defined(XSEC_BUILDING_TOOLS)
 #   include "config.h"
 #else
 #	include <xsec/framework/XSECConfig.hpp>
@@ -145,7 +145,7 @@
 
 #endif
 
-#ifdef XSEC_BUILDING_LIBRARY
+#if defined(XSEC_BUILDING_LIBRARY) || defined(XSEC_BUILDING_TOOLS)
 #   ifdef HAVE_STRCASECMP
 #       define _stricmp(x,y) strcasecmp(x,y)
 #   else

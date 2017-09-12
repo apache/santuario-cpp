@@ -55,7 +55,7 @@ class XSECAlgorithmHandler;
  * It is primarily a static class.
  */
 
-class DSIG_EXPORT XSECPlatformUtils {
+class XSEC_EXPORT XSECPlatformUtils {
 
 public :
 

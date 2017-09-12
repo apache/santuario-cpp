@@ -249,7 +249,7 @@ int SASLCleanXKMSPassPhrase(unsigned char * input, int inputLen, safeBuffer &out
 	return ret;
 }
 
-int DSIG_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
+int XSEC_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
 
 	unsigned char keyVal[] = {XKMSAuthenticationValue};
 
@@ -271,7 +271,7 @@ int DSIG_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputL
 }
 	
 
-int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
+int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
 
 	unsigned char keyVal[] = {XKMSRevocationCodeIdenfitierEncoding1};
 
@@ -293,7 +293,7 @@ int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * i
 
 }
 
-int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
+int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
 
 
 	unsigned char tmpBuf[XSEC_MAX_HASH_SIZE];
@@ -302,7 +302,7 @@ int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2(unsigned char * i
 
 }
 
-int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
+int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
 
 	unsigned char keyVal[] = {XKMSRevocationCodeIdenfitierEncoding2};
 
@@ -320,7 +320,7 @@ int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned cha
 
 }
 
-int DSIG_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
+int XSEC_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen) {
 
 	unsigned char keyVal[] = {XKMSKeyEncryption};
 	unsigned char shaOutput[22];	// SHA1 has 20 bytes of output
@@ -371,7 +371,7 @@ int DSIG_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned c
 //           Some Base64 helpers
 // --------------------------------------------------------------------------------
 
-XMLCh DSIG_EXPORT * EncodeToBase64XMLCh(unsigned char * input, int inputLen) {
+XMLCh XSEC_EXPORT * EncodeToBase64XMLCh(unsigned char * input, int inputLen) {
 
 	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
 	Janitor<XSECCryptoBase64> j_b64(b64);
@@ -394,7 +394,7 @@ XMLCh DSIG_EXPORT * EncodeToBase64XMLCh(unsigned char * input, int inputLen) {
 
 }
 
-unsigned int DSIG_EXPORT DecodeFromBase64XMLCh(const XMLCh * input, unsigned char * output, int maxOutputLen) {
+unsigned int XSEC_EXPORT DecodeFromBase64XMLCh(const XMLCh * input, unsigned char * output, int maxOutputLen) {
 
 	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
 	Janitor<XSECCryptoBase64> j_b64(b64);
@@ -408,7 +408,7 @@ unsigned int DSIG_EXPORT DecodeFromBase64XMLCh(const XMLCh * input, unsigned cha
 	return j;
 }
 
-unsigned int DSIG_EXPORT DecodeFromBase64(const char * input, unsigned char * output, int maxOutputLen) {
+unsigned int XSEC_EXPORT DecodeFromBase64(const char * input, unsigned char * output, int maxOutputLen) {
 
 	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
 	Janitor<XSECCryptoBase64> j_b64(b64);

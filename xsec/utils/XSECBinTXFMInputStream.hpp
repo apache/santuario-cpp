@@ -60,7 +60,7 @@ class TXFMBase;
  */
 
 
-class DSIG_EXPORT XSECBinTXFMInputStream : public XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream
+class XSEC_EXPORT XSECBinTXFMInputStream : public XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream
 {
 
 public :

@@ -56,7 +56,7 @@
  * crypto functions.
  */
 
-class DSIG_EXPORT OpenSSLCryptoSymmetricKey : public XSECCryptoSymmetricKey {
+class XSEC_EXPORT OpenSSLCryptoSymmetricKey : public XSECCryptoSymmetricKey {
 
 public :
 

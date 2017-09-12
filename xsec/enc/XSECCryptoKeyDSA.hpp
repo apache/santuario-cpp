@@ -43,7 +43,7 @@
  * The library uses classes derived from this to process DSA keys.
  */
 
-class DSIG_EXPORT XSECCryptoKeyDSA : public XSECCryptoKey {
+class XSEC_EXPORT XSECCryptoKeyDSA : public XSECCryptoKey {
 
 public :
 

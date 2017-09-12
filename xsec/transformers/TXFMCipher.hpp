@@ -42,7 +42,7 @@
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMCipher : public TXFMBase {
+class XSEC_EXPORT TXFMCipher : public TXFMBase {
 
 public:
 

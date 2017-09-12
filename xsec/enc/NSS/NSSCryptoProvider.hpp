@@ -45,7 +45,7 @@
  
  /*\@{*/
 
-class DSIG_EXPORT NSSCryptoProvider : public XSECCryptoProvider {
+class XSEC_EXPORT NSSCryptoProvider : public XSECCryptoProvider {
 
 
 public :

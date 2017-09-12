@@ -46,7 +46,7 @@
  *
  */
 
-class DSIG_EXPORT NSSCryptoKeyHMAC : public XSECCryptoKeyHMAC {
+class XSEC_EXPORT NSSCryptoKeyHMAC : public XSECCryptoKeyHMAC {
 
 public :
 

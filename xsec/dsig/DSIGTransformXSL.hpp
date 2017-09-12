@@ -50,7 +50,7 @@
 
 
 
-class DSIG_EXPORT DSIGTransformXSL : public DSIGTransform {
+class XSEC_EXPORT DSIGTransformXSL : public DSIGTransform {
 
 public:
 

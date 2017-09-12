@@ -81,7 +81,7 @@ struct XSECNodeListElt {
 //           XSECC14n20010315 Object definition
 // --------------------------------------------------------------------------------
 
-class CANON_EXPORT XSECC14n20010315 : public XSECCanon {
+class XSEC_EXPORT XSECC14n20010315 : public XSECCanon {
 
 #if defined(XALAN_NO_NAMESPACES)
 	typedef vector<char *>				CharListVectorType;

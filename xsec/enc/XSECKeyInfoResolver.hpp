@@ -55,7 +55,7 @@
  *
  */
 
-class DSIG_EXPORT XSECKeyInfoResolver {
+class XSEC_EXPORT XSECKeyInfoResolver {
 
 public :
 

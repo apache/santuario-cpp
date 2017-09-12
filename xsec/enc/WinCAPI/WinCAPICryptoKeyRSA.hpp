@@ -53,7 +53,7 @@ class WinCAPICryptoProvider;
  * The library uses classes derived from this to process RSA keys.
  */
 
-class DSIG_EXPORT WinCAPICryptoKeyRSA : public XSECCryptoKeyRSA {
+class XSEC_EXPORT WinCAPICryptoKeyRSA : public XSECCryptoKeyRSA {
 
 public :
 

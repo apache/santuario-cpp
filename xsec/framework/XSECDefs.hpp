@@ -48,8 +48,8 @@
 #	endif
 #	define WIN32_LEAN_AND_MEAN
 #	include <windows.h>
-#elif defined (XSEC_LIBRARY_BUILD)
-#       include "config.h"
+#elif XSEC_BUILDING_LIBRARY
+#   include "config.h"
 #else
 #	include <xsec/framework/XSECConfig.hpp>
 #endif
@@ -92,27 +92,16 @@
 //           Project Library Handling
 // --------------------------------------------------------------------------------
 
-#if defined (PLATFORM_EXPORT)
-#  define XSEC_PLATFORM_EXPORT PLATFORM_EXPORT
-#  define XSEC_PLATFORM_IMPORT PLATFORM_IMPORT
+#if defined(DLL_EXPORT)
+  #if defined(XSEC_BUILDING_LIBRARY)
+    #define XSEC_EXPORT XSEC_PLATFORM_EXPORT
+  #else
+    #define XSEC_EXPORT XSEC_PLATFORM_IMPORT
+  #endif
 #else
-#  define XSEC_PLATFORM_EXPORT XERCES_PLATFORM_EXPORT
-#  define XSEC_PLATFORM_IMPORT XERCES_PLATFORM_IMPORT
+  #define XSEC_EXPORT
 #endif
 
-#if defined (PROJ_CANON)
-
-#define CANON_EXPORT XSEC_PLATFORM_EXPORT
-#else
-#define CANON_EXPORT XSEC_PLATFORM_IMPORT
-#endif
-
-#if defined (PROJ_DSIG)
-
-#define DSIG_EXPORT XSEC_PLATFORM_EXPORT
-#else
-#define DSIG_EXPORT XSEC_PLATFORM_IMPORT
-#endif
 
 // Platform includes.  Much of this is taken from Xalan
 

@@ -57,7 +57,7 @@ XSEC_DECLARE_XERCES_CLASS(BinInputStream);
  *
  */
 
-class DSIG_EXPORT XSECURIResolver {
+class XSEC_EXPORT XSECURIResolver {
 
 public:
 

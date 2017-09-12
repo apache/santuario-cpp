@@ -51,7 +51,7 @@ XSEC_DECLARE_XERCES_CLASS(BinInputStream);
  */
 
 
-class DSIG_EXPORT XSECTXFMInputSource : public XERCES_CPP_NAMESPACE_QUALIFIER InputSource
+class XSEC_EXPORT XSECTXFMInputSource : public XERCES_CPP_NAMESPACE_QUALIFIER InputSource
 {
 
 public :

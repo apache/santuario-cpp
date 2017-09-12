@@ -37,7 +37,7 @@ class TXFMChain;
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMConcatChains : public TXFMBase {
+class XSEC_EXPORT TXFMConcatChains : public TXFMBase {
 
 	#if defined(XSEC_NO_NAMESPACES)
 	typedef vector<TXFMChain *>			TXFMChainVectorType

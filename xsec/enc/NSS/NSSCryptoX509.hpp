@@ -46,7 +46,7 @@ class NSSCryptoProvider;
  *
  */
 
-class DSIG_EXPORT NSSCryptoX509 : public XSECCryptoX509 {
+class XSEC_EXPORT NSSCryptoX509 : public XSECCryptoX509 {
 
 public :
 

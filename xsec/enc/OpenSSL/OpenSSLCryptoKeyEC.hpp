@@ -48,7 +48,7 @@
  */
 
 
-class DSIG_EXPORT OpenSSLCryptoKeyEC : public XSECCryptoKeyEC {
+class XSEC_EXPORT OpenSSLCryptoKeyEC : public XSECCryptoKeyEC {
 
 public :
 

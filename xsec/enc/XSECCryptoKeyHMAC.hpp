@@ -44,7 +44,7 @@
  * The library uses classes derived from this to process HMAC keys.
  */
 
-class DSIG_EXPORT XSECCryptoKeyHMAC : public XSECCryptoKey {
+class XSEC_EXPORT XSECCryptoKeyHMAC : public XSECCryptoKey {
 
 public :
 

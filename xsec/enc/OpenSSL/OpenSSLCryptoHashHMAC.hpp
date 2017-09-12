@@ -53,7 +53,7 @@
  *
  */
 
-class DSIG_EXPORT OpenSSLCryptoHashHMAC : public XSECCryptoHash {
+class XSEC_EXPORT OpenSSLCryptoHashHMAC : public XSECCryptoHash {
 
 public :
 

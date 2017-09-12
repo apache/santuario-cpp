@@ -46,7 +46,7 @@
  * The library uses classes derived from this to process RSA keys.
  */
 
-class DSIG_EXPORT OpenSSLCryptoKeyRSA : public XSECCryptoKeyRSA {
+class XSEC_EXPORT OpenSSLCryptoKeyRSA : public XSECCryptoKeyRSA {
 
 public :
 

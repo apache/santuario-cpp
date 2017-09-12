@@ -40,7 +40,7 @@
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMEnvelope : public TXFMBase {
+class XSEC_EXPORT TXFMEnvelope : public TXFMBase {
 
 private:
 

@@ -46,7 +46,7 @@
 //           Constant Strings Class
 // --------------------------------------------------------------------------------
 
-class DSIG_EXPORT XKMSConstants {
+class XSEC_EXPORT XKMSConstants {
 
 public:
 

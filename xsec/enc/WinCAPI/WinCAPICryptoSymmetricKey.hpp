@@ -58,7 +58,7 @@
  * crypto functions.
  */
 
-class DSIG_EXPORT WinCAPICryptoSymmetricKey : public XSECCryptoSymmetricKey {
+class XSEC_EXPORT WinCAPICryptoSymmetricKey : public XSECCryptoSymmetricKey {
 
 public :
 

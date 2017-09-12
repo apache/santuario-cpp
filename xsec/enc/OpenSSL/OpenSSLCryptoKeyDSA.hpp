@@ -47,7 +47,7 @@
  */
 
 
-class DSIG_EXPORT OpenSSLCryptoKeyDSA : public XSECCryptoKeyDSA {
+class XSEC_EXPORT OpenSSLCryptoKeyDSA : public XSECCryptoKeyDSA {
 
 public :
 

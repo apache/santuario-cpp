@@ -68,7 +68,7 @@ class DSIGObject;
  *
  */
 
-class DSIG_EXPORT DSIGSignature {
+class XSEC_EXPORT DSIGSignature {
 
 protected:
 

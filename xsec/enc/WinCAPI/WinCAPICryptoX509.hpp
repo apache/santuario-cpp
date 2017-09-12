@@ -49,7 +49,7 @@ class WinCAPICryptoProvider;
  *
  */
 
-class DSIG_EXPORT WinCAPICryptoX509 : public XSECCryptoX509 {
+class XSEC_EXPORT WinCAPICryptoX509 : public XSECCryptoX509 {
 
 public :
 

@@ -47,7 +47,7 @@
 
 
 
-class DSIG_EXPORT DSIGTransformEnvelope : public DSIGTransform {
+class XSEC_EXPORT DSIGTransformEnvelope : public DSIGTransform {
 
 public:
 

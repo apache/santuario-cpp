@@ -61,7 +61,7 @@
  * loading of these keys.
  */
 
-class DSIG_EXPORT WinCAPICryptoKeyHMAC : public XSECCryptoKeyHMAC {
+class XSEC_EXPORT WinCAPICryptoKeyHMAC : public XSECCryptoKeyHMAC {
 
 public :
 

@@ -57,7 +57,7 @@ class DSIGReference;
  *
  */
 
-class DSIG_EXPORT DSIGReferenceList {
+class XSEC_EXPORT DSIGReferenceList {
 
 public:
 

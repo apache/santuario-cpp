@@ -54,7 +54,7 @@
  * not need to be able to handle concurrent encode/decode operations.
  */
 
-class DSIG_EXPORT XSECCryptoBase64 {
+class XSEC_EXPORT XSECCryptoBase64 {
 
 
 public :

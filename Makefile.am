@@ -30,5 +30,8 @@ EXTRA_DIST = \
 	xsec/framework/version.rc \
 	xsec/tools/threadTest/threadtest.cpp
 
+pkgconfigdir = @pkgconfigdir@
+pkgconfig_DATA= xml-security-c.pc
+
 dist-hook:
 	rm -rf `find $(distdir)/Projects -name .svn`

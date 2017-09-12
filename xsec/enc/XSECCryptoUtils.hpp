@@ -50,22 +50,22 @@
 #define	XKMSRevocationCodeIdenfitierEncoding2	0x03
 #define XKMSKeyEncryption						0x04
 
-int DSIG_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
-int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
+int XSEC_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
+int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
 /* Calculate encoding 2 - Input is original pass phrase */
-int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
+int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
 /* Calculate encoding 2 - Input is encoding 1 */
-int DSIG_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
-int DSIG_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
+int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
+int XSEC_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
 #endif
 
 // --------------------------------------------------------------------------------
 //           Some Base64 helpers
 // --------------------------------------------------------------------------------
 
-XMLCh DSIG_EXPORT * EncodeToBase64XMLCh(unsigned char * input, int inputLen);
-unsigned int DSIG_EXPORT DecodeFromBase64XMLCh(const XMLCh * input, unsigned char * output, int maxOutputLen);
-unsigned int DSIG_EXPORT DecodeFromBase64(const char * input, unsigned char * output, int maxOutputLen);
+XMLCh XSEC_EXPORT * EncodeToBase64XMLCh(unsigned char * input, int inputLen);
+unsigned int XSEC_EXPORT DecodeFromBase64XMLCh(const XMLCh * input, unsigned char * output, int maxOutputLen);
+unsigned int XSEC_EXPORT DecodeFromBase64(const char * input, unsigned char * output, int maxOutputLen);
 
 // --------------------------------------------------------------------------------
 //           Some stuff to help with wierd signatures
@@ -74,7 +74,7 @@ unsigned int DSIG_EXPORT DecodeFromBase64(const char * input, unsigned char * ou
 // Convert an ASN.1 format DSA signature (!!!) to the two component integers
 // NOTE - both r and s must be at least 20 bytes long
 
-bool DSIG_EXPORT ASN2DSASig(const unsigned char * input, unsigned char * r, unsigned char * s);
+bool XSEC_EXPORT ASN2DSASig(const unsigned char * input, unsigned char * r, unsigned char * s);
 
 // --------------------------------------------------------------------------------
 //           Calculate correct OIDs for an RSA sig

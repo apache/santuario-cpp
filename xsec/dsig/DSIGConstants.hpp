@@ -559,7 +559,7 @@ bool maskGenerationFunc2URI(safeBuffer &uri, maskGenerationFunc mgf) {
 //           Constant Strings Class
 // --------------------------------------------------------------------------------
 
-class DSIG_EXPORT DSIGConstants {
+class XSEC_EXPORT DSIGConstants {
 
 public:
 
@@ -714,15 +714,15 @@ const XMLCh * canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
    these URIs, it's just we don't have an internal enum mapping
 */
 
-bool DSIG_EXPORT XSECmapURIToSignatureMethods(const XMLCh * URI,
+bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh * URI,
 												  signatureMethod & sm,
 												  hashMethod & hm);
-bool DSIG_EXPORT XSECmapURIToHashMethod(const XMLCh * URI,
+bool XSEC_EXPORT XSECmapURIToHashMethod(const XMLCh * URI,
 												  hashMethod & hm);
-bool DSIG_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
+bool XSEC_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
 							canonicalizationMethod & cm);
 
-bool DSIG_EXPORT XSECmapURIToMaskGenerationFunc(const XMLCh * URI,
+bool XSEC_EXPORT XSECmapURIToMaskGenerationFunc(const XMLCh * URI,
 												  maskGenerationFunc & mgf);
 
 #endif /* DSIGCONSTANTS_HEADER */

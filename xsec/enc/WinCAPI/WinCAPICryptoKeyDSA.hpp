@@ -54,7 +54,7 @@ class WinCAPICryptoProvider;
  */
 
 
-class DSIG_EXPORT WinCAPICryptoKeyDSA : public XSECCryptoKeyDSA {
+class XSEC_EXPORT WinCAPICryptoKeyDSA : public XSECCryptoKeyDSA {
 
 public :
 

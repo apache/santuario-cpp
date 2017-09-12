@@ -44,7 +44,7 @@ class TXFMBase;
  */
 
 
-class DSIG_EXPORT TXFMChain {
+class XSEC_EXPORT TXFMChain {
 
 public:
 

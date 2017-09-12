@@ -54,7 +54,7 @@ class XSECEnv;
  */
 
 
-class DSIG_EXPORT DSIGObject {
+class XSEC_EXPORT DSIGObject {
 
 public:
 

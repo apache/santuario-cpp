@@ -56,7 +56,7 @@ class DSIGXPathFilterExpr;
  *
  */
 
-class DSIG_EXPORT DSIGTransformXPathFilter : public DSIGTransform {
+class XSEC_EXPORT DSIGTransformXPathFilter : public DSIGTransform {
 
 
 public:

@@ -68,7 +68,7 @@ class XSECEnv;
  *
  */
 
-class DSIG_EXPORT DSIGReference {
+class XSEC_EXPORT DSIGReference {
 
 public:
 

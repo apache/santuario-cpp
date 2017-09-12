@@ -78,7 +78,7 @@ struct sockaddr;
 
 class XSECSOAPRequestorSimple;
 
-class DSIG_EXPORT XSECBinHTTPURIInputStream : public XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream
+class XSEC_EXPORT XSECBinHTTPURIInputStream : public XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream
 {
 public :
 

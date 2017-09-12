@@ -40,7 +40,7 @@
  * @ingroup internal
  */
 
-class DSIG_EXPORT TXFMURL : public TXFMBase {
+class XSEC_EXPORT TXFMURL : public TXFMBase {
 
 private:
 

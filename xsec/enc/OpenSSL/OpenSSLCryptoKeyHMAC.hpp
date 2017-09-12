@@ -45,7 +45,7 @@
  * Used to provide HMAC keys to OpenSSLCryptoHashHMAC
  */
 
-class DSIG_EXPORT OpenSSLCryptoKeyHMAC : public XSECCryptoKeyHMAC {
+class XSEC_EXPORT OpenSSLCryptoKeyHMAC : public XSECCryptoKeyHMAC {
 
 public :
 

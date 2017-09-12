@@ -51,7 +51,7 @@ class NSSCryptoProvider;
  */
 
 
-class DSIG_EXPORT NSSCryptoKeyDSA : public XSECCryptoKeyDSA {
+class XSEC_EXPORT NSSCryptoKeyDSA : public XSECCryptoKeyDSA {
 
 public :
 

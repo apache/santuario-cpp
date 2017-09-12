@@ -92,7 +92,7 @@ struct XSECNameSpaceEntry {
  */
 
 
-class CANON_EXPORT XSECNameSpaceExpander {
+class XSEC_EXPORT XSECNameSpaceExpander {
 
 
 #if defined(XALAN_NO_NAMESPACES)

@@ -46,7 +46,7 @@
  *
  */
 
-class DSIG_EXPORT OpenSSLCryptoX509 : public XSECCryptoX509 {
+class XSEC_EXPORT OpenSSLCryptoX509 : public XSECCryptoX509 {
 
 public :
 

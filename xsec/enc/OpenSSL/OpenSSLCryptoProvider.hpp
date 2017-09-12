@@ -53,7 +53,7 @@
  */
  /*\@{*/
 
-class DSIG_EXPORT OpenSSLCryptoProvider : public XSECCryptoProvider {
+class XSEC_EXPORT OpenSSLCryptoProvider : public XSECCryptoProvider {
 
 #ifdef XSEC_OPENSSL_HAVE_EC
     std::map<std::string,int> m_namedCurveMap;

@@ -110,7 +110,7 @@ xsec_xklient_SOURCES = \
    enc/OpenSSL/OpenSSLSupport.hpp
 endif
 
-lib_CPPFLAGS += -DXSEC_BUILDING_LIBRARY
+lib_CPPFLAGS = -DXSEC_BUILDING_LIBRARY
 
 lib_LTLIBRARIES = libxml-security-c.la
 

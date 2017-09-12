@@ -145,7 +145,7 @@
 
 #endif
 
-#ifdef XSEC_LIBRARY_BUILD
+#ifdef XSEC_BUILDING_LIBRARY
 #   ifdef HAVE_STRCASECMP
 #       define _stricmp(x,y) strcasecmp(x,y)
 #   else

@@ -66,10 +66,6 @@ CXXFLAGS="${CXXFLAGS} ${PTHREAD_CFLAGS}"
 LIBS="${LIBS} ${PTHREAD_LIBS}"
 CC="${PTHREAD_CC}"
 
-# Checks for required libraries
-AC_CHECK_LIB(m, floor,)
-AC_CHECK_LIB(socket, getservent,)
-
 # Check for required includes
 AC_CHECK_HEADERS([unistd.h direct.h])
 

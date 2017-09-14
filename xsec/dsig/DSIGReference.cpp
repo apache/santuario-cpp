@@ -964,7 +964,7 @@ bool DSIGReference::verifyReferenceList(DSIGReferenceList * lst, safeBuffer &err
 
 			}
 		}
-		catch (const NetAccessorException& e) {
+		catch (const NetAccessorException&) {
 
 			res = false;
 

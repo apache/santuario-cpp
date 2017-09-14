@@ -94,9 +94,9 @@
 
 #if defined(DLL_EXPORT)
   #if defined(XSEC_BUILDING_LIBRARY)
-    #define XSEC_EXPORT XSEC_PLATFORM_EXPORT
+    #define XSEC_EXPORT XERCES_PLATFORM_EXPORT
   #else
-    #define XSEC_EXPORT XSEC_PLATFORM_IMPORT
+    #define XSEC_EXPORT XERCES_PLATFORM_IMPORT
   #endif
 #else
   #define XSEC_EXPORT

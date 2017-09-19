@@ -169,7 +169,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC10/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC15/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -188,7 +188,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win32\VC10\Debug;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\$(Platform)\VC12\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win32\VC15\Debug;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\$(Platform)\VC15\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -197,7 +197,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC10/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC15/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -216,12 +216,12 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win64\VC10\Debug;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\Win64\VC12\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win64\VC15\Debug;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\Win64\VC15\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC10/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC15/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -239,7 +239,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win32\VC10\Release;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\Win32\VC12\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win32\VC15\Release;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\Win32\VC15\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -247,7 +247,7 @@
       <TargetEnvironment>X64</TargetEnvironment>
     </Midl>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC10/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC15/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -265,7 +265,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win64\VC10\Release;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\Win64\VC12\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XALANCROOT)\Build\Win64\VC15\Release;$(XALANCROOT)\lib;$(XERCESCROOT)\Build\Win64\VC15\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">
@@ -290,7 +290,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\$(Platform)\VC12\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\$(Platform)\VC15\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">
@@ -318,7 +318,7 @@
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
-      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\Win64\VC12\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\Win64\VC15\Debug;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">
@@ -341,7 +341,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\Win32\VC12\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\Win32\VC15\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">
@@ -367,7 +367,7 @@
       </DataExecutionPrevention>
       <TargetMachine>MachineX64</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\Win64\VC12\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(XERCESCROOT)\Build\Win64\VC15\Release;$(XERCESCROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

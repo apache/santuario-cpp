@@ -54,8 +54,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,8,0,0
- PRODUCTVERSION 1,8,0,0
+ FILEVERSION 2,0,0,0
+ PRODUCTVERSION 2,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -73,22 +73,22 @@ BEGIN
             VALUE "Comments", "\0"
             VALUE "CompanyName", "The Apache Software Foundation\0"
             VALUE "FileDescription", "Santuario C++ XML Security Library\0"
-            VALUE "FileVersion", "1, 8, 0, 0\0"
+            VALUE "FileVersion", "2, 0, 0, 0\0"
 #ifdef _DEBUG
-            VALUE "InternalName", "xsec_1_8D\0"
+            VALUE "InternalName", "xsec_2_0D\0"
 #else
-            VALUE "InternalName", "xsec_1_8\0"
+            VALUE "InternalName", "xsec_2_0\0"
 #endif
             VALUE "LegalCopyright", "Copyright � 2002-2017 The Apache Software Foundation\0"
             VALUE "LegalTrademarks", "\0"
 #ifdef _DEBUG
-            VALUE "OriginalFilename", "xsec_1_8D.dll\0"
+            VALUE "OriginalFilename", "xsec_2_0D.dll\0"
 #else
-            VALUE "OriginalFilename", "xsec_1_8.dll\0"
+            VALUE "OriginalFilename", "xsec_2_0.dll\0"
 #endif
             VALUE "PrivateBuild", "\0"
             VALUE "ProductName", "Santuario C++ XML Security Library\0"
-            VALUE "ProductVersion", "1, 8, 0, 0\0"
+            VALUE "ProductVersion", "2, 0, 0, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END

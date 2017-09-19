@@ -28,8 +28,8 @@
  * version number. They are used to create version strings.
  */
 
-#define XSEC_VERSION_MAJOR   1
-#define XSEC_VERSION_MEDIUM  8
+#define XSEC_VERSION_MAJOR   2
+#define XSEC_VERSION_MEDIUM  0
 #define XSEC_VERSION_MINOR   0
 
 // --------------------------------------------------------------------------------

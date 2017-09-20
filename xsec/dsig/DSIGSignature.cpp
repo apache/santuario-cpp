@@ -719,11 +719,7 @@ void DSIGSignature::load(void) {
 	mp_signedInfo->load();
 
 	// Look at Signature Value
-	tmpElt = tmpElt->getNextSibling();
-
-	while (tmpElt != 0 && tmpElt->getNodeType() != DOMNode::ELEMENT_NODE)
-		tmpElt = tmpElt->getNextSibling();
-
+	tmpElt = findNextElementChild(tmpElt);
 	if (tmpElt == 0 || !strEquals(getDSIGLocalName(tmpElt), "SignatureValue")) {
 
 		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
@@ -748,11 +744,7 @@ void DSIGSignature::load(void) {
 
 
 	// Now look at KeyInfo
-	tmpElt = tmpElt->getNextSibling();
-
-	while (tmpElt != 0 && !((tmpElt->getNodeType() == DOMNode::ELEMENT_NODE) && 
-		strEquals(getDSIGLocalName(tmpElt), "KeyInfo")))
-		tmpElt = tmpElt->getNextSibling();
+	tmpElt = findNextElementChild(tmpElt);
 
 	if (tmpElt != 0 && strEquals(getDSIGLocalName(tmpElt), "KeyInfo")) {
 

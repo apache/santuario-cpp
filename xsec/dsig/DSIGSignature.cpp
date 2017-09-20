@@ -295,17 +295,17 @@ const DSIGObject * DSIGSignature::getObjectItem(int i) const {
 // Constructors and Destructors
 
 DSIGSignature::DSIGSignature(DOMDocument *doc, DOMNode *sigNode) :
-m_keyInfoList(0),
-m_errStr("") {
-
-	mp_doc = doc;
-	mp_sigNode = sigNode;
-	mp_signingKey = NULL;
-	mp_signedInfo = NULL;
-	mp_KeyInfoResolver = NULL;
-	mp_KeyInfoNode = NULL;
-	m_loaded = false;
-	m_interlockingReferences = false;
+		m_loaded(false),
+		mp_doc(doc),
+		mp_sigNode(sigNode),
+		mp_signedInfo(NULL),
+		mp_signatureValueNode(NULL),
+		m_keyInfoList(NULL),
+		mp_KeyInfoNode(NULL),
+		m_errStr(""),
+		mp_signingKey(NULL),
+		mp_KeyInfoResolver(NULL),
+		m_interlockingReferences(false) {
 
 	// Set up our formatter
 	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes, 
@@ -319,16 +319,17 @@ m_errStr("") {
 }
 
 DSIGSignature::DSIGSignature(void) :
-m_keyInfoList(0),
-m_errStr("") {
-	mp_doc = NULL;
-	mp_sigNode = NULL;
-	mp_signingKey = NULL;
-	mp_signedInfo = NULL;
-	mp_KeyInfoResolver = NULL;
-	mp_KeyInfoNode = NULL;
-	m_loaded = false;
-	m_interlockingReferences = false;
+		m_loaded(false),
+		mp_doc(NULL),
+		mp_sigNode(NULL),
+		mp_signedInfo(NULL),
+		mp_signatureValueNode(NULL),
+		m_keyInfoList(NULL),
+		mp_KeyInfoNode(NULL),
+		m_errStr(""),
+		mp_signingKey(NULL),
+		mp_KeyInfoResolver(NULL),
+		m_interlockingReferences(false) {
 
 	// Set up our formatter
 	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes, 

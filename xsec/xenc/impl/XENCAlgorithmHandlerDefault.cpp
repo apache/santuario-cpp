@@ -427,7 +427,7 @@ unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
 	offset += sk->decryptFinish(&buf[offset], _MY_MAX_KEY_SIZE - offset);
 
 	// Calculate the CMS Key Checksum
-	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hashSHA1();
+	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hashSHA();
 	if (!sha1) {
 
 		throw XSECException(XSECException::CryptoProviderError, 
@@ -485,7 +485,7 @@ bool XENCAlgorithmHandlerDefault::wrapKey3DES(
 	// Do the first encrypt
 	XMLByte buf2[_MY_MAX_KEY_SIZE + 16];
 
-	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hashSHA1();
+	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hashSHA();
 	if (!sha1) {
 
 		throw XSECException(XSECException::CryptoProviderError, 

@@ -36,10 +36,8 @@ XERCES_CPP_NAMESPACE_USE
 
 // Standarad includes 
 
-TXFMMD5::TXFMMD5(DOMDocument *doc,
-									 XSECCryptoKey * key) : TXFMBase (doc) {
-
-	toOutput = 0;					// Nothing yet to output
+TXFMMD5::TXFMMD5(DOMDocument *doc, XSECCryptoKey * key) :
+	TXFMBase (doc), mp_h(NULL), md_value(NULL), md_len(0), toOutput(0) {
 
 	if (key == NULL)
 		// Get a MD5 worker
@@ -59,7 +57,12 @@ TXFMMD5::TXFMMD5(DOMDocument *doc,
 				"Error requesting MD5 object from Crypto Provider");
 
 	}
-									
+
+	md_value = new unsigned char[XSECPlatformUtils::g_cryptoProvider->getMaxHashSize()];
+	if (!md_value) {
+		delete mp_h;
+	}
+
 };
 
 TXFMMD5::~TXFMMD5() {
@@ -111,7 +114,7 @@ void TXFMMD5::setInput(TXFMBase * inputT) {
 	
 	// Finalise
 
-	md_len = mp_h->finish(md_value, CRYPTO_MAX_HASH_SIZE);
+	md_len = mp_h->finish(md_value, XSECPlatformUtils::g_cryptoProvider->getMaxHashSize());
 
 	toOutput = md_len;
 

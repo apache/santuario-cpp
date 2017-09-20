@@ -175,24 +175,8 @@ const XMLCh * OpenSSLCryptoProvider::getProviderName() const {
 }
     // Hashing classes
 
-XSECCryptoHash  * OpenSSLCryptoProvider::hashSHA1() const {
-
-    OpenSSLCryptoHash * ret;
-
-    XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA1));
-
-    return ret;
-
-}
-
-XSECCryptoHash * OpenSSLCryptoProvider::hashHMACSHA1() const {
-
-    OpenSSLCryptoHashHMAC * ret;
-
-    XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
-
-    return ret;
-
+unsigned int OpenSSLCryptoProvider::getMaxHashSize() const {
+	return 128;
 }
 
 XSECCryptoHash  * OpenSSLCryptoProvider::hashSHA(int length) const {

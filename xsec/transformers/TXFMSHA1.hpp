@@ -40,8 +40,8 @@ class XSEC_EXPORT TXFMSHA1 : public TXFMBase {
 
 private:
 
-	XSECCryptoHash		* mp_h;							// To hold the hash
-	unsigned char		md_value[CRYPTO_MAX_HASH_SIZE];	// Final output
+	XSECCryptoHash		* mp_h;						// To hold the hash
+	unsigned char		*md_value;					// Final output
 	unsigned int		md_len;							// Length of digest
 
 	unsigned int		toOutput;						// Amount still to output

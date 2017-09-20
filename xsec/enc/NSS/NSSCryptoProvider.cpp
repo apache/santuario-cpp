@@ -129,19 +129,10 @@ const XMLCh * NSSCryptoProvider::getProviderName() const {
 
 }
 
-// --------------------------------------------------------------------------------
-//           Hash SHA1
-// --------------------------------------------------------------------------------
-
-XSECCryptoHash	* NSSCryptoProvider::hashSHA1() const {
-
-	NSSCryptoHash * ret;
-
-	XSECnew(ret, NSSCryptoHash(XSECCryptoHash::HASH_SHA1));
-
-	return ret;
-
+unsigned int NSSCryptoProvider::getMaxHashSize() const {
+	return NSS_MAX_HASH_SIZE;
 }
+
 
 // --------------------------------------------------------------------------------
 //           Hash SHA
@@ -164,20 +155,6 @@ XSECCryptoHash	* NSSCryptoProvider::hashSHA(int length) const {
 	default:
     ret = NULL;
 	}
-
-	return ret;
-
-}
-
-// --------------------------------------------------------------------------------
-//           Hash HMAC SHA1
-// --------------------------------------------------------------------------------
-
-XSECCryptoHash * NSSCryptoProvider::hashHMACSHA1() const {
-
-	NSSCryptoHashHMAC * ret;
-
-	XSECnew(ret, NSSCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
 
 	return ret;
 

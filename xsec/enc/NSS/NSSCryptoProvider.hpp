@@ -80,50 +80,34 @@ public :
 	//@{
 
 	/**
-	 * \brief Return a SHA1 implementation.
+	 * \brief Get the provider's maximum digest length.
 	 *
-	 * Call used by the library to obtain a SHA1 object from the 
-	 * provider.
+	 * Call used by the library to max out the buffer sizes it uses.
 	 *
-	 * @returns A pointer to an NSS Hash object that implements SHA1
-	 * @see NSSCryptoHash
+	 * @returns maximum size to allow for
 	 */
-
-	virtual XSECCryptoHash * hashSHA1() const;
+	virtual unsigned int getMaxHashSize() const;
 
   /**
-	 * \brief Return a SHA1 implementation.
+	 * \brief Return a SHA implementation.
 	 *
-	 * Call used by the library to obtain a SHA1 object from the 
+	 * Call used by the library to obtain a SHA object from the
 	 * provider.
 	 *
-	 * @returns A pointer to an NSS Hash object that implements SHA1
+	 * @returns A pointer to an NSS Hash object that implements SHA
 	 * @see NSSCryptoHash
 	 */
 
 	virtual XSECCryptoHash * hashSHA(int length = 160) const;
 
-	/**
-	 * \brief Return a HMAC SHA1 implementation.
-	 *
-	 * Call used by the library to obtain a HMAC SHA1 object from the 
-	 * provider.  The caller will need to set the key in the hash
-	 * object with an XSECCryptoKeyHMAC using NSSCryptoHash::setKey()
-	 *
-	 * @returns A pointer to a Hash object that implements HMAC-SHA1
-	 * @see NSSCryptoHash
-	 */
-
-	virtual XSECCryptoHash * hashHMACSHA1() const;
-
   /**
-	 * \brief Return a HMAC SHA1 implementation.
+	 * \brief Return a HMAC SHA implementation.
 	 *
-	 * Call used by the library to obtain a HMAC SHA1 object from the 
+	 * Call used by the library to obtain a HMAC SHA object from the
 	 * provider.  The caller will need to set the key in the hash
 	 * object with an XSECCryptoKeyHMAC using NSSCryptoHash::setKey()
 	 *
-	 * @returns A pointer to a Hash object that implements HMAC-SHA1
+	 * @returns A pointer to a Hash object that implements HMAC-SHA
 	 * @see NSSCryptoHash
 	 */
 

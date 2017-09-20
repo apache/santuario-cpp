@@ -117,16 +117,13 @@ public :
 	//@{
 
 	/**
-	 * \brief Return a SHA1 implementation.
+	 * \brief Get the provider's maximum digest length.
 	 *
-	 * Call used by the library to obtain a SHA1 object from the 
-	 * provider.
+	 * Call used by the library to max out the buffer sizes it uses.
 	 *
-	 * @returns A pointer to an WinCAPI Hash object that implements SHA1
-	 * @see WinCAPICryptoHash
+	 * @returns maximum size to allow for
 	 */
-
-	virtual XSECCryptoHash			* hashSHA1() const;
+	virtual unsigned int getMaxHashSize() const;
 
 	/**
 	 * \brief Return a SHA implementation.
@@ -141,19 +138,6 @@ public :
 	 
 	virtual XSECCryptoHash			* hashSHA(int length = 160) const;
 	
-	/**
-	 * \brief Return a HMAC SHA1 implementation.
-	 *
-	 * Call used by the library to obtain a HMAC SHA1 object from the 
-	 * provider.  The caller will need to set the key in the hash
-	 * object with an XSECCryptoKeyHMAC using WinCAPICryptoHash::setKey()
-	 *
-	 * @returns A pointer to a Hash object that implements HMAC-SHA1
-	 * @see WinCAPICryptoHash
-	 */
-
-	virtual XSECCryptoHash			* hashHMACSHA1() const;
-
 	/**
 	 * \brief Return a HMAC SHA(1-512) implementation.
 	 *

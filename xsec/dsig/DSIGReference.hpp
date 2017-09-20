@@ -552,7 +552,6 @@ private:
 
 
 	XSECSafeBufferFormatter		* mp_formatter;
-	bool formatterLocal;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
 								* mp_referenceNode;		// Points to start of document where reference node is
 	TXFMBase					* mp_preHash;			// To be used pre-hash

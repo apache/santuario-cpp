@@ -108,46 +108,44 @@ static const XMLCh s_unicodeStrRootNode[] =
 // --------------------------------------------------------------------------------
 
 
-DSIGReference::DSIGReference(const XSECEnv * env, DOMNode *dom) {
-
-	mp_referenceNode = dom;
-	mp_env = env;
+DSIGReference::DSIGReference(const XSECEnv * env, DOMNode *dom) :
+	mp_formatter(NULL),
+	mp_referenceNode(dom),
+	mp_preHash(NULL),
+	mp_manifestList(NULL),
+	mp_URI(NULL),
+	m_isManifest(false),
+	mp_transformsNode(NULL),
+	me_hashMethod(HASH_NONE),
+	mp_hashValueNode(NULL),
+	mp_env(env),
+	mp_transformList(NULL),
+	mp_algorithmURI(NULL),
+	m_loaded(false) {
 
 	// Should throw an exception if the node is not a REFERENCE element
 
 	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes,
 												XMLFormatter::UnRep_CharRef));
-
-	mp_preHash = NULL;
-	mp_manifestList = NULL;
-	me_hashMethod = HASH_NONE;
-	mp_transformsNode = NULL;
-	mp_transformList = NULL;
-	mp_URI = NULL;
-	m_isManifest = false;
-	mp_algorithmURI = NULL;
-	m_loaded = false;
-
 }
 
-DSIGReference::DSIGReference(const XSECEnv * env) {
-
-	mp_env = env;
-	mp_referenceNode = NULL;
-	mp_transformsNode = NULL;
-	mp_transformList = NULL;
+DSIGReference::DSIGReference(const XSECEnv * env) :
+	mp_formatter(NULL),
+	mp_referenceNode(NULL),
+	mp_preHash(NULL),
+	mp_manifestList(NULL),
+	mp_URI(NULL),
+	m_isManifest(false),
+	mp_transformsNode(NULL),
+	me_hashMethod(HASH_NONE),
+	mp_hashValueNode(NULL),
+	mp_env(env),
+	mp_transformList(NULL),
+	mp_algorithmURI(NULL),
+	m_loaded(false) {
 
 	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes,
 											XMLFormatter::UnRep_CharRef));
-
-	mp_preHash = NULL;		// By default no "special" transform
-	mp_manifestList = NULL;
-	me_hashMethod = HASH_NONE;
-	mp_URI = NULL;
-	m_isManifest = false;
-	mp_algorithmURI = NULL;
-	m_loaded = false;
-
 };
 
 DSIGReference::~DSIGReference() {
@@ -1186,13 +1184,15 @@ DSIGTransformList * DSIGReference::loadTransforms(
 
 void DSIGReference::setHash(void) {
 
+	unsigned int maxHashSize = XSECPlatformUtils::g_cryptoProvider->getMaxHashSize();
+
 	// First determine the hash value
-	XMLByte calculatedHashVal[CRYPTO_MAX_HASH_SIZE];	// The hash that we determined
+	XMLByte calculatedHashVal[maxHashSize];	// The hash that we determined
 	unsigned int calculatedHashLen;
-	XMLByte base64Hash [CRYPTO_MAX_HASH_SIZE * 2];
+	XMLByte base64Hash [maxHashSize * 2];
 	unsigned int base64HashLen;
 
-	calculatedHashLen = calculateHash(calculatedHashVal, CRYPTO_MAX_HASH_SIZE);
+	calculatedHashLen = calculateHash(calculatedHashVal, maxHashSize);
 
 	// Calculate the base64 value
 
@@ -1211,9 +1211,9 @@ void DSIGReference::setHash(void) {
 	base64HashLen = b64->encode(calculatedHashVal,
 								calculatedHashLen,
 								base64Hash,
-								CRYPTO_MAX_HASH_SIZE * 2);
+								maxHashSize * 2);
 	base64HashLen += b64->encodeFinish(&base64Hash[base64HashLen],
-										(CRYPTO_MAX_HASH_SIZE * 2) - base64HashLen);
+										(maxHashSize * 2) - base64HashLen);
 
 	// Ensure the string is terminated
 	if (base64Hash[base64HashLen-1] == '\n')
@@ -1426,15 +1426,17 @@ bool DSIGReference::checkHash() {
 
 	// First set up for input
 
-	XMLByte calculatedHashVal[CRYPTO_MAX_HASH_SIZE];		// The hash that we determined
-	XMLByte readHashVal[CRYPTO_MAX_HASH_SIZE];			// The hash in the element
+	unsigned int maxHashSize = XSECPlatformUtils::g_cryptoProvider->getMaxHashSize();
+
+	XMLByte calculatedHashVal[maxHashSize];		// The hash that we determined
+	XMLByte readHashVal[maxHashSize];			// The hash in the element
 
 	unsigned int calculatedHashSize, i;
 
-	if ((calculatedHashSize = calculateHash(calculatedHashVal, CRYPTO_MAX_HASH_SIZE)) == 0)
+	if ((calculatedHashSize = calculateHash(calculatedHashVal, maxHashSize)) == 0)
 		return false;
 
-	if (readHash(readHashVal, CRYPTO_MAX_HASH_SIZE) != calculatedHashSize)
+	if (readHash(readHashVal, maxHashSize) != calculatedHashSize)
 		return false;
 
 	for (i = 0; i < calculatedHashSize; ++i) {

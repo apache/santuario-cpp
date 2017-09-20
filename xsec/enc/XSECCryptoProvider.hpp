@@ -109,18 +109,6 @@
 // Some constants
 
 /**
- *\brief Maximum length (in bytes) of any expected Digest results.
- *
- * This constant defines the maximum length (in bytes) of HASH returns.
- * We have defined it far and above the size we would normally expect.
- *
- * @todo This should really come from each of the providers and should
- * be implemented as a function call to *CryptoProvider
- */
-
-#define CRYPTO_MAX_HASH_SIZE		128
-
-/**
  *\brief OID For DSA
  */
 
@@ -129,7 +117,7 @@
 /**
  *\brief The base class that all *CryptoProviders need to implement.
  *
- * The instatiations of this class are used by the core library to
+ * The instantiations of this class are used by the core library to
  * create cryptographic objects necessary for the library to do its work
  * without actually knowing any details at all about the provider library
  *
@@ -154,17 +142,13 @@ public :
 	//@{
 
 	/**
-	 * \brief Return a SHA1 implementation.
+	 * \brief Get the provider's maximum digest length.
 	 *
-	 * Call used by the library to obtain a SHA1 object from the 
-	 * provider.
+	 * Call used by the library to max out the buffer sizes it uses.
 	 *
-	 * @returns A pointer to a Hash object that implements SHA1
-	 * @see XSECCryptoHash
-	 * @deprecated Use hashSHA instead
+	 * @returns maximum size to allow for
 	 */
-	 
-	virtual XSECCryptoHash			* hashSHA1() const = 0;
+	virtual unsigned int getMaxHashSize() const = 0;
 
 	/**
 	 * \brief Return a SHA implementation.
@@ -172,26 +156,12 @@ public :
 	 * Call used by the library to obtain a SHA object from the 
 	 * provider.  Size of hash determined by length argument (160 = SHA1)
 	 *
-	 * @returns A pointer to a Hash object that implements SHA1
+	 * @returns A pointer to a Hash object that implements SHA.
 	 * @param length - length of hash.  E.g. 160 for SHA1 or 256 for SHA256
 	 * @see XSECCryptoHash
 	 */
 	 
 	virtual XSECCryptoHash			* hashSHA(int length = 160) const = 0;
-
-	/**
-	 * \brief Return a HMAC SHA1 implementation.
-	 *
-	 * Call used by the library to obtain a HMAC SHA1 object from the 
-	 * provider.  The caller will need to set the key in the hash
-	 * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey()
-	 *
-	 * @returns A pointer to a Hash object that implements HMAC-SHA1
-	 * @see XSECCryptoHash
-	 * @deprecated use hashHMACSHA instead
-	 */
-
-	virtual XSECCryptoHash			* hashHMACSHA1() const = 0;
 
 	/**
 	 * \brief Return a HMAC SHA(1-512) implementation.
@@ -200,7 +170,7 @@ public :
 	 * provider.  The caller will need to set the key in the hash
 	 * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey()
 	 *
-	 * @returns A pointer to a Hash object that implements HMAC-SHA1
+	 * @returns A pointer to a Hash object that implements HMAC-SHA.
 	 * @param length Length of hash output (160 = SHA1, 256, 512 etc)
 	 * @see XSECCryptoHash
 	 */

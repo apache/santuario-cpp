@@ -178,39 +178,34 @@ const XMLCh * WinCAPICryptoProvider::getProviderName() const {
 
 // Hashing classes
 
-XSECCryptoHash	* WinCAPICryptoProvider::hashSHA1() const {
-
-	WinCAPICryptoHash * ret;
-
-	XSECnew(ret, WinCAPICryptoHash(m_provDSS, XSECCryptoHash::HASH_SHA1));
-
-	return ret;
-
+unsigned int WinCAPICryptoProvider::getMaxHashSize() const {
+	return WINCAPI_MAX_HASH_SIZE;
 }
 
-XSECCryptoHash * WinCAPICryptoProvider::hashHMACSHA1() const {
-
-	WinCAPICryptoHashHMAC * ret;
-
-	XSECnew(ret, WinCAPICryptoHashHMAC(m_provDSS, XSECCryptoHash::HASH_SHA1));
-
-	return ret;
-
-}
 
 XSECCryptoHash	* WinCAPICryptoProvider::hashSHA(int length) const {
 
 
-	if (length == 160)
-		return hashSHA1();
+	if (length == 160) {
+		WinCAPICryptoHash * ret;
+
+		XSECnew(ret, WinCAPICryptoHash(m_provDSS, XSECCryptoHash::HASH_SHA1));
+
+		return ret;
+	}
 
 	else return NULL;
 }
 
 XSECCryptoHash * WinCAPICryptoProvider::hashHMACSHA(int length) const {
 
-	if (length == 160)
-		return hashHMACSHA1();
+	if (length == 160) {
+		WinCAPICryptoHashHMAC * ret;
+
+		XSECnew(ret, WinCAPICryptoHashHMAC(m_provDSS, XSECCryptoHash::HASH_SHA1));
+
+		return ret;
+	}
 
 	else return NULL;
 

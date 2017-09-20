@@ -34,10 +34,9 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-TXFMSHA1::TXFMSHA1(DOMDocument *doc, hashMethod hm,
-									 XSECCryptoKey * key) : TXFMBase (doc) {
+TXFMSHA1::TXFMSHA1(DOMDocument *doc, hashMethod hm, XSECCryptoKey * key) :
+	TXFMBase (doc), mp_h(NULL), md_value(NULL), md_len(0), toOutput(0) {
 
-	toOutput = 0;					// Nothing yet to output
 	int hashLen = 0;
 
 	switch (hm) {
@@ -71,7 +70,6 @@ TXFMSHA1::TXFMSHA1(DOMDocument *doc, hashMethod hm,
 
 		}
 		mp_h->setKey(key);
-
 	}
 
 	
@@ -81,7 +79,11 @@ TXFMSHA1::TXFMSHA1(DOMDocument *doc, hashMethod hm,
 				"Error requesting SHA1 object from Crypto Provider");
 
 	}
-									
+
+	md_value = new unsigned char[XSECPlatformUtils::g_cryptoProvider->getMaxHashSize()];
+	if (!md_value) {
+		delete mp_h;
+	}
 };
 
 TXFMSHA1::~TXFMSHA1() {
@@ -90,6 +92,8 @@ TXFMSHA1::~TXFMSHA1() {
 	if (mp_h)
 		delete mp_h;
 
+	if (md_value)
+		delete[] md_value;
 };
 
 	// Methods to set the inputs
@@ -140,7 +144,7 @@ void TXFMSHA1::setInput(TXFMBase * inputT) {
 	
 	// Finalise
 
-	md_len = mp_h->finish(md_value, CRYPTO_MAX_HASH_SIZE);
+	md_len = mp_h->finish(md_value, XSECPlatformUtils::g_cryptoProvider->getMaxHashSize());
 
 	toOutput = md_len;
 

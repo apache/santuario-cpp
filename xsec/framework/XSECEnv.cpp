@@ -159,7 +159,7 @@ XSECEnv::XSECEnv(DOMDocument *doc) {
 												XMLFormatter::UnRep_CharRef));
 
 	// Set up IDs
-	m_idByAttributeNameFlag = true;		// At the moment this is on by default
+	m_idByAttributeNameFlag = false;		// Now off by default.
 	// Register "Id" and "id" as valid Attribute names
 	registerIdAttributeName(s_Id);
 	registerIdAttributeName(s_id);

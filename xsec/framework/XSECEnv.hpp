@@ -366,11 +366,10 @@ public:
 	 * The setIdByAttributeName call enables or disables the second part of the Id
 	 * search.  I.e. when the Id doesn't exist as an attribute of Type=ID, whether or
 	 * not to search for an attribute of a name in the list of names.  By default
-	 * this behaviour is enabled.
+	 * this behaviour is disabled.
 	 *
-	 * @warning This is currently enabled by default for backwards compatibility
-	 * reasons only.  Future version may reverse this and ship disabled by default, as
-	 * this behaviour is a potential security risk.
+	 * @warning The default has been changed from earlier versions of the library
+	 * to address the security risk of assuming IDness based on name.
 	 *
 	 * @param flag Enable (true) or Disable (false) searching for Id attributes by name
 	 */

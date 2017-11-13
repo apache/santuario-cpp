@@ -257,7 +257,7 @@ int XSEC_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputL
 	Janitor<XSECCryptoKeyHMAC> j_k(k);
 	k->setKey(keyVal, 1);
 
-	XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA1();
+	XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA();
 	Janitor<XSECCryptoHash> j_h(h);
 	h->setKey(k);
 
@@ -279,7 +279,7 @@ int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * i
 	Janitor<XSECCryptoKeyHMAC> j_k(k);
 	k->setKey(keyVal, 1);
 
-	XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA1();
+	XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA();
 	Janitor<XSECCryptoHash> j_h(h);
 
 	h->setKey(k);
@@ -310,7 +310,7 @@ int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding2From1(unsigned cha
 	Janitor<XSECCryptoKeyHMAC> j_k(k);
 	k->setKey(keyVal, 1);
 
-	XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA1();
+	XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA();
 	Janitor<XSECCryptoHash> j_h(h);
 
 	h->setKey(k);
@@ -337,7 +337,7 @@ int XSEC_EXPORT CalculateXKMSKEK(unsigned char * input, int inputLen, unsigned c
 		XSECCryptoKeyHMAC * k = XSECPlatformUtils::g_cryptoProvider->keyHMAC();
 		k->setKey(shaOutput, keyLen);
 
-		XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA1();
+		XSECCryptoHash *h = XSECPlatformUtils::g_cryptoProvider->hashHMACSHA();
 		Janitor<XSECCryptoHash> j_h(h);
 
 		h->setKey(k);

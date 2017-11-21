@@ -1184,36 +1184,48 @@ DSIGTransformList * DSIGReference::loadTransforms(
 
 void DSIGReference::setHash(void) {
 
-	unsigned int maxHashSize = XSECPlatformUtils::g_cryptoProvider->getMaxHashSize();
+    // Set up
 
-	// First determine the hash value
-	XMLByte calculatedHashVal[maxHashSize];	// The hash that we determined
-	unsigned int calculatedHashLen;
-	XMLByte base64Hash [maxHashSize * 2];
-	unsigned int base64HashLen;
+    if (mp_hashValueNode == 0) {
+        throw XSECException(XSECException::NotLoaded,
+            "setHash() called in DSIGReference before load()");
+    }
 
-	calculatedHashLen = calculateHash(calculatedHashVal, maxHashSize);
-
-	// Calculate the base64 value
+    unsigned int maxHashSize = XSECPlatformUtils::g_cryptoProvider->getMaxHashSize();
 
 	XSECCryptoBase64 *	b64 = XSECPlatformUtils::g_cryptoProvider->base64();
-
 	if (!b64) {
-
 		throw XSECException(XSECException::CryptoProviderError,
 				"Error requesting Base64 object from Crypto Provider");
-
 	}
 
 	Janitor<XSECCryptoBase64> j_b64(b64);
 
-	b64->encodeInit();
-	base64HashLen = b64->encode(calculatedHashVal,
-								calculatedHashLen,
-								base64Hash,
-								maxHashSize * 2);
-	base64HashLen += b64->encodeFinish(&base64Hash[base64HashLen],
-										(maxHashSize * 2) - base64HashLen);
+    // First determine the hash value
+    XMLByte* calculatedHashVal = new XMLByte[maxHashSize];
+    XMLByte* base64Hash = new XMLByte[maxHashSize * 2];
+
+    unsigned int base64HashLen = 0;
+
+    try {
+        unsigned int calculatedHashLen = calculateHash(calculatedHashVal, maxHashSize);
+
+        // Calculate the base64 value
+        b64->encodeInit();
+        base64HashLen = b64->encode(calculatedHashVal,
+            calculatedHashLen,
+            base64Hash,
+            maxHashSize * 2);
+        base64HashLen += b64->encodeFinish(&base64Hash[base64HashLen],
+            (maxHashSize * 2) - base64HashLen);
+    }
+    catch (...) {
+        delete[] calculatedHashVal;
+        delete[] base64Hash;
+        throw;
+    }
+
+    delete[] calculatedHashVal;
 
 	// Ensure the string is terminated
 	if (base64Hash[base64HashLen-1] == '\n')
@@ -1223,16 +1235,7 @@ void DSIGReference::setHash(void) {
 
 	// Now find the correct text node to re-set
 
-	DOMNode *tmpElt = mp_hashValueNode;
-
-	if (mp_hashValueNode == 0) {
-
-		throw XSECException(XSECException::NotLoaded,
-			"setHash() called in DSIGReference before load()");
-
-	}
-
-	tmpElt = mp_hashValueNode->getFirstChild();
+	DOMNode* tmpElt = mp_hashValueNode->getFirstChild();
 
 	while (tmpElt != NULL && tmpElt->getNodeType() != DOMNode::TEXT_NODE)
 		tmpElt = tmpElt->getNextSibling();
@@ -1247,6 +1250,7 @@ void DSIGReference::setHash(void) {
 		tmpElt->setNodeValue(MAKE_UNICODE_STRING((char *) base64Hash));
 	}
 
+    delete[] base64Hash;
 }
 
 
@@ -1428,22 +1432,38 @@ bool DSIGReference::checkHash() {
 
 	unsigned int maxHashSize = XSECPlatformUtils::g_cryptoProvider->getMaxHashSize();
 
-	XMLByte calculatedHashVal[maxHashSize];		// The hash that we determined
-	XMLByte readHashVal[maxHashSize];			// The hash in the element
+	XMLByte* calculatedHashVal = new XMLByte[maxHashSize];		// The hash that we determined
 
-	unsigned int calculatedHashSize, i;
+    unsigned int calculatedHashSize;
 
-	if ((calculatedHashSize = calculateHash(calculatedHashVal, maxHashSize)) == 0)
-		return false;
+    try {
+        if ((calculatedHashSize = calculateHash(calculatedHashVal, maxHashSize)) == 0)
+            return false;
+    }
+    catch (...) {
+        delete[] calculatedHashVal;
+        throw;
+    }
 
-	if (readHash(readHashVal, maxHashSize) != calculatedHashSize)
-		return false;
+    XMLByte* readHashVal = new XMLByte [maxHashSize];			// The hash in the element
 
-	for (i = 0; i < calculatedHashSize; ++i) {
-		if (calculatedHashVal[i] != readHashVal[i])
-			return false;
+    if (readHash(readHashVal, maxHashSize) != calculatedHashSize) {
+        delete[] calculatedHashVal;
+        delete[] readHashVal;
+        return false;
+    }
+
+	for (unsigned int i = 0; i < calculatedHashSize; ++i) {
+        if (calculatedHashVal[i] != readHashVal[i]) {
+            delete[] calculatedHashVal;
+            delete[] readHashVal;
+            return false;
+        }
 
 	}
+
+    delete[] calculatedHashVal;
+    delete[] readHashVal;
 
 	// Got through with flying colours!
 	return true;

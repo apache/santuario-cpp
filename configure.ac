@@ -55,8 +55,8 @@ AC_PROG_AWK
 AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 
 if test "$GCC" = "yes" ; then
-    CFLAGS="-Wall -Wstrict-overflow=5 $GCC_CFLAGS"
-    CXXFLAGS="-Wall -Wstrict-overflow=5 $GCC_CXXFLAGS"
+    CFLAGS="-Wall $GCC_CFLAGS"
+    CXXFLAGS="-Wall $GCC_CXXFLAGS"
 fi
 
 # pthreads

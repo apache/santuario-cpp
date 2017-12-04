@@ -429,7 +429,7 @@ void DSIGReference::setType(const XMLCh *type) {
 //           isManifest
 // --------------------------------------------------------------------------------
 
-bool DSIGReference::isManifest() {
+bool DSIGReference::isManifest() const {
 
 	return m_isManifest;
 
@@ -439,7 +439,7 @@ bool DSIGReference::isManifest() {
 //           getURI
 // --------------------------------------------------------------------------------
 
-const XMLCh * DSIGReference::getURI() {
+const XMLCh * DSIGReference::getURI() const {
 
 	return mp_URI;
 
@@ -449,7 +449,7 @@ const XMLCh * DSIGReference::getURI() {
 //           getManifestReferenceList
 // --------------------------------------------------------------------------------
 
-DSIGReferenceList * DSIGReference::getManifestReferenceList() {
+DSIGReferenceList * DSIGReference::getManifestReferenceList() const {
 
 	return mp_manifestList;
 
@@ -1469,8 +1469,3 @@ bool DSIGReference::checkHash() {
 	return true;
 
 }
-
-
-
-
-

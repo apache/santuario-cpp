@@ -123,7 +123,7 @@ public:
 	 * @returns the URI attribute string for this object
 	 */
 
-	const XMLCh * getId(void);
+	const XMLCh * getId(void) const;
 
 	/**
 	 * \brief Returns the MimeType string of this object
@@ -131,7 +131,7 @@ public:
 	 * @returns a pointer to the buffer containing the Mime Type string
 	 */
 
-	const XMLCh * getMimeType(void);
+	const XMLCh * getMimeType(void) const;
 
 	/**
 	 * \brief Returns the Encoding string of this object
@@ -139,7 +139,7 @@ public:
 	 * @returns a pointer to the buffer containing the Encoding string
 	 */
 
-	const XMLCh * getEncoding(void);
+	const XMLCh * getEncoding(void) const;
 
 	/**
 	 * \brief Returns the Element node for this object
@@ -147,7 +147,7 @@ public:
 	 * @returns the Element node at the head of this object
 	 */
 
-	const XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement(void);
+	const XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement(void) const;
 
 	//@}
 

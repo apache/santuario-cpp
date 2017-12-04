@@ -126,7 +126,7 @@ public:
 	 * \brief Return the DOMNode that heads up this KeyInfo child
 	 */
 
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getKeyInfoDOMNode()
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getKeyInfoDOMNode() const
 		{return mp_keyInfoDOMNode;}
 
 	/**

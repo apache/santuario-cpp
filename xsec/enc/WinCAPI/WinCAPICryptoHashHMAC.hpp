@@ -104,7 +104,7 @@ public :
 	 * @param key The key the HMAC function should use.
 	 */
 
-	virtual void		setKey(XSECCryptoKey * key);
+	virtual void		setKey(const XSECCryptoKey * key);
 
 	//@}
 

@@ -123,7 +123,7 @@ OpenSSLCryptoHashHMAC::OpenSSLCryptoHashHMAC(HashType alg) : m_mdLen(0),
 
 }
 
-void OpenSSLCryptoHashHMAC::setKey(XSECCryptoKey *key) {
+void OpenSSLCryptoHashHMAC::setKey(const XSECCryptoKey *key) {
 
     // Use this to initialise the HMAC Context
 

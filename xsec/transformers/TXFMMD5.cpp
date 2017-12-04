@@ -36,7 +36,7 @@ XERCES_CPP_NAMESPACE_USE
 
 // Standarad includes 
 
-TXFMMD5::TXFMMD5(DOMDocument *doc, XSECCryptoKey * key) :
+TXFMMD5::TXFMMD5(DOMDocument *doc, const XSECCryptoKey * key) :
 	TXFMBase (doc), mp_h(NULL), md_value(NULL), md_len(0), toOutput(0) {
 
 	if (key == NULL)

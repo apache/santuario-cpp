@@ -213,7 +213,7 @@ XSECAlgorithmHandler * DSIGAlgorithmHandlerDefault::clone(void) const {
 //			Add a hash txfm
 // --------------------------------------------------------------------------------
 
-TXFMBase * addHashTxfm(signatureMethod sm, hashMethod hm, XSECCryptoKey * key, 
+TXFMBase * addHashTxfm(signatureMethod sm, hashMethod hm, const XSECCryptoKey * key,
 					   DOMDocument * doc) {
 
 	// Given a hash method and signature method, create an appropriate TXFM
@@ -328,7 +328,7 @@ TXFMBase * addHashTxfm(signatureMethod sm, hashMethod hm, XSECCryptoKey * key,
 
 bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain * inputBytes,
 														  const XMLCh * URI,
-														  XSECCryptoKey * key) const {
+														  const XSECCryptoKey * key) const {
 
 	signatureMethod sm;
 	hashMethod hm;
@@ -362,7 +362,7 @@ bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain * inputBytes
 unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		unsigned int outputLength,
 		safeBuffer & result) const {
 
@@ -558,7 +558,7 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 		const XMLCh * URI,
 		const char * sig,
 		unsigned int outputLength,
-		XSECCryptoKey * key) const {
+		const XSECCryptoKey * key) const {
 
 	signatureMethod sm;
 	hashMethod hm;
@@ -735,7 +735,7 @@ bool DSIGAlgorithmHandlerDefault::appendHashTxfm(
 unsigned int DSIGAlgorithmHandlerDefault::decryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		DOMDocument * doc,
 		safeBuffer & result
 		) const {
@@ -748,7 +748,7 @@ unsigned int DSIGAlgorithmHandlerDefault::decryptToSafeBuffer(
 bool DSIGAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
 		) const {
 
@@ -764,7 +764,7 @@ bool DSIGAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 bool DSIGAlgorithmHandlerDefault::encryptToSafeBuffer(
 		TXFMChain * plainText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 		) const {

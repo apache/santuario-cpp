@@ -49,7 +49,7 @@ public:
 	// Constructors and destructors
 
     TXFMCipher(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
-                XSECCryptoKey* key,
+                const XSECCryptoKey* key,
                 bool encrypt,
                 XSECCryptoSymmetricKey::SymmetricKeyMode mode = XSECCryptoSymmetricKey::MODE_CBC,
                 unsigned int taglen = 0);

@@ -55,13 +55,13 @@ public:
 	virtual bool appendSignatureHashTxfm(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key
+		const XSECCryptoKey * key
 	) const;
 
 	virtual unsigned int signToSafeBuffer(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		unsigned int outputLength,
 		safeBuffer & result
 	) const;
@@ -71,7 +71,7 @@ public:
 		const XMLCh * URI,
 		const char * sig,
 		unsigned int outputLength,
-		XSECCryptoKey * key
+		const XSECCryptoKey * key
 	) const;
 
 	virtual bool appendHashTxfm(
@@ -84,7 +84,7 @@ public:
 	virtual unsigned int decryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 	) const;
@@ -92,14 +92,14 @@ public:
 	virtual bool appendDecryptCipherTXFM(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
 	) const;
 
 	virtual bool encryptToSafeBuffer(
 		TXFMChain * plainText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 	) const;

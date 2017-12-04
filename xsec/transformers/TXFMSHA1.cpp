@@ -102,19 +102,19 @@ TXFMSHA1::~TXFMSHA1() {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMSHA1::getInputType(void) {
+TXFMBase::ioType TXFMSHA1::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
-TXFMBase::ioType TXFMSHA1::getOutputType(void) {
+TXFMBase::ioType TXFMSHA1::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
 
-TXFMBase::nodeType TXFMSHA1::getNodeType(void) {
+TXFMBase::nodeType TXFMSHA1::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -176,23 +176,5 @@ unsigned int TXFMSHA1::readBytes(XMLByte * const toFill, unsigned int maxToFill)
 	toOutput -= maxToFill;
 
 	return ret;
-
-}
-
-DOMDocument * TXFMSHA1::getDocument() {
-
-	return NULL;
-
-}
-
-DOMNode * TXFMSHA1::getFragmentNode() {
-
-	return NULL;		// Return a null node
-
-};
-
-const XMLCh * TXFMSHA1::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }

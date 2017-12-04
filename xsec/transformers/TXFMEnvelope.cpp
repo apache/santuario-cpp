@@ -97,19 +97,19 @@ void TXFMEnvelope::setInput(TXFMBase *newInput) {
 
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMEnvelope::getInputType(void) {
+TXFMBase::ioType TXFMEnvelope::getInputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::ioType TXFMEnvelope::getOutputType(void) {
+TXFMBase::ioType TXFMEnvelope::getOutputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::nodeType TXFMEnvelope::getNodeType(void) {
+TXFMBase::nodeType TXFMEnvelope::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_XPATH_NODESET;
 
@@ -235,26 +235,8 @@ unsigned int TXFMEnvelope::readBytes(XMLByte * const toFill, unsigned int maxToF
 
 }
 
-DOMDocument *TXFMEnvelope::getDocument() {
+DOMDocument *TXFMEnvelope::getDocument() const {
 
 	return mp_document;
-
-}
-
-DOMNode *TXFMEnvelope::getFragmentNode() {
-
-	return NULL;
-
-}
-
-const XMLCh * TXFMEnvelope::getFragmentId() {
-
-	return NULL;	// Empty string
-
-}
-
-XSECXPathNodeList	& TXFMEnvelope::getXPathNodeList() {
-
-	return m_XPathMap;
 
 }

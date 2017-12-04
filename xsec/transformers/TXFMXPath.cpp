@@ -539,18 +539,18 @@ void TXFMXPath::evaluateEnvelope(DOMNode *t) {
 	
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMXPath::getInputType(void) {
+TXFMBase::ioType TXFMXPath::getInputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
-TXFMBase::ioType TXFMXPath::getOutputType(void) {
+TXFMBase::ioType TXFMXPath::getOutputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::nodeType TXFMXPath::getNodeType(void) {
+TXFMBase::nodeType TXFMXPath::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_XPATH_NODESET;
 
@@ -564,27 +564,9 @@ unsigned int TXFMXPath::readBytes(XMLByte * const toFill, unsigned int maxToFill
 
 }
 
-DOMDocument *TXFMXPath::getDocument() {
+DOMDocument *TXFMXPath::getDocument() const {
 
 	return document;
-
-}
-
-DOMNode *TXFMXPath::getFragmentNode() {
-
-	return NULL;
-
-}
-
-const XMLCh * TXFMXPath::getFragmentId() {
-
-	return NULL;	// Empty string
-
-}
-
-XSECXPathNodeList	& TXFMXPath::getXPathNodeList() {
-
-	return m_XPathMap;
 
 }
 

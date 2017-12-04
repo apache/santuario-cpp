@@ -89,19 +89,19 @@ void TXFMCipher::setInput(TXFMBase *newInput) {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMCipher::getInputType(void) {
+TXFMBase::ioType TXFMCipher::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
-TXFMBase::ioType TXFMCipher::getOutputType(void) {
+TXFMBase::ioType TXFMCipher::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
 
-TXFMBase::nodeType TXFMCipher::getNodeType(void) {
+TXFMBase::nodeType TXFMCipher::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -164,23 +164,5 @@ unsigned int TXFMCipher::readBytes(XMLByte * const toFill, unsigned int maxToFil
 	}
 
 	return ret;
-
-}
-
-DOMDocument *TXFMCipher::getDocument() {
-
-	return NULL;
-
-}
-
-DOMNode * TXFMCipher::getFragmentNode() {
-
-	return NULL;		// Return a null node
-
-}
-
-const XMLCh * TXFMCipher::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }

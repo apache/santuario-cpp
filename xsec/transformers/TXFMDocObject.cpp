@@ -37,16 +37,12 @@ XERCES_CPP_NAMESPACE_USE
 TXFMDocObject::TXFMDocObject(DOMDocument *doc) : TXFMBase(doc) {
 
 	input = NULL;
-	fragmentId = NULL;
 	type = TXFMBase::DOM_NODE_NONE;	// No nodes currently held
 	mp_env = NULL;
 
 }
 
 TXFMDocObject::~TXFMDocObject() {
-
-	if (fragmentId != NULL)
-		XSEC_RELEASE_XMLCH(fragmentId);
 
 }
 
@@ -136,7 +132,6 @@ void TXFMDocObject::setInput(DOMDocument *doc, const XMLCh * newFragmentId) {
 		throw XSECException(XSECException::IDNotFoundInDOMDoc);
 
 	document = doc;
-	fragmentId = XMLString::replicate(newFragmentId);
 	type = TXFMBase::DOM_NODE_DOCUMENT_FRAGMENT;
 
 }
@@ -170,19 +165,19 @@ void TXFMDocObject::setInput(DOMDocument *doc) {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMDocObject::getInputType(void) {
+TXFMBase::ioType TXFMDocObject::getInputType(void) const {
 
 	return TXFMBase::NONE;
 
 }
 
-TXFMBase::ioType TXFMDocObject::getOutputType(void) {
+TXFMBase::ioType TXFMDocObject::getOutputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::nodeType TXFMDocObject::getNodeType(void) {
+TXFMBase::nodeType TXFMDocObject::getNodeType(void) const {
 
 	return type;
 
@@ -196,20 +191,14 @@ unsigned int TXFMDocObject::readBytes(XMLByte * const toFill, unsigned int maxTo
 
 }
 
-DOMDocument * TXFMDocObject::getDocument() {
+DOMDocument * TXFMDocObject::getDocument() const {
 
 	return document;
 
 }
 
-DOMNode * TXFMDocObject::getFragmentNode() {
+DOMNode * TXFMDocObject::getFragmentNode() const {
 
 	return fragmentObject;
-
-}
-
-const XMLCh * TXFMDocObject::getFragmentId() {
-
-	return fragmentId;	
 
 }

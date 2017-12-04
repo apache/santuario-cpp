@@ -695,18 +695,18 @@ void TXFMXPathFilter::evaluateExprs(DSIGTransformXPathFilter::exprVectorType * e
 	
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMXPathFilter::getInputType(void) {
+TXFMBase::ioType TXFMXPathFilter::getInputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
-TXFMBase::ioType TXFMXPathFilter::getOutputType(void) {
+TXFMBase::ioType TXFMXPathFilter::getOutputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::nodeType TXFMXPathFilter::getNodeType(void) {
+TXFMBase::nodeType TXFMXPathFilter::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_XPATH_NODESET;
 
@@ -720,21 +720,9 @@ unsigned int TXFMXPathFilter::readBytes(XMLByte * const toFill, unsigned int max
 
 }
 
-DOMDocument *TXFMXPathFilter::getDocument() {
+DOMDocument *TXFMXPathFilter::getDocument() const {
 
 	return document;
-
-}
-
-DOMNode *TXFMXPathFilter::getFragmentNode() {
-
-	return NULL;
-
-}
-
-const XMLCh * TXFMXPathFilter::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }
 

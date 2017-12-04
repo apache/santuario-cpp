@@ -69,7 +69,7 @@ TXFMParser::~TXFMParser() {
 //  For expanding name spaces when necessary
 // -----------------------------------------------------------------------
 
-bool TXFMParser::nameSpacesExpanded(void) {
+bool TXFMParser::nameSpacesExpanded(void) const {
 
 	// NOTE : Do not check inputs as this has its own document
 
@@ -135,19 +135,20 @@ void TXFMParser::setInput(TXFMBase *newInput) {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMParser::getInputType(void) {
+TXFMBase::ioType TXFMParser::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
-TXFMBase::ioType TXFMParser::getOutputType(void) {
+
+TXFMBase::ioType TXFMParser::getOutputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
 
-TXFMBase::nodeType TXFMParser::getNodeType(void) {
+TXFMBase::nodeType TXFMParser::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_DOCUMENT;
 
@@ -161,20 +162,8 @@ unsigned int TXFMParser::readBytes(XMLByte * const toFill, unsigned int maxToFil
 
 }
 
-DOMDocument *TXFMParser::getDocument() {
+DOMDocument *TXFMParser::getDocument() const {
 
 	return mp_parsedDoc;
-
-}
-
-DOMNode * TXFMParser::getFragmentNode() {
-
-	return NULL;		// Return a null node
-
-}
-
-const XMLCh * TXFMParser::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }

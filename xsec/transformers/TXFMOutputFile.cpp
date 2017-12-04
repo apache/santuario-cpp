@@ -79,20 +79,20 @@ bool TXFMOutputFile::setFile(char * const fileName) {
 
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMOutputFile::getInputType(void) {
+TXFMBase::ioType TXFMOutputFile::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::ioType TXFMOutputFile::getOutputType(void) {
+TXFMBase::ioType TXFMOutputFile::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
 
-TXFMBase::nodeType TXFMOutputFile::getNodeType(void) {
+TXFMBase::nodeType TXFMOutputFile::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -111,23 +111,5 @@ unsigned int TXFMOutputFile::readBytes(XMLByte * const toFill, unsigned int maxT
 		f.write((char *) toFill, sz);
 
 	return sz;
-
-}
-
-DOMDocument * TXFMOutputFile::getDocument() {
-
-	return NULL;
-
-}
-
-DOMNode * TXFMOutputFile::getFragmentNode() {
-
-	return NULL;
-
-};
-
-const XMLCh * TXFMOutputFile::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }

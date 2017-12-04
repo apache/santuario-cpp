@@ -72,20 +72,18 @@ public:
 
 	// Methods to get tranform output type and input requirement
 
-	TXFMBase::ioType getInputType(void);
-	TXFMBase::ioType getOutputType(void);
-	TXFMBase::nodeType getNodeType(void);
+	TXFMBase::ioType getInputType(void) const;
+	TXFMBase::ioType getOutputType(void) const;
+	TXFMBase::nodeType getNodeType(void) const;
 
 	// Methods to get output data
 
 	unsigned int readBytes(XMLByte * const toFill, const unsigned int maxToFill);
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * getDocument();
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * getFragmentNode();
-	virtual const XMLCh * getFragmentId();
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * getDocument() const;
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * getFragmentNode() const;
 	
 private:
 
-	XMLCh	* fragmentId;				// The identifier of the object
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument 
 			* document;					// The DOM document we are working with
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode 

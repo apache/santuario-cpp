@@ -53,7 +53,7 @@ private:
 
 public:
 
-	TXFMMD5(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, XSECCryptoKey * key = NULL);
+	TXFMMD5(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, const XSECCryptoKey * key = NULL);
 	~TXFMMD5();
 
 	// Methods to get tranform output type and input requirement

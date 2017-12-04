@@ -51,7 +51,7 @@ public:
 	virtual unsigned int decryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 	) const;
@@ -59,14 +59,14 @@ public:
 	virtual bool appendDecryptCipherTXFM(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
 	) const;
 
 	virtual bool encryptToSafeBuffer(
 		TXFMChain * plainText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 	) const;
@@ -84,7 +84,7 @@ public:
 	virtual unsigned int signToSafeBuffer(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		unsigned int outputLength,
 		safeBuffer & result
 	) const;
@@ -92,7 +92,7 @@ public:
 	virtual bool appendSignatureHashTxfm(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key
+		const XSECCryptoKey * key
 	) const;
 
 	virtual bool verifyBase64Signature(
@@ -100,7 +100,7 @@ public:
 		const XMLCh * URI,
 		const char * sig,
 		unsigned int outputLength,
-		XSECCryptoKey * key
+		const XSECCryptoKey * key
 	) const;
 
 	virtual bool appendHashTxfm(
@@ -113,7 +113,7 @@ public:
 private:
 
 	void mapURIToKey(const XMLCh * uri, 
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XSECCryptoKey::KeyType &kt,
 		XSECCryptoSymmetricKey::SymmetricKeyType &skt,
 		bool &isSymmetricKeyWrap,
@@ -123,41 +123,41 @@ private:
 	unsigned int doRSADecryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result) const;
 
 	bool doRSAEncryptToSafeBuffer(
 		TXFMChain * plainText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result) const;
 
 	unsigned int doGCMDecryptToSafeBuffer(
 		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
         unsigned int taglen,
 		safeBuffer & result) const;
 
 	unsigned int unwrapKeyAES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const;
 
 	unsigned int unwrapKey3DES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const;
 
 	bool wrapKeyAES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const;
 
 	bool wrapKey3DES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const;
 };
 

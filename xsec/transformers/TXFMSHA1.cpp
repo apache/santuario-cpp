@@ -34,7 +34,7 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-TXFMSHA1::TXFMSHA1(DOMDocument *doc, hashMethod hm, XSECCryptoKey * key) :
+TXFMSHA1::TXFMSHA1(DOMDocument *doc, hashMethod hm, const XSECCryptoKey * key) :
 	TXFMBase (doc), mp_h(NULL), md_value(NULL), md_len(0), toOutput(0) {
 
 	int hashLen = 0;

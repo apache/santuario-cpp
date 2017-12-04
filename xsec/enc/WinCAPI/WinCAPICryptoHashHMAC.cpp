@@ -136,7 +136,7 @@ void WinCAPICryptoHashHMAC::eraseKeys(void) {
 
 }
 
-void WinCAPICryptoHashHMAC::setKey(XSECCryptoKey *key) {
+void WinCAPICryptoHashHMAC::setKey(const XSECCryptoKey *key) {
 
 	
 	BOOL fResult;

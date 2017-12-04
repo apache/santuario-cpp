@@ -36,7 +36,7 @@
 XERCES_CPP_NAMESPACE_USE
 
 TXFMCipher::TXFMCipher(DOMDocument *doc, 
-					   XSECCryptoKey * key, 
+					   const XSECCryptoKey * key,
 					   bool encrypt,
                        XSECCryptoSymmetricKey::SymmetricKeyMode mode,
                        unsigned int taglen) : 

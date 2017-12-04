@@ -80,7 +80,7 @@ unsigned char s_AES_IV [] = {
 // --------------------------------------------------------------------------------
 
 void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri, 
-											  XSECCryptoKey * key,
+											  const XSECCryptoKey * key,
 											  XSECCryptoKey::KeyType &kt,
 											  XSECCryptoSymmetricKey::SymmetricKeyType &skt,
 											  bool &isSymmetricKeyWrap,
@@ -205,7 +205,7 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 
 unsigned int XENCAlgorithmHandlerDefault::unwrapKeyAES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const {
 
 	// Cat the encrypted key
@@ -281,7 +281,7 @@ unsigned int XENCAlgorithmHandlerDefault::unwrapKeyAES(
 
 bool XENCAlgorithmHandlerDefault::wrapKeyAES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const {
 
 	// get the raw key
@@ -377,7 +377,7 @@ bool XENCAlgorithmHandlerDefault::wrapKeyAES(
 
 unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const {
 
 	// Perform an unwrap on the key
@@ -456,7 +456,7 @@ unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
 
 bool XENCAlgorithmHandlerDefault::wrapKey3DES(
    		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		safeBuffer & result) const {
 
 	// Cat the plaintext key
@@ -559,7 +559,7 @@ bool XENCAlgorithmHandlerDefault::wrapKey3DES(
 bool XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
 		) const {
 
@@ -609,7 +609,7 @@ bool XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 
 unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
 		TXFMChain * cipherText,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
         unsigned int taglen,
 		safeBuffer & result) const {
 
@@ -671,7 +671,7 @@ unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
 unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		DOMDocument * doc,
 		safeBuffer & result) const {
 
@@ -804,7 +804,7 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		DOMDocument * doc,
 		safeBuffer & result
 		) const {
@@ -902,7 +902,7 @@ unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
 bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 		TXFMChain * plainText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 		) const {
@@ -1045,7 +1045,7 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 bool XENCAlgorithmHandlerDefault::encryptToSafeBuffer(
 		TXFMChain * plainText,
 		XENCEncryptionMethod * encryptionMethod,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
 		) const {
@@ -1188,7 +1188,7 @@ XSECAlgorithmHandler * XENCAlgorithmHandlerDefault::clone(void) const {
 unsigned int XENCAlgorithmHandlerDefault::signToSafeBuffer(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key,
+		const XSECCryptoKey * key,
 		unsigned int outputLength,
 		safeBuffer & result) const {
 
@@ -1201,7 +1201,7 @@ unsigned int XENCAlgorithmHandlerDefault::signToSafeBuffer(
 bool XENCAlgorithmHandlerDefault::appendSignatureHashTxfm(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key) const {
+		const XSECCryptoKey * key) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"XENCAlgorithmHandlerDefault - Signature operations not supported");
@@ -1213,7 +1213,7 @@ bool XENCAlgorithmHandlerDefault::verifyBase64Signature(
 		const XMLCh * URI,
 		const char * sig,
 		unsigned int outputLength,
-		XSECCryptoKey * key) const {
+		const XSECCryptoKey * key) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"XENCAlgorithmHandlerDefault - Signature operations not supported");

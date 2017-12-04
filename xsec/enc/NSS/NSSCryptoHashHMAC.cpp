@@ -122,7 +122,7 @@ void NSSCryptoHashHMAC::reset() {
 //           Key manipulation
 // --------------------------------------------------------------------------------
 
-void NSSCryptoHashHMAC::setKey(XSECCryptoKey *key) {
+void NSSCryptoHashHMAC::setKey(const XSECCryptoKey *key) {
 
   if (key->getKeyType() != XSECCryptoKey::KEY_HMAC) {
 

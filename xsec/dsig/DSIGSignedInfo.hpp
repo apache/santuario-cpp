@@ -138,7 +138,7 @@ public:
 	 * @param errStr The safeBuffer that error messages should be written to.
 	 */
 
-	bool verify(safeBuffer &errStr);
+	bool verify(safeBuffer &errStr) const;
 
 	/**
 	 * \brief Hash the reference list
@@ -250,7 +250,7 @@ public:
 	 * @returns the SignedInfo node
 	 */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getDOMNode(void);
+	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getDOMNode(void) const;
 
 	/**
 	 * \brief Get the Algorithm URI
@@ -259,7 +259,7 @@ public:
 	 * the signature
 	 */
 
-	const XMLCh * getAlgorithmURI() {return mp_algorithmURI;}
+	const XMLCh * getAlgorithmURI() const {return mp_algorithmURI;}
 
 	/**
 	 * \brief Get the canonicalisation method 
@@ -267,7 +267,7 @@ public:
 	 * @returns Canonicalisation method
 	 */
 
-	canonicalizationMethod getCanonicalizationMethod(void);
+	canonicalizationMethod getCanonicalizationMethod(void) const;
 
 	/**
 	 * \brief Get the hash method
@@ -275,7 +275,7 @@ public:
 	 * @returns the Hash (digest) Method
 	 */
 
-	hashMethod getHashMethod(void);
+	hashMethod getHashMethod(void) const;
 
 	/**
 	 * \brief Get the signature method
@@ -283,7 +283,7 @@ public:
 	 * @returns the Signature method
 	 */
 
-	signatureMethod getSignatureMethod(void);
+	signatureMethod getSignatureMethod(void) const;
 
 	/**
 	 * \brief Get HMAC length
@@ -292,7 +292,7 @@ public:
 	 * This returns the length used.
 	 */
 
-	int getHMACOutputLength(void);
+	int getHMACOutputLength(void) const;
 
 	/**
 	 * \brief Return the list of references
@@ -302,6 +302,15 @@ public:
 	 */
 
 	DSIGReferenceList *getReferenceList (void) {return mp_referenceList;}
+
+	/**
+	 * \brief Return the list of references
+	 *
+	 * Returns a pointer to the object holding the references
+	 * contained in the SignedInfo
+	 */
+
+	const DSIGReferenceList *getReferenceList (void) const {return mp_referenceList;}
 
 	//@}
 

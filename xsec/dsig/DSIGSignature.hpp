@@ -157,7 +157,7 @@ public:
 	  * @see #getErrMsgs
 	  */
 
-	bool verify(void);
+	bool verify(void) const;
 
 	/**
 	  * \brief Verify a signature is valid (skip references).
@@ -169,7 +169,7 @@ public:
 	  * @see #verify
 	  */
 
-	bool verifySignatureOnly(void);
+	bool verifySignatureOnly(void) const;
 
 	/**
 	  * \brief Sign a DSIGSignature DOM structure.
@@ -428,7 +428,7 @@ public:
 	 */
 
 	unsigned int calculateSignedInfoAndReferenceHash(unsigned char * hashBuf, 
-													unsigned int hashBufLen);
+													unsigned int hashBufLen) const;
 
 	/**
 	 * \brief Get the hash of the Signed Value
@@ -444,7 +444,7 @@ public:
 	 */
 
 	unsigned int calculateSignedInfoHash(unsigned char * hashBuf, 
-										unsigned int hashBufLen);
+										unsigned int hashBufLen) const;
 
 	/**
 	 * \brief Return the reference list for outside use.
@@ -606,7 +606,7 @@ public:
 	 *
 	 */
 
-	XSECSafeBufferFormatter * getSBFormatter(void) {return mp_formatter;}
+	XSECSafeBufferFormatter * getSBFormatter(void) const {return mp_formatter;}
 
 	/**
 	 * \brief Set the interlocking references flag
@@ -988,8 +988,8 @@ private:
 
 	// Internal functions
 	void createKeyInfoElement(void);
-	bool verifySignatureOnlyInternal(void);
-	TXFMChain * getSignedInfoInput(void);
+	bool verifySignatureOnlyInternal(void) const;
+	TXFMChain * getSignedInfoInput(void) const;
 
 	// Initialisation
 	static void Initialise(void);
@@ -1007,7 +1007,7 @@ private:
 	DSIGKeyInfoList				m_keyInfoList;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
 								* mp_KeyInfoNode;
-	safeBuffer			        m_errStr;
+	mutable safeBuffer			m_errStr;
 
 	// Environment
 	XSECEnv						* mp_env;

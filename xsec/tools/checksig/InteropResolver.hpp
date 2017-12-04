@@ -52,26 +52,26 @@ public :
 
     // Interface functions
 
-    virtual XSECCryptoKey * resolveKey(DSIGKeyInfoList * lst);
+    virtual XSECCryptoKey * resolveKey(const DSIGKeyInfoList * lst) const;
     virtual XSECKeyInfoResolver * clone(void) const;
 
     // Internal functions
-    X509 * nextFile2Cert(void);
-    bool checkMatch(DSIGKeyInfoList * lst, X509 * x);
-    XSECCryptoKey * openCertURI(const XMLCh * uri);
+    X509 * nextFile2Cert(void) const;
+    bool checkMatch(const DSIGKeyInfoList * lst, X509 * x) const;
+    XSECCryptoKey * openCertURI(const XMLCh * uri) const;
 
 private:
 
     XMLCh *         mp_baseURI;
-    bool            m_searchStarted;
-    bool            m_searchFinished;
+    mutable bool    m_searchStarted;
+    mutable bool    m_searchFinished;
 
 #if defined (_WIN32)
     _finddata_t     m_finder;
     long            m_handle;
 #else
-    glob_t          m_globbuf;
-    int             m_fcount;
+    mutable glob_t  m_globbuf;
+    mutable int     m_fcount;
 #endif
 
 };

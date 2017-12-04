@@ -85,7 +85,7 @@ public :
 	 * @returns Either the appropriate key or NULL if none can be found
 	 */
 
-	virtual XSECCryptoKey * resolveKey(DSIGKeyInfoList * lst) = 0;
+	virtual XSECCryptoKey * resolveKey(const DSIGKeyInfoList * lst) const = 0;
 
 	/**
 	 * \brief Clone the resolver to be installed in a new object.

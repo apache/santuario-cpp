@@ -50,7 +50,7 @@ public :
 
     // Interface functions
 
-    virtual XSECCryptoKey * resolveKey(DSIGKeyInfoList * lst);
+    virtual XSECCryptoKey * resolveKey(const DSIGKeyInfoList * lst) const;
     virtual XSECKeyInfoResolver * clone(void) const;
 
     // Internal functions

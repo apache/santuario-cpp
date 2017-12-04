@@ -77,19 +77,19 @@ void TXFMBase64::setInput(TXFMBase *newInput) {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMBase64::getInputType(void) {
+TXFMBase::ioType TXFMBase64::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
-TXFMBase::ioType TXFMBase64::getOutputType(void) {
+TXFMBase::ioType TXFMBase64::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
 
-TXFMBase::nodeType TXFMBase64::getNodeType(void) {
+TXFMBase::nodeType TXFMBase64::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -184,22 +184,4 @@ unsigned int TXFMBase64::readBytes(XMLByte * const toFill, unsigned int maxToFil
 
 	return ret;
 #endif
-}
-
-DOMDocument *TXFMBase64::getDocument() {
-
-	return NULL;
-
-}
-
-DOMNode * TXFMBase64::getFragmentNode() {
-
-	return NULL;		// Return a null node
-
-}
-
-const XMLCh * TXFMBase64::getFragmentId() {
-
-	return NULL;	// Empty string
-
 }

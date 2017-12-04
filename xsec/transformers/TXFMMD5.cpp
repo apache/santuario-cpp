@@ -79,19 +79,20 @@ TXFMMD5::~TXFMMD5() {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMMD5::getInputType(void) {
-
-	return TXFMBase::BYTE_STREAM;
-
-}
-TXFMBase::ioType TXFMMD5::getOutputType(void) {
+TXFMBase::ioType TXFMMD5::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
+TXFMBase::ioType TXFMMD5::getOutputType(void) const {
 
-TXFMBase::nodeType TXFMMD5::getNodeType(void) {
+	return TXFMBase::BYTE_STREAM;
+
+}
+
+
+TXFMBase::nodeType TXFMMD5::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -146,23 +147,5 @@ unsigned int TXFMMD5::readBytes(XMLByte * const toFill, unsigned int maxToFill) 
 	toOutput -= maxToFill;
 
 	return ret;
-
-}
-
-DOMDocument * TXFMMD5::getDocument() {
-
-	return NULL;
-
-}
-
-DOMNode * TXFMMD5::getFragmentNode() {
-
-	return NULL;		// Return a null node
-
-};
-
-const XMLCh * TXFMMD5::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }

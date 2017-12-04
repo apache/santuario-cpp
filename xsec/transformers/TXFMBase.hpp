@@ -76,8 +76,7 @@ protected:
 
 public:
 
-	TXFMBase(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc) 
-		{input = NULL; keepComments = true; mp_nse = NULL; mp_expansionDoc = doc;}
+    TXFMBase(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
 	virtual ~TXFMBase();
 
 	// For getting/setting input/output type
@@ -110,12 +109,12 @@ public:
 
 	// Methods to get tranform output type and input requirement
 
-	virtual ioType getInputType(void) = 0;
-	virtual ioType getOutputType(void) = 0;
-	virtual nodeType getNodeType(void) = 0;
+	virtual ioType getInputType(void) const = 0;
+	virtual ioType getOutputType(void) const = 0;
+	virtual nodeType getNodeType(void) const = 0;
 
 	// Name space expansion handling
-	virtual bool nameSpacesExpanded(void);
+	virtual bool nameSpacesExpanded(void) const;
 	virtual void expandNameSpaces(void);
 	void deleteExpandedNameSpaces(void);
 
@@ -123,16 +122,15 @@ public:
 
 	virtual void stripComments(void) { keepComments = false;}
 	virtual void activateComments(void);
-	virtual bool getCommentsStatus(void) {return keepComments;}
+	virtual bool getCommentsStatus(void) const {return keepComments;}
 
 	// Methods to get output data
 	
 	// BinInputStream methods:
 
 	virtual unsigned int readBytes(XMLByte * const toFill, const unsigned int maxToFill) = 0;
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *getDocument() = 0;
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getFragmentNode() = 0;
-	virtual const XMLCh * getFragmentId() = 0;
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *getDocument() const;
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getFragmentNode() const;
 	virtual XSECXPathNodeList & getXPathNodeList() {return m_XPathMap;}
 
 	// Friends and Statics

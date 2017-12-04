@@ -148,19 +148,19 @@ void TXFMC14n::setInclusive11() {
 
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMC14n::getInputType(void) {
+TXFMBase::ioType TXFMC14n::getInputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::ioType TXFMC14n::getOutputType(void) {
+TXFMBase::ioType TXFMC14n::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::nodeType TXFMC14n::getNodeType(void) {
+TXFMBase::nodeType TXFMC14n::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -177,23 +177,3 @@ unsigned int TXFMC14n::readBytes(XMLByte * const toFill, unsigned int maxToFill)
 	return (unsigned int) mp_c14n->outputBuffer(toFill, maxToFill);
 
 }
-
-DOMDocument * TXFMC14n::getDocument() {
-
-	return NULL;
-
-}
-
-DOMNode * TXFMC14n::getFragmentNode() {
-
-	return NULL;
-
-}
-
-const XMLCh * TXFMC14n::getFragmentId() {
-
-	return NULL;	// Empty string
-
-}
-
-

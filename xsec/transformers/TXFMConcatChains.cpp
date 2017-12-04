@@ -74,19 +74,19 @@ void TXFMConcatChains::setInput(TXFMChain *newInputChain) {
 
 }
 	
-TXFMBase::ioType TXFMConcatChains::getInputType(void) {
+TXFMBase::ioType TXFMConcatChains::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::ioType TXFMConcatChains::getOutputType(void) {
+TXFMBase::ioType TXFMConcatChains::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::nodeType TXFMConcatChains::getNodeType(void) {
+TXFMBase::nodeType TXFMConcatChains::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -135,21 +135,3 @@ unsigned int TXFMConcatChains::readBytes(XMLByte * const toFill, const unsigned 
 	return bytesRead;
 
 }
-
-DOMDocument *TXFMConcatChains::getDocument() {
-
-	return NULL;
-
-}
-DOMNode *TXFMConcatChains::getFragmentNode() {
-
-	return NULL;
-
-}
-
-const XMLCh * TXFMConcatChains::getFragmentId() {
-
-	return NULL;
-
-}
-	

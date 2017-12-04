@@ -83,20 +83,20 @@ void TXFMSB::setInput(const safeBuffer& sbIn, unsigned int sbSize) {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMSB::getInputType(void) {
+TXFMBase::ioType TXFMSB::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::ioType TXFMSB::getOutputType(void) {
+TXFMBase::ioType TXFMSB::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
 
-TXFMBase::nodeType TXFMSB::getNodeType(void) {
+TXFMBase::nodeType TXFMSB::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -133,22 +133,4 @@ unsigned int TXFMSB::readBytes(XMLByte * const toFill, unsigned int maxToFill) {
 	toOutput -= maxToFill;
 
 	return ret;
-}
-
-DOMDocument *TXFMSB::getDocument() {
-
-	return NULL;
-
-};
-
-DOMNode * TXFMSB::getFragmentNode() {
-
-	return NULL;
-
-};
-
-const XMLCh * TXFMSB::getFragmentId() {
-
-	return NULL;	// Empty string
-
 }

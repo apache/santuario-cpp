@@ -93,19 +93,19 @@ void TXFMURL::setInput(BinInputStream * inputStream) {
 
 	// Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMURL::getInputType(void) {
+TXFMBase::ioType TXFMURL::getInputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::ioType TXFMURL::getOutputType(void) {
+TXFMBase::ioType TXFMURL::getOutputType(void) const {
 
 	return TXFMBase::BYTE_STREAM;
 
 }
 
-TXFMBase::nodeType TXFMURL::getNodeType(void) {
+TXFMBase::nodeType TXFMURL::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_NONE;
 
@@ -139,23 +139,5 @@ unsigned int TXFMURL::readBytes(XMLByte * const toFill, unsigned int maxToFill) 
 		done = true;
 
 	return ret;
-
-}
-
-DOMDocument *TXFMURL::getDocument() {
-
-	return NULL;
-
-};
-
-DOMNode *TXFMURL::getFragmentNode() {
-
-	return NULL;
-
-};
-
-const XMLCh * TXFMURL::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }

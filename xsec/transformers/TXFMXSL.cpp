@@ -75,7 +75,7 @@ CallbackSizeType TransformXSLOutputFn(const char * s, CallbackSizeType sz, void 
 //  For expanding name spaces when necessary
 // -----------------------------------------------------------------------
 
-bool TXFMXSL::nameSpacesExpanded(void) {
+bool TXFMXSL::nameSpacesExpanded(void) const {
 
 	// NOTE : Do not check inputs as this has its own document
 
@@ -204,18 +204,18 @@ void TXFMXSL::evaluateStyleSheet(const safeBuffer &sbStyleSheet) {
 
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMXSL::getInputType(void) {
+TXFMBase::ioType TXFMXSL::getInputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
-TXFMBase::ioType TXFMXSL::getOutputType(void) {
+TXFMBase::ioType TXFMXSL::getOutputType(void) const {
 
 	return TXFMBase::DOM_NODES;
 
 }
 
-TXFMBase::nodeType TXFMXSL::getNodeType(void) {
+TXFMBase::nodeType TXFMXSL::getNodeType(void) const {
 
 	return TXFMBase::DOM_NODE_DOCUMENT;
 
@@ -229,21 +229,9 @@ unsigned int TXFMXSL::readBytes(XMLByte * const toFill, unsigned int maxToFill) 
 
 }
 
-DOMDocument * TXFMXSL::getDocument() {
+DOMDocument * TXFMXSL::getDocument() const {
 
 	return docOut;
-
-}
-
-DOMNode * TXFMXSL::getFragmentNode() {
-
-	return NULL;
-
-}
-
-const XMLCh * TXFMXSL::getFragmentId() {
-
-	return NULL;	// Empty string
 
 }
 

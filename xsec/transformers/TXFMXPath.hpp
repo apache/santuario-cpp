@@ -91,9 +91,9 @@ public:
 	
 	// Methods to get tranform output type and input requirement
 
-	virtual TXFMBase::ioType getInputType(void);
-	virtual TXFMBase::ioType getOutputType(void);
-	virtual TXFMBase::nodeType getNodeType(void);
+	virtual TXFMBase::ioType getInputType(void) const;
+	virtual TXFMBase::ioType getOutputType(void) const;
+	virtual TXFMBase::nodeType getNodeType(void) const;
 
 	// XPath unique
 
@@ -104,10 +104,7 @@ public:
 	// Methods to get output data
 
 	virtual unsigned int readBytes(XMLByte * const toFill, const unsigned int maxToFill);
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *getDocument();
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getFragmentNode();
-	virtual const XMLCh * getFragmentId();
-	virtual XSECXPathNodeList	& getXPathNodeList();
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *getDocument() const;
 private:
 	TXFMXPath();
 };

@@ -34,15 +34,15 @@ XERCES_CPP_NAMESPACE_USE
 
 // Construct/Destruct
 
-TXFMDocObject::TXFMDocObject(DOMDocument *doc) : TXFMBase(doc) {
-
-	input = NULL;
-	type = TXFMBase::DOM_NODE_NONE;	// No nodes currently held
-	mp_env = NULL;
+TXFMDocObject::TXFMDocObject(DOMDocument *doc)
+	: TXFMBase(doc), fragmentId(NULL), document(NULL), fragmentObject(NULL), type(TXFMBase::DOM_NODE_NONE), mp_env(NULL) {
 
 }
 
 TXFMDocObject::~TXFMDocObject() {
+
+	if (fragmentId != NULL)
+		XSEC_RELEASE_XMLCH(fragmentId);
 
 }
 
@@ -132,6 +132,7 @@ void TXFMDocObject::setInput(DOMDocument *doc, const XMLCh * newFragmentId) {
 		throw XSECException(XSECException::IDNotFoundInDOMDoc);
 
 	document = doc;
+	fragmentId = XMLString::replicate(newFragmentId);
 	type = TXFMBase::DOM_NODE_DOCUMENT_FRAGMENT;
 
 }
@@ -200,5 +201,11 @@ DOMDocument * TXFMDocObject::getDocument() const {
 DOMNode * TXFMDocObject::getFragmentNode() const {
 
 	return fragmentObject;
+
+}
+
+const XMLCh * TXFMDocObject::getFragmentId() const {
+
+	return fragmentId;
 
 }

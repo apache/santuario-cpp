@@ -50,7 +50,7 @@ class XSEC_EXPORT TXFMDocObject : public TXFMBase {
 public:
 
 	TXFMDocObject(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMDocObject();
+	virtual ~TXFMDocObject();
 
 	// Methods to set the inputs
 
@@ -81,9 +81,11 @@ public:
 	unsigned int readBytes(XMLByte * const toFill, const unsigned int maxToFill);
 	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * getDocument() const;
 	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * getFragmentNode() const;
+	virtual const XMLCh* getFragmentId() const;
 	
 private:
 
+	XMLCh	* fragmentId;				// The identifier of the object
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument 
 			* document;					// The DOM document we are working with
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode 

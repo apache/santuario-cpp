@@ -119,7 +119,7 @@ public:
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
-	) = 0;
+	) const = 0;
 
 	//@}
 
@@ -154,7 +154,7 @@ public:
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
-	) = 0;
+	) const = 0;
 
 	/**
 	 * \brief Append an appropriate decrypt TXFMer to a cipher txfm chain.
@@ -183,7 +183,7 @@ public:
 		XENCEncryptionMethod * encryptionMethod,
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
-	) = 0;
+	) const = 0;
 
 
 	//@}
@@ -219,7 +219,7 @@ public:
 		XSECCryptoKey * key,
 		unsigned int outputLength,
 		safeBuffer & result
-	) = 0;
+	) const = 0;
 
 	/**
 	 * \brief Validate a signature using an input TXFMChain
@@ -246,7 +246,7 @@ public:
 		const char * sig,
 		unsigned int outputLength,
 		XSECCryptoKey * key
-	) = 0;
+	) const = 0;
 
 	//@}
 
@@ -269,7 +269,7 @@ public:
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
 		XSECCryptoKey * key
-	) = 0;
+	) const = 0;
 
 	/**
 	 * \brief Append a hash to a TXFM Chain based on URI
@@ -286,7 +286,7 @@ public:
 	virtual bool appendHashTxfm(
 		TXFMChain * inputBytes,
 		const XMLCh * URI
-	) = 0;
+	) const = 0;
 
 	//@}
 
@@ -308,7 +308,7 @@ public:
 		const XMLCh * uri,
 		const unsigned char * keyBuffer,
 		unsigned int keyLen
-	) = 0;
+	) const = 0;
 
 	//@}
 

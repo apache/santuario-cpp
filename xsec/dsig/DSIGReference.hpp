@@ -322,7 +322,7 @@ public:
 	 * the value of the URI stored inthe reference
 	 */
 
-	const XMLCh * getURI();
+	const XMLCh * getURI() const;
 
 	/**
 	 * \brief Get the Digest method
@@ -332,7 +332,7 @@ public:
 	 * @returns the hashMethod
 	 */
 
-	hashMethod getHashMethod(void) {
+	hashMethod getHashMethod(void) const {
 		return me_hashMethod;
 	}
 
@@ -354,7 +354,7 @@ public:
 	 * obtain information about the transforms and also change the the transforms
 	 */
 
-	DSIGTransformList * getTransforms(void) {
+	DSIGTransformList * getTransforms(void) const {
 		return mp_transformList;
 	}
 
@@ -364,7 +364,7 @@ public:
 	 * @returns true iff the Reference element is a Manifest reference
 	 */
 	
-	bool isManifest();
+	bool isManifest() const;
 
 	/**
 	 * \brief Get the Manifest
@@ -373,7 +373,7 @@ public:
 	 * list of this reference element.
 	 */
 
-	DSIGReferenceList * getManifestReferenceList();		// Return list of references for a manifest object
+	DSIGReferenceList * getManifestReferenceList() const;		// Return list of references for a manifest object
 
 
 	//@}

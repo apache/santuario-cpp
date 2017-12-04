@@ -328,7 +328,7 @@ TXFMBase * addHashTxfm(signatureMethod sm, hashMethod hm, XSECCryptoKey * key,
 
 bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain * inputBytes,
 														  const XMLCh * URI,
-														  XSECCryptoKey * key) {
+														  XSECCryptoKey * key) const {
 
 	signatureMethod sm;
 	hashMethod hm;
@@ -364,7 +364,7 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
 		const XMLCh * URI,
 		XSECCryptoKey * key,
 		unsigned int outputLength,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	signatureMethod sm;
 	hashMethod hm;
@@ -558,7 +558,7 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 		const XMLCh * URI,
 		const char * sig,
 		unsigned int outputLength,
-		XSECCryptoKey * key) {
+		XSECCryptoKey * key) const {
 
 	signatureMethod sm;
 	hashMethod hm;
@@ -678,7 +678,7 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 
 bool DSIGAlgorithmHandlerDefault::appendHashTxfm(
 		TXFMChain * inputBytes,
-		const XMLCh * URI) {
+		const XMLCh * URI) const {
 
 	hashMethod hm;
 
@@ -738,7 +738,7 @@ unsigned int DSIGAlgorithmHandlerDefault::decryptToSafeBuffer(
 		XSECCryptoKey * key,
 		DOMDocument * doc,
 		safeBuffer & result
-		) {
+		) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"DSIGAlgorithmHandlerDefault - Encryption operations not supported");
@@ -750,7 +750,7 @@ bool DSIGAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 		XENCEncryptionMethod * encryptionMethod,
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
-		) {
+		) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"DSIGAlgorithmHandlerDefault - Encryption operations not supported");
@@ -767,7 +767,7 @@ bool DSIGAlgorithmHandlerDefault::encryptToSafeBuffer(
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
-		) {
+		) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"DSIGAlgorithmHandlerDefault - Encryption operations not supported");
@@ -782,7 +782,7 @@ XSECCryptoKey * DSIGAlgorithmHandlerDefault::createKeyForURI(
 		const XMLCh * uri,
 		const unsigned char * keyBuffer,
 		unsigned int keyLen
-		) {
+		) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"DSIGAlgorithmHandlerDefault - Key creation operations not supported");

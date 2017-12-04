@@ -170,7 +170,7 @@ DOMElement * DSIGObject::createBlankObject(void) {
 // --------------------------------------------------------------------------------
 
 
-const XMLCh * DSIGObject::getId(void) {
+const XMLCh * DSIGObject::getId(void) const {
 
 	if (mp_idAttr != NULL)
 		return mp_idAttr->getNodeValue();
@@ -179,7 +179,7 @@ const XMLCh * DSIGObject::getId(void) {
 
 }
 
-const XMLCh * DSIGObject::getMimeType(void) {
+const XMLCh * DSIGObject::getMimeType(void) const {
 
 	if (mp_mimeTypeAttr != NULL)
 		return mp_mimeTypeAttr->getNodeValue();
@@ -189,7 +189,7 @@ const XMLCh * DSIGObject::getMimeType(void) {
 }
 
 
-const XMLCh * DSIGObject::getEncoding(void) {
+const XMLCh * DSIGObject::getEncoding(void) const {
 
 	if (mp_encodingAttr != NULL)
 		return mp_encodingAttr->getNodeValue();
@@ -198,7 +198,7 @@ const XMLCh * DSIGObject::getEncoding(void) {
 
 }
 
-const DOMElement * DSIGObject::getElement(void) {
+const DOMElement * DSIGObject::getElement(void) const {
 
 	return (DOMElement *) mp_objectNode;
 

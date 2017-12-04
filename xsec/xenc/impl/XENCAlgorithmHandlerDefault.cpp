@@ -85,7 +85,7 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 											  XSECCryptoSymmetricKey::SymmetricKeyType &skt,
 											  bool &isSymmetricKeyWrap,
                                               XSECCryptoSymmetricKey::SymmetricKeyMode &skm,
-                                              unsigned int& taglen) {
+                                              unsigned int& taglen) const {
 
 	if (key == NULL) {
 		throw XSECException(XSECException::CipherError, 
@@ -206,7 +206,7 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
 unsigned int XENCAlgorithmHandlerDefault::unwrapKeyAES(
    		TXFMChain * cipherText,
 		XSECCryptoKey * key,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	// Cat the encrypted key
 	XMLByte buf[_MY_MAX_KEY_SIZE];
@@ -282,7 +282,7 @@ unsigned int XENCAlgorithmHandlerDefault::unwrapKeyAES(
 bool XENCAlgorithmHandlerDefault::wrapKeyAES(
    		TXFMChain * cipherText,
 		XSECCryptoKey * key,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	// get the raw key
 	XMLByte buf[_MY_MAX_KEY_SIZE + 8];
@@ -378,7 +378,7 @@ bool XENCAlgorithmHandlerDefault::wrapKeyAES(
 unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
    		TXFMChain * cipherText,
 		XSECCryptoKey * key,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	// Perform an unwrap on the key
 	safeBuffer cipherSB;
@@ -457,7 +457,7 @@ unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
 bool XENCAlgorithmHandlerDefault::wrapKey3DES(
    		TXFMChain * cipherText,
 		XSECCryptoKey * key,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	// Cat the plaintext key
 	XMLByte buf[_MY_MAX_KEY_SIZE + 16];
@@ -561,7 +561,7 @@ bool XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 		XENCEncryptionMethod * encryptionMethod,
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
-		) {
+		) const {
 
 	// We only support this for bulk Symmetric key algorithms
 
@@ -611,7 +611,7 @@ unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
 		TXFMChain * cipherText,
 		XSECCryptoKey * key,
         unsigned int taglen,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	// Only works with symmetric key
     if (key->getKeyType() != XSECCryptoKey::KEY_SYMMETRIC) {
@@ -673,7 +673,7 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 		XENCEncryptionMethod * encryptionMethod,
 		XSECCryptoKey * key,
 		DOMDocument * doc,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	// Only works with RSA_PRIVATE or PAIR
 	if (key->getKeyType() == XSECCryptoKey::KEY_RSA_PUBLIC) {
@@ -807,7 +807,7 @@ unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
 		XSECCryptoKey * key,
 		DOMDocument * doc,
 		safeBuffer & result
-		) {
+		) const {
 
 	XSECCryptoKey::KeyType kt;
 	XSECCryptoSymmetricKey::SymmetricKeyType skt;
@@ -905,7 +905,7 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
-		) {
+		) const {
 
 	// Only works with RSA_PRIVATE or PAIR
 	if (key->getKeyType() == XSECCryptoKey::KEY_RSA_PRIVATE) {
@@ -1048,7 +1048,7 @@ bool XENCAlgorithmHandlerDefault::encryptToSafeBuffer(
 		XSECCryptoKey * key,
 		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
 		safeBuffer & result
-		) {
+		) const {
 
 	XSECCryptoKey::KeyType kt;
 	XSECCryptoSymmetricKey::SymmetricKeyType skt;
@@ -1128,7 +1128,7 @@ XSECCryptoKey * XENCAlgorithmHandlerDefault::createKeyForURI(
 		const XMLCh * uri,
 		const unsigned char * keyBuffer,
 		unsigned int keyLen
-		) {
+		) const {
 
 	XSECCryptoSymmetricKey * sk = NULL;
 
@@ -1190,7 +1190,7 @@ unsigned int XENCAlgorithmHandlerDefault::signToSafeBuffer(
 		const XMLCh * URI,
 		XSECCryptoKey * key,
 		unsigned int outputLength,
-		safeBuffer & result) {
+		safeBuffer & result) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"XENCAlgorithmHandlerDefault - Signature operations not supported");
@@ -1201,7 +1201,7 @@ unsigned int XENCAlgorithmHandlerDefault::signToSafeBuffer(
 bool XENCAlgorithmHandlerDefault::appendSignatureHashTxfm(
 		TXFMChain * inputBytes,
 		const XMLCh * URI,
-		XSECCryptoKey * key) {
+		XSECCryptoKey * key) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"XENCAlgorithmHandlerDefault - Signature operations not supported");
@@ -1213,7 +1213,7 @@ bool XENCAlgorithmHandlerDefault::verifyBase64Signature(
 		const XMLCh * URI,
 		const char * sig,
 		unsigned int outputLength,
-		XSECCryptoKey * key) {
+		XSECCryptoKey * key) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"XENCAlgorithmHandlerDefault - Signature operations not supported");
@@ -1222,10 +1222,9 @@ bool XENCAlgorithmHandlerDefault::verifyBase64Signature(
 
 bool XENCAlgorithmHandlerDefault::appendHashTxfm(
 		TXFMChain * inputBytes,
-		const XMLCh * URI) {
+		const XMLCh * URI) const {
 
 	throw XSECException(XSECException::AlgorithmMapperError, 
 			"XENCAlgorithmHandlerDefault - Hash operations not supported");
 
 }
-

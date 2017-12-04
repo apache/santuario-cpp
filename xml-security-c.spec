@@ -10,10 +10,10 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
 %if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
 BuildRequires:  xerces-c-devel >= 3.2
-%{?_with_xalan:BuildRequires: xalan-c-devel >= 1.12}
+%{?_with_xalan:BuildRequires: xalan-c-devel >= 1.11}
 %else
 BuildRequires:  libxerces-c-devel >= 3.2
-%{?_with_xalan:BuildRequires: libxalan-c-devel >= 1.12}
+%{?_with_xalan:BuildRequires: libxalan-c-devel >= 1.11}
 %endif
 BuildRequires:  openssl-devel gcc-c++ pkgconfig
 %if "%{_vendor}" == "redhat"

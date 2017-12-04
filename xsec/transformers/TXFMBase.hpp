@@ -131,6 +131,7 @@ public:
 	virtual unsigned int readBytes(XMLByte * const toFill, const unsigned int maxToFill) = 0;
 	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *getDocument() const;
 	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getFragmentNode() const;
+	virtual const XMLCh* getFragmentId() const;
 	virtual XSECXPathNodeList & getXPathNodeList() {return m_XPathMap;}
 
 	// Friends and Statics

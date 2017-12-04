@@ -123,3 +123,9 @@ XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * TXFMBase::getFragmentNode() const {
     return NULL;		// Return a null node
 
 }
+
+const XMLCh* TXFMBase::getFragmentId() const {
+
+    return NULL;
+
+}

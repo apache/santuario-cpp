@@ -56,7 +56,7 @@ void DSIGReferenceList::addReference(DSIGReference * ref) {
 
 }
 
-DSIGReferenceList::size_type DSIGReferenceList::getSize() {
+DSIGReferenceList::size_type DSIGReferenceList::getSize() const {
 
 	return m_referenceList.size();
 
@@ -76,7 +76,7 @@ DSIGReference * DSIGReferenceList::removeReference(size_type index) {
 
 }
 
-DSIGReference * DSIGReferenceList::item(ReferenceListVectorType::size_type index) {
+DSIGReference * DSIGReferenceList::item(ReferenceListVectorType::size_type index) const {
 
 	if (index < m_referenceList.size())
 		return m_referenceList[index];

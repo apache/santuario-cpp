@@ -520,7 +520,7 @@ public:
 	 * @returns true iff all the references validate successfully.
 	 */
 
-	static bool verifyReferenceList(DSIGReferenceList * lst, safeBuffer &errorStr);
+	static bool verifyReferenceList(const DSIGReferenceList * lst, safeBuffer &errorStr);
 	
 	/**
 	 * \brief Hash a reference list

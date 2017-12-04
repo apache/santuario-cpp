@@ -48,7 +48,10 @@ DSIGSignedInfo::DSIGSignedInfo(DOMDocument *doc,
 	m_HMACOutputLength = 0;
 	mp_formatter = pFormatter;
 	mp_signedInfoNode = signedInfoNode;
+	m_hashMethod = HASH_NONE;
 	m_signatureMethod = SIGNATURE_NONE;
+	m_canonicalizationMethod = CANON_NONE;
+	mp_algorithmURI = NULL;
 	mp_env = env;
 	mp_referenceList = NULL;
 	m_loaded = false;
@@ -63,7 +66,10 @@ DSIGSignedInfo::DSIGSignedInfo(DOMDocument *doc,
 	m_HMACOutputLength = 0;
 	mp_formatter = pFormatter;
 	mp_signedInfoNode = NULL;
+	m_hashMethod = HASH_NONE;
 	m_signatureMethod = SIGNATURE_NONE;
+	m_canonicalizationMethod = CANON_NONE;
+	mp_algorithmURI = NULL;
 	mp_env = env;
 	mp_referenceList = NULL;
 	m_loaded = false;
@@ -83,31 +89,31 @@ DSIGSignedInfo::~DSIGSignedInfo() {
 
 }
 
-signatureMethod DSIGSignedInfo::getSignatureMethod(void) {
+signatureMethod DSIGSignedInfo::getSignatureMethod(void) const {
 
 	return m_signatureMethod;
 
 }
 
-DOMNode * DSIGSignedInfo::getDOMNode() {
+DOMNode * DSIGSignedInfo::getDOMNode() const {
 
 	return mp_signedInfoNode;
 
 }
 
-canonicalizationMethod DSIGSignedInfo::getCanonicalizationMethod(void) {
+canonicalizationMethod DSIGSignedInfo::getCanonicalizationMethod(void) const {
 
 	return m_canonicalizationMethod;
 
 }
 
-hashMethod DSIGSignedInfo::getHashMethod() {
+hashMethod DSIGSignedInfo::getHashMethod() const {
 
 	return m_hashMethod;
 
 }
 
-int DSIGSignedInfo::getHMACOutputLength() {
+int DSIGSignedInfo::getHMACOutputLength() const {
 
 	return m_HMACOutputLength;
 
@@ -121,7 +127,7 @@ int DSIGSignedInfo::getHMACOutputLength() {
 // --------------------------------------------------------------------------------
 
 
-bool DSIGSignedInfo::verify(safeBuffer &errStr) {
+bool DSIGSignedInfo::verify(safeBuffer &errStr) const {
 
 	return DSIGReference::verifyReferenceList(mp_referenceList, errStr);
 

@@ -130,7 +130,7 @@ public:
 	 * @param index The pointer into the list
 	 */
 
-	DSIGReference * item(size_type index);
+	DSIGReference * item(size_type index) const;
 
 	/**
 	 * \brief Find the number of elements in the list
@@ -138,7 +138,7 @@ public:
 	 * @returns The number of elements in the list
 	 */
 
-	size_type	getSize();
+	size_type	getSize() const;
 
 	/**
 	 * \brief Clear out the list

@@ -63,7 +63,7 @@ XSECKeyInfoResolverDefault::~XSECKeyInfoResolverDefault() {
 // --------------------------------------------------------------------------------
 
 
-XSECCryptoKey * XSECKeyInfoResolverDefault::resolveKey(DSIGKeyInfoList * lst) {
+XSECCryptoKey * XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList * lst) const {
 
 	// Try to find a key from the KeyInfo list as best we can
 	// NOTE: No validation is performed (i.e. no cert/CRL checks etc.)

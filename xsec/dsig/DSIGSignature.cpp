@@ -779,7 +779,7 @@ void DSIGSignature::load(void) {
 */
 }
 
-TXFMChain * DSIGSignature::getSignedInfoInput(void) {
+TXFMChain * DSIGSignature::getSignedInfoInput(void) const {
 
 	TXFMBase * txfm;
 	TXFMChain * chain;
@@ -842,7 +842,7 @@ TXFMChain * DSIGSignature::getSignedInfoInput(void) {
 }
 
 unsigned int DSIGSignature::calculateSignedInfoHash(unsigned char * hashBuf, 
-													unsigned int hashBufLen) {
+													unsigned int hashBufLen) const {
 
 	// Get the SignedInfo input bytes
 	TXFMChain * chain = getSignedInfoInput();
@@ -881,7 +881,7 @@ unsigned int DSIGSignature::calculateSignedInfoHash(unsigned char * hashBuf,
 }
 
 unsigned int DSIGSignature::calculateSignedInfoAndReferenceHash(unsigned char * hashBuf, 
-													unsigned int hashBufLen) {
+													unsigned int hashBufLen) const {
 
 	// Set up the reference list hashes - including any manifests
 	mp_signedInfo->hash(m_interlockingReferences);
@@ -893,7 +893,7 @@ unsigned int DSIGSignature::calculateSignedInfoAndReferenceHash(unsigned char * 
 //           Verify a signature
 // --------------------------------------------------------------------------------
 
-bool DSIGSignature::verifySignatureOnlyInternal(void) {
+bool DSIGSignature::verifySignatureOnlyInternal(void) const {
 
 	unsigned char hash[4096];
 
@@ -969,14 +969,14 @@ bool DSIGSignature::verifySignatureOnlyInternal(void) {
 
 }
 
-bool DSIGSignature::verifySignatureOnly(void) {
+bool DSIGSignature::verifySignatureOnly(void) const {
 
 	m_errStr.sbTranscodeIn("");
 	return verifySignatureOnlyInternal();
 
 }
 
-bool DSIGSignature::verify(void) {
+bool DSIGSignature::verify(void) const {
 
 	// We have a (hopefully) fully loaded signature.  Need to 
 	// verify

@@ -935,7 +935,7 @@ void DSIGReference::hashReferenceList(DSIGReferenceList *lst, bool interlocking)
 //           Verify reference list
 // --------------------------------------------------------------------------------
 
-bool DSIGReference::verifyReferenceList(DSIGReferenceList * lst, safeBuffer &errStr) {
+bool DSIGReference::verifyReferenceList(const DSIGReferenceList * lst, safeBuffer &errStr) {
 
 	// Run through a list of hashes and checkHash for each one
 

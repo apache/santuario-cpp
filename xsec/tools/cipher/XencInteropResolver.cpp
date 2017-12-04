@@ -327,17 +327,17 @@ BIO * createFileBIO(const XMLCh * baseURI, const char * name) {
 //           Resolver
 // --------------------------------------------------------------------------------
 
-XSECCryptoKey * XencInteropResolver::resolveKey(DSIGKeyInfoList * lst) {
+XSECCryptoKey * XencInteropResolver::resolveKey(const DSIGKeyInfoList * lst) const {
 
     int lstSize = (int) lst->getSize();
 
     for (int i = 0; i < lstSize; ++i) {
 
-        DSIGKeyInfo * ki = lst->item(i);
+        const DSIGKeyInfo * ki = lst->item(i);
 
         if (ki->getKeyInfoType() == DSIGKeyInfo::KEYINFO_NAME) {
 
-            DSIGKeyInfoName * kn = (DSIGKeyInfoName *) ki;
+            const DSIGKeyInfoName * kn = static_cast<const DSIGKeyInfoName*>(ki);
 
             const XMLCh * name = kn->getKeyName();
 

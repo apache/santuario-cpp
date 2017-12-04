@@ -90,7 +90,7 @@ void reverseSlash(safeBuffer &path) {
 #endif
 
 
-X509 * InteropResolver::nextFile2Cert(void) {
+X509 * InteropResolver::nextFile2Cert(void) const {
 
 
     if (m_searchFinished)
@@ -296,13 +296,13 @@ X509_NAME * X509_NAME_create_from_txt(const char * n) {
     return ret;
 }
 
-bool InteropResolver::checkMatch(DSIGKeyInfoList * lst, X509 * x) {
+bool InteropResolver::checkMatch(const DSIGKeyInfoList * lst, X509 * x) const {
 
     // Check if the parameters in x match the required certificate
 
 
     int sz = (int) lst->getSize();
-    DSIGKeyInfo* k;
+    const DSIGKeyInfo* k;
     
     for (int i = 0; i < sz; ++i) {
 
@@ -310,7 +310,7 @@ bool InteropResolver::checkMatch(DSIGKeyInfoList * lst, X509 * x) {
 
         if (k->getKeyInfoType() == DSIGKeyInfo::KEYINFO_X509) {
 
-            DSIGKeyInfoX509 * kx = static_cast<DSIGKeyInfoX509 *>(k);
+            const DSIGKeyInfoX509 * kx = static_cast<const DSIGKeyInfoX509 *>(k);
             
             const XMLCh * serial = kx->getX509IssuerSerialNumber();
 
@@ -426,7 +426,7 @@ bool InteropResolver::checkMatch(DSIGKeyInfoList * lst, X509 * x) {
 }
 
 
-XSECCryptoKey * InteropResolver::openCertURI(const XMLCh * uri) {
+XSECCryptoKey * InteropResolver::openCertURI(const XMLCh * uri) const {
 
     // Open a certificate from a file URI relative to the signature file
     BIO * bioCert;
@@ -463,7 +463,7 @@ XSECCryptoKey * InteropResolver::openCertURI(const XMLCh * uri) {
 
 }
 
-XSECCryptoKey * InteropResolver::resolveKey(DSIGKeyInfoList * lst) {
+XSECCryptoKey * InteropResolver::resolveKey(const DSIGKeyInfoList * lst) const {
 
 
     // First check if this has an X509 cert + an X509 CRL
@@ -474,13 +474,13 @@ XSECCryptoKey * InteropResolver::resolveKey(DSIGKeyInfoList * lst) {
 
     for (int i = 0; i < lstSize; ++i) {
 
-        DSIGKeyInfo * ki;
+        const DSIGKeyInfo * ki;
         ki = lst->item(i);
         const XMLCh * rawuri;
 
         if (ki->getKeyInfoType() == DSIGKeyInfo::KEYINFO_X509) {
             
-            DSIGKeyInfoX509 * kix509 = static_cast<DSIGKeyInfoX509 *>(ki);
+            const DSIGKeyInfoX509 * kix509 = static_cast<const DSIGKeyInfoX509 *>(ki);
 
             if ((rawuri = kix509->getRawRetrievalURI()) != NULL) {
 
@@ -506,7 +506,7 @@ XSECCryptoKey * InteropResolver::resolveKey(DSIGKeyInfoList * lst) {
 
         else if (ki->getKeyInfoType() == DSIGKeyInfo::KEYINFO_NAME) {
 
-            DSIGKeyInfoName * kn = static_cast<DSIGKeyInfoName *>(ki);
+            const DSIGKeyInfoName * kn = static_cast<const DSIGKeyInfoName *>(ki);
 
             if (kn->getKeyName() != NULL) {
 

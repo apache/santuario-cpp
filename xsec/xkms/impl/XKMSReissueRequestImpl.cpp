@@ -307,12 +307,12 @@ XKMSAuthentication * XKMSReissueRequestImpl::addAuthentication(void) {
 }
 
 DSIGSignature * XKMSReissueRequestImpl::addProofOfPossessionSignature(
-		canonicalizationMethod cm,
-		signatureMethod	sm,
-		hashMethod hm) {
+		const XMLCh* c14nAlgorithm,
+                const XMLCh* signatureAlgorithm,
+                const XMLCh* hashAlgorithm) {
 
 	DSIGSignature * ret = m_prov.newSignature();
-	DOMElement * elt = ret->createBlankSignature(m_msg.mp_env->getParentDocument(), cm, sm, hm);
+	DOMElement * elt = ret->createBlankSignature(m_msg.mp_env->getParentDocument(), c14nAlgorithm, signatureAlgorithm);
 
 	/* Create the enveloping reference */
 	safeBuffer sb;
@@ -320,7 +320,7 @@ DSIGSignature * XKMSReissueRequestImpl::addProofOfPossessionSignature(
 	sb.sbXMLChAppendCh(chPound);
 	sb.sbXMLChCat(mp_reissueKeyBinding->getId());
 
-	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer());
+	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer(), hashAlgorithm);
 	ref->appendCanonicalizationTransform(CANON_C14NE_COM);
 
 	/* Embed the signature in the document inside a KeyBindingAuthentication element */

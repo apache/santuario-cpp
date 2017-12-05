@@ -77,9 +77,9 @@ public:
 	// Interface Set methods
 
 	virtual DSIGSignature * addKeyBindingAuthenticationSignature(
-		canonicalizationMethod cm = CANON_C14NE_NOC,
-		signatureMethod	sm = SIGNATURE_HMAC,
-		hashMethod hm = HASH_SHA1);
+                const XMLCh* c14nAlgorithm,
+		const XMLCh* signatureAlgorithm,
+		const XMLCh* hashAlgorithm);
 	virtual void setNotBoundAuthentication(const XMLCh * uri, const XMLCh * value);
 
 private:

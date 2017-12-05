@@ -86,7 +86,6 @@ public:
 		XMLCh * DQ,
 		XMLCh * InverseQ,
 		XMLCh * D,		
-		encryptionMethod em,
 		const XMLCh * algorithmURI = NULL);
 
 

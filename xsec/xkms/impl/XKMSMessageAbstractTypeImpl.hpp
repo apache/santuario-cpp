@@ -89,9 +89,9 @@ public:
 	virtual void setService(const XMLCh * service);
 	virtual void setNonce(const XMLCh * uri);
 	virtual DSIGSignature * addSignature(
-		canonicalizationMethod cm = CANON_C14N_NOC,
-		signatureMethod	sm = SIGNATURE_DSA,
-		hashMethod hm = HASH_SHA1);
+		const XMLCh* c14nAlgorithm,
+                const XMLCh* signatureAlgorithm,
+                const XMLCh* hashAlgorithm);
 
 	/* Opaque Client Data interface */
 	virtual int getOpaqueClientDataSize(void);
@@ -151,10 +151,10 @@ private:
 	virtual void setNonce(const XMLCh * uri) \
 		{m_msg.setNonce(uri);} \
 	virtual DSIGSignature * addSignature( \
-		canonicalizationMethod cm = CANON_C14N_NOC, \
-		signatureMethod	sm = SIGNATURE_DSA, \
-		hashMethod hm = HASH_SHA1) \
-		{return m_msg.addSignature(cm,sm,hm);} \
+		const XMLCh* c14nAlgorithm, \
+		const XMLCh* signatureAlgorithm, \
+		const XMLCh* hashAlgorithm) \
+		{return m_msg.addSignature(c14nAlgorithm,signatureAlgorithm,hashAlgorithm);} \
 	virtual int getOpaqueClientDataSize(void) \
 		{return m_msg.getOpaqueClientDataSize();} \
 	virtual const XMLCh * getOpaqueClientDataItemStr(int item) \

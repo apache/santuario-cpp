@@ -177,7 +177,7 @@ int main (int argc, char **argv) {
 		cipher->setKey(key);
 
 		/* Encrypt the element that needs to be hidden */
-		cipher->encryptElement(g_toEncrypt, ENCRYPT_3DES_CBC);
+		cipher->encryptElement(g_toEncrypt, DSIGConstants::s_unicodeStrURI3DES_CBC);
 
 		/* Now lets create an EncryptedKey element to hold the generated key */
 
@@ -192,7 +192,7 @@ int main (int argc, char **argv) {
 		/* Now do the encrypt, using RSA with PKCS 1.5 padding */
 
 		XENCEncryptedKey * encryptedKey = 
-			cipher->encryptKey(keyBuf, 24, ENCRYPT_RSA_15);
+			cipher->encryptKey(keyBuf, 24, DSIGConstants::s_unicodeStrURIRSA_1_5);
 
 		/*
 		 * Add the encrypted Key to the previously created EncryptedData, which

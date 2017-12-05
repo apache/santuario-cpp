@@ -332,12 +332,12 @@ void XKMSMessageAbstractTypeImpl::setNonce(const XMLCh * uri) {
 }
 
 DSIGSignature * XKMSMessageAbstractTypeImpl::addSignature(
-		canonicalizationMethod cm,
-		signatureMethod	sm,
-		hashMethod hm) {
+		const XMLCh* c14nAlgorithm,
+                const XMLCh* signatureAlgorithm,
+                const XMLCh* hashAlgorithm) {
 
 	DSIGSignature * ret = m_prov.newSignature();
-	DOMElement * elt = ret->createBlankSignature(mp_env->getParentDocument(), cm, sm, hm);
+	DOMElement * elt = ret->createBlankSignature(mp_env->getParentDocument(), c14nAlgorithm, signatureAlgorithm);
 
 	/* Create the enveloping reference */
 	safeBuffer sb;
@@ -345,7 +345,7 @@ DSIGSignature * XKMSMessageAbstractTypeImpl::addSignature(
 	sb.sbXMLChAppendCh(chPound);
 	sb.sbXMLChCat(getId());
 
-	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer());
+	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer(), hashAlgorithm);
 	ref->appendEnvelopedSignatureTransform();
 	ref->appendCanonicalizationTransform(CANON_C14NE_COM);
 

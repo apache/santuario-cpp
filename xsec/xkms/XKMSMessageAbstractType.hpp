@@ -256,9 +256,9 @@ public:
 	 */
 
 	virtual DSIGSignature * addSignature(
-		canonicalizationMethod cm = CANON_C14N_NOC,
-		signatureMethod	sm = SIGNATURE_DSA,
-		hashMethod hm = HASH_SHA1) = 0;
+		const XMLCh* c14nAlgorithm,
+		const XMLCh* signatureAlgorithm,
+		const XMLCh* hashAlgorithm) = 0;
 
 	//@}
 

@@ -599,7 +599,10 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
                     return NULL;
                 }
 
-                sig = lr->addSignature(CANON_C14N_NOC, SIGNATURE_DSA, HASH_SHA1);
+                sig = lr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+                		DSIGConstants::s_unicodeStrURIDSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
@@ -624,7 +627,10 @@ XKMSMessageAbstractType * createLocateRequest(XSECProvider &prov, DOMDocument **
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
-                sig = lr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
+                sig = lr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+                		DSIGConstants::s_unicodeStrURIRSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
@@ -879,7 +885,10 @@ XKMSMessageAbstractType * createValidateRequest(XSECProvider &prov, DOMDocument 
                     return NULL;
                 }
 
-                sig = vr->addSignature(CANON_C14N_NOC, SIGNATURE_DSA, HASH_SHA1);
+                sig = vr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+                		DSIGConstants::s_unicodeStrURIDSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
@@ -904,7 +913,10 @@ XKMSMessageAbstractType * createValidateRequest(XSECProvider &prov, DOMDocument 
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
-                sig = vr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
+                sig = vr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+                		DSIGConstants::s_unicodeStrURIRSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
@@ -1013,7 +1025,7 @@ void printRegisterRequestUsage(void) {
 XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument **doc, int argc, char ** argv, int &paramCount, XKMSCompoundRequest * cr = NULL) {
 
     XSECCryptoKey *proofOfPossessionKey = NULL;
-    signatureMethod proofOfPossessionSm = SIGNATURE_DSA;
+    const XMLCh* proofOfPossessionSm = NULL;
 
     if (paramCount >= argc || 
         (_stricmp(argv[paramCount], "--help") == 0) ||
@@ -1178,7 +1190,10 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
 
             // Set key and validate
             XKMSAuthentication * a = rr->addAuthentication();
-            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature();
+            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature(
+            			DSIGConstants::s_unicodeStrURIC14N_NOC,
+					DSIGConstants::s_unicodeStrURIHMAC_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
 
             sig->setSigningKey(k);
             sig->sign();
@@ -1238,7 +1253,10 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                     return NULL;
                 }
 
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_DSA, HASH_SHA1);
+                sig = rr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+                		DSIGConstants::s_unicodeStrURIDSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
@@ -1263,7 +1281,10 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
+                sig = rr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+                		DSIGConstants::s_unicodeStrURIRSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
@@ -1344,7 +1365,7 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 }
 
                 proofOfPossessionKey = new OpenSSLCryptoKeyDSA(pkey);
-                proofOfPossessionSm = SIGNATURE_DSA;
+                proofOfPossessionSm = DSIGConstants::s_unicodeStrURIDSA_SHA1;
 
 				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
 				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
@@ -1369,7 +1390,7 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
                 }
 
                 proofOfPossessionKey = new OpenSSLCryptoKeyRSA(pkey);
-                proofOfPossessionSm = SIGNATURE_RSA;
+                proofOfPossessionSm = DSIGConstants::s_unicodeStrURIRSA_SHA1;
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
 				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
@@ -1404,7 +1425,10 @@ XKMSMessageAbstractType * createRegisterRequest(XSECProvider &prov, DOMDocument 
 
         // Set up the proof of possession
         DSIGSignature * s = 
-            rr->addProofOfPossessionSignature(CANON_C14NE_NOC, proofOfPossessionSm);
+            rr->addProofOfPossessionSignature(
+            		DSIGConstants::s_unicodeStrURIC14N_NOC,
+				proofOfPossessionSm,
+				DSIGConstants::s_unicodeStrURISHA1);
 
         s->setSigningKey(proofOfPossessionKey);
         s->sign();
@@ -1587,7 +1611,10 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
 
             // Set key and validate
             XKMSAuthentication * a = rr->addAuthentication();
-            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature();
+            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature(
+            		DSIGConstants::s_unicodeStrURIC14N_NOC,
+				DSIGConstants::s_unicodeStrURIHMAC_SHA1,
+				DSIGConstants::s_unicodeStrURISHA1);
 
             sig->setSigningKey(k);
             sig->sign();
@@ -1647,7 +1674,10 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                     return NULL;
                 }
 
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_DSA, HASH_SHA1);
+                sig = rr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+					DSIGConstants::s_unicodeStrURIDSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
@@ -1672,7 +1702,10 @@ XKMSMessageAbstractType * createRevokeRequest(XSECProvider &prov, DOMDocument **
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
+                sig = rr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+					DSIGConstants::s_unicodeStrURIRSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
@@ -1840,7 +1873,7 @@ void printReissueRequestUsage(void) {
 XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument **doc, int argc, char ** argv, int &paramCount, XKMSCompoundRequest * cr = NULL) {
 
     XSECCryptoKey *proofOfPossessionKey = NULL;
-    signatureMethod proofOfPossessionSm = SIGNATURE_DSA;
+    const XMLCh* proofOfPossessionSm = NULL;
 
     if (paramCount >= argc || 
         (_stricmp(argv[paramCount], "--help") == 0) ||
@@ -1958,7 +1991,10 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
 
             // Set key and validate
             XKMSAuthentication * a = rr->addAuthentication();
-            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature();
+            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature(
+            		DSIGConstants::s_unicodeStrURIC14N_NOC,
+				DSIGConstants::s_unicodeStrURIHMAC_SHA1,
+				DSIGConstants::s_unicodeStrURISHA1);
 
             sig->setSigningKey(k);
             sig->sign();
@@ -2018,7 +2054,10 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                     return NULL;
                 }
 
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_DSA, HASH_SHA1);
+                sig = rr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+					DSIGConstants::s_unicodeStrURIDSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
@@ -2043,7 +2082,10 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
+                sig = rr->addSignature(
+                		DSIGConstants::s_unicodeStrURIC14N_NOC,
+					DSIGConstants::s_unicodeStrURIRSA_SHA1,
+					DSIGConstants::s_unicodeStrURISHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
@@ -2124,7 +2166,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 }
 
                 proofOfPossessionKey = new OpenSSLCryptoKeyDSA(pkey);
-                proofOfPossessionSm = SIGNATURE_DSA;
+                proofOfPossessionSm = DSIGConstants::s_unicodeStrURIDSA_SHA1;
 
 				const BIGNUM *otherP = NULL, *otherQ = NULL, *otherG = NULL;
 				DSA_get0_pqg(EVP_PKEY_get0_DSA(pkey), &otherP, &otherQ, &otherG);
@@ -2149,7 +2191,7 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
                 }
 
                 proofOfPossessionKey = new OpenSSLCryptoKeyRSA(pkey);
-                proofOfPossessionSm = SIGNATURE_RSA;
+                proofOfPossessionSm = DSIGConstants::s_unicodeStrURIRSA_SHA1;
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;
 				RSA_get0_key(EVP_PKEY_get0_RSA(pkey), &n, &e, &d);
@@ -2184,7 +2226,10 @@ XKMSMessageAbstractType * createReissueRequest(XSECProvider &prov, DOMDocument *
 
         // Set up the proof of possession
         DSIGSignature * s = 
-            rr->addProofOfPossessionSignature(CANON_C14NE_NOC, proofOfPossessionSm);
+            rr->addProofOfPossessionSignature(
+            			DSIGConstants::s_unicodeStrURIC14N_NOC,
+            			proofOfPossessionSm,
+					DSIGConstants::s_unicodeStrURISHA1);
 
         s->setSigningKey(proofOfPossessionKey);
         s->sign();
@@ -2368,7 +2413,10 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
 
             // Set key and validate
             XKMSAuthentication * a = rr->addAuthentication();
-            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature();
+            DSIGSignature * sig = a->addKeyBindingAuthenticationSignature(
+            		DSIGConstants::s_unicodeStrURIC14N_NOC,
+            		DSIGConstants::s_unicodeStrURIHMAC_SHA1,
+				DSIGConstants::s_unicodeStrURISHA1);
 
             sig->setSigningKey(k);
             sig->sign();
@@ -2428,7 +2476,10 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                     return NULL;
                 }
 
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_DSA, HASH_SHA1);
+                sig = rr->addSignature(
+                				DSIGConstants::s_unicodeStrURIC14N_NOC,
+							DSIGConstants::s_unicodeStrURIDSA_SHA1,
+							DSIGConstants::s_unicodeStrURISHA1);
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
 
@@ -2453,7 +2504,10 @@ XKMSMessageAbstractType * createRecoverRequest(XSECProvider &prov, DOMDocument *
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
                     exit (1);
                 }
-                sig = rr->addSignature(CANON_C14N_NOC, SIGNATURE_RSA, HASH_SHA1);
+                sig = rr->addSignature(
+                			DSIGConstants::s_unicodeStrURIC14N_NOC,
+						DSIGConstants::s_unicodeStrURIRSA_SHA1,
+						DSIGConstants::s_unicodeStrURISHA1);
                 key = new OpenSSLCryptoKeyRSA(pkey);
 
 				const BIGNUM *n=NULL, *e=NULL, *d=NULL;

@@ -129,9 +129,9 @@ public:
 	 */
 
 	virtual DSIGSignature * addKeyBindingAuthenticationSignature(
-		canonicalizationMethod cm = CANON_C14NE_NOC,
-		signatureMethod	sm = SIGNATURE_HMAC,
-		hashMethod hm = HASH_SHA1) = 0;
+                const XMLCh* c14nAlgorithm,
+                const XMLCh* signatureAlgorithm,
+                const XMLCh* hashAlgorithm) = 0;
 
 	/**
 	 * \brief Set the NotBoundAuthentication value

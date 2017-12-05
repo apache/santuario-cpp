@@ -128,7 +128,9 @@ int main (int argc, char **argv) {
 
 		// Use it to create a blank signature DOM structure from the doc
 
-		sigNode = sig->createBlankSignature(doc, CANON_C14N_COM, SIGNATURE_HMAC, HASH_SHA1);
+		sigNode = sig->createBlankSignature(doc,
+				DSIGConstants::s_unicodeStrURIC14N_NOC,
+				DSIGConstants::s_unicodeStrURIHMAC_SHA1);
 
 		// Inser the signature DOM nodes into the doc
 
@@ -137,7 +139,7 @@ int main (int argc, char **argv) {
 		rootElem->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("\n")));
 
 		// Create an envelope reference for the text to be signed
-		DSIGReference * ref = sig->createReference(MAKE_UNICODE_STRING(""));
+		DSIGReference * ref = sig->createReference(MAKE_UNICODE_STRING(""), DSIGConstants::s_unicodeStrURISHA1);
 		ref->appendEnvelopedSignatureTransform();
 
 		// Set the HMAC Key to be the string "secret"

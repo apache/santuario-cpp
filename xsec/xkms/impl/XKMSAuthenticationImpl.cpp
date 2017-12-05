@@ -194,9 +194,9 @@ XKMSNotBoundAuthentication * XKMSAuthenticationImpl::getNotBoundAuthentication(v
 // --------------------------------------------------------------------------------
 
 DSIGSignature * XKMSAuthenticationImpl::addKeyBindingAuthenticationSignature(
-		canonicalizationMethod cm,
-		signatureMethod	sm,
-		hashMethod hm) {
+                const XMLCh* c14nAlgorithm,
+		const XMLCh* signatureAlgorithm,	
+		const XMLCh* hashAlgorithm) {
 
 	if (mp_keyBindingId == NULL) {
 		throw XSECException(XSECException::XKMSError,
@@ -204,7 +204,7 @@ DSIGSignature * XKMSAuthenticationImpl::addKeyBindingAuthenticationSignature(
 	}
 
 	DSIGSignature * ret = m_prov.newSignature();
-	DOMElement * elt = ret->createBlankSignature(mp_env->getParentDocument(), cm, sm, hm);
+	DOMElement * elt = ret->createBlankSignature(mp_env->getParentDocument(), c14nAlgorithm, signatureAlgorithm);
 
 	/* Create the enveloping reference */
 	safeBuffer sb;
@@ -212,7 +212,7 @@ DSIGSignature * XKMSAuthenticationImpl::addKeyBindingAuthenticationSignature(
 	sb.sbXMLChAppendCh(chPound);
 	sb.sbXMLChCat(mp_keyBindingId);
 
-	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer());
+	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer(), hashAlgorithm);
 	ref->appendCanonicalizationTransform(CANON_C14NE_COM);
 
 	/* Embed the signature in the document inside a KeyBindingAuthentication element */

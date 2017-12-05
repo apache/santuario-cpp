@@ -77,9 +77,9 @@ public:
 	virtual XKMSReissueKeyBinding * addReissueKeyBinding(XKMSStatus::StatusValue status);
 	virtual XKMSAuthentication * addAuthentication(void);
 	virtual DSIGSignature * addProofOfPossessionSignature(
-		canonicalizationMethod cm = CANON_C14N_NOC,
-		signatureMethod	sm = SIGNATURE_DSA,
-		hashMethod hm = HASH_SHA1);
+		const XMLCh* c14nAlgorithm,
+                const XMLCh* signatureAlgorithm,
+                const XMLCh* hashAlgorithm);
 
 	/* Implemented from MessageAbstractType */
 	virtual messageType getMessageType(void);

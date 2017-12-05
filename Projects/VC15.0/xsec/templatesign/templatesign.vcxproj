@@ -176,7 +176,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -205,7 +205,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -279,7 +279,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -307,7 +307,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <BrowseInformation>true</BrowseInformation>
+      <BrowseInformation>false</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>

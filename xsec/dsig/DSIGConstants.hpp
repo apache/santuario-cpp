@@ -210,28 +210,6 @@ enum xpathFilterType {
 
 };
 
-enum encryptionMethod {
-
-	ENCRYPT_NONE			= 0,				// No method defined
-	ENCRYPT_3DES_CBC		= 1,				// Use 3DES
-	ENCRYPT_AES128_CBC		= 2,				// 128 bit AES in CBC mode
-	ENCRYPT_AES192_CBC		= 3,				// 192 bit AES in CBC mode
-	ENCRYPT_AES256_CBC		= 4,				// 256 bit AES in CBC mode
-	ENCRYPT_KW_AES128		= 5,				// KeyWrap - AES128
-	ENCRYPT_KW_AES192		= 6,				// KeyWrap - AES192
-	ENCRYPT_KW_AES256		= 7,				// KeyWrap - AES256
-	ENCRYPT_KW_3DES			= 8,
-	ENCRYPT_RSA_15			= 9,				// RSA with PKCS 1.5 padding
-	ENCRYPT_RSA_OAEP_MGFP1	= 10,				// RSA with OAEP and MGFP1
-    ENCRYPT_RSA_OAEP	    = 11,				// RSA with OAEP
-	ENCRYPT_AES128_GCM		= 12,				// 128 bit AES in GCM
-    ENCRYPT_AES192_GCM		= 13,				// 192 bit AES in GCM
-	ENCRYPT_AES256_GCM		= 14,				// 256 bit AES in GCM
-	ENCRYPT_KW_AES128_PAD	= 15,				// KeyWrap - AES128 with padding
-	ENCRYPT_KW_AES192_PAD	= 16,				// KeyWrap - AES192 with padding
-	ENCRYPT_KW_AES256_PAD	= 17				// KeyWrap - AES256 with padding
-};
-
 enum maskGenerationFunc {
     MGF_NONE                = 0,                // No MGF defined
     MGF1_SHA1               = 1,                // MGF1-SHA1
@@ -407,106 +385,6 @@ bool hashMethod2URI(safeBuffer &uri, hashMethod hm) {
 		break;
 
 	default:
-		return false;
-
-	}
-
-	return true;
-
-}
-
-inline
-bool encryptionMethod2URI(safeBuffer &uri, encryptionMethod em) {
-
-	switch (em) {
-
-	case (ENCRYPT_3DES_CBC) :
-
-		uri = URI_ID_3DES_CBC;
-		break;
-
-	case (ENCRYPT_AES128_CBC) :
-
-		uri = URI_ID_AES128_CBC;
-		break;
-
-	case (ENCRYPT_AES192_CBC) :
-
-		uri = URI_ID_AES192_CBC;
-		break;
-
-	case (ENCRYPT_AES256_CBC) :
-
-		uri = URI_ID_AES256_CBC;
-		break;
-
-	case (ENCRYPT_KW_AES128) :
-
-		uri = URI_ID_KW_AES128;
-		break;
-
-	case (ENCRYPT_KW_AES192) :
-
-		uri = URI_ID_KW_AES192;
-		break;
-
-	case (ENCRYPT_KW_AES256) :
-
-		uri = URI_ID_KW_AES256;
-		break;
-
-	case (ENCRYPT_KW_3DES) :
-
-		uri = URI_ID_KW_3DES;
-		break;
-
-	case (ENCRYPT_RSA_15) :
-
-		uri = URI_ID_RSA_1_5;
-		break;
-
-	case (ENCRYPT_RSA_OAEP_MGFP1) :
-
-		uri = URI_ID_RSA_OAEP_MGFP1;
-		break;
-
-	case (ENCRYPT_RSA_OAEP) :
-
-		uri = URI_ID_RSA_OAEP;
-		break;
-
-	case (ENCRYPT_AES128_GCM) :
-
-		uri = URI_ID_AES128_GCM;
-		break;
-
-	case (ENCRYPT_AES192_GCM) :
-
-		uri = URI_ID_AES192_GCM;
-		break;
-
-    case (ENCRYPT_AES256_GCM) :
-
-		uri = URI_ID_AES256_GCM;
-		break;
-
-	case (ENCRYPT_KW_AES128_PAD) :
-
-		uri = URI_ID_KW_AES128_PAD;
-		break;
-
-	case (ENCRYPT_KW_AES192_PAD) :
-
-		uri = URI_ID_KW_AES192_PAD;
-		break;
-
-	case (ENCRYPT_KW_AES256_PAD) :
-
-		uri = URI_ID_KW_AES256_PAD;
-		break;
-
-    default:
-
 		return false;
 
 	}

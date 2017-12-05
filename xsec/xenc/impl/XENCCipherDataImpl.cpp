@@ -242,19 +242,19 @@ DOMElement * XENCCipherDataImpl::createBlankCipherData(
 // --------------------------------------------------------------------------------
 
 	// Interface methods
-XENCCipherDataImpl::XENCCipherDataType XENCCipherDataImpl::getCipherDataType(void) {
+XENCCipherDataImpl::XENCCipherDataType XENCCipherDataImpl::getCipherDataType(void) const {
 
 	return m_cipherDataType;
 
 }
 
-XENCCipherValue * XENCCipherDataImpl::getCipherValue(void) {
+XENCCipherValue * XENCCipherDataImpl::getCipherValue(void) const {
 
 	return mp_cipherValue;
 
 }
 
-XENCCipherReference * XENCCipherDataImpl::getCipherReference(void) {
+XENCCipherReference * XENCCipherDataImpl::getCipherReference(void) const {
 
 	return mp_cipherReference;
 

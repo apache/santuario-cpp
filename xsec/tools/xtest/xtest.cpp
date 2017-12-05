@@ -133,6 +133,7 @@ bool	 g_useWinCAPI = false;
 bool	 g_useNSS = false;
 bool g_haveAES = true;
 
+
 // --------------------------------------------------------------------------------
 //           Known "Good" Values
 // --------------------------------------------------------------------------------
@@ -994,33 +995,6 @@ void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh 
 
 		cerr << "OK";
 
-#if 0
-#if defined XSEC_HAVE_OPENSSL
-
-		if (g_useWinCAPI || g_useNSS) {
-
-			cerr << " ... validate against OpenSSL" << endl;
-
-			BIO * bioMem = BIO_new(BIO_s_mem());
-			BIO_puts(bioMem, s_tstRSAPrivateKey);
-			EVP_PKEY * pk = PEM_read_bio_PrivateKey(bioMem, NULL, NULL, NULL);
-
-			OpenSSLCryptoKeyRSA * rsaKey = new OpenSSLCryptoKeyRSA(pk);
-
-			sig->setSigningKey(rsaKey);
-			if (!sig->verify()) {
-				cerr << "bad verify!" << endl;
-				exit (1);
-			}
-
-			cerr << "OK";
-
-			BIO_free(bioMem);
-			EVP_PKEY_free(pk);
-		}
-#endif
-#endif
-
 		cerr << "\n";	
 
 		outputDoc(impl, doc);
@@ -1649,7 +1623,7 @@ void unitTestCipherReference(DOMImplementation * impl) {
 }
 
 
-void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key, encryptionMethod em, bool doElementContent) {
+void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key, const XMLCh* algorithm, bool doElementContent) {
 
 	if (doElementContent)
 		cerr << "Encrypting Element Content ... ";
@@ -1688,9 +1662,9 @@ void unitTestElementContentEncrypt(DOMImplementation *impl, XSECCryptoKey * key,
 	
 		// Now encrypt!
 		if (doElementContent)
-			cipher->encryptElementContent(doc->getDocumentElement(), em);
+			cipher->encryptElementContent(doc->getDocumentElement(), algorithm);
 		else
-			cipher->encryptElement((DOMElement *) categoryNode, em);
+			cipher->encryptElement((DOMElement *) categoryNode, algorithm);
 
 		cerr << "done ... check encrypted ... ";
 
@@ -1798,7 +1772,7 @@ void unitTestSmallElement(DOMImplementation *impl) {
 		cipher->setKey(ks->clone());
 	
 		// Now encrypt!
-		cipher->encryptElementContent(productNode, ENCRYPT_3DES_CBC);
+		cipher->encryptElementContent(productNode, DSIGConstants::s_unicodeStrURI3DES_CBC);
 
 		cerr << "done ... check encrypted ... ";
 
@@ -1866,7 +1840,7 @@ void unitTestSmallElement(DOMImplementation *impl) {
 }
 
 
-void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMethod em) {
+void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, const XMLCh* algorithm) {
 
 	// Create a document that we will embed the encrypted key in
 	DOMDocument *doc = impl->createDocument(
@@ -1897,7 +1871,7 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, encryptionMe
 		cipher->setKEK(k);
 
 		XENCEncryptedKey * encryptedKey;
-		encryptedKey = cipher->encryptKey(toEncryptStr, (unsigned int) strlen((char *) toEncryptStr), em);
+		encryptedKey = cipher->encryptKey(toEncryptStr, (unsigned int) strlen((char *) toEncryptStr), algorithm);
 		Janitor<XENCEncryptedKey> j_encryptedKey(encryptedKey);
 
 		rootElem->appendChild(encryptedKey->getElement());
@@ -1979,17 +1953,20 @@ void unitTestEncrypt(DOMImplementation *impl) {
 
 			OpenSSLCryptoKeyRSA * k = new OpenSSLCryptoKeyRSA(pk);
 
-			unitTestKeyEncrypt(impl, k, ENCRYPT_RSA_15);
+			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_1_5);
 
 			cerr << "RSA OAEP key wrap... ";
 			k = new OpenSSLCryptoKeyRSA(pk);
-			unitTestKeyEncrypt(impl, k, ENCRYPT_RSA_OAEP_MGFP1);
+			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1);
 
 			cerr << "RSA OAEP key wrap + params... ";
 			k = new OpenSSLCryptoKeyRSA(pk);
 			k->setOAEPparams(s_tstOAEPparams, (unsigned int) strlen((char *) s_tstOAEPparams));
+			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1);
 
-			unitTestKeyEncrypt(impl, k, ENCRYPT_RSA_OAEP_MGFP1);
+            cerr << "RSA OAEP 1.1 key wrap... ";
+            k = new OpenSSLCryptoKeyRSA(pk);
+            unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP);
 
 			BIO_free(bioMem);
 			EVP_PKEY_free(pk);
@@ -2004,12 +1981,16 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			HCRYPTPROV p = cp->getApacheKeyStore();
 			
 			WinCAPICryptoKeyRSA * rsaKey = new WinCAPICryptoKeyRSA(p, AT_KEYEXCHANGE, true);
-			unitTestKeyEncrypt(impl, rsaKey, ENCRYPT_RSA_15);
+			unitTestKeyEncrypt(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_1_5);
 
 			cerr << "RSA OAEP key wrap... ";
 			rsaKey = new WinCAPICryptoKeyRSA(p, AT_KEYEXCHANGE, true);
-			unitTestKeyEncrypt(impl, rsaKey, ENCRYPT_RSA_OAEP_MGFP1);
-		}
+			unitTestKeyEncrypt(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1);
+
+            cerr << "RSA OAEP 1.1 key wrap... ";
+            rsaKey = new WinCAPICryptoKeyRSA(p, AT_KEYEXCHANGE, true);
+            unitTestKeyEncrypt(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_OAEP);
+        }
 
 #endif
 
@@ -2045,7 +2026,7 @@ void unitTestEncrypt(DOMImplementation *impl) {
 
 			// Now use the key!
 			NSSCryptoKeyRSA * rsaKey = new NSSCryptoKeyRSA(pubKey, prvKey);
-			unitTestKeyEncrypt(impl, rsaKey, ENCRYPT_RSA_15);
+			unitTestKeyEncrypt(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_1_5);
 
 			if (slot) 
 				// Actual keys will be deleted by the provider
@@ -2064,21 +2045,21 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
 			ks->setKey((unsigned char *) s_keyStr, 16);
 		
-			unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_AES128);
+			unitTestKeyEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIKW_AES128);
 
 			cerr << "AES 192 key wrap... ";
 
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
 			ks->setKey((unsigned char *) s_keyStr, 24);
 		
-			unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_AES192);
+			unitTestKeyEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIKW_AES192);
 
 			cerr << "AES 256 key wrap... ";
 
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
 			ks->setKey((unsigned char *) s_keyStr, 32);
 		
-			unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_AES256);
+			unitTestKeyEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIKW_AES256);
 		}
 
 		else 
@@ -2089,7 +2070,7 @@ void unitTestEncrypt(DOMImplementation *impl) {
 		ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 		ks->setKey((unsigned char *) s_keyStr, 24);
 		
-		unitTestKeyEncrypt(impl, ks, ENCRYPT_KW_3DES);
+		unitTestKeyEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIKW_3DES);
 
 		// Now do Element encrypts
 
@@ -2099,24 +2080,24 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			ks->setKey((unsigned char *) s_keyStr, 16);
 
 			cerr << "Unit testing AES 128 bit CBC encryption" << endl;
-			unitTestElementContentEncrypt(impl, ks->clone(), ENCRYPT_AES128_CBC, false);
-			unitTestElementContentEncrypt(impl, ks, ENCRYPT_AES128_CBC, true);
+			unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES128_CBC, false);
+			unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES128_CBC, true);
 
 			//192 AES
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
 			ks->setKey((unsigned char *) s_keyStr, 24);
 
 			cerr << "Unit testing AES 192 bit CBC encryption" << endl;
-			unitTestElementContentEncrypt(impl, ks->clone(), ENCRYPT_AES192_CBC, false);
-			unitTestElementContentEncrypt(impl, ks, ENCRYPT_AES192_CBC, true);
+			unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES192_CBC, false);
+			unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES192_CBC, true);
 
 		// 256 AES
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
 			ks->setKey((unsigned char *) s_keyStr, 32);
 
 			cerr << "Unit testing AES 256 bit CBC encryption" << endl;
-			unitTestElementContentEncrypt(impl, ks->clone(), ENCRYPT_AES256_CBC, false);
-			unitTestElementContentEncrypt(impl, ks, ENCRYPT_AES256_CBC, true);
+			unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES256_CBC, false);
+			unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES256_CBC, true);
 		}
 
 		else
@@ -2127,8 +2108,8 @@ void unitTestEncrypt(DOMImplementation *impl) {
 		ks->setKey((unsigned char *) s_keyStr, 24);
 
 		cerr << "Unit testing 3DES CBC encryption" << endl;
-		unitTestElementContentEncrypt(impl, ks->clone(), ENCRYPT_3DES_CBC, false);
-		unitTestElementContentEncrypt(impl, ks, ENCRYPT_3DES_CBC, true);
+		unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURI3DES_CBC, false);
+		unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURI3DES_CBC, true);
 #ifdef XSEC_HAVE_XALAN
 		if (g_haveAES) {
 			cerr << "Unit testing CipherReference creation and decryption" << endl;
@@ -2205,7 +2186,7 @@ void testEncrypt(DOMImplementation *impl) {
 	
 		// Now encrypt!
 		cerr << "Performing 3DES encryption on <category> element ... ";
-		cipher->encryptElement((DOMElement *) categoryNode, ENCRYPT_3DES_CBC);
+		cipher->encryptElement((DOMElement *) categoryNode, DSIGConstants::s_unicodeStrURI3DES_CBC);
 
 		// Add a KeyInfo
 		cerr << "done\nAppending a <KeyName> ... ";
@@ -2253,9 +2234,9 @@ void testEncrypt(DOMImplementation *impl) {
 
 		XENCEncryptedKey * encryptedKey;
 		if (g_haveAES)
-			encryptedKey = cipher->encryptKey(randomBuffer, 24, ENCRYPT_KW_AES128);
+			encryptedKey = cipher->encryptKey(randomBuffer, 24, DSIGConstants::s_unicodeStrURIKW_AES128);
 		else
-			encryptedKey = cipher->encryptKey(randomBuffer, 24, ENCRYPT_KW_3DES);
+			encryptedKey = cipher->encryptKey(randomBuffer, 24, DSIGConstants::s_unicodeStrURIKW_3DES);
 		cerr << "done!" << endl;
 
 		cerr << "Adding CarriedKeyName and Recipient to encryptedKey ... " << endl;

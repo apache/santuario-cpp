@@ -118,19 +118,19 @@ public:
 	void removeTransform(size_type index);
 
 	/**
-	 * \brief Delete the transform at the indicated position.
+	 * \brief Access the transform at the indicated position.
 	 *
-	 * @param index The position to delete from.
+	 * @param index position
 	 */
 
-	DSIGTransform * item(size_type index);
+	DSIGTransform * item(size_type index) const;
 
 	/** 
 	 * \brief Get the number of items.
 	 *
 	 */
 
-	size_type	getSize();
+	size_type	getSize() const;
 
 	/**
 	 * \brief Remove all elements - but delete none.

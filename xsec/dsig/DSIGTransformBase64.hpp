@@ -105,7 +105,7 @@ public:
 	 *
 	 */
 
-	virtual transformType getTransformType();
+	virtual transformType getTransformType() const;
 
 	/**
 	 * \brief Create the Base 64transformer element.

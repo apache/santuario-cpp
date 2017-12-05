@@ -207,7 +207,7 @@ void WinCAPICryptoKeyRSA::loadPublicExponentBase64BigNums(const char * b64, unsi
 
 }
 
-HCRYPTKEY WinCAPICryptoKeyRSA::importKey(void) {
+HCRYPTKEY WinCAPICryptoKeyRSA::importKey(void) const {
 	
 	if (m_key != 0 ||
 		mp_exponent == NULL ||
@@ -278,7 +278,7 @@ bool WinCAPICryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
 								 unsigned int hashLen,
 								 const char * base64Signature,
 								 unsigned int sigLen,
-								 hashMethod hm) {
+								 hashMethod hm) const {
 
 	// Use the currently loaded key to validate the Base64 encoded signature
 
@@ -398,7 +398,7 @@ unsigned int WinCAPICryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * h
 		unsigned int hashLen,
 		char * base64SignatureBuf,
 		unsigned int base64SignatureBufLen,
-		hashMethod hm) {
+		hashMethod hm) const {
 
 	// Sign a pre-calculated hash using this key
 
@@ -568,7 +568,7 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm) {
+								 hashMethod hm) const {
 
 	// Perform a decrypt
 	if (m_key == 0) {
@@ -639,7 +639,7 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm) {
+								 hashMethod hm) const {
 
 	// Perform an encrypt
 	if (m_key == 0) {

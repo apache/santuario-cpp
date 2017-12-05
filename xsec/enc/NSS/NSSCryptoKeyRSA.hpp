@@ -180,7 +180,7 @@ public :
 								 unsigned int hashLen,
 								 const char * base64Signature,
 								 unsigned int sigLen,
-								 hashMethod hm);
+								 hashMethod hm) const;
 
 	/**
 	 * \brief Create a signature
@@ -203,7 +203,7 @@ public :
 								unsigned int hashLen,
 								char * base64SignatureBuf,
 								unsigned int base64SignatureBufLen,
-								hashMethod hm);
+								hashMethod hm) const;
 
 	/**
 	 * \brief Decrypt using private key
@@ -225,7 +225,7 @@ public :
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm);
+								 hashMethod hm) const;
 
 	/**
 	 * \brief Encrypt using a public key
@@ -247,7 +247,7 @@ public :
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm);
+								 hashMethod hm) const;
 
 	/**
 	 * \brief Obtain the length of an RSA key
@@ -322,15 +322,15 @@ public :
 
 private:
 
-  SECKEYPublicKey  *	mp_pubkey;
+	mutable SECKEYPublicKey  *	mp_pubkey;
 	SECKEYPrivateKey *	mp_privkey;
 
-  SECItem * mp_modulus;
-  SECItem * mp_exponent;
+	SECItem * mp_modulus;
+	SECItem * mp_exponent;
 
 	// Instruct to import from parameters
 
-	void importKey(void);
+	void importKey(void) const;
 	void loadParamsFromKey(void);
 
 };

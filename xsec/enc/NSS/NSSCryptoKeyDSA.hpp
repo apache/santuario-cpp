@@ -119,7 +119,7 @@ public :
 	virtual unsigned int signBase64Signature(unsigned char * hashBuf,
 						unsigned int hashLen,
 						char * base64SignatureBuf,
-						unsigned int base64SignatureBufLen);
+						unsigned int base64SignatureBufLen) const;
 
 	/**
 	 * \brief Verify a signature
@@ -136,7 +136,7 @@ public :
 	virtual bool verifyBase64Signature(unsigned char * hashBuf, 
 						 unsigned int hashLen,
 						 char * base64Signature,
-						 unsigned int sigLen);
+						 unsigned int sigLen) const;
 
 	//@}
 
@@ -242,7 +242,7 @@ public :
 
 private:
 
-	SECKEYPublicKey  *	mp_pubkey;
+	mutable SECKEYPublicKey  *	mp_pubkey;
 	SECKEYPrivateKey *	mp_privkey;
 
   SECItem * mp_P;
@@ -252,7 +252,7 @@ private:
 
 	// Instruct to import from parameters
 
-	void importKey(void);
+	void importKey(void) const;
 	void loadParamsFromKey(void);
 
 };

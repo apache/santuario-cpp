@@ -60,7 +60,7 @@ DSIGTransformEnvelope::~DSIGTransformEnvelope() {};
 // --------------------------------------------------------------------------------
 
 
-transformType DSIGTransformEnvelope::getTransformType() {
+transformType DSIGTransformEnvelope::getTransformType() const {
 
 	return TRANSFORM_ENVELOPED_SIGNATURE;
 

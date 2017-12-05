@@ -203,7 +203,7 @@ public :
 	 * @see OpenSSLCryptoKeyEC
 	 */
 
-	virtual XSECCryptoKeyEC		    * keyEC() const;
+	virtual XSECCryptoKeyEC		* keyEC() const;
 
 	/**
 	 * \brief Return a key implementation object based on DER-encoded input.
@@ -217,7 +217,7 @@ public :
 	 * @see XSECCryptoKey
 	 */
 
-	virtual XSECCryptoKey           * keyDER(const char* buf, unsigned long buflen, bool base64) const;
+	virtual XSECCryptoKey		* keyDER(const char* buf, unsigned long buflen, bool base64) const;
 
     /**
 	 * \brief Return an X509 implementation object.

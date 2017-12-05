@@ -113,7 +113,7 @@ public :
     virtual unsigned int signBase64Signature(unsigned char * hashBuf,
         unsigned int hashLen,
         char * base64SignatureBuf,
-        unsigned int base64SignatureBufLen);
+        unsigned int base64SignatureBufLen) const;
 
     /**
      * \brief Verify a signature
@@ -131,7 +131,7 @@ public :
     virtual bool verifyBase64Signature(unsigned char * hashBuf, 
                              unsigned int hashLen,
                              char * base64Signature,
-                             unsigned int sigLen);
+                             unsigned int sigLen) const;
     
     //@}
 

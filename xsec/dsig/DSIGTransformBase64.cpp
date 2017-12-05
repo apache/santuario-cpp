@@ -60,7 +60,7 @@ DSIGTransformBase64::~DSIGTransformBase64() {};
 // --------------------------------------------------------------------------------
 
 
-transformType DSIGTransformBase64::getTransformType() {
+transformType DSIGTransformBase64::getTransformType() const {
 
 	return TRANSFORM_BASE64;
 

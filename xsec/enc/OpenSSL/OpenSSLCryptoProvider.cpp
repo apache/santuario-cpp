@@ -267,6 +267,16 @@ XSECCryptoKeyDSA * OpenSSLCryptoProvider::keyDSA() const {
 
 }
 
+XSECCryptoKeyRSA * OpenSSLCryptoProvider::keyRSA() const {
+
+    OpenSSLCryptoKeyRSA * ret;
+
+    XSECnew(ret, OpenSSLCryptoKeyRSA());
+
+    return ret;
+
+}
+
 XSECCryptoKeyEC * OpenSSLCryptoProvider::keyEC() const {
     
 #ifdef XSEC_OPENSSL_HAVE_EC
@@ -279,16 +289,6 @@ XSECCryptoKeyEC * OpenSSLCryptoProvider::keyEC() const {
     throw XSECCryptoException(XSECCryptoException::UnsupportedError,
         "OpenSSLCryptoProvider::keyEC - EC support not available");
 #endif
-}
-
-XSECCryptoKeyRSA * OpenSSLCryptoProvider::keyRSA() const {
-    
-    OpenSSLCryptoKeyRSA * ret;
-
-    XSECnew(ret, OpenSSLCryptoKeyRSA());
-
-    return ret;
-
 }
 
 XSECCryptoKey* OpenSSLCryptoProvider::keyDER(const char* buf, unsigned long len, bool base64) const {

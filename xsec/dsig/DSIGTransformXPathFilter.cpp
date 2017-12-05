@@ -72,7 +72,7 @@ DSIGTransformXPathFilter::~DSIGTransformXPathFilter() {
 
 }
 
-transformType DSIGTransformXPathFilter::getTransformType() {
+transformType DSIGTransformXPathFilter::getTransformType() const {
 
 	return TRANSFORM_XPATH_FILTER;
 

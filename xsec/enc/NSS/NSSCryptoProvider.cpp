@@ -256,6 +256,18 @@ XSECCryptoKeyRSA * NSSCryptoProvider::keyRSA() const {
 
 }
 
+XSECCryptoKeyEC * NSSCryptoProvider::keyEC() const {
+
+    throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+        "NSSCryptoProvider::keyEC - EC support not available");
+}
+
+XSECCryptoKey* NSSCryptoProvider::keyDER(const char* buf, unsigned long len, bool base64) const {
+
+    throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+        "NSSCryptoProvider::keyDER - DER decoding support not available");
+}
+
 // --------------------------------------------------------------------------------
 //           Get symmetric key
 // --------------------------------------------------------------------------------

@@ -66,7 +66,7 @@ DSIGTransformC14n::~DSIGTransformC14n() {};
 //           Interface Methods
 // --------------------------------------------------------------------------------
 
-transformType DSIGTransformC14n::getTransformType() {
+transformType DSIGTransformC14n::getTransformType() const {
 
 	if ((m_cMethod == CANON_C14NE_NOC) || (m_cMethod == CANON_C14NE_COM))
 		return TRANSFORM_EXC_C14N;

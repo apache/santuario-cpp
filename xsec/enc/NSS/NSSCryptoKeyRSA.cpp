@@ -191,7 +191,7 @@ void NSSCryptoKeyRSA::loadPublicExponentBase64BigNums(const char * b64, unsigned
 //           Import key
 // --------------------------------------------------------------------------------
 
-void NSSCryptoKeyRSA::importKey(void) {
+void NSSCryptoKeyRSA::importKey(void) const {
 
 	if (mp_pubkey != 0 || mp_exponent == NULL || mp_modulus == NULL)
 		return;
@@ -252,7 +252,7 @@ bool NSSCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * hashB
 								 unsigned int hashLen,
 								 const char * base64Signature,
 								 unsigned int sigLen,
-								 hashMethod hm) {
+								 hashMethod hm) const {
 
 	// Use the currently loaded key to validate the Base64 encoded signature
 
@@ -358,7 +358,7 @@ unsigned int NSSCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * hashB
 		unsigned int hashLen,
 		char * base64SignatureBuf,
 		unsigned int base64SignatureBufLen,
-		hashMethod hm) {
+		hashMethod hm) const {
 
 	// Sign a pre-calculated hash using this key
 
@@ -534,7 +534,7 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm) {
+								 hashMethod hm) const {
 
 	// Perform a decrypt
 	if (mp_privkey == 0) {
@@ -614,7 +614,7 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm) {
+								 hashMethod hm) const {
 
 	// Perform an encrypt
 	if (mp_pubkey == 0) {

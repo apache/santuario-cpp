@@ -261,6 +261,17 @@ XSECCryptoKeyRSA * WinCAPICryptoProvider::keyRSA() const {
 
 }
 
+XSECCryptoKeyEC * WinCAPICryptoProvider::keyEC() const {
+
+    throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+        "WinCAPICryptoProvider::keyEC - EC support not available");
+}
+
+XSECCryptoKey* WinCAPICryptoProvider::keyDER(const char* buf, unsigned long len, bool base64) const {
+
+    throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+        "WinCAPICryptoProvider::keyDER - DER decoding support not available");
+}
 
 XSECCryptoX509 * WinCAPICryptoProvider::X509() const {
 

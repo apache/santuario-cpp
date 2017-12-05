@@ -192,7 +192,7 @@ void WinCAPICryptoKeyDSA::loadJBase64BigNums(const char * b64, unsigned int len)
 //           Verify a signature encoded as a Base64 string
 // --------------------------------------------------------------------------------
 
-void WinCAPICryptoKeyDSA::importKey(void) {
+void WinCAPICryptoKeyDSA::importKey(void) const {
 	
 	if (m_key != 0 ||
 		mp_P == NULL ||
@@ -287,7 +287,7 @@ void WinCAPICryptoKeyDSA::importKey(void) {
 bool WinCAPICryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf, 
 								 unsigned int hashLen,
 								 char * base64Signature,
-								 unsigned int sigLen) {
+								 unsigned int sigLen) const {
 
 	// Use the currently loaded key to validate the Base64 encoded signature
 
@@ -421,7 +421,7 @@ bool WinCAPICryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
 unsigned int WinCAPICryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 		unsigned int hashLen,
 		char * base64SignatureBuf,
-		unsigned int base64SignatureBufLen) {
+		unsigned int base64SignatureBufLen) const {
 
 	// Sign a pre-calculated hash using this key
 

@@ -166,7 +166,7 @@ public :
 								 unsigned int hashLen,
 								 const char * base64Signature,
 								 unsigned int sigLen,
-								 hashMethod hm) = 0;
+								 hashMethod hm) const = 0;
 
 	/**
 	 * \brief Create a signature
@@ -193,7 +193,7 @@ public :
 		unsigned int hashLen,
 		char * base64SignatureBuf,
 		unsigned int base64SignatureBufLen,
-		hashMethod hm) = 0;
+		hashMethod hm) const = 0;
 
 	/**
 	 * \brief Decrypt using private key
@@ -215,7 +215,7 @@ public :
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm) = 0;
+								 hashMethod hm) const = 0;
 
 	/**
 	 * \brief Encrypt using a public key
@@ -238,7 +238,7 @@ public :
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm) = 0;
+								 hashMethod hm) const = 0;
 
 	/**
 	 * \brief Obtain the length of an RSA key

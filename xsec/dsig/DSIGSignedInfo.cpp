@@ -137,7 +137,7 @@ bool DSIGSignedInfo::verify(safeBuffer &errStr) const {
 //           Calculate and set hash values for each reference element
 // --------------------------------------------------------------------------------
 
-void DSIGSignedInfo::hash(bool interlockingReferences) {
+void DSIGSignedInfo::hash(bool interlockingReferences) const {
 
 	DSIGReference::hashReferenceList(mp_referenceList, interlockingReferences);
 

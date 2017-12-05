@@ -113,7 +113,7 @@ public:
 	 * @returns The filter type of this expression
 	 */
 
-	xpathFilterType getFilterType(void);
+	xpathFilterType getFilterType(void) const;
 
 	/**
 	 * \brief create from blank
@@ -136,7 +136,7 @@ public:
 	 * @returns The filter expression
 	 */
 
-	const XMLCh * getFilter(void) {return m_expr.rawXMLChBuffer();}
+	const XMLCh * getFilter(void) const {return m_expr.rawXMLChBuffer();}
 
 	/**
 	 * \brief Add a new namespace to the list to be used
@@ -160,7 +160,7 @@ public:
 	 * @returns A pointer to the NamedNodeMap
 	 */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap * getNamespaces(void) {
+	XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap * getNamespaces(void) const {
 		return mp_NSMap;
 	}
 

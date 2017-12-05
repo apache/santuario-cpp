@@ -271,7 +271,7 @@ public :
 	 * @see XSECCryptoKeyEC
 	 */
 
-	virtual XSECCryptoKeyEC         * keyEC() const;
+	virtual XSECCryptoKeyEC         * keyEC() const = 0;
 
 	/**
 	 * \brief Return a key implementation object based on DER-encoded input.
@@ -285,7 +285,7 @@ public :
 	 * @see XSECCryptoKey
 	 */
 
-	virtual XSECCryptoKey         * keyDER(const char* buf, unsigned long buflen, bool base64) const;
+	virtual XSECCryptoKey         * keyDER(const char* buf, unsigned long buflen, bool base64) const = 0;
 
     /**
 	 * \brief Return an X509 implementation object.

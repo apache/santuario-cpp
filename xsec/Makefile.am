@@ -424,7 +424,6 @@ enc_sources = \
   enc/XSECCryptoUtils.cpp \
   enc/XSECCryptoBase64.cpp \
   enc/XSCrypt/XSCryptCryptoBase64.cpp \
-  enc/XSECCryptoProvider.cpp \
   enc/XSECCryptoException.cpp
 
 # Framework files

@@ -446,37 +446,6 @@ const XMLCh * DSIGSignature::getXPFNSPrefix() const {
 
 }
 
-// --------------------------------------------------------------------------------
-//           Creating Blank Signature
-// --------------------------------------------------------------------------------
-
-DOMElement *DSIGSignature::createBlankSignature(DOMDocument *doc,
-			canonicalizationMethod cm,
-			signatureMethod	sm,
-			hashMethod hm) {
-
-	// This is now deprecated.  Because this is so, we go the long way - translate
-	// to URI and then call the "standard" method, which will translate back to 
-	// internal enums if possible
-
-	const XMLCh * cURI;
-	safeBuffer sURI;
-
-	if ((cURI = canonicalizationMethod2UNICODEURI(cm)) == NULL) {
-		throw XSECException(XSECException::UnknownCanonicalization,
-			"DSIGSignature::createBlankSignature - Canonicalisation method unknown");
-	}
-
-	if (signatureHashMethod2URI(sURI, sm, hm) == false) {
-		throw XSECException(XSECException::UnknownSignatureAlgorithm,
-			"DSIGSignature::createBlankSignature - Signature/Hash method unknown");
-	}
-
-	return createBlankSignature(doc, cURI, sURI.sbStrToXMLCh());
-
-}
-
-
 DOMElement *DSIGSignature::createBlankSignature(
 		DOMDocument *doc,
 		const XMLCh * canonicalizationAlgorithmURI,
@@ -540,14 +509,6 @@ DOMElement *DSIGSignature::createBlankSignature(
 // --------------------------------------------------------------------------------
 //           Creating References
 // --------------------------------------------------------------------------------
-
-DSIGReference * DSIGSignature::createReference(const XMLCh * URI, 
-								hashMethod hm, 
-								char * type) {
-
-	return mp_signedInfo->createReference(URI, hm, type);
-
-}
 
 DSIGReference * DSIGSignature::createReference(
 		const XMLCh * URI,

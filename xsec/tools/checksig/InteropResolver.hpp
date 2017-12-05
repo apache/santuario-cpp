@@ -67,8 +67,8 @@ private:
     mutable bool    m_searchFinished;
 
 #if defined (_WIN32)
-    _finddata_t     m_finder;
-    long            m_handle;
+    mutable _finddata_t m_finder;
+    mutable long    m_handle;
 #else
     mutable glob_t  m_globbuf;
     mutable int     m_fcount;

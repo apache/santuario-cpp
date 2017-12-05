@@ -38,7 +38,6 @@
     <ProjectGuid>{10CE0E86-DF94-4244-9D81-C1D5CDDA6AD8}</ProjectGuid>
     <RootNamespace>templatesign</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'" Label="Configuration">

@@ -38,7 +38,6 @@
     <ProjectGuid>{D5B5A007-E873-4D12-B4AF-60811AFD9EF1}</ProjectGuid>
     <RootNamespace>xsec_lib</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'" Label="Configuration">
@@ -194,7 +193,6 @@
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2D.lib</ImportLibrary>
@@ -233,7 +231,6 @@
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2D.lib</ImportLibrary>
@@ -266,7 +263,6 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2.lib</ImportLibrary>
@@ -303,7 +299,6 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2.lib</ImportLibrary>
@@ -340,7 +335,6 @@
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2D.lib</ImportLibrary>
@@ -379,7 +373,6 @@
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2D.lib</ImportLibrary>
@@ -412,7 +405,6 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2.lib</ImportLibrary>
@@ -449,7 +441,6 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImportLibrary>$(OutDir)xsec_2.lib</ImportLibrary>
@@ -488,104 +479,24 @@
     <ClCompile Include="..\..\..\..\xsec\dsig\DSIGTransformXSL.cpp" />
     <ClCompile Include="..\..\..\..\xsec\dsig\DSIGXPathFilterExpr.cpp" />
     <ClCompile Include="..\..\..\..\xsec\dsig\DSIGXPathHere.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHash.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHashHMAC.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyDSA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyHMAC.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyRSA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoProvider.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoSymmetricKey.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoX509.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHash.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHashHMAC.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyDSA.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyHMAC.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyRSA.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoProvider.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoSymmetricKey.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\NSS\NSSCryptoX509.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHash.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHashHMAC.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyDSA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyHMAC.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyRSA.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoProvider.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoSymmetricKey.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoX509.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHash.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHashHMAC.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyDSA.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyHMAC.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyRSA.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoProvider.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoSymmetricKey.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoX509.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoBase64.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoException.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoUtils.cpp" />
@@ -693,104 +604,24 @@
     <ClInclude Include="..\..\..\..\xsec\dsig\DSIGTransformXSL.hpp" />
     <ClInclude Include="..\..\..\..\xsec\dsig\DSIGXPathFilterExpr.hpp" />
     <ClInclude Include="..\..\..\..\xsec\dsig\DSIGXPathHere.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHash.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHashHMAC.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyDSA.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyHMAC.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyRSA.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoProvider.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoSymmetricKey.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoX509.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHash.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoHashHMAC.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyDSA.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyHMAC.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoKeyRSA.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoProvider.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoSymmetricKey.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\NSS\NSSCryptoX509.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoKeyEC.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLSupport.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHash.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHashHMAC.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyDSA.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyHMAC.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyRSA.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoProvider.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoSymmetricKey.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoX509.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHash.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoHashHMAC.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyDSA.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyHMAC.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoKeyRSA.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoProvider.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoSymmetricKey.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\enc\WinCAPI\WinCAPICryptoX509.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\XSECCryptoKeyEC.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\resource.h" />
     <ClInclude Include="..\..\..\..\xsec\enc\XSECCryptoBase64.hpp" />

@@ -38,7 +38,6 @@
     <ProjectGuid>{C84D6CCF-E9E5-4846-9E51-4D84412663FA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>txfmout</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

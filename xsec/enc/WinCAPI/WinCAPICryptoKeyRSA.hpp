@@ -367,15 +367,15 @@ public :
 
 private:
 
-	HCRYPTPROV					m_p;
-	mutable HCRYPTKEY			m_key;			// For a public key
-	mutable DWORD				m_keySpec;		// For a private key
+	HCRYPTPROV			m_p;
+	mutable HCRYPTKEY	m_key;			// For a public key
+	DWORD				m_keySpec;		// For a private key
 
-	BYTE						* mp_modulus;
-	BYTE						* mp_exponent;
+	BYTE				* mp_modulus;
+	BYTE				* mp_exponent;
 
-	unsigned int				m_modulusLen;
-	unsigned int				m_exponentLen;
+	unsigned int		m_modulusLen;
+	unsigned int		m_exponentLen;
 
 	// Instruct to import from parameters
 

@@ -150,7 +150,7 @@ int attNodeCount(DOMElement * d) {
 
 }
 
-void XSECNameSpaceExpander::expandNameSpaces(void) {
+void XSECNameSpaceExpander::expandNameSpaces() {
 
 	if (m_expanded)
 		return;				// Don't do this twice!
@@ -174,7 +174,7 @@ void XSECNameSpaceExpander::expandNameSpaces(void) {
 }
 
 
-void XSECNameSpaceExpander::deleteAddedNamespaces(void) {
+void XSECNameSpaceExpander::deleteAddedNamespaces() {
 
 	NameSpaceEntryListVectorType::size_type size = m_lst.size();
 	XSECNameSpaceEntry *e;
@@ -203,7 +203,7 @@ void XSECNameSpaceExpander::deleteAddedNamespaces(void) {
 
 }
 
-bool XSECNameSpaceExpander::nodeWasAdded(DOMNode *n) {
+bool XSECNameSpaceExpander::nodeWasAdded(DOMNode *n) const {
 
 	NameSpaceEntryListVectorType::size_type size = m_lst.size();
 	XSECNameSpaceEntry *e;

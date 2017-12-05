@@ -226,8 +226,8 @@ int evaluate(int argc, char ** argv) {
     XSECCryptoKey           * kek = NULL;
     XSECCryptoKey           * key = NULL;
     int                     keyLen = 0;
-    encryptionMethod        kekAlg = ENCRYPT_NONE;
-    encryptionMethod        keyAlg = ENCRYPT_NONE;
+    const XMLCh*            kekAlg = NULL;
+    const XMLCh*            keyAlg = NULL;
     DOMDocument             *doc;
     unsigned char           keyBuf[24];
     XMLFormatTarget         *formatTarget ;
@@ -345,45 +345,45 @@ int evaluate(int argc, char ** argv) {
                 case '\0' :
                     keyLen = 24;
                     loadKeyAs = XSECCryptoSymmetricKey::KEY_3DES_192;
-                    keyAlg = ENCRYPT_3DES_CBC;
+                    keyAlg = DSIGConstants::s_unicodeStrURI3DES_CBC;
                     break;
                 case '2' :
                     keyLen = 16;
                     loadKeyAs = XSECCryptoSymmetricKey::KEY_AES_128;
                     if (isKEK) {
-                        kekAlg = ENCRYPT_KW_AES128;
+                        kekAlg = DSIGConstants::s_unicodeStrURIKW_AES128;
                     }
                     else if (strlen(argv[paramCount]) == 6) {
-                        keyAlg = ENCRYPT_AES128_CBC;
+                        keyAlg = DSIGConstants::s_unicodeStrURIAES128_CBC;
                     }
                     else {
-                        keyAlg = ENCRYPT_AES128_GCM;
+                        keyAlg = DSIGConstants::s_unicodeStrURIAES128_GCM;
                     }
                     break;
                 case '9' :
                     keyLen = 24;
                     loadKeyAs = XSECCryptoSymmetricKey::KEY_AES_192;
                     if (isKEK) {
-                        kekAlg = ENCRYPT_KW_AES192;
+                        kekAlg = DSIGConstants::s_unicodeStrURIKW_AES192;
                     }
                     else if (strlen(argv[paramCount]) == 6) {
-                        keyAlg = ENCRYPT_AES192_CBC;
+                        keyAlg = DSIGConstants::s_unicodeStrURIAES192_CBC;
                     }
                     else {
-                        keyAlg = ENCRYPT_AES192_GCM;
+                        keyAlg = DSIGConstants::s_unicodeStrURIAES192_GCM;
                     }
                     break;
                 case '5' :
                     keyLen = 32;
                     loadKeyAs = XSECCryptoSymmetricKey::KEY_AES_256;
                     if (isKEK) {
-                        kekAlg = ENCRYPT_KW_AES256;
+                        kekAlg = DSIGConstants::s_unicodeStrURIKW_AES256;
                     }
                     else if (strlen(argv[paramCount]) == 6) {
-                        keyAlg = ENCRYPT_AES256_CBC;
+                        keyAlg = DSIGConstants::s_unicodeStrURIAES256_CBC;
                     }
                     else {
-                        keyAlg = ENCRYPT_AES256_GCM;
+                        keyAlg = DSIGConstants::s_unicodeStrURIAES256_GCM;
                     }
                     break;
                 }
@@ -462,7 +462,7 @@ int evaluate(int argc, char ** argv) {
                 }
 
                 kek = new OpenSSLCryptoKeyRSA(pkey);
-                kekAlg = ENCRYPT_RSA_15;
+                kekAlg = DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1;
                 EVP_PKEY_free(pkey);
                 BIO_free(bioKey);
                 paramCount += 3;
@@ -531,7 +531,7 @@ int evaluate(int argc, char ** argv) {
                 }
 
                 kek = new OpenSSLCryptoKeyRSA(pkey);
-                kekAlg = ENCRYPT_RSA_15;
+                kekAlg = DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1;
 
                 // Clean up
 
@@ -729,7 +729,7 @@ int evaluate(int argc, char ** argv) {
                     XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
                 k->setKey(keyBuf, 24);
                 cipher->setKey(k);
-                keyAlg = ENCRYPT_3DES_CBC;
+                keyAlg = DSIGConstants::s_unicodeStrURI3DES_CBC;
                 keyStr = keyBuf;
                 keyLen = 24;
             }

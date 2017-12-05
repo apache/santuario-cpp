@@ -140,7 +140,7 @@ public:
 	 * Perform the expansion operation and create a list of all added nodes.
 	 */
 
-	void expandNameSpaces(void);
+	void expandNameSpaces();
 
 	/**
 	 * \brief Collapse name-spaces
@@ -149,14 +149,14 @@ public:
 	 * was created at that time
 	 */
 
-	void deleteAddedNamespaces(void);
+	void deleteAddedNamespaces();
 
 	// Check if a node is an added node
-	bool nodeWasAdded(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n);
+	bool nodeWasAdded(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *n) const;
 
 private:  // Functions
 
-	XSECNameSpaceExpander(void);					// No default constructor
+	XSECNameSpaceExpander();					// No default constructor
 	void recurse(XERCES_CPP_NAMESPACE_QUALIFIER DOMElement *n);
 
 	// data

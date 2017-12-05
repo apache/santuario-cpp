@@ -38,7 +38,6 @@
     <ProjectGuid>{0C455A95-991B-4019-8872-AA1FE6139F69}</ProjectGuid>
     <RootNamespace>cipher</RootNamespace>
     <Keyword>Win32Proj</Keyword>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'" Label="Configuration">

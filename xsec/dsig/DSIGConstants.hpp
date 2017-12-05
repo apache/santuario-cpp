@@ -269,50 +269,6 @@ bool canonicalizationMethod2URI(safeBuffer &uri, canonicalizationMethod cm) {
 
 
 inline
-bool hashMethod2URI(safeBuffer &uri, hashMethod hm) {
-
-	switch (hm) {
-
-	case (HASH_SHA1) :
-
-		uri = URI_ID_SHA1;
-		break;
-
-	case (HASH_MD5) :
-
-		uri = URI_ID_MD5;
-		break;
-
-	case (HASH_SHA224) :
-
-		uri = URI_ID_SHA224;
-		break;
-
-	case (HASH_SHA256) :
-
-		uri = URI_ID_SHA256;
-		break;
-
-	case (HASH_SHA384) :
-
-		uri = URI_ID_SHA384;
-		break;
-
-	case (HASH_SHA512) :
-
-		uri = URI_ID_SHA512;
-		break;
-
-	default:
-		return false;
-
-	}
-
-	return true;
-
-}
-
-inline
 bool maskGenerationFunc2URI(safeBuffer &uri, maskGenerationFunc mgf) {
 
 	switch (mgf) {

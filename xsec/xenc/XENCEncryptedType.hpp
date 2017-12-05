@@ -41,6 +41,9 @@ class DSIGKeyInfoList;
 class DSIGKeyInfoName;
 class DSIGKeyInfoValue;
 class DSIGKeyInfoX509;
+class DSIGKeyInfoPGPData;
+class DSIGKeyInfoSPKIData;
+class DSIGKeyInfoMgmtData;
 class XENCEncryptionMethod;
 class XENCEncryptedKey;
 
@@ -129,7 +132,7 @@ public:
 	 * @returns the DOM Element Node representing the \<EncryptionType\> element
 	 */
 
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement(void) const = 0;
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement() const = 0;
 
 	//@}
 
@@ -148,7 +151,7 @@ public:
 	 * or NULL if no type is set
 	 */
 
-	virtual const XMLCh * getType(void) const = 0;
+	virtual const XMLCh * getType() const = 0;
 
 	/**
 	 * \brief Get the MimeType of the EncryptedType
@@ -164,7 +167,7 @@ public:
 	 * or NULL if no MimeType is set
 	 */
 
-	virtual const XMLCh * getMimeType(void) const = 0;
+	virtual const XMLCh * getMimeType() const = 0;
 
 	/**
 	 * \brief Get the Encoding of the EncryptedType
@@ -179,7 +182,7 @@ public:
 	 * @returns A string (owned by the library) providing the encoding URI
 	 */
 
-	virtual const XMLCh * getEncoding(void) const = 0;
+	virtual const XMLCh * getEncoding() const = 0;
 
 	//@}
 
@@ -240,22 +243,27 @@ public:
 	
 	//@{
 
-	/**
-	 * \brief Get the list of \<KeyInfo\> elements.
-	 *
-	 * <p>This function recovers list that contains the KeyInfo elements
-	 * read in from the DOM document.</p>
-	 *
-	 * <p>This list should be used by calling applications to determine what key
-	 * is appropriate for decrypting the document.</p>
-	 *
-	 * @note The list should never be modified directly.  If you need to
-	 * add keyInfo elements, call the appropriate functions in EncryptedType
-	 *
-	 * @returns A pointer to the DSIGKeyInfoList object held by the XENCCipher
-	 */
-	
-	virtual DSIGKeyInfoList * getKeyInfoList(void) = 0;
+    /**
+    * \brief Get the list of \<KeyInfo\> elements.
+    *
+    * <p>This function recovers list that contains the KeyInfo elements
+    * read in from the DOM document.</p>
+    *
+    * @returns A pointer to the DSIGKeyInfoList object held by the encrypted type
+    */
+
+    virtual DSIGKeyInfoList * getKeyInfoList() = 0;
+
+    /**
+    * \brief Get the list of \<KeyInfo\> elements.
+    *
+    * <p>This function recovers list that contains the KeyInfo elements
+    * read in from the DOM document.</p>
+    *
+    * @returns A pointer to the DSIGKeyInfoList object held by the encrypted type
+    */
+
+	virtual const DSIGKeyInfoList * getKeyInfoList() const = 0;
 
 	/**
 	 * \brief Clear out all KeyInfo elements in the signature.
@@ -265,7 +273,7 @@ public:
 	 *
 	 */
 
-	virtual void clearKeyInfo(void) = 0;
+	virtual void clearKeyInfo() = 0;
 
 	/**
 	 * \brief Append a DSA KeyValue element 
@@ -308,7 +316,7 @@ public:
 	 * @returns A pointer to the created object.
 	 */
 
-	virtual DSIGKeyInfoX509 * appendX509Data(void) = 0;
+	virtual DSIGKeyInfoX509 * appendX509Data() = 0;
 
 	/**
 	 * \brief Append a KeyName element.
@@ -321,6 +329,41 @@ public:
 	 */
 
 	virtual DSIGKeyInfoName * appendKeyName(const XMLCh * name, bool isDName = false) = 0;
+
+    /**
+    * \brief Append a PGPData element.
+    *
+    * Add a new KeyInfo element for a PGP key.
+    *
+    * @param id The ID of the key to set in the XML (base64 encoded - NULL if none)
+    * @param packet The Packet information to set in the XML (base64 encoded -
+    * NULL if none)
+    * @returns A pointer to the created object
+    */
+
+    virtual DSIGKeyInfoPGPData * appendPGPData(const XMLCh * id, const XMLCh * packet) = 0;
+
+    /**
+    * \brief Append a SPKIData element
+    *
+    * Add a new KeyInfo element for a set of SPKI S-expressions
+    *
+    * @param sexp The initial S-expression to set in the SPKIData element
+    * @returns A pointer to the created object
+    */
+
+    virtual DSIGKeyInfoSPKIData * appendSPKIData(const XMLCh * sexp) = 0;
+
+    /**
+    * \brief Append a MgmtData element
+    *
+    * Add a new KeyInfo element for Management Data
+    *
+    * @param data The string to set in the MgmtData element
+    * @returns A pointer to the created object
+    */
+
+    virtual DSIGKeyInfoMgmtData * appendMgmtData(const XMLCh * data) = 0;
 
 	/**
 	 * \brief Append an already created EncryptedKey.

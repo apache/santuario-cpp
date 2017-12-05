@@ -70,7 +70,7 @@
  */
 
 
-class XENCEncryptedKey : public XENCEncryptedType, public DSIGKeyInfo {
+class XENCEncryptedKey : public virtual XENCEncryptedType, public DSIGKeyInfo {
 
 	/** @name Constructors and Destructors */
 	//@{

@@ -311,21 +311,6 @@ DSIGTransformXPathFilter * DSIGReference::appendXPathFilterTransform(void) {
 // --------------------------------------------------------------------------------
 
 
-DOMElement *DSIGReference::createBlankReference(const XMLCh * URI, hashMethod hm, char * type) {
-
-	// Deprecated - use the algorithm URI based method instead
-
-	safeBuffer hURI;
-
-	if (hashMethod2URI(hURI, hm) == false) {
-		throw XSECException(XSECException::UnknownSignatureAlgorithm,
-			"DSIGReference::createBlankReference - Hash method unknown");
-	}
-
-	return createBlankReference(URI, hURI.sbStrToXMLCh(), MAKE_UNICODE_STRING(type));
-
-}
-
 DOMElement *DSIGReference::createBlankReference(const XMLCh * URI,
 												const XMLCh * hashAlgorithmURI,
 												const XMLCh * type) {

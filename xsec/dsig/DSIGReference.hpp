@@ -149,29 +149,6 @@ public:
 	 *
 	 * @param URI The URI (data source) for this reference.  Set to NULL for
 	 * an anonymous reference.
-	 * @param hm The type of Digest to be used (generally SHA-1)
-	 * @param type A type string (as defined by XML Signature).
-	 * @returns The root Reference element of the newly created DOM structure.
-	 * @deprecated Use the URI based creation method instead
-	 */
-
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * 
-		createBlankReference(const XMLCh * URI, hashMethod hm, char * type);
-
-	/**
-	 * \brief Create a Reference structure in the document.
-	 *
-	 * <p>This function will create a Reference structure in the owner
-	 * document.  In some cases, a call to this function will be sufficient
-	 * to put the required Reference in place.  In other cases, calls will
-	 * also need to be made to the various append*Transform methods.</p>
-	 *
-	 * @note The XSEC Library currently makes very little use of <em>type</em>
-	 * attributes in \<Reference\> Elements.  However this may of use to calling
-	 * applications.
-	 *
-	 * @param URI The URI (data source) for this reference.  Set to NULL for
-	 * an anonymous reference.
 	 * @param hashAlgorithmURI The type of Digest to be used (generally SHA-1)
 	 * @param type A type string (as defined by XML Signature).
 	 * @returns The root Reference element of the newly created DOM structure.

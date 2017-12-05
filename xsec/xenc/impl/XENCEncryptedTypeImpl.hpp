@@ -45,7 +45,7 @@ class XENCEncryptionMethodImpl;
 class TXFMChain;
 class XSECEnv;
 
-class XENCEncryptedTypeImpl : public XENCEncryptedType {
+class XENCEncryptedTypeImpl : public virtual XENCEncryptedType {
 
 public:
 
@@ -69,10 +69,32 @@ public:
 						const XMLCh * value);
 
 	// Interface Methods
-	virtual XENCCipherData * getCipherData(void) const;
-	virtual DSIGKeyInfoList * getKeyInfoList(void) {return &m_keyInfoList;}
-	virtual XENCEncryptionMethod * getEncryptionMethod(void) const;
-	virtual void clearKeyInfo(void);
+	virtual XENCCipherData * getCipherData() const;
+	virtual XENCEncryptionMethod * getEncryptionMethod() const;
+	virtual void clearKeyInfo();
+
+    /**
+    * \brief Get the list of \<KeyInfo\> elements.
+    *
+    * <p>This function recovers list that contains the KeyInfo elements
+    * read in from the DOM document.</p>
+    *
+    * @returns A pointer to the DSIGKeyInfoList object held by the encrypted type
+    */
+
+    virtual DSIGKeyInfoList * getKeyInfoList();
+
+    /**
+    * \brief Get the list of \<KeyInfo\> elements.
+    *
+    * <p>This function recovers list that contains the KeyInfo elements
+    * read in from the DOM document.</p>
+
+    * @returns A pointer to the DSIGKeyInfoList object held by the encrypted type
+    */
+
+    virtual const DSIGKeyInfoList * getKeyInfoList() const;
+
 	/**
 	 * \brief Append a DSA KeyValue element 
 	 *
@@ -114,15 +136,73 @@ public:
 	 * @returns A pointer to the created object.
 	 */
 
-	virtual DSIGKeyInfoX509 * appendX509Data(void);
+	virtual DSIGKeyInfoX509 * appendX509Data();
+
+    /**
+    * \brief Append a KeyName element.
+    *
+    * Add a new KeyInfo element for a key name.
+    *
+    * @param name The name of the key to set in the XML
+    * @param isDName Treat the name as a Distinguished name and encode accordingly
+    * @returns A pointer to the created object
+    */
+
 	virtual DSIGKeyInfoName * appendKeyName(const XMLCh * name, bool isDName = false);
-	virtual void appendEncryptedKey(XENCEncryptedKey * encryptedKey);
+
+    /**
+    * \brief Append a PGPData element.
+    *
+    * Add a new KeyInfo element for a PGP key.
+    *
+    * @param id The ID of the key to set in the XML (base64 encoded - NULL if none)
+    * @param packet The Packet information to set in the XML (base64 encoded -
+    * NULL if none)
+    * @returns A pointer to the created object
+    */
+
+    virtual DSIGKeyInfoPGPData * appendPGPData(const XMLCh * id, const XMLCh * packet);
+
+    /**
+    * \brief Append a SPKIData element
+    *
+    * Add a new KeyInfo element for a set of SPKI S-expressions
+    *
+    * @param sexp The initial S-expression to set in the SPKIData element
+    * @returns A pointer to the created object
+    */
+
+    virtual DSIGKeyInfoSPKIData * appendSPKIData(const XMLCh * sexp);
+
+    /**
+    * \brief Append a MgmtData element
+    *
+    * Add a new KeyInfo element for Management Data
+    *
+    * @param data The string to set in the MgmtData element
+    * @returns A pointer to the created object
+    */
+
+    virtual DSIGKeyInfoMgmtData * appendMgmtData(const XMLCh * data);
+
+    /**
+    * \brief Append an already created EncryptedKey.
+    *
+    * Add an already created EncryptedKey.
+    *
+    * @note The encryptedKey becomes the property of the owning EncryptedType
+    * object and will be deleted upon its destruction.
+    *
+    * @param encryptedKey A pointer to the encrypted Key
+    */
+    
+    virtual void appendEncryptedKey(XENCEncryptedKey * encryptedKey);
 
 	// Get methods
-	virtual const XMLCh * getType(void) const;
-	virtual const XMLCh * getMimeType(void) const;
-	virtual const XMLCh * getEncoding(void) const;
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement(void) const
+	virtual const XMLCh * getType() const;
+	virtual const XMLCh * getMimeType() const;
+	virtual const XMLCh * getEncoding() const;
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * getElement() const
 		{return mp_encryptedTypeElement;};
 
 	// Set methods
@@ -135,10 +215,10 @@ protected:
 	// Create the txfm list - gives as output a TXFM chain with
 	// the output being the raw encrypted data
 
-	TXFMChain * createCipherTXFMChain(void);
+	TXFMChain * createCipherTXFMChain();
 
 	// Worker function to start building the KeyInfo list
-	void createKeyInfoElement(void);
+	void createKeyInfoElement();
 
 	const XSECEnv				* mp_env;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement					

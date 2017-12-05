@@ -387,13 +387,13 @@ TXFMChain * XENCEncryptedTypeImpl::createCipherTXFMChain(void) {
 //			Get Methods
 // --------------------------------------------------------------------------------
 
-XENCCipherData * XENCEncryptedTypeImpl::getCipherData(void) const {
+XENCCipherData * XENCEncryptedTypeImpl::getCipherData() const {
 
 	return mp_cipherData;
 
 }
 
-XENCEncryptionMethod * XENCEncryptedTypeImpl::getEncryptionMethod(void) const {
+XENCEncryptionMethod * XENCEncryptedTypeImpl::getEncryptionMethod() const {
 	
 	return mp_encryptionMethod;
 
@@ -403,7 +403,15 @@ XENCEncryptionMethod * XENCEncryptedTypeImpl::getEncryptionMethod(void) const {
 //			KeyInfo elements
 // --------------------------------------------------------------------------------
 
-void XENCEncryptedTypeImpl::clearKeyInfo(void) {
+const DSIGKeyInfoList * XENCEncryptedTypeImpl::getKeyInfoList() const {
+    return &m_keyInfoList;
+}
+
+DSIGKeyInfoList * XENCEncryptedTypeImpl::getKeyInfoList() {
+    return &m_keyInfoList;
+}
+
+void XENCEncryptedTypeImpl::clearKeyInfo() {
 
 	if (mp_keyInfoElement == NULL)
 		return;
@@ -424,7 +432,7 @@ void XENCEncryptedTypeImpl::clearKeyInfo(void) {
 
 }
 
-void XENCEncryptedTypeImpl::createKeyInfoElement(void) {
+void XENCEncryptedTypeImpl::createKeyInfoElement() {
 
 	if (mp_keyInfoElement != NULL)
 		return;
@@ -484,7 +492,7 @@ DSIGKeyInfoValue * XENCEncryptedTypeImpl::appendRSAKeyValue(const XMLCh * modulu
 }
 
 
-DSIGKeyInfoX509 * XENCEncryptedTypeImpl::appendX509Data(void) {
+DSIGKeyInfoX509 * XENCEncryptedTypeImpl::appendX509Data() {
 
 	createKeyInfoElement();
 	return m_keyInfoList.appendX509Data();
@@ -495,6 +503,27 @@ DSIGKeyInfoName * XENCEncryptedTypeImpl::appendKeyName(const XMLCh * name, bool 
 
 	createKeyInfoElement();
 	return m_keyInfoList.appendKeyName(name, isDName);
+
+}
+
+DSIGKeyInfoPGPData * XENCEncryptedTypeImpl::appendPGPData(const XMLCh * id, const XMLCh * packet) {
+
+    createKeyInfoElement();
+    return m_keyInfoList.appendPGPData(id, packet);
+
+}
+
+DSIGKeyInfoSPKIData * XENCEncryptedTypeImpl::appendSPKIData(const XMLCh * sexp) {
+
+    createKeyInfoElement();
+    return m_keyInfoList.appendSPKIData(sexp);
+
+}
+
+DSIGKeyInfoMgmtData * XENCEncryptedTypeImpl::appendMgmtData(const XMLCh * data) {
+
+    createKeyInfoElement();
+    return m_keyInfoList.appendMgmtData(data);
 
 }
 
@@ -509,7 +538,7 @@ void XENCEncryptedTypeImpl::appendEncryptedKey(XENCEncryptedKey * encryptedKey) 
 //			Type URI handling
 // --------------------------------------------------------------------------------
 
-const XMLCh * XENCEncryptedTypeImpl::getType(void) const {
+const XMLCh * XENCEncryptedTypeImpl::getType() const {
 
 	if (mp_typeAttr != NULL)
 		return mp_typeAttr->getNodeValue();
@@ -543,7 +572,7 @@ void XENCEncryptedTypeImpl::setType(const XMLCh * uri) {
 //			MimeType handling
 // --------------------------------------------------------------------------------
 
-const XMLCh * XENCEncryptedTypeImpl::getMimeType(void) const {
+const XMLCh * XENCEncryptedTypeImpl::getMimeType() const {
 
 	if (mp_mimeTypeAttr != NULL)
 		return mp_mimeTypeAttr->getNodeValue();
@@ -576,7 +605,7 @@ void XENCEncryptedTypeImpl::setMimeType(const XMLCh * mimeType) {
 //			Encoding handling
 // --------------------------------------------------------------------------------
 
-const XMLCh * XENCEncryptedTypeImpl::getEncoding(void) const {
+const XMLCh * XENCEncryptedTypeImpl::getEncoding() const {
 
 	if (mp_encodingAttr != NULL)
 		return mp_encodingAttr->getNodeValue();

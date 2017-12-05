@@ -65,7 +65,7 @@
  */
 
 
-class XENCEncryptedData : public XENCEncryptedType {
+class XENCEncryptedData : public virtual XENCEncryptedType {
 
 	/** @name Constructors and Destructors */
 	//@{

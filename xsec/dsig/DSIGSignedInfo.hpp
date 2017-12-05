@@ -173,41 +173,6 @@ public:
 		);
 
 	/**
-	 * \brief Create an empty SignedInfo
-	 *
-	 * Creates the DOM structure for a SignedInfo
-	 *
-	 * Builds the DOM structures and sets the control
-	 * structures of the SignedInfo
-	 *
-	 * @param cm The canonicalisation method to set the SignedInfo as
-	 * @param sm Signature Method to use
-	 * @param hm Hash method to use (for the SignedInfo, not the references)
-	 * @deprecated Use URI based creation method instead
-	 */
-
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement *
-		createBlankSignedInfo(canonicalizationMethod cm,
-			signatureMethod	sm,
-			hashMethod hm
-		);
-
-	/**
-	 * \brief Create a reference to add to the SignedInfo
-	 *
-	 * Called by DSIGSignature to create and enter a new reference element
-	 *
-	 * @param URI What the reference references
-	 * @param hm Digest method to use for the reference
-	 * @param type Reference type
-	 * @deprecated Use the algorithmURI based call instead
-	 */
-
-	DSIGReference * createReference(const XMLCh * URI,
-		hashMethod hm, char * type);
-
-
-	/**
 	 * \brief Create a reference to add to the SignedInfo
 	 *
 	 * Called by DSIGSignature to create and enter a new reference element
@@ -270,22 +235,6 @@ public:
 	canonicalizationMethod getCanonicalizationMethod(void) const;
 
 	/**
-	 * \brief Get the hash method
-	 *
-	 * @returns the Hash (digest) Method
-	 */
-
-	hashMethod getHashMethod(void) const;
-
-	/**
-	 * \brief Get the signature method
-	 *
-	 * @returns the Signature method
-	 */
-
-	signatureMethod getSignatureMethod(void) const;
-
-	/**
 	 * \brief Get HMAC length
 	 * 
 	 * HMAC signatures can be truncated to a nominated length.
@@ -324,8 +273,6 @@ private:
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
 								* mp_signedInfoNode;
 	canonicalizationMethod		m_canonicalizationMethod;
-	signatureMethod				m_signatureMethod;
-	hashMethod					m_hashMethod;
 	DSIGReferenceList			* mp_referenceList;
 	int							m_HMACOutputLength;
 	const XMLCh					* mp_algorithmURI;

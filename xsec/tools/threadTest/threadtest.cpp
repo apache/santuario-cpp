@@ -251,10 +251,10 @@ DWORD WINAPI doSignThread (LPVOID Param) {
 		DOMElement * sigNode;
 
 		sig->setDSIGNSPrefix(MAKE_UNICODE_STRING("ds"));
-		sigNode = sig->createBlankSignature(myDoc, CANON_C14N_COM, SIGNATURE_HMAC, HASH_SHA1);
+		sigNode = sig->createBlankSignature(myDoc, DSIGConstants::s_unicodeStrURIC14N_COM, DSIGConstants::s_unicodeStrURIHMAC_SHA1);
 		myRootElem->appendChild(sigNode);
 		myRootElem->appendChild(myDoc->createTextNode(DSIGConstants::s_unicodeStrNL));
-		ref = sig->createReference(MAKE_UNICODE_STRING(""));
+		ref = sig->createReference(MAKE_UNICODE_STRING(""), DSIGConstants::s_unicodeStrURISHA1);
 		ref->appendEnvelopedSignatureTransform();
 
 		sig->appendKeyName(MAKE_UNICODE_STRING("The secret key is \"secret\""));

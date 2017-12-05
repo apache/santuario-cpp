@@ -310,65 +310,6 @@ public:
 	);
 
 	/**
-	 * \brief Create a \<Signature\> DOM structure.
-	 *
-	 * <p>The DOM structure created is still divorced from the document.  The callee
-	 * needs to take the returned \<Signature\> Element node and insert it at the
-	 * appropriate place in their document.</p>
-	 *
-	 * <p>The signature is a skeleton only.  There are no references or KeyInfo
-	 * elements inserted.  However the DSIGSignature structures are set up with the
-	 * new information, so once an element has been created and a signing key has been
-	 * set, a call to #sign will sign appropriately.
-	 *
-	 * @note The digest method (hash method) set here is for the signing function only.
-	 * Different hash methods can be used for reference elements.
-	 *
-	 * @param doc The document the Signature DOM structure will be inserted into.
-	 * @param cm The canonicalisation method to use.
-	 * @param sm The signature algorithm to be used.
-	 * @param hm The Digest function to be used for the actual signatures.
-	 * @returns The newly created \<Signature\> element that the caller should insert in
-	 * the document.
-	 * @deprecated Use the URI based creation method instead, as this supports 
-	 * signature algorithms that are not known to the library directly.
-	 */
-
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement *createBlankSignature(
-		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc,
-		canonicalizationMethod cm = CANON_C14N_NOC,
-		signatureMethod	sm = SIGNATURE_DSA,
-		hashMethod hm = HASH_SHA1
-	);
-
-	/**
-	 * \brief Add a new reference to the end of the list of \<Reference\> nodes.
-	 *
-	 * <p>Creates a new DSIGReference, adds it to the list of references handled
-	 * by the owning DSIGSignature and also creates the skeleton DOM structure into
-	 * the document.</p>
-	 *
-	 * @note The XSEC Library currently makes very little use of <em>type</em>
-	 * attributes in \<Reference\> Elements.  However this may of use to calling
-	 * applications.
-	 *
-	 * @see DSIGReference
-	 * @param URI The Data that this Reference node refers to.
-	 * @param hm The hashing (digest) method to be used for this reference
-	 * @param type A "type" string (as defined in XML Signature).
-	 * @returns The newly created DSIGReference element.
-	 * @deprecated Use the URI based creation method instead
-	 *
-	 */
-
-	
-	DSIGReference * createReference(
-		const XMLCh * URI,
-		hashMethod hm = HASH_SHA1, 
-		char * type = NULL
-	);
-
-	/**
 	 * \brief Add a new reference to the end of the list of \<Reference\> nodes.
 	 *
 	 * <p>Creates a new DSIGReference, adds it to the list of references handled
@@ -562,32 +503,6 @@ public:
      */
 
     const XMLCh * getAlgorithmURI() const;
-
-	/**
-	 * \brief Get the hash method
-	 *
-	 * Obtain the hash (digest) algorithm that is used to generate a hash
-	 * of the canonicalised \<SignedInfo\> element.
-	 *
-	 * @returns the Hash (digest) Method
-	 */
-
-	hashMethod getHashMethod(void) const
-	{return (mp_signedInfo != NULL ? 
-			 mp_signedInfo->getHashMethod() : HASH_NONE);}
-
-	/**
-	 * \brief Get the signature method
-	 *
-	 * Obtain the algorithm that will be used to generate/check the signature
-	 * of the canonicalised and hashed \<SignedInfo\> element.
-	 *
-	 * @returns the Signature method
-	 */
-
-	signatureMethod getSignatureMethod(void) const
-	{return (mp_signedInfo != NULL ? 
-			 mp_signedInfo->getSignatureMethod() : SIGNATURE_NONE);}
 
 	/**
 	 * \brief Get the Signature Value

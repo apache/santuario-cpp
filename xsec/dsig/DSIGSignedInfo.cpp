@@ -48,8 +48,6 @@ DSIGSignedInfo::DSIGSignedInfo(DOMDocument *doc,
 	m_HMACOutputLength = 0;
 	mp_formatter = pFormatter;
 	mp_signedInfoNode = signedInfoNode;
-	m_hashMethod = HASH_NONE;
-	m_signatureMethod = SIGNATURE_NONE;
 	m_canonicalizationMethod = CANON_NONE;
 	mp_algorithmURI = NULL;
 	mp_env = env;
@@ -66,8 +64,6 @@ DSIGSignedInfo::DSIGSignedInfo(DOMDocument *doc,
 	m_HMACOutputLength = 0;
 	mp_formatter = pFormatter;
 	mp_signedInfoNode = NULL;
-	m_hashMethod = HASH_NONE;
-	m_signatureMethod = SIGNATURE_NONE;
 	m_canonicalizationMethod = CANON_NONE;
 	mp_algorithmURI = NULL;
 	mp_env = env;
@@ -89,12 +85,6 @@ DSIGSignedInfo::~DSIGSignedInfo() {
 
 }
 
-signatureMethod DSIGSignedInfo::getSignatureMethod(void) const {
-
-	return m_signatureMethod;
-
-}
-
 DOMNode * DSIGSignedInfo::getDOMNode() const {
 
 	return mp_signedInfoNode;
@@ -104,12 +94,6 @@ DOMNode * DSIGSignedInfo::getDOMNode() const {
 canonicalizationMethod DSIGSignedInfo::getCanonicalizationMethod(void) const {
 
 	return m_canonicalizationMethod;
-
-}
-
-hashMethod DSIGSignedInfo::getHashMethod() const {
-
-	return m_hashMethod;
 
 }
 
@@ -147,20 +131,6 @@ void DSIGSignedInfo::hash(bool interlockingReferences) const {
 //           Create an empty reference in the signed info
 // --------------------------------------------------------------------------------
 
-
-DSIGReference * DSIGSignedInfo::createReference(const XMLCh * URI, 
-								hashMethod hm, 
-								char * type) {
-
-	safeBuffer hURI;
-
-	if (hashMethod2URI(hURI, hm) == false) {
-		throw XSECException(XSECException::UnknownSignatureAlgorithm,
-			"DSIGSignedInfo::createReference - Hash method unknown");
-	}
-	
-	return createReference(URI, hURI.sbStrToXMLCh(), MAKE_UNICODE_STRING(type));;
-}
 
 DSIGReference * DSIGSignedInfo::createReference(
 		const XMLCh * URI,
@@ -201,33 +171,6 @@ DSIGReference * DSIGSignedInfo::removeReference(DSIGReferenceList::size_type ind
 //           Create an empty SignedInfo
 // --------------------------------------------------------------------------------
 
-// deprecated
-
-DOMElement *DSIGSignedInfo::createBlankSignedInfo(canonicalizationMethod cm,
-			signatureMethod	sm,
-			hashMethod hm) {
-
-	// This is now deprecated.  Because this is so, we go the long way - translate
-	// to URI and then call the "standard" method, which will translate back to 
-	// internal enums if possible
-
-	const XMLCh * cURI;
-	safeBuffer sURI;
-
-	if ((cURI = canonicalizationMethod2UNICODEURI(cm)) == NULL) {
-		throw XSECException(XSECException::UnknownCanonicalization,
-			"DSIGSignature::createBlankSignature - Canonicalisation method unknown");
-	}
-
-	if (signatureHashMethod2URI(sURI, sm, hm) == false) {
-		throw XSECException(XSECException::UnknownSignatureAlgorithm,
-			"DSIGSignature::createBlankSignature - Signature/Hash method unknown");
-	}
-
-	return createBlankSignedInfo(cURI, sURI.sbStrToXMLCh());
-
-}
-
 DOMElement * DSIGSignedInfo::createBlankSignedInfo(
 			const XMLCh * canonicalizationAlgorithmURI,
 			const XMLCh * signatureAlgorithmURI) {
@@ -244,7 +187,6 @@ DOMElement * DSIGSignedInfo::createBlankSignedInfo(
 
 	// Now create the algorithm parts
 	XSECmapURIToCanonicalizationMethod(canonicalizationAlgorithmURI, m_canonicalizationMethod);
-	XSECmapURIToSignatureMethods(signatureAlgorithmURI, m_signatureMethod, m_hashMethod);
 
 	// Canonicalisation
 

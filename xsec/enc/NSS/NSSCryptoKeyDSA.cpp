@@ -182,7 +182,7 @@ void NSSCryptoKeyDSA::loadJBase64BigNums(const char * b64, unsigned int len) {
 //           Import key
 // --------------------------------------------------------------------------------
 
-void NSSCryptoKeyDSA::importKey(void) {
+void NSSCryptoKeyDSA::importKey(void) const {
 	
 	if (mp_pubkey != 0 ||
 		mp_P == NULL ||
@@ -268,7 +268,7 @@ void NSSCryptoKeyDSA::importKey(void) {
 bool NSSCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf, 
 								 unsigned int hashLen,
 								 char * base64Signature,
-								 unsigned int sigLen) {
+								 unsigned int sigLen) const {
 
 	// Use the currently loaded key to validate the Base64 encoded signature
 
@@ -323,7 +323,7 @@ bool NSSCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
 unsigned int NSSCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 		unsigned int hashLen,
 		char * base64SignatureBuf,
-		unsigned int base64SignatureBufLen) {
+		unsigned int base64SignatureBufLen) const {
 
 	// Sign a pre-calculated hash using this key
 

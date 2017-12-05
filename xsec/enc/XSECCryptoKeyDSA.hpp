@@ -96,7 +96,7 @@ public :
 	virtual bool verifyBase64Signature(unsigned char * hashBuf, 
 								 unsigned int hashLen,
 								 char * base64Signature,
-								 unsigned int sigLen) = 0;
+								 unsigned int sigLen) const = 0;
 
 	/**
 	 * \brief Create a signature
@@ -117,7 +117,7 @@ public :
 	virtual unsigned int signBase64Signature(unsigned char * hashBuf,
 		unsigned int hashLen,
 		char * base64SignatureBuf,
-		unsigned int base64SignatureBufLen) = 0;
+		unsigned int base64SignatureBufLen) const = 0;
 
 	//@}
 

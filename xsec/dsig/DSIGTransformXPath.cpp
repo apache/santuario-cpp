@@ -70,7 +70,7 @@ DSIGTransformXPath::~DSIGTransformXPath() {};
 //           Interface Methods
 // --------------------------------------------------------------------------------
 	
-transformType DSIGTransformXPath::getTransformType() {
+transformType DSIGTransformXPath::getTransformType() const {
 
 	return TRANSFORM_XPATH;
 

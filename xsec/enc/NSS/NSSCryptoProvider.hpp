@@ -212,6 +212,29 @@ public :
 	virtual XSECCryptoKeyRSA * keyRSA() const;
 
 	/**
+	 * \brief Return an EC key implementation object.
+	 *
+	 * Call used by the library to obtain an NSS EC key object.
+	 *
+	 * @returns Pointer to the new EC key
+	 */
+
+	virtual XSECCryptoKeyEC	* keyEC() const;
+
+	/**
+	 * \brief Return a key implementation object based on DER-encoded input.
+	 *
+	 * Call used by the library to obtain a key object from a DER-encoded key.
+	 *
+     * @param buf       DER-encoded data
+     * @param buflen    length of data
+     * @param base64    true iff data is base64-encoded
+	 * @returns Pointer to the new key
+	 */
+
+	virtual XSECCryptoKey	* keyDER(const char* buf, unsigned long buflen, bool base64) const;
+
+	/**
 	 * \brief Return an X509 implementation object.
 	 * 
 	 * Call used by the library to obtain an object that can work

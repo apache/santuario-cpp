@@ -50,6 +50,3 @@ DOMElement * DSIGTransform::createTransformNode() {
 	return ret;
 
 }
-
-
-

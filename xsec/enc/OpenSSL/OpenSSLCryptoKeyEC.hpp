@@ -114,7 +114,7 @@ public :
 	virtual unsigned int signBase64SignatureDSA(unsigned char * hashBuf,
 		unsigned int hashLen,
 		char * base64SignatureBuf,
-		unsigned int base64SignatureBufLen);
+		unsigned int base64SignatureBufLen) const;
 
 	/**
 	 * \brief Verify an EC-DSA signature
@@ -132,7 +132,7 @@ public :
 	virtual bool verifyBase64SignatureDSA(unsigned char * hashBuf, 
 							 unsigned int hashLen,
 							 char * base64Signature,
-							 unsigned int sigLen);
+							 unsigned int sigLen) const;
 	
 	//@}
 

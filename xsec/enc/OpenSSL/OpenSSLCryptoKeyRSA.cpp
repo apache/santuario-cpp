@@ -458,7 +458,7 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
                                  unsigned int hashLen,
                                  const char * base64Signature,
                                  unsigned int sigLen,
-                                 hashMethod hm = HASH_SHA1) {
+                                 hashMethod hm = HASH_SHA1) const {
 
     // Use the currently loaded key to validate the Base64 encoded signature
 
@@ -592,7 +592,7 @@ unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * h
         unsigned int hashLen,
         char * base64SignatureBuf,
         unsigned int base64SignatureBufLen,
-        hashMethod hm) {
+        hashMethod hm) const {
 
     // Sign a pre-calculated hash using this key
 
@@ -684,7 +684,7 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 hashMethod hm) {
+                                 hashMethod hm) const {
 
     // Perform a decrypt
     if (mp_rsaKey == NULL) {
@@ -864,7 +864,7 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 hashMethod hm) {
+                                 hashMethod hm) const {
 
     // Perform an encrypt
     if (mp_rsaKey == NULL) {

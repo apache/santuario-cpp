@@ -143,7 +143,7 @@ OpenSSLCryptoKeyEC::OpenSSLCryptoKeyEC(EVP_PKEY *k) {
 bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
                                  unsigned int hashLen,
                                  char * base64Signature,
-                                 unsigned int sigLen) {
+                                 unsigned int sigLen) const {
 
     // Use the currently loaded key to validate the Base64 encoded signature
 
@@ -226,7 +226,7 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
 unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
         unsigned int hashLen,
         char * base64SignatureBuf,
-        unsigned int base64SignatureBufLen) {
+        unsigned int base64SignatureBufLen) const {
 
     // Sign a pre-calculated hash using this key
 

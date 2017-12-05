@@ -588,7 +588,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoBase64.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoException.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoProvider.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoUtils.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECCryptoX509.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSECKeyInfoResolverDefault.cpp" />

@@ -100,7 +100,7 @@ public:
 	 *
 	 */
 
-	virtual transformType getTransformType();
+	virtual transformType getTransformType() const;
 
 	/**
 	 * \brief Create the Enevelope transformer element.

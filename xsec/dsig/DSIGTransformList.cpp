@@ -56,7 +56,7 @@ void DSIGTransformList::addTransform(DSIGTransform * ref) {
 
 }
 
-DSIGTransformList::size_type DSIGTransformList::getSize(void) {
+DSIGTransformList::size_type DSIGTransformList::getSize(void) const {
 
 	return m_transformList.size();
 
@@ -77,7 +77,7 @@ void DSIGTransformList::removeTransform(size_type index) {
 	}
 }
 
-DSIGTransform * DSIGTransformList::item(DSIGTransformList::size_type index) {
+DSIGTransform * DSIGTransformList::item(DSIGTransformList::size_type index) const {
 
 	if (index < m_transformList.size())
 		return m_transformList[index];

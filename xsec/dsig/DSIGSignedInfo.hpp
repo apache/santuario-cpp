@@ -151,7 +151,7 @@ public:
 	 * references
 	 */
 
-	void hash(bool interlockingReferences);
+	void hash(bool interlockingReferences) const;
 
 	/**
 	 * \brief Create an empty SignedInfo

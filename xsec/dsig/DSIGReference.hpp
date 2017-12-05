@@ -393,8 +393,7 @@ public:
 	 * @returns The number of bytes copied into the buffer
 	 */
 
-	unsigned int calculateHash(XMLByte * toFill, 
-							unsigned int maxToFill);
+	unsigned int calculateHash(XMLByte * toFill, unsigned int maxToFill) const;
 
 	/**
 	 * \brief Read the hash from the Reference element.
@@ -408,8 +407,7 @@ public:
 	 * @returns Number of bytes written
 	 */
 	
-	unsigned int readHash(XMLByte *toFill,			
-							unsigned int maxToFill);
+	unsigned int readHash(XMLByte *toFill, unsigned int maxToFill) const;
 
 	/**
 	 * \brief Validate the Reference element
@@ -421,7 +419,7 @@ public:
 	 * in the reference.
 	 */
 
-	bool checkHash();
+	bool checkHash() const;
 
 	/**
 	 * \brief Set the value of the hash in the Reference
@@ -537,7 +535,7 @@ public:
 	 * internally is very primitive and CPU intensive, so this is a method to 
 	 * bypass the checks.
 	 */
-	static void hashReferenceList(DSIGReferenceList * list, bool interlocking = true);
+	static void hashReferenceList(const DSIGReferenceList * list, bool interlocking = true);
 
 	//@}
 
@@ -554,7 +552,7 @@ private:
 	XSECSafeBufferFormatter		* mp_formatter;
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
 								* mp_referenceNode;		// Points to start of document where reference node is
-	TXFMBase					* mp_preHash;			// To be used pre-hash
+	mutable TXFMBase				* mp_preHash;			// To be used pre-hash
 	DSIGReferenceList			* mp_manifestList;		// The list of references in a manifest
 	const XMLCh					* mp_URI;				// The URI String
 	bool						m_isManifest;			// Does this reference a manifest?

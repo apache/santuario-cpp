@@ -214,7 +214,7 @@ public :
 								 unsigned int hashLen,
 								 const char * base64Signature,
 								 unsigned int sigLen,
-								 hashMethod hm);
+								 hashMethod hm) const;
 
 	/**
 	 * \brief Create a signature
@@ -238,7 +238,7 @@ public :
 								unsigned int hashLen,
 								char * base64SignatureBuf,
 								unsigned int base64SignatureBufLen,
-								hashMethod hm);
+								hashMethod hm) const;
 
 	/**
 	 * \brief Decrypt using private key
@@ -260,7 +260,7 @@ public :
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm);
+								 hashMethod hm) const;
 
 	/**
 	 * \brief Encrypt using a public key
@@ -282,7 +282,7 @@ public :
 								 unsigned int inLength,
 								 unsigned int maxOutLength,
 								 PaddingType padding,
-								 hashMethod hm);
+								 hashMethod hm) const;
 
 	/**
 	 * \brief Obtain the length of an RSA key
@@ -361,15 +361,15 @@ public :
 	 * @returns The key
 	 */
 
-	HCRYPTKEY importKey(void);
+	HCRYPTKEY importKey(void) const;
 
 	//@}
 
 private:
 
 	HCRYPTPROV					m_p;
-	HCRYPTKEY					m_key;			// For a public key
-	DWORD						m_keySpec;		// For a private key
+	mutable HCRYPTKEY			m_key;			// For a public key
+	mutable DWORD				m_keySpec;		// For a private key
 
 	BYTE						* mp_modulus;
 	BYTE						* mp_exponent;

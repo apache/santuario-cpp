@@ -287,19 +287,19 @@ if test x"$use_nss" != "xno" ; then
     if test x"$use_nss" = "xyes" ; then
         AC_PATH_PROG(PKG_CONFIG, pkg-config,)
         if test "x$PKG_CONFIG" != x && test "x$PKG_CONFIG" != "xno" ; then
-            if pkg-config nss ; then
-                NSSLIBS="`$PKG_CONFIG --libs nss`"
-                NSSFLAGS="`$PKG_CONFIG --cflags nss`"
+            if pkg-config nss && pkg-config nspr; then
+                NSSLIBS="`$PKG_CONFIG --libs nss` `$PKG_CONFIG --libs nspr`"
+                NSSFLAGS="`$PKG_CONFIG --cflags nss` `$PKG_CONFIG --cflags nspr`"
             else
                 AC_MSG_WARN([NSS not supported by pkg-config, try --with-nss=PATH instead])
             fi
         else
             check=`nss-config --version 2>/dev/null`
             if test -n "$check"; then
-                NSSLIBS=`nss-config --libs`
-                NSSFLAGS=`nss-config --cflags`
+                NSSLIBS="`nss-config --libs` `nspr-config --libs`"
+                NSSFLAGS="`nss-config --cflags` `nspr-config --cflags`"
             else
-                AC_MSG_ERROR([Unable to use pkg-config or find nss-config, try --with-nss=PATH])
+                AC_MSG_ERROR([Unable to use pkg-config or find nss-config/nspr-config, try --with-nss=PATH])
             fi
         fi
     else
@@ -307,7 +307,7 @@ if test x"$use_nss" != "xno" ; then
             NSSLIBS="-L${use_nss}/lib"
         fi
         # NSS is broken and doesn't use a standard include path.
-        NSSFLAGS="-I${use_nss}/include/nss3 -I${use_nss}/include/nss"
+        NSSFLAGS="-I${use_nss}/include/nss3 -I${use_nss}/include/nss -I${use_nss}/include/nspr"
         NSSLIBS="$NSSLIBS -lssl3 -lsmime3 -lnss3 -lplds4 -lplc4 -lnspr4"
     fi
     

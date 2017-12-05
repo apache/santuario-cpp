@@ -126,7 +126,7 @@ public:
 	 *
 	 */
 
-	virtual transformType getTransformType() = 0;
+	virtual transformType getTransformType() const = 0;
 	
 	/**
 	 * \brief Create the transformer element and append to an existing Chain.

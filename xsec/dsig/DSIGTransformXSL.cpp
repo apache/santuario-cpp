@@ -108,7 +108,7 @@ DSIGTransformXSL::~DSIGTransformXSL() {};
 // --------------------------------------------------------------------------------
 
 
-transformType DSIGTransformXSL::getTransformType() {
+transformType DSIGTransformXSL::getTransformType() const {
 
 	return TRANSFORM_XSLT;
 

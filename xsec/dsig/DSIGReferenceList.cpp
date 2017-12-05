@@ -84,6 +84,7 @@ DSIGReference * DSIGReferenceList::item(ReferenceListVectorType::size_type index
 	return NULL;
 
 }
+
 bool DSIGReferenceList::empty() {
 
 	// Clear out the list - note we do NOT delete the reference elements

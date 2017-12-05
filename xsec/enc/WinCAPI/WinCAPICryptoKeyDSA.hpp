@@ -153,7 +153,7 @@ public :
 	virtual unsigned int signBase64Signature(unsigned char * hashBuf,
 						unsigned int hashLen,
 						char * base64SignatureBuf,
-						unsigned int base64SignatureBufLen);
+						unsigned int base64SignatureBufLen) const;
 
 	/**
 	 * \brief Verify a signature
@@ -170,7 +170,7 @@ public :
 	virtual bool verifyBase64Signature(unsigned char * hashBuf, 
 						 unsigned int hashLen,
 						 char * base64Signature,
-						 unsigned int sigLen);
+						 unsigned int sigLen) const;
 
 	//@}
 
@@ -277,7 +277,7 @@ public :
 private:
 
 	HCRYPTPROV					m_p;
-	HCRYPTKEY					m_key;		// For a public key
+	mutable HCRYPTKEY			m_key;		// For a public key
 	DWORD						m_keySpec;	// For a private key
 
 	BYTE						* mp_P;
@@ -292,7 +292,7 @@ private:
 
 	// Instruct to import from parameters
 
-	void importKey(void);
+	void importKey(void) const;
 	void loadParamsFromKey(void);
 
 	// No default constructor

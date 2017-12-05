@@ -107,7 +107,7 @@ public:
 	 *
 	 */
 
-	virtual transformType getTransformType();
+	virtual transformType getTransformType() const;
 
 	/**
 	 * \brief Create the XPath Transformer class.

@@ -894,7 +894,7 @@ XSECBinTXFMInputStream * DSIGReference::makeBinInputStream(void) const {
 // --------------------------------------------------------------------------------
 
 
-void DSIGReference::hashReferenceList(DSIGReferenceList *lst, bool interlocking) {
+void DSIGReference::hashReferenceList(const DSIGReferenceList *lst, bool interlocking) {
 
 // Run through a list of hashes and checkHash for each one
 
@@ -1260,7 +1260,7 @@ void DSIGReference::setHash(void) {
 //           Create hash
 // --------------------------------------------------------------------------------
 
-unsigned int DSIGReference::calculateHash(XMLByte *toFill, unsigned int maxToFill) {
+unsigned int DSIGReference::calculateHash(XMLByte *toFill, unsigned int maxToFill) const {
 
 	// Determine the hash value of the element
 
@@ -1351,7 +1351,7 @@ unsigned int DSIGReference::calculateHash(XMLByte *toFill, unsigned int maxToFil
 //           Read hash
 // --------------------------------------------------------------------------------
 
-unsigned int DSIGReference::readHash(XMLByte *toFill, unsigned int maxToFill) {
+unsigned int DSIGReference::readHash(XMLByte *toFill, unsigned int maxToFill) const {
 
 	// Determine the hash value stored in the reference
 
@@ -1423,7 +1423,7 @@ unsigned int DSIGReference::readHash(XMLByte *toFill, unsigned int maxToFill) {
 //           Check a reference
 // --------------------------------------------------------------------------------
 
-bool DSIGReference::checkHash() {
+bool DSIGReference::checkHash() const {
 
 	// Determine the hash value of the element and check if matches that stored in the
 	// DigestValue part of the element

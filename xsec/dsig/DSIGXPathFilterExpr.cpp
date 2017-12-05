@@ -62,7 +62,9 @@ XMLCh filterStr[] = {
 DSIGXPathFilterExpr::DSIGXPathFilterExpr(const XSECEnv * env, DOMNode * node) :
 mp_env(env),
 mp_xpathFilterNode(node),
+mp_exprTextNode(NULL),
 mp_NSMap(NULL),
+m_filterType(FILTER_UNION),
 m_loaded(false) {
 
 }
@@ -70,7 +72,9 @@ m_loaded(false) {
 DSIGXPathFilterExpr::DSIGXPathFilterExpr(const XSECEnv * env) :
 mp_env(env),
 mp_xpathFilterNode(NULL),
+mp_exprTextNode(NULL),
 mp_NSMap(NULL),
+m_filterType(FILTER_UNION),
 m_loaded(false)  {
 
 }
@@ -231,7 +235,7 @@ DOMElement * DSIGXPathFilterExpr::setFilter(xpathFilterType filterType,
 //           Find the type
 // --------------------------------------------------------------------------------
 
-xpathFilterType DSIGXPathFilterExpr::getFilterType(void) {
+xpathFilterType DSIGXPathFilterExpr::getFilterType(void) const {
 
 	if (m_loaded == false) {
 		throw XSECException(XSECException::LoadEmptyXPathFilter,

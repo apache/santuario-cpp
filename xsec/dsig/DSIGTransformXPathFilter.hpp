@@ -119,7 +119,7 @@ public:
 	 *
 	 */
 
-	virtual transformType getTransformType();
+	virtual transformType getTransformType() const;
 
 	/**
 	 * \brief Create the XPath Filter Transformer class.

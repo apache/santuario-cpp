@@ -248,7 +248,7 @@ OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA(EVP_PKEY *k) : mp_accumP(NULL), mp_accu
 bool OpenSSLCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
                                  unsigned int hashLen,
                                  char * base64Signature,
-                                 unsigned int sigLen) {
+                                 unsigned int sigLen) const {
 
     // Use the currently loaded key to validate the Base64 encoded signature
 
@@ -354,7 +354,7 @@ bool OpenSSLCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
 unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
         unsigned int hashLen,
         char * base64SignatureBuf,
-        unsigned int base64SignatureBufLen) {
+        unsigned int base64SignatureBufLen) const {
 
     // Sign a pre-calculated hash using this key
 

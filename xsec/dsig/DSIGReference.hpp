@@ -301,18 +301,6 @@ public:
 
 	const XMLCh * getURI() const;
 
-	/**
-	 * \brief Get the Digest method
-	 *
-	 * Obtain the digest method used to find a hash for this reference
-	 *
-	 * @returns the hashMethod
-	 */
-
-	hashMethod getHashMethod(void) const {
-		return me_hashMethod;
-	}
-
     /**
      * \brief Get the Digest Algorithm URI
      *
@@ -535,7 +523,6 @@ private:
 	bool						m_isManifest;			// Does this reference a manifest?
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
 								* mp_transformsNode;
-	hashMethod					me_hashMethod;			// What form of digest?
 	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
 								* mp_hashValueNode;		// Node where the Hash value is stored
 	const XSECEnv				* mp_env;

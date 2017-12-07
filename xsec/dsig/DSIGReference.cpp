@@ -116,7 +116,6 @@ DSIGReference::DSIGReference(const XSECEnv * env, DOMNode *dom) :
 	mp_URI(NULL),
 	m_isManifest(false),
 	mp_transformsNode(NULL),
-	me_hashMethod(HASH_NONE),
 	mp_hashValueNode(NULL),
 	mp_env(env),
 	mp_transformList(NULL),
@@ -137,7 +136,6 @@ DSIGReference::DSIGReference(const XSECEnv * env) :
 	mp_URI(NULL),
 	m_isManifest(false),
 	mp_transformsNode(NULL),
-	me_hashMethod(HASH_NONE),
 	mp_hashValueNode(NULL),
 	mp_env(env),
 	mp_transformList(NULL),
@@ -322,8 +320,6 @@ DOMElement *DSIGReference::createBlankReference(const XMLCh * URI,
 	mp_manifestList = NULL;
 	mp_transformsNode = NULL;
 	mp_transformList = NULL;
-
-	XSECmapURIToHashMethod(hashAlgorithmURI, me_hashMethod);
 
 	safeBuffer str;
 	DOMDocument *doc = mp_env->getParentDocument();
@@ -681,9 +677,6 @@ void DSIGReference::load(void) {
 	}
 
 	mp_algorithmURI = atts->item(i)->getNodeValue();
-
-	// Determine hashing algorithm
-	XSECmapURIToHashMethod(mp_algorithmURI, me_hashMethod);
 
 	// Find the hash value node
 

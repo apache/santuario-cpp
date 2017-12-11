@@ -52,7 +52,6 @@
 #include <xsec/framework/XSECURIResolver.hpp>
 #include <xsec/transformers/TXFMDocObject.hpp>
 #include <xsec/transformers/TXFMOutputFile.hpp>
-#include <xsec/transformers/TXFMSHA1.hpp>
 #include <xsec/transformers/TXFMBase64.hpp>
 #include <xsec/transformers/TXFMC14n.hpp>
 #include <xsec/transformers/TXFMChain.hpp>

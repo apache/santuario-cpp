@@ -112,7 +112,7 @@
  *\brief OID For DSA
  */
 
-#define CRYPTO_OID_DSA				"1.2.840.10040.4.1"
+#define CRYPTO_OID_DSA "1.2.840.10040.4.1"
 
 /**
  *\brief The base class that all *CryptoProviders need to implement.
@@ -120,9 +120,6 @@
  * The instantiations of this class are used by the core library to
  * create cryptographic objects necessary for the library to do its work
  * without actually knowing any details at all about the provider library
- *
- * @note Subject to change
- * @see OpenSSLCryptoProvider
  */
 
 class XSEC_EXPORT XSECCryptoProvider {
@@ -130,233 +127,197 @@ class XSEC_EXPORT XSECCryptoProvider {
 
 public :
 
-	/** @name Constructors and Destructors */
-	//@{
-	
-	XSECCryptoProvider() {};
-	virtual ~XSECCryptoProvider() {};
-	//@}
+    /** @name Constructors and Destructors */
+    //@{
+
+    XSECCryptoProvider() {};
+    virtual ~XSECCryptoProvider() {};
+    //@}
 
 
-	/** @name Hashing (Digest) Functions */
-	//@{
+    /** @name Hashing (Digest) Functions */
+    //@{
 
-	/**
-	 * \brief Get the provider's maximum digest length.
-	 *
-	 * Call used by the library to max out the buffer sizes it uses.
-	 *
-	 * @returns maximum size to allow for
-	 */
-	virtual unsigned int getMaxHashSize() const = 0;
+    /**
+     * \brief Get the provider's maximum digest length.
+     *
+     * Call used by the library to max out the buffer sizes it uses.
+     *
+     * @returns maximum size to allow for
+     */
+    virtual unsigned int getMaxHashSize() const = 0;
 
-	/**
-	 * \brief Return a SHA implementation.
-	 *
-	 * Call used by the library to obtain a SHA object from the 
-	 * provider.  Size of hash determined by length argument (160 = SHA1)
-	 *
-	 * @returns A pointer to a Hash object that implements SHA.
-	 * @param length - length of hash.  E.g. 160 for SHA1 or 256 for SHA256
-	 * @see XSECCryptoHash
-	 */
-	 
-	virtual XSECCryptoHash			* hashSHA(int length = 160) const = 0;
+    /**
+     * \brief Return a hashing implementation.
+     *
+     * Call used by the library to obtain a hashing implementation from the
+     * provider.
+     *
+     * @returns a pointer to a hashing object.
+     */
+    virtual XSECCryptoHash* hash(XSECCryptoHash::HashType type) const = 0;
 
-	/**
-	 * \brief Return a HMAC SHA(1-512) implementation.
-	 *
-	 * Call used by the library to obtain a HMAC SHA object from the 
-	 * provider.  The caller will need to set the key in the hash
-	 * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey()
-	 *
-	 * @returns A pointer to a Hash object that implements HMAC-SHA.
-	 * @param length Length of hash output (160 = SHA1, 256, 512 etc)
-	 * @see XSECCryptoHash
-	 */
+    /**
+     * \brief Return an HMAC implementation.
+     *
+     * Call used by the library to obtain an HMAC implementation from the
+     * provider.  The caller will need to set the key in the hash
+     * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey().
+     *
+     * @returns a pointer to the hashing object.
+     */
+    virtual XSECCryptoHash* HMAC(XSECCryptoHash::HashType type) const = 0;
 
-	virtual XSECCryptoHash			* hashHMACSHA(int length = 160) const = 0;
+    /**
+     * \brief Return a HMAC key
+     *
+     * Sometimes the library needs to create an HMAC key (notably within
+     * the XKMS utilities.
+     *
+     * This function allows the library to obtain a key that can then have
+     * a value set within it.
+     */
 
-	/**
-	 * \brief Return a MD5 implementation.
-	 *
-	 * Call used by the library to obtain a MD5 object from the 
-	 * provider.
-	 *
-	 * @returns A pointer to a Hash object that implements MD5
-	 * @see XSECCryptoHash
-	 */
-	 
-	virtual XSECCryptoHash			* hashMD5() const = 0;
+    virtual XSECCryptoKeyHMAC* keyHMAC() const = 0;
 
-	/**
-	 * \brief Return a HMAC MD5 implementation.
-	 *
-	 * Call used by the library to obtain a HMAC MD5 object from the 
-	 * provider.  The caller will need to set the key in the hash
-	 * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey()
-	 *
-	 * @note The use of MD5 is explicitly marked as <b>not recommended</b> 
-	 * in the XML Digital Signature standard due to recent advances in
-	 * cryptography indicating there <em>may</em> be weaknesses in the 
-	 * algorithm.
-	 *
-	 * @returns A pointer to a Hash object that implements HMAC-MD5
-	 * @see XSECCryptoHash
-	 */
+    //@}
 
-	virtual XSECCryptoHash			* hashHMACMD5() const = 0;
+    /** @name Encoding functions */
+    //@{
 
-	/**
-	 * \brief Return a HMAC key
-	 *
-	 * Sometimes the library needs to create an HMAC key (notably within
-	 * the XKMS utilities.
-	 *
-	 * This function allows the library to obtain a key that can then have
-	 * a value set within it.
-	 */
+    /**
+     * \brief Return a Base64 encoder/decoder implementation.
+     *
+     * Call used by the library to obtain a Base64 encoder/decoder.
+     *
+     * @returns Pointer to the new Base64 encoder.
+     * @see XSECCryptoBase64
+     */
 
-	virtual XSECCryptoKeyHMAC		* keyHMAC() const = 0;
+    virtual XSECCryptoBase64* base64() const = 0;
 
-	//@}
+    //@}
 
-	/** @name Encoding functions */
-	//@{
+    /** @name Keys and Certificates */
+    //@{
 
-	/**
-	 * \brief Return a Base64 encoder/decoder implementation.
-	 *
-	 * Call used by the library to obtain a Base64 encoder/decoder.
-	 *
-	 * @returns Pointer to the new Base64 encoder.
-	 * @see XSECCryptoBase64
-	 */
+    /**
+     * \brief Return a DSA key implementation object.
+     *
+     * Call used by the library to obtain a DSA key object.
+     *
+     * @returns Pointer to the new DSA key
+     * @see XSECCryptoKeyDSA
+     */
 
-	virtual XSECCryptoBase64		* base64() const = 0;
+    virtual XSECCryptoKeyDSA* keyDSA() const = 0;
 
-	//@}
+    /**
+     * \brief Return an RSA key implementation object.
+     *
+     * Call used by the library to obtain an RSA key object.
+     *
+     * @returns Pointer to the new RSA key
+     * @see XSECCryptoKeyRSA
+     */
 
-	/** @name Keys and Certificates */
-	//@{
+    virtual XSECCryptoKeyRSA* keyRSA() const = 0;
 
-	/**
-	 * \brief Return a DSA key implementation object.
-	 * 
-	 * Call used by the library to obtain a DSA key object.
-	 *
-	 * @returns Pointer to the new DSA key
-	 * @see XSECCryptoKeyDSA
-	 */
+    /**
+     * \brief Return an EC key implementation object.
+     *
+     * Call used by the library to obtain an EC key object.
+     *
+     * @returns Pointer to the new EC key
+     * @see XSECCryptoKeyEC
+     */
 
-	virtual XSECCryptoKeyDSA		* keyDSA() const = 0;
+    virtual XSECCryptoKeyEC* keyEC() const = 0;
 
-	/**
-	 * \brief Return an RSA key implementation object.
-	 * 
-	 * Call used by the library to obtain an RSA key object.
-	 *
-	 * @returns Pointer to the new RSA key
-	 * @see XSECCryptoKeyRSA
-	 */
-
-	virtual XSECCryptoKeyRSA		* keyRSA() const = 0;
-
-	/**
-	 * \brief Return an EC key implementation object.
-	 * 
-	 * Call used by the library to obtain an EC key object.
-	 *
-	 * @returns Pointer to the new EC key
-	 * @see XSECCryptoKeyEC
-	 */
-
-	virtual XSECCryptoKeyEC         * keyEC() const = 0;
-
-	/**
-	 * \brief Return a key implementation object based on DER-encoded input.
-	 * 
-	 * Call used by the library to obtain a key object from a DER-encoded key.
-	 *
+    /**
+     * \brief Return a key implementation object based on DER-encoded input.
+     *
+     * Call used by the library to obtain a key object from a DER-encoded key.
+     *
      * @param buf       DER-encoded data
      * @param buflen    length of data
      * @param base64    true iff data is base64-encoded
-	 * @returns Pointer to the new key
-	 * @see XSECCryptoKey
-	 */
+     * @returns Pointer to the new key
+     * @see XSECCryptoKey
+     */
 
-	virtual XSECCryptoKey         * keyDER(const char* buf, unsigned long buflen, bool base64) const = 0;
+    virtual XSECCryptoKey* keyDER(const char* buf, unsigned long buflen, bool base64) const = 0;
 
     /**
-	 * \brief Return an X509 implementation object.
-	 * 
-	 * Call used by the library to obtain an object that can work
-	 * with X509 certificates.
-	 *
-	 * @returns Pointer to the new X509 object
-	 * @see XSECCryptoX509
-	 */
+     * \brief Return an X509 implementation object.
+     *
+     * Call used by the library to obtain an object that can work
+     * with X509 certificates.
+     *
+     * @returns Pointer to the new X509 object
+     * @see XSECCryptoX509
+     */
 
-	virtual XSECCryptoX509			* X509() const = 0;
+    virtual XSECCryptoX509* X509() const = 0;
 
-	/**
-	 * \brief Determine whether a given algorithm is supported
-	 *
-	 * A call that can be used to determine whether a given 
-	 * symmetric algorithm is supported
-	 */
+    /**
+     * \brief Determine whether a given algorithm is supported
+     *
+     * A call that can be used to determine whether a given
+     * symmetric algorithm is supported
+     */
 
-	virtual bool algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyType alg) const = 0;
+    virtual bool algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyType alg) const = 0;
 
-	/**
-	 * \brief Determine whether a given algorithm is supported
-	 *
-	 * A call that can be used to determine whether a given 
-	 * digest algorithm is supported
-	 */
+    /**
+     * \brief Determine whether a given algorithm is supported
+     *
+     * A call that can be used to determine whether a given
+     * digest algorithm is supported
+     */
 
-	virtual bool algorithmSupported(XSECCryptoHash::HashType alg) const = 0;
-	
-	/**
-	 * \brief Return a Symmetric Key implementation object.
-	 *
-	 * Call used by the library to obtain a bulk encryption
-	 * object.
-	 *
-	 * @returns Pointer to the new SymmetricKey object
-	 * @see XSECCryptoSymmetricKey
-	 */
+    virtual bool algorithmSupported(XSECCryptoHash::HashType alg) const = 0;
 
-	virtual XSECCryptoSymmetricKey	* keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const = 0;
+    /**
+     * \brief Return a Symmetric Key implementation object.
+     *
+     * Call used by the library to obtain a bulk encryption
+     * object.
+     *
+     * @returns Pointer to the new SymmetricKey object
+     * @see XSECCryptoSymmetricKey
+     */
 
-	/**
-	 * \brief Obtain some random octets
-	 *
-	 * For generation of IVs and the like, the library needs to be able
-	 * to obtain "random" octets.  The library uses this call to the 
-	 * crypto provider to obtain what it needs.
-	 *
-	 * @param buffer The buffer to place the random data in
-	 * @param numOctets Number of bytes required
-	 * @returns Number of bytes obtained.
-	 */
+    virtual XSECCryptoSymmetricKey* keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const = 0;
 
-	virtual unsigned int getRandom(unsigned char * buffer, unsigned int numOctets) const = 0;
+    /**
+     * \brief Obtain some random octets
+     *
+     * For generation of IVs and the like, the library needs to be able
+     * to obtain "random" octets.  The library uses this call to the
+     * crypto provider to obtain what it needs.
+     *
+     * @param buffer The buffer to place the random data in
+     * @param numOctets Number of bytes required
+     * @returns Number of bytes obtained.
+     */
 
-	//@}
+    virtual unsigned int getRandom(unsigned char* buffer, unsigned int numOctets) const = 0;
 
-	/** @name Information Functions */
-	//@{
+    //@}
 
-	/**
-	 * \brief Returns a string that identifies the Crypto Provider
-	 */
+    /** @name Information Functions */
+    //@{
 
-	virtual const XMLCh * getProviderName() const = 0;
+    /**
+     * \brief Returns a string that identifies the Crypto Provider
+     */
 
-	//@}
+    virtual const XMLCh * getProviderName() const = 0;
 
-	/*\@}*/
+    //@}
+
+    /*\@}*/
 };
 
 

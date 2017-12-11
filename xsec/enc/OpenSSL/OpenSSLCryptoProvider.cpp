@@ -176,81 +176,28 @@ const XMLCh * OpenSSLCryptoProvider::getProviderName() const {
     // Hashing classes
 
 unsigned int OpenSSLCryptoProvider::getMaxHashSize() const {
-	return 128;
+    return 128;
 }
 
-XSECCryptoHash  * OpenSSLCryptoProvider::hashSHA(int length) const {
+XSECCryptoHash  * OpenSSLCryptoProvider::hash(XSECCryptoHash::HashType type) const {
+	OpenSSLCryptoHash* ret;
 
+	XSECnew(ret, OpenSSLCryptoHash(type));
 
-    OpenSSLCryptoHash * ret;
-
-    switch (length) {
-
-    case 160: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA1));
-        break;
-    case 224: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA224));
-        break;
-    case 256: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA256));
-        break;
-    case 384: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA384));
-        break;
-    case 512: XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_SHA512));
-        break;
-    default:
-        ret = NULL;
-    }
-
-    return ret;
-
+	return ret;
 }
 
-XSECCryptoHash * OpenSSLCryptoProvider::hashHMACSHA(int length) const {
+XSECCryptoHash * OpenSSLCryptoProvider::HMAC(XSECCryptoHash::HashType type) const {
+	OpenSSLCryptoHashHMAC* ret;
 
-    OpenSSLCryptoHashHMAC * ret;
+	XSECnew(ret, OpenSSLCryptoHashHMAC(type));
 
-    switch (length) {
-
-    case 160: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
-        break;
-    case 224: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA224));
-        break;
-    case 256: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA256));
-        break;
-    case 384: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA384));
-        break;
-    case 512: XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_SHA512));
-        break;
-    default:
-        ret = NULL;
-    }
-
-    return ret;
-
-}
-
-XSECCryptoHash  * OpenSSLCryptoProvider::hashMD5() const {
-
-    OpenSSLCryptoHash * ret;
-
-    XSECnew(ret, OpenSSLCryptoHash(XSECCryptoHash::HASH_MD5));
-
-    return ret;
-
-}
-
-XSECCryptoHash * OpenSSLCryptoProvider::hashHMACMD5() const {
-
-    OpenSSLCryptoHashHMAC * ret;
-
-    XSECnew(ret, OpenSSLCryptoHashHMAC(XSECCryptoHash::HASH_MD5));
-
-    return ret;
-
+	return ret;
 }
 
 XSECCryptoKeyHMAC * OpenSSLCryptoProvider::keyHMAC(void) const {
-
     OpenSSLCryptoKeyHMAC * ret;
+
     XSECnew(ret, OpenSSLCryptoKeyHMAC);
 
     return ret;
@@ -258,7 +205,6 @@ XSECCryptoKeyHMAC * OpenSSLCryptoProvider::keyHMAC(void) const {
 }
 
 XSECCryptoKeyDSA * OpenSSLCryptoProvider::keyDSA() const {
-    
     OpenSSLCryptoKeyDSA * ret;
 
     XSECnew(ret, OpenSSLCryptoKeyDSA());
@@ -268,13 +214,11 @@ XSECCryptoKeyDSA * OpenSSLCryptoProvider::keyDSA() const {
 }
 
 XSECCryptoKeyRSA * OpenSSLCryptoProvider::keyRSA() const {
-
     OpenSSLCryptoKeyRSA * ret;
 
     XSECnew(ret, OpenSSLCryptoKeyRSA());
 
     return ret;
-
 }
 
 XSECCryptoKeyEC * OpenSSLCryptoProvider::keyEC() const {
@@ -359,32 +303,22 @@ XSECCryptoKey* OpenSSLCryptoProvider::keyDER(const char* buf, unsigned long len,
 
 
 XSECCryptoX509 * OpenSSLCryptoProvider::X509() const {
-
     OpenSSLCryptoX509 * ret;
 
     XSECnew(ret, OpenSSLCryptoX509());
 
     return ret;
-
 }
 
 XSECCryptoBase64 * OpenSSLCryptoProvider::base64() const {
-
-#if 0
-    OpenSSLCryptoBase64 * ret;
-
-    XSECnew(ret, OpenSSLCryptoBase64());
-#else
     XSCryptCryptoBase64 *ret;
+
     XSECnew(ret, XSCryptCryptoBase64);
 
-#endif
     return ret;
-
 }
 
 bool OpenSSLCryptoProvider::algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
-
     switch (alg) {
 
     case (XSECCryptoSymmetricKey::KEY_AES_128) :
@@ -405,11 +339,9 @@ bool OpenSSLCryptoProvider::algorithmSupported(XSECCryptoSymmetricKey::Symmetric
     }
 
     return false;
-
 }
 
 bool OpenSSLCryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) const {
-
     switch (alg) {
 
     case (XSECCryptoHash::HASH_SHA1) :
@@ -437,22 +369,18 @@ bool OpenSSLCryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) con
     }
 
     return false;
-
 }
 
 
 XSECCryptoSymmetricKey  * OpenSSLCryptoProvider::keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
-
     OpenSSLCryptoSymmetricKey * ret;
 
     XSECnew(ret, OpenSSLCryptoSymmetricKey(alg));
 
     return ret;
-
 }
 
 unsigned int OpenSSLCryptoProvider::getRandom(unsigned char * buffer, unsigned int numOctets) const {
-
     if (RAND_status() != 1) {
 
         throw XSECCryptoException(XSECCryptoException::GeneralError,
@@ -469,7 +397,6 @@ unsigned int OpenSSLCryptoProvider::getRandom(unsigned char * buffer, unsigned i
     }
 
     return numOctets;
-
 }
 
 

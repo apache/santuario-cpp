@@ -28,13 +28,12 @@
  *
  */
 
-#include <xsec/framework/XSECDefs.hpp>
 #if defined (XSEC_HAVE_OPENSSL)
 
-
-#include <xsec/enc/OpenSSL/OpenSSLCryptoHashHMAC.hpp>
+#include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSECCryptoKeyHMAC.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLCryptoHashHMAC.hpp>
 
 #include <memory.h>
 
@@ -121,6 +120,10 @@ OpenSSLCryptoHashHMAC::OpenSSLCryptoHashHMAC(HashType alg) : m_mdLen(0),
     m_initialised = false;
     m_hashType = alg;
 
+}
+
+const XMLCh* OpenSSLCryptoHashHMAC::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVOpenSSL;
 }
 
 void OpenSSLCryptoHashHMAC::setKey(const XSECCryptoKey *key) {

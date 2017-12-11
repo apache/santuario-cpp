@@ -41,7 +41,12 @@ NSSCryptoKeyHMAC::NSSCryptoKeyHMAC() :m_keyBuf("") {
 	m_keyBuf.isSensitive();
 	m_keyLen = 0;
 
-};
+}
+
+const XMLCh * NSSCryptoKeyHMAC::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVNSS;
+}
+
 
 // --------------------------------------------------------------------------------
 //           Set key

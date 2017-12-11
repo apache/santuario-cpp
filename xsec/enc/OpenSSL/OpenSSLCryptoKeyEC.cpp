@@ -63,6 +63,10 @@ OpenSSLCryptoKeyEC::~OpenSSLCryptoKeyEC() {
 
 };
 
+const XMLCh* OpenSSLCryptoKeyEC::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVOpenSSL;
+}
+
 // Generic key functions
 
 XSECCryptoKey::KeyType OpenSSLCryptoKeyEC::getKeyType() const {

@@ -83,7 +83,7 @@ public :
      *\brief Return the OpenSSL string identifier
      */
 
-    virtual const XMLCh * getProviderName() const {return DSIGConstants::s_unicodeStrPROVOpenSSL;}
+    virtual const XMLCh * getProviderName() const;
 
     /**
      * \brief Replicate key

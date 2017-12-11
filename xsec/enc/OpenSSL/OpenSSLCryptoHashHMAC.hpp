@@ -93,13 +93,13 @@ public :
      * @param key The key the HMAC function should use.
      */
 
-    virtual void        setKey(const XSECCryptoKey * key);
+    virtual void setKey(const XSECCryptoKey* key);
 
     /**
      * \brief Return the string identifier for the OpenSSL interface
      */
 
-    virtual const XMLCh * getProviderName() {return DSIGConstants::s_unicodeStrPROVOpenSSL;}
+    virtual const XMLCh* getProviderName() const;
 
     //@}
 
@@ -112,7 +112,7 @@ public :
      * Re-initialises the digest structure.
      */
 
-    virtual void        reset(void);
+    virtual void reset();
 
     /**
      * \brief Hash some data.
@@ -125,7 +125,7 @@ public :
      * @param length The number of bytes to be read from data
      */
 
-    virtual void        hash(unsigned char * data, 
+    virtual void hash(unsigned char* data,
                              unsigned int length);
     /**
      * \brief Finish up a Digest operation and read the result.
@@ -140,7 +140,7 @@ public :
      * @returns The number of bytes copied into the hash buffer
      */
 
-    virtual unsigned int finish(unsigned char * hash,
+    virtual unsigned int finish(unsigned char* hash,
                                 unsigned int maxLength);// Finish and get hash
 
     //@}
@@ -156,13 +156,13 @@ public :
      * @returns The hash type
      */
 
-    virtual HashType getHashType(void) const;
+    virtual HashType getHashType() const;
 
     /**
      * \brief Get OpenSSL Hash Context
      */
 
-    HMAC_CTX * getOpenSSLHMAC_CTX(void) {return mp_hctx;}
+    HMAC_CTX* getOpenSSLHMAC_CTX(void) {return mp_hctx;}
 
     //@}
 

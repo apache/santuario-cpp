@@ -20,7 +20,7 @@
 /*
  * XSEC
  *
- * DSIGConstants := Definitions of varius DSIG constants (mainly strings)
+ * DSIGConstants := Definitions of various DSIG constants (mainly strings)
  *
  * Author(s): Berin Lautenbach
  *
@@ -31,6 +31,7 @@
 #ifndef DSIGCONSTANTS_HEADER
 #define DSIGCONSTANTS_HEADER
 
+#include <xsec/enc/XSECCryptoHash.hpp>
 #include <xsec/utils/XSECSafeBuffer.hpp>
 
 // Xerces
@@ -179,17 +180,6 @@ enum signatureMethod {
 };
 
 
-enum hashMethod {
-
-	HASH_NONE					= 0,			// No method defined
-	HASH_SHA1					= 1, 			// SHA1
-	HASH_MD5					= 2,
-	HASH_SHA224					= 3,
-	HASH_SHA256					= 4,
-	HASH_SHA384					= 5,
-	HASH_SHA512					= 6
-};
-
 enum transformType {
 
 	TRANSFORM_BASE64,
@@ -224,7 +214,7 @@ enum maskGenerationFunc {
 // --------------------------------------------------------------------------------
 
 inline
-bool canonicalizationMethod2URI(safeBuffer &uri, canonicalizationMethod cm) {
+bool canonicalizationMethod2URI(safeBuffer& uri, canonicalizationMethod cm) {
 
 	switch (cm) {
 
@@ -269,7 +259,7 @@ bool canonicalizationMethod2URI(safeBuffer &uri, canonicalizationMethod cm) {
 
 
 inline
-bool maskGenerationFunc2URI(safeBuffer &uri, maskGenerationFunc mgf) {
+bool maskGenerationFunc2URI(safeBuffer& uri, maskGenerationFunc mgf) {
 
 	switch (mgf) {
 
@@ -427,7 +417,7 @@ public:
 
 
 inline
-const XMLCh * canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
+const XMLCh* canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
 
 	switch (cm) {
 
@@ -467,16 +457,14 @@ const XMLCh * canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
    these URIs, it's just we don't have an internal enum mapping
 */
 
-bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh * URI,
-												  signatureMethod & sm,
-												  hashMethod & hm);
-bool XSEC_EXPORT XSECmapURIToHashMethod(const XMLCh * URI,
-												  hashMethod & hm);
-bool XSEC_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
-							canonicalizationMethod & cm);
+bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh* URI,
+												  signatureMethod& sm,
+												  XSECCryptoHash::HashType& type);
+bool XSEC_EXPORT XSECmapURIToHashType(const XMLCh* URI, XSECCryptoHash::HashType& type);
+bool XSEC_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh* URI,
+							canonicalizationMethod& cm);
 
-bool XSEC_EXPORT XSECmapURIToMaskGenerationFunc(const XMLCh * URI,
-												  maskGenerationFunc & mgf);
+bool XSEC_EXPORT XSECmapURIToMaskGenerationFunc(const XMLCh* URI,
+												  maskGenerationFunc& mgf);
 
 #endif /* DSIGCONSTANTS_HEADER */
-

@@ -66,6 +66,10 @@ OpenSSLCryptoKeyDSA::~OpenSSLCryptoKeyDSA() {
         BN_free(mp_accumQ);
 };
 
+const XMLCh* OpenSSLCryptoKeyDSA::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVOpenSSL;
+}
+
 // Generic key functions
 
 XSECCryptoKey::KeyType OpenSSLCryptoKeyDSA::getKeyType() const {

@@ -29,15 +29,15 @@
 
 // XSEC Includes
 
-#include <xsec/framework/XSECDefs.hpp>
+#include <xsec/dsig/DSIGConstants.hpp>
+#include <xsec/enc/XSECCryptoKey.hpp>
+#include <xsec/enc/XSECCryptoSymmetricKey.hpp>
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/transformers/TXFMCipher.hpp>
 #include <xsec/transformers/TXFMBase64.hpp>
 #include <xsec/transformers/TXFMSB.hpp>
 #include <xsec/xenc/XENCEncryptionMethod.hpp>
-#include <xsec/enc/XSECCryptoKey.hpp>
-#include <xsec/enc/XSECCryptoSymmetricKey.hpp>
-#include <xsec/framework/XSECError.hpp>
 #include <xsec/utils/XSECDOMUtils.hpp>
 
 #include "../../utils/XSECAutoPtr.hpp"
@@ -427,7 +427,7 @@ unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
 	offset += sk->decryptFinish(&buf[offset], _MY_MAX_KEY_SIZE - offset);
 
 	// Calculate the CMS Key Checksum
-	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hashSHA();
+	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hash(XSECCryptoHash::HASH_SHA1);
 	if (!sha1) {
 
 		throw XSECException(XSECException::CryptoProviderError, 
@@ -485,7 +485,7 @@ bool XENCAlgorithmHandlerDefault::wrapKey3DES(
 	// Do the first encrypt
 	XMLByte buf2[_MY_MAX_KEY_SIZE + 16];
 
-	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hashSHA();
+	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hash(XSECCryptoHash::HASH_SHA1);
 	if (!sha1) {
 
 		throw XSECException(XSECException::CryptoProviderError, 
@@ -714,19 +714,19 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 												  offset, 
 												  rsa->getLength(), 
 												  XSECCryptoKeyRSA::PAD_PKCS_1_5, 
-												  HASH_NONE);
+                                                  XSECCryptoHash::HASH_NONE);
 	}
 	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
              strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
 
-        hashMethod hm;
+        XSECCryptoHash::HashType hashType;
 	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
 
 	    // Is this a URI we recognize?
 	    if (!digmeth|| !*digmeth) {
-	        hm = HASH_SHA1;
+	        hashType = XSECCryptoHash::HASH_SHA1;
 	    }
-	    else if (!XSECmapURIToHashMethod(digmeth, hm)) {
+	    else if (!XSECmapURIToHashType(digmeth, hashType)) {
 	        safeBuffer sb;
 	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
 	        sb.sbXMLChCat(digmeth);
@@ -780,7 +780,7 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 												  offset, 
 												  rsa->getLength(), 
 												  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-												  hm);
+												  hashType);
 
 	}
 
@@ -944,18 +944,18 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 												  offset, 
 												  rsa->getLength(), 
 												  XSECCryptoKeyRSA::PAD_PKCS_1_5, 
-												  HASH_NONE);
+												  XSECCryptoHash::HASH_NONE);
 	}
 
 	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
             strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
         
-        hashMethod hm;
+        XSECCryptoHash::HashType hashType;
         if (encryptionMethod->getDigestMethod() == NULL) {
-            hm = HASH_SHA1;
+            hashType = XSECCryptoHash::HASH_SHA1;
 		    encryptionMethod->setDigestMethod(DSIGConstants::s_unicodeStrURISHA1);
         }
-        else if (!XSECmapURIToHashMethod(encryptionMethod->getDigestMethod(), hm)) {
+        else if (!XSECmapURIToHashType(encryptionMethod->getDigestMethod(), hashType)) {
 	        safeBuffer sb;
 	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
 	        sb.sbXMLChCat(encryptionMethod->getDigestMethod());
@@ -1010,7 +1010,7 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 										  offset, 
 										  rsa->getLength(), 
 										  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-										  hm);
+										  hashType);
 
 	}
 	else {

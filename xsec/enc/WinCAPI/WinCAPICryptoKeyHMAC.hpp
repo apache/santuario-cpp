@@ -104,7 +104,7 @@ public :
 	 * \brief Return the WinCAPI string identifier
 	 */
 
-	virtual const XMLCh * getProviderName() const {return DSIGConstants::s_unicodeStrPROVWinCAPI;}
+	virtual const XMLCh * getProviderName() const;
 
 	//@}
 

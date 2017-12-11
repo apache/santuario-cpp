@@ -123,7 +123,7 @@ public :
 	 *\brief Return the WiNCAPI string identifier
 	 */
 
-	virtual const XMLCh * getProviderName() const {return DSIGConstants::s_unicodeStrPROVWinCAPI;}
+	virtual const XMLCh * getProviderName() const;
 	
 	/**
 	 * \brief Replicate key

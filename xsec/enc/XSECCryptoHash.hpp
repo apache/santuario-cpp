@@ -32,10 +32,12 @@
 #define XSECCRYPTOHASH_INCLUDE
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/enc/XSECCryptoKey.hpp>
 
-#define XSEC_MAX_HASH_SIZE			256		/* Max size of any expected hash algorithms (oversized) */
-#define XSEC_MAX_HASH_BLOCK_SIZE	64		/* Max size of blocks used - MD5 and SHA1 are both 64 bytes*/
+#define XSEC_MAX_HASH_SIZE         256        /* Max size of any expected hash algorithms (oversized) */
+#define XSEC_MAX_HASH_BLOCK_SIZE    64        /* Max size of blocks used - MD5 and SHA1 are both 64 bytes*/
+
+// Forward definitions
+class XSECCryptoKey;
 
 /**
  * @ingroup crypto
@@ -61,106 +63,104 @@ class XSEC_EXPORT XSECCryptoHash {
 
 public :
 
-	/**
-	 * \brief Enumeration of Hash (Digest) types
-	 *
-	 * The hash types known to XSEC
-	 */
+    /**
+     * \brief Enumeration of Hash (Digest) types
+     *
+     * The hash types known to XSEC
+     */
 
-	enum HashType {
+    enum HashType {
+        HASH_NONE              = 0,
+        HASH_SHA1              = 1,
+        HASH_MD5               = 2,
+        HASH_SHA224            = 3,
+        HASH_SHA256            = 4,
+        HASH_SHA384            = 5,
+        HASH_SHA512            = 6
+    };
 
-		HASH_NONE			= 0,
-		HASH_SHA1			= 1,
-		HASH_MD5			= 2,
-		HASH_SHA224			= 3,
-		HASH_SHA256			= 4,
-		HASH_SHA384			= 5,
-		HASH_SHA512			= 6
+    // Constructors/Destructors
 
-	};
+    XSECCryptoHash() {}
+    virtual ~XSECCryptoHash() {}
 
-	// Constructors/Destructors
-	
-	XSECCryptoHash() {};
-	virtual ~XSECCryptoHash() {};
+    /** @name Digest/Hash functions */
+    //@{
 
-	/** @name Digest/Hash functions */
-	//@{
+    /**
+     * \brief Rest the hash function
+     *
+     * XSEC will call the #reset() function prior to re-using a CryptoHash
+     * object.
+     */
 
-	/**
-	 * \brief Rest the hash function
-	 *
-	 * XSEC will call the #reset() function prior to re-using a CryptoHash
-	 * object.
-	 */
+    virtual void reset() = 0;                    // Reset the hash
 
-	virtual void		reset(void) = 0;					// Reset the hash
+    /**
+     * \brief Hash some data.
+     *
+     * Take length bytes of data from the data buffer and update the hash
+     * that already exists.  This function may (and normally will) be called
+     * many times for large blocks of data.
+     *
+     * @param data The buffer containing the data to be hashed.
+     * @param length The number of bytes to be read from data
+     */
 
-	/**
-	 * \brief Hash some data.
-	 *
-	 * Take length bytes of data from the data buffer and update the hash
-	 * that already exists.  This function may (and normally will) be called
-	 * many times for large blocks of data.
-	 *
-	 * @param data The buffer containing the data to be hashed.
-	 * @param length The number of bytes to be read from data
-	 */
+    virtual void hash(unsigned char* data,
+                             unsigned int length) = 0;
 
-	virtual void		hash(unsigned char * data, 
-							 unsigned int length) = 0;
+    /**
+     * \brief Finish up a Digest operation and read the result.
+     *
+     * This call tells the CryptoHash object that the input is complete and
+     * to finalise the Digest.  The output of the digest is read into the
+     * hash buffer (at most maxLength bytes)
+     *
+     * @param hash The buffer the hash should be read into.
+     * @param maxLength The maximum number of bytes to be read into hash
+     * @returns The number of bytes copied into the hash buffer
+     */
 
-	/**
-	 * \brief Finish up a Digest operation and read the result.
-	 *
-	 * This call tells the CryptoHash object that the input is complete and
-	 * to finalise the Digest.  The output of the digest is read into the 
-	 * hash buffer (at most maxLength bytes)
-	 *
-	 * @param hash The buffer the hash should be read into.
-	 * @param maxLength The maximum number of bytes to be read into hash
-	 * @returns The number of bytes copied into the hash buffer
-	 */
+    virtual unsigned int finish(unsigned char* hash,
+                                unsigned int maxLength) = 0;// Finish and get hash
 
-	virtual unsigned int finish(unsigned char * hash,
-								unsigned int maxLength) = 0;// Finish and get hash
+    //@}
 
-	//@}
+    /** @name Information functions */
+    //@{
 
-	/** @name Information functions */
-	//@{
+    /**
+     *\brief
+     *
+     * Determine the hash type of this object
+     *
+     * @returns The hash type
+     */
 
-	/**
-	 *\brief
-	 *
-	 * Determine the hash type of this object
-	 *
-	 * @returns The hash type
-	 */
+    virtual HashType getHashType() const = 0;
 
-	virtual HashType getHashType(void) const = 0;
+    //@}
 
-	//@}
+    /** @name HMAC Functions */
+    //@{
 
-	/** @name HMAC Functions */
-	//@{
-	
-	/**
-	 *\brief
-	 *
-	 * The HMAC classes are treated in the library as standard hash
-	 * objects that just happen to take a key.  Thus all hash functions
-	 * implement this function (potentially just to throw an exception)
-	 *
-	 * Sets the key - which needs to have a base class of 
-	 * XSECCryptoKeyHMAC.
-	 *
-	 * @param key The key the HMAC function should use.
-	 */
+    /**
+     *\brief
+     *
+     * The HMAC classes are treated in the library as standard hash
+     * objects that just happen to take a key.  Thus all hash functions
+     * implement this function (potentially just to throw an exception)
+     *
+     * Sets the key - which needs to have a base class of
+     * XSECCryptoKeyHMAC.
+     *
+     * @param key The key the HMAC function should use.
+     */
 
-	virtual void		setKey(const XSECCryptoKey * key) = 0;
+    virtual void setKey(const XSECCryptoKey* key) = 0;
 
-	//@}
+    //@}
 
 };
 

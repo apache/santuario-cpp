@@ -113,7 +113,7 @@ public :
 	 * \brief Returns a string that identifies the crypto owner of this library.
 	 */
 
-    virtual const XMLCh * getProviderName() const {return DSIGConstants::s_unicodeStrPROVWinCAPI;}
+    virtual const XMLCh * getProviderName() const;
 
 	//@}
 

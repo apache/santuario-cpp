@@ -83,6 +83,10 @@ NSSCryptoKeyDSA::~NSSCryptoKeyDSA() {
 
 };
 
+const XMLCh * NSSCryptoKeyDSA::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVNSS;
+}
+
 // --------------------------------------------------------------------------------
 //           Get key type
 // --------------------------------------------------------------------------------

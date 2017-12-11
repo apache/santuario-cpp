@@ -110,6 +110,10 @@ WinCAPICryptoKeyDSA::~WinCAPICryptoKeyDSA() {
 
 };
 
+const XMLCh * WinCAPICryptoKeyDSA::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVWinCAPI;
+}
+
 // Generic key functions
 
 XSECCryptoKey::KeyType WinCAPICryptoKeyDSA::getKeyType() const {

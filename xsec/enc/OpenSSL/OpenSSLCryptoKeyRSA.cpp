@@ -260,17 +260,15 @@ namespace {
 };
 
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
-mp_rsaKey(NULL),
-mp_oaepParams(NULL),
-m_oaepParamsLen(0),
-mp_accumE(NULL),
-mp_accumN(NULL),
-m_mgf(MGF1_SHA1) {
+	mp_rsaKey(NULL),
+	mp_oaepParams(NULL),
+	m_oaepParamsLen(0),
+	mp_accumE(NULL),
+	mp_accumN(NULL),
+	m_mgf(MGF1_SHA1) {
 };
 
 OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {
-
-
     // If we have a RSA, delete it (OpenSSL will clear the memory)
 
     if (mp_rsaKey)
@@ -286,7 +284,11 @@ OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {
         BN_free(mp_accumN);
 };
 
-void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int paramsLen) {
+const XMLCh* OpenSSLCryptoKeyRSA::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVOpenSSL;
+}
+
+void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char* params, unsigned int paramsLen) {
 
     if (mp_oaepParams != NULL) {
         delete[] mp_oaepParams;
@@ -299,31 +301,22 @@ void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int par
     }
     else
         mp_oaepParams = NULL;
-
 }
 
 void OpenSSLCryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
-
     m_mgf = mgf;
-
 }
 
-unsigned int OpenSSLCryptoKeyRSA::getOAEPparamsLen(void) const {
-
+unsigned int OpenSSLCryptoKeyRSA::getOAEPparamsLen() const {
     return m_oaepParamsLen;
-
 }
 
-const unsigned char * OpenSSLCryptoKeyRSA::getOAEPparams(void) const {
-
+const unsigned char * OpenSSLCryptoKeyRSA::getOAEPparams() const {
     return mp_oaepParams;
-
 }
 
 maskGenerationFunc OpenSSLCryptoKeyRSA::getMGF() const {
-
     return m_mgf;
-
 }
 
 // Generic key functions
@@ -347,13 +340,10 @@ XSECCryptoKey::KeyType OpenSSLCryptoKeyRSA::getKeyType() const {
         return KEY_RSA_PUBLIC;
 
     return KEY_NONE;
-
 }
 
-void OpenSSLCryptoKeyRSA::loadPublicModulusBase64BigNums(const char * b64, unsigned int len) {
-
+void OpenSSLCryptoKeyRSA::loadPublicModulusBase64BigNums(const char* b64, unsigned int len) {
     setNBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
-
 }
 
 void OpenSSLCryptoKeyRSA::setNBase(BIGNUM *nBase) {
@@ -376,10 +366,8 @@ void OpenSSLCryptoKeyRSA::setNBase(BIGNUM *nBase) {
 }
 
 
-void OpenSSLCryptoKeyRSA::loadPublicExponentBase64BigNums(const char * b64, unsigned int len) {
-
+void OpenSSLCryptoKeyRSA::loadPublicExponentBase64BigNums(const char* b64, unsigned int len) {
     setEBase(OpenSSLCryptoBase64::b642BN((char *) b64, len));
-
 }
 
 
@@ -417,12 +405,12 @@ void OpenSSLCryptoKeyRSA::commitEN() {
 // "Hidden" OpenSSL functions
 
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) :
-mp_rsaKey(NULL),
-mp_oaepParams(NULL),
-m_oaepParamsLen(0),
-mp_accumE(NULL),
-mp_accumN(NULL),
-m_mgf(MGF1_SHA1)
+	mp_rsaKey(NULL),
+	mp_oaepParams(NULL),
+	m_oaepParamsLen(0),
+	mp_accumE(NULL),
+	mp_accumN(NULL),
+	m_mgf(MGF1_SHA1)
 {
 
     // Create a new key to be loaded as we go
@@ -454,16 +442,16 @@ m_mgf(MGF1_SHA1)
 //           Verify a signature encoded as a Base64 string
 // --------------------------------------------------------------------------------
 
-bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * hashBuf,
-                                 unsigned int hashLen,
-                                 const char * base64Signature,
-                                 unsigned int sigLen,
-                                 hashMethod hm = HASH_SHA1) const {
+bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(
+		const unsigned char* hashBuf,
+		unsigned int hashLen,
+		const char * base64Signature,
+		unsigned int sigLen,
+		XSECCryptoHash::HashType type) const {
 
     // Use the currently loaded key to validate the Base64 encoded signature
 
     if (mp_rsaKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Attempt to validate signature with empty key");
     }
@@ -494,7 +482,6 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
                           cleanedBase64SignatureLen);
 
     if (rc < 0) {
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Error during Base64 Decode");
     }
@@ -510,16 +497,16 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
 
     int keySize = RSA_size(mp_rsaKey);
     if (keySize != sigValLen) {
-    	    throw XSECCryptoException(XSECCryptoException::RSAError,
-    	        "OpenSSL:RSA - Signature size does not match key size");
+            throw XSECCryptoException(XSECCryptoException::RSAError,
+                "OpenSSL:RSA - Signature size does not match key size");
     }
 
     // Now decrypt
 
-    unsigned char * decryptBuf;
+    unsigned char* decryptBuf;
 
     // Decrypt will always be longer than (RSA_len(key) - 11)
-    decryptBuf = new unsigned char [RSA_size(mp_rsaKey)];
+    decryptBuf = new unsigned char[RSA_size(mp_rsaKey)];
     ArrayJanitor<unsigned char> j_decryptBuf(decryptBuf);
 
     // Note at this time only supports PKCS1 padding
@@ -536,16 +523,13 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
                                              RSA_PKCS1_PADDING);
 
     if (decryptSize < 0) {
-
-/*      throw XSECCryptoException(XSECCryptoException::RSAError,
-            "OpenSSL:RSA::verify() - Error decrypting signature"); */
         // Really - this is a failed signature check, not an exception!
         return false;
     }
 
     /* Check the OID */
     int oidLen = 0;
-    unsigned char * oid = getRSASigOID(hm, oidLen);
+    unsigned char * oid = getRSASigOID(type, oidLen);
 
     if (oid == NULL) {
         throw XSECCryptoException(XSECCryptoException::RSAError,
@@ -553,34 +537,23 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
     }
 
     if (decryptSize != (int) (oidLen + hashLen) || hashLen != oid[oidLen-1]) {
-
         return false;
-
     }
 
     for (t = 0; t < oidLen; ++t) {
-
         if (oid[t] != decryptBuf[t]) {
-
             return false;
-
         }
-
     }
 
     for (;t < decryptSize; ++t) {
-
         if (hashBuf[t-oidLen] != decryptBuf[t]) {
-
             return false;
-
         }
-
     }
 
     // All OK
     return true;
-
 }
 
 // --------------------------------------------------------------------------------
@@ -588,30 +561,30 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * h
 // --------------------------------------------------------------------------------
 
 
-unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * hashBuf,
+unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(
+		unsigned char* hashBuf,
         unsigned int hashLen,
         char * base64SignatureBuf,
         unsigned int base64SignatureBufLen,
-        hashMethod hm) const {
+		XSECCryptoHash::HashType type) const {
 
     // Sign a pre-calculated hash using this key
 
     if (mp_rsaKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Attempt to sign data with empty key");
     }
 
     // Build the buffer to be encrypted by prepending the SHA1 OID to the hash
 
-    unsigned char * encryptBuf;
-    unsigned char * preEncryptBuf;
-    unsigned char * oid;
+    unsigned char* encryptBuf;
+    unsigned char* preEncryptBuf;
+    unsigned char* oid;
     int oidLen;
     int encryptLen;
     int preEncryptLen;
 
-    oid = getRSASigOID(hm, oidLen);
+    oid = getRSASigOID(type, oidLen);
 
     if (oid == NULL) {
         throw XSECCryptoException(XSECCryptoException::RSAError,
@@ -641,7 +614,6 @@ unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * h
     delete[] preEncryptBuf;
 
     if (encryptLen < 0) {
-
         delete[] encryptBuf;
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA::sign() - Error encrypting hash");
@@ -667,7 +639,6 @@ unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * h
     delete[] encryptBuf;
 
     if (sigValLen <= 0) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:RSA - Error base64 encoding signature");
     }
@@ -679,22 +650,21 @@ unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * h
 //           decrypt a buffer
 // --------------------------------------------------------------------------------
 
-unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
-                                 unsigned char * plainBuf,
-                                 unsigned int inLength,
-                                 unsigned int maxOutLength,
-                                 PaddingType padding,
-                                 hashMethod hm) const {
+unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
+		const unsigned char* inBuf,
+		unsigned char* plainBuf,
+		unsigned int inLength,
+		unsigned int maxOutLength,
+		PaddingType padding,
+		XSECCryptoHash::HashType type) const {
 
     // Perform a decrypt
     if (mp_rsaKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Attempt to decrypt data with empty key");
     }
 
 #if 0
-
     /* normally commented out code to determine endian problems */
     unsigned int i;
     unsigned char e[2048];
@@ -705,7 +675,6 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
             inBuf1[i] = e[inLength - 1 - i];
         }
     }
-
 #endif
 
     int decryptSize;
@@ -725,17 +694,14 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                             RSA_PKCS1_PADDING);
 
         if (decryptSize < 0) {
-
             throw XSECCryptoException(XSECCryptoException::RSAError,
                 "OpenSSL:RSA privateKeyDecrypt - Error Decrypting PKCS1_5 padded RSA encrypt");
-
         }
 
         break;
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
         {
-
             unsigned char * tBuf;
             int num = RSA_size(mp_rsaKey);
             XSECnew(tBuf, unsigned char[num]);
@@ -743,20 +709,20 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
             const EVP_MD* evp_md = NULL;
             const EVP_MD* mgf_md = NULL;
 
-            switch (hm) {
-                case HASH_SHA1:
+            switch (type) {
+                case XSECCryptoHash::HASH_SHA1:
                     evp_md = EVP_get_digestbyname("SHA1");
                     break;
-                case HASH_SHA224:
+                case XSECCryptoHash::HASH_SHA224:
                     evp_md = EVP_get_digestbyname("SHA224");
                     break;
-                case HASH_SHA256:
+                case XSECCryptoHash::HASH_SHA256:
                     evp_md = EVP_get_digestbyname("SHA256");
                     break;
-                case HASH_SHA384:
+                case XSECCryptoHash::HASH_SHA384:
                     evp_md = EVP_get_digestbyname("SHA384");
                     break;
-                case HASH_SHA512:
+                case XSECCryptoHash::HASH_SHA512:
                     evp_md = EVP_get_digestbyname("SHA512");
                     break;
             }
@@ -799,10 +765,8 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                 mp_rsaKey,
                                 RSA_NO_PADDING);
             if (decryptSize < 0) {
-
                 throw XSECCryptoException(XSECCryptoException::RSAError,
                     "OpenSSL:RSA privateKeyDecrypt - Error doing raw decrypt of RSA encrypted data");
-
             }
 
             // Clear out the "0"s at the front
@@ -821,24 +785,19 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                                        mgf_md);
 
             if (decryptSize < 0) {
-
                 throw XSECCryptoException(XSECCryptoException::RSAError,
                     "OpenSSL:RSA privateKeyDecrypt - Error removing OAEPadding");
-
             }
 
         }
         break;
 
     default :
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Unknown padding method");
-
     }
 
 #if 0
-
     /* normally commented out code to determine endian problems */
     int i;
     unsigned char t[512];
@@ -848,27 +807,25 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
             plainBuf[i] = t[decryptSize - 1 - i];
         }
     }
-
 #endif
 
     return decryptSize;
-
 }
 
 // --------------------------------------------------------------------------------
 //           encrypt a buffer
 // --------------------------------------------------------------------------------
 
-unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
-                                 unsigned char * cipherBuf,
-                                 unsigned int inLength,
-                                 unsigned int maxOutLength,
-                                 PaddingType padding,
-                                 hashMethod hm) const {
+unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
+		const unsigned char* inBuf,
+		unsigned char* cipherBuf,
+		unsigned int inLength,
+		unsigned int maxOutLength,
+		PaddingType padding,
+		XSECCryptoHash::HashType type) const {
 
     // Perform an encrypt
     if (mp_rsaKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Attempt to encrypt data with empty key");
     }
@@ -890,17 +847,14 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                             RSA_PKCS1_PADDING);
 
         if (encryptSize < 0) {
-
             throw XSECCryptoException(XSECCryptoException::RSAError,
                 "OpenSSL:RSA publicKeyEncrypt - Error performing PKCS1_5 padded RSA encrypt");
-
         }
 
         break;
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
         {
-
             unsigned char * tBuf;
             unsigned int num = RSA_size(mp_rsaKey);
             if (maxOutLength < num) {
@@ -911,20 +865,20 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
             const EVP_MD* evp_md = NULL;
             const EVP_MD* mgf_md = NULL;
 
-            switch (hm) {
-                case HASH_SHA1:
+            switch (type) {
+                case XSECCryptoHash::HASH_SHA1:
                     evp_md = EVP_get_digestbyname("SHA1");
                     break;
-                case HASH_SHA224:
+                case XSECCryptoHash::HASH_SHA224:
                     evp_md = EVP_get_digestbyname("SHA224");
                     break;
-                case HASH_SHA256:
+                case XSECCryptoHash::HASH_SHA256:
                     evp_md = EVP_get_digestbyname("SHA256");
                     break;
-                case HASH_SHA384:
+                case XSECCryptoHash::HASH_SHA384:
                     evp_md = EVP_get_digestbyname("SHA384");
                     break;
-                case HASH_SHA512:
+                case XSECCryptoHash::HASH_SHA512:
                     evp_md = EVP_get_digestbyname("SHA512");
                     break;
             }
@@ -976,10 +930,8 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                                                      mgf_md);
 
             if (encryptSize <= 0) {
-
                 throw XSECCryptoException(XSECCryptoException::RSAError,
                     "OpenSSL:RSA publicKeyEncrypt - Error adding OAEPadding");
-
             }
 
             encryptSize = RSA_public_encrypt(num,
@@ -987,27 +939,19 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                                 cipherBuf,
                                 mp_rsaKey,
                                 RSA_NO_PADDING);
-
-
             if (encryptSize < 0) {
-
                 throw XSECCryptoException(XSECCryptoException::RSAError,
                     "OpenSSL:RSA publicKeyEncrypt - Error encrypting padded data");
-
             }
         }
         break;
 
     default :
-
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Unknown padding method");
-
     }
 
-
     return encryptSize;
-
 }
 
 // --------------------------------------------------------------------------------
@@ -1020,7 +964,6 @@ unsigned int OpenSSLCryptoKeyRSA::getLength(void) const {
         return RSA_size(mp_rsaKey);
 
     return 0;
-
 }
 
 // --------------------------------------------------------------------------------
@@ -1062,7 +1005,6 @@ XSECCryptoKey * OpenSSLCryptoKeyRSA::clone() const {
         RSA_set0_crt_params(ret->mp_rsaKey, DUP_NON_NULL(dmp1), DUP_NON_NULL(dmq1), DUP_NON_NULL(iqmp));
 
     return ret;
-
 }
 
 #endif /* XSEC_HAVE_OPENSSL */

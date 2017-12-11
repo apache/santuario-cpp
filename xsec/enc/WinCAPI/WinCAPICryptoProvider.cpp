@@ -51,127 +51,123 @@ XSEC_USING_XERCES(ArrayJanitor);
 static char s_xsecKeyStoreName[] = "ApacheXML-SecurityKeyStore";
 
 WinCAPICryptoProvider::WinCAPICryptoProvider(
-						LPCSTR provDSSName,
-						LPCSTR provRSAName,
-            DWORD dwFlags) {
+                        LPCSTR provDSSName,
+                        LPCSTR provRSAName,
+                        DWORD dwFlags) {
 
-	if (!CryptAcquireContext(&m_provDSS,
-		NULL,
-		provDSSName,
-		PROV_DSS,
-		CRYPT_VERIFYCONTEXT))
-	{
-		throw XSECException(XSECException::InternalError,
-			"WinCAPICryptoProvider() - Error obtaining default PROV_DSS");
-	}
+    if (!CryptAcquireContext(&m_provDSS,
+        NULL,
+        provDSSName,
+        PROV_DSS,
+        CRYPT_VERIFYCONTEXT))
+    {
+        throw XSECException(XSECException::InternalError,
+            "WinCAPICryptoProvider() - Error obtaining default PROV_DSS");
+    }
 
-	if (!CryptAcquireContext(&m_provRSA,
-		NULL,
-		provRSAName,
-		PROV_RSA_AES,
-		CRYPT_VERIFYCONTEXT)) 
-	{
-		// Check if we maybe don't understand AES
+    if (!CryptAcquireContext(&m_provRSA,
+        NULL,
+        provRSAName,
+        PROV_RSA_AES,
+        CRYPT_VERIFYCONTEXT))
+    {
+        // Check if we maybe don't understand AES
 
-		DWORD error = GetLastError();
-		if (error == NTE_PROV_TYPE_NOT_DEF || error == 0) {
+        DWORD error = GetLastError();
+        if (error == NTE_PROV_TYPE_NOT_DEF || error == 0) {
 
-			// This system does not have AES!
-			m_haveAES = false;
-			m_provRSAType = PROV_RSA_FULL;
+            // This system does not have AES!
+            m_haveAES = false;
+            m_provRSAType = PROV_RSA_FULL;
 
-			if (!CryptAcquireContext(&m_provRSA,
-				NULL,
-				provRSAName,
-				PROV_RSA_FULL,
-				CRYPT_VERIFYCONTEXT)) 
-			{
+            if (!CryptAcquireContext(&m_provRSA,
+                NULL,
+                provRSAName,
+                PROV_RSA_FULL,
+                CRYPT_VERIFYCONTEXT))
+            {
 
-				throw XSECException(XSECException::InternalError,
-					"WinCAPICryptoProvider() - Error obtaining default PROV_RSA_FULL");
-			}
+                throw XSECException(XSECException::InternalError,
+                    "WinCAPICryptoProvider() - Error obtaining default PROV_RSA_FULL");
+            }
 
-		}
-		
-		else {
+        }
 
-			throw XSECException(XSECException::InternalError,
-				"WinCAPICryptoProvider() - Error obtaining default PROV_RSA_AES");
-		}
-	}
+        else {
 
-	else {
-		m_haveAES = true;
-		m_provRSAType = PROV_RSA_AES;
-	}
+            throw XSECException(XSECException::InternalError,
+                "WinCAPICryptoProvider() - Error obtaining default PROV_RSA_AES");
+        }
+    }
 
-	// Now obtain our internal (library) key store
+    else {
+        m_haveAES = true;
+        m_provRSAType = PROV_RSA_AES;
+    }
 
-	if (!CryptAcquireContext(&m_provApacheKeyStore,
-		s_xsecKeyStoreName,
-		provRSAName,
-		m_provRSAType,
-		dwFlags)) 
-	{
-		CryptAcquireContext(&m_provApacheKeyStore,
-			                    s_xsecKeyStoreName,
-			                    provRSAName,
-			                    m_provRSAType,
-			                    CRYPT_DELETEKEYSET);
+    // Now obtain our internal (library) key store
 
-		// Try to create
-		if (!CryptAcquireContext(&m_provApacheKeyStore,
-			s_xsecKeyStoreName,
-			provRSAName,
-			m_provRSAType,
-			dwFlags | CRYPT_NEWKEYSET)) {
+    if (!CryptAcquireContext(&m_provApacheKeyStore,
+        s_xsecKeyStoreName,
+        provRSAName,
+        m_provRSAType,
+        dwFlags))
+    {
+        CryptAcquireContext(&m_provApacheKeyStore,
+                                s_xsecKeyStoreName,
+                                provRSAName,
+                                m_provRSAType,
+                                CRYPT_DELETEKEYSET);
 
-		    // Prevents failure on mandatory profiles, see SANTUARIO-378.
-		    if (GetLastError() != NTE_TEMPORARY_PROFILE) {
-	            throw XSECException(XSECException::InternalError,
-	                "WinCAPICryptoProvider() - Error obtaining generating internal key store for PROV_RSA_FULL");
-		    } else {
-		        m_provApacheKeyStore = NULL;
-		    }
-		}
-		else {
-			HCRYPTKEY k;
-			if (!CryptGenKey(m_provApacheKeyStore, AT_KEYEXCHANGE, CRYPT_EXPORTABLE, &k)) {
-				throw XSECException(XSECException::InternalError,
-					"WinCAPICryptoProvider() - Error generating internal key set for PROV_RSA_FULL");
-			}
-			CryptDestroyKey(k);
-		}
-	}
+        // Try to create
+        if (!CryptAcquireContext(&m_provApacheKeyStore,
+            s_xsecKeyStoreName,
+            provRSAName,
+            m_provRSAType,
+            dwFlags | CRYPT_NEWKEYSET)) {
 
-	// Copy parameters for later use
+            // Prevents failure on mandatory profiles, see SANTUARIO-378.
+            if (GetLastError() != NTE_TEMPORARY_PROFILE) {
+                throw XSECException(XSECException::InternalError,
+                    "WinCAPICryptoProvider() - Error obtaining generating internal key store for PROV_RSA_FULL");
+            } else {
+                m_provApacheKeyStore = NULL;
+            }
+        }
+        else {
+            HCRYPTKEY k;
+            if (!CryptGenKey(m_provApacheKeyStore, AT_KEYEXCHANGE, CRYPT_EXPORTABLE, &k)) {
+                throw XSECException(XSECException::InternalError,
+                    "WinCAPICryptoProvider() - Error generating internal key set for PROV_RSA_FULL");
+            }
+            CryptDestroyKey(k);
+        }
+    }
 
-	if (provDSSName != NULL)
-		m_provDSSName = strdup(provDSSName);
-	else
-		m_provDSSName = NULL;
+    // Copy parameters for later use
 
-	if (provRSAName != NULL)
-		m_provRSAName = strdup(provRSAName);
-	else
-		m_provRSAName = NULL;
+    if (provDSSName != NULL)
+        m_provDSSName = strdup(provDSSName);
+    else
+        m_provDSSName = NULL;
 
+    if (provRSAName != NULL)
+        m_provRSAName = strdup(provRSAName);
+    else
+        m_provRSAName = NULL;
 }
 
 WinCAPICryptoProvider::~WinCAPICryptoProvider() {
-
-
-	CryptReleaseContext(m_provRSA, 0);
-	CryptReleaseContext(m_provDSS, 0);
-	if (m_provApacheKeyStore) {
-	    CryptReleaseContext(m_provApacheKeyStore, 0);
-	}
-
+    CryptReleaseContext(m_provRSA, 0);
+    CryptReleaseContext(m_provDSS, 0);
+    if (m_provApacheKeyStore) {
+        CryptReleaseContext(m_provApacheKeyStore, 0);
+    }
 }
 
-const XMLCh * WinCAPICryptoProvider::getProviderName() const {
+const XMLCh* WinCAPICryptoProvider::getProviderName() const {
 
-	return DSIGConstants::s_unicodeStrPROVWinCAPI;
+    return DSIGConstants::s_unicodeStrPROVWinCAPI;
 
 }
 
@@ -179,89 +175,63 @@ const XMLCh * WinCAPICryptoProvider::getProviderName() const {
 // Hashing classes
 
 unsigned int WinCAPICryptoProvider::getMaxHashSize() const {
-	return WINCAPI_MAX_HASH_SIZE;
+    return WINCAPI_MAX_HASH_SIZE;
 }
 
 
-XSECCryptoHash	* WinCAPICryptoProvider::hashSHA(int length) const {
+XSECCryptoHash* WinCAPICryptoProvider::hash(XSECCryptoHash::HashType type) const {
 
+    WinCAPICryptoHash* ret = NULL;
 
-	if (length == 160) {
-		WinCAPICryptoHash * ret;
+    switch(type) {
+    case XSECCryptoHash::HASH_SHA1:
+    case XSECCryptoHash::HASH_MD5:
+        XSECnew(ret, WinCAPICryptoHash(m_provDSS, type));
+        break;
+    }
 
-		XSECnew(ret, WinCAPICryptoHash(m_provDSS, XSECCryptoHash::HASH_SHA1));
-
-		return ret;
-	}
-
-	else return NULL;
+    return ret;
 }
 
-XSECCryptoHash * WinCAPICryptoProvider::hashHMACSHA(int length) const {
+XSECCryptoHash* WinCAPICryptoProvider::HMAC(XSECCryptoHash::HashType type) const {
 
-	if (length == 160) {
-		WinCAPICryptoHashHMAC * ret;
+    WinCAPICryptoHashHMAC* ret = NULL;
 
-		XSECnew(ret, WinCAPICryptoHashHMAC(m_provDSS, XSECCryptoHash::HASH_SHA1));
+    switch(type) {
+    case XSECCryptoHash::HASH_SHA1:
+    case XSECCryptoHash::HASH_MD5:
+        XSECnew(ret, WinCAPICryptoHashHMAC(m_provDSS, type));
+        break;
+    }
 
-		return ret;
-	}
-
-	else return NULL;
-
+    return ret;
 }
 
-XSECCryptoHash	* WinCAPICryptoProvider::hashMD5() const {
+XSECCryptoKeyHMAC* WinCAPICryptoProvider::keyHMAC(void) const {
+    WinCAPICryptoKeyHMAC * ret;
 
-	WinCAPICryptoHash * ret;
+    XSECnew(ret, WinCAPICryptoKeyHMAC(m_provDSS));
 
-	XSECnew(ret, WinCAPICryptoHash(m_provDSS, XSECCryptoHash::HASH_MD5));
-
-	return ret;
-
+    return ret;
 }
 
-XSECCryptoHash * WinCAPICryptoProvider::hashHMACMD5() const {
+XSECCryptoKeyDSA* WinCAPICryptoProvider::keyDSA() const {
+    WinCAPICryptoKeyDSA * ret;
 
-	WinCAPICryptoHashHMAC * ret;
+    XSECnew(ret, WinCAPICryptoKeyDSA(m_provDSS));
 
-	XSECnew(ret, WinCAPICryptoHashHMAC(m_provDSS, XSECCryptoHash::HASH_MD5));
-
-	return ret;
-
+    return ret;
 }
 
-XSECCryptoKeyHMAC * WinCAPICryptoProvider::keyHMAC(void) const {
+XSECCryptoKeyRSA* WinCAPICryptoProvider::keyRSA() const {
+    WinCAPICryptoKeyRSA * ret;
 
-	WinCAPICryptoKeyHMAC * ret;
-	XSECnew(ret, WinCAPICryptoKeyHMAC(m_provDSS));
+    XSECnew(ret, WinCAPICryptoKeyRSA(m_provRSA));
 
-	return ret;
-
+    return ret;
 }
 
-
-XSECCryptoKeyDSA * WinCAPICryptoProvider::keyDSA() const {
-	
-	WinCAPICryptoKeyDSA * ret;
-
-	XSECnew(ret, WinCAPICryptoKeyDSA(m_provDSS));
-
-	return ret;
-
-}
-
-XSECCryptoKeyRSA * WinCAPICryptoProvider::keyRSA() const {
-	
-	WinCAPICryptoKeyRSA * ret;
-
-	XSECnew(ret, WinCAPICryptoKeyRSA(m_provRSA));
-
-	return ret;
-
-}
-
-XSECCryptoKeyEC * WinCAPICryptoProvider::keyEC() const {
+XSECCryptoKeyEC* WinCAPICryptoProvider::keyEC() const {
 
     throw XSECCryptoException(XSECCryptoException::UnsupportedError,
         "WinCAPICryptoProvider::keyEC - EC support not available");
@@ -273,97 +243,89 @@ XSECCryptoKey* WinCAPICryptoProvider::keyDER(const char* buf, unsigned long len,
         "WinCAPICryptoProvider::keyDER - DER decoding support not available");
 }
 
-XSECCryptoX509 * WinCAPICryptoProvider::X509() const {
+XSECCryptoX509* WinCAPICryptoProvider::X509() const {
+    WinCAPICryptoX509 * ret;
 
-	WinCAPICryptoX509 * ret;
+    XSECnew(ret, WinCAPICryptoX509(m_provRSA, m_provDSS));
 
-	XSECnew(ret, WinCAPICryptoX509(m_provRSA, m_provDSS));
-
-	return ret;
-
+    return ret;
 }
 
-XSECCryptoBase64 * WinCAPICryptoProvider::base64() const {
+XSECCryptoBase64* WinCAPICryptoProvider::base64() const {
 
-	// The Windows CAPI does not provide a Base64 decoder/encoder.
-	// Use the internal implementation.
+    // The Windows CAPI does not provide a Base64 decoder/encoder.
+    // Use the internal implementation.
 
-	XSCryptCryptoBase64 * ret;
+    XSCryptCryptoBase64 * ret;
 
-	XSECnew(ret, XSCryptCryptoBase64());
+    XSECnew(ret, XSCryptCryptoBase64());
 
-	return ret;
-
+    return ret;
 }
 
 bool WinCAPICryptoProvider::algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
 
-	switch (alg) {
+    switch (alg) {
 
-	case (XSECCryptoSymmetricKey::KEY_AES_128) :
-	case (XSECCryptoSymmetricKey::KEY_AES_192) :
-	case (XSECCryptoSymmetricKey::KEY_AES_256) :
+    case (XSECCryptoSymmetricKey::KEY_AES_128) :
+    case (XSECCryptoSymmetricKey::KEY_AES_192) :
+    case (XSECCryptoSymmetricKey::KEY_AES_256) :
 
-		return m_haveAES;
+        return m_haveAES;
 
-	case (XSECCryptoSymmetricKey::KEY_3DES_192) :
+    case (XSECCryptoSymmetricKey::KEY_3DES_192) :
 
-		return true;
+        return true;
 
-	default:
+    default:
 
-		return false;
+        return false;
 
-	}
+    }
 
-	return false;
-
+    return false;
 }
 
 bool WinCAPICryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) const {
+    switch (alg) {
 
-	switch (alg) {
+    case (XSECCryptoHash::HASH_SHA1) :
+    case (XSECCryptoHash::HASH_MD5) :
 
-	case (XSECCryptoHash::HASH_SHA1) :
-	case (XSECCryptoHash::HASH_MD5) :
+        return true;
 
-		return true;
+    case (XSECCryptoHash::HASH_SHA224) :
+    case (XSECCryptoHash::HASH_SHA256) :
+    case (XSECCryptoHash::HASH_SHA384) :
+    case (XSECCryptoHash::HASH_SHA512) :
 
-	case (XSECCryptoHash::HASH_SHA224) :
-	case (XSECCryptoHash::HASH_SHA256) :
-	case (XSECCryptoHash::HASH_SHA384) :
-	case (XSECCryptoHash::HASH_SHA512) :
+        return false;
 
-		return false;
+    default:
+        return false;
+    }
 
-	default:
-		return false;
-	}
-
-	return false;
-
-}
-	
-XSECCryptoSymmetricKey	* WinCAPICryptoProvider::keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
-
-	// Only temporary
-
-	WinCAPICryptoSymmetricKey * ret;
-	
-	XSECnew(ret, WinCAPICryptoSymmetricKey(m_provApacheKeyStore, alg));
-
-	return ret;
-
+    return false;
 }
 
-unsigned int WinCAPICryptoProvider::getRandom(unsigned char * buffer, unsigned int numOctets) const {
+XSECCryptoSymmetricKey* WinCAPICryptoProvider::keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
+    // Only temporary
 
-	if (!CryptGenRandom(m_provApacheKeyStore, numOctets, buffer)) {
-		throw XSECException(XSECException::InternalError,
-			"WinCAPICryptoProvider() - Error generating Random data");
-	}
+    WinCAPICryptoSymmetricKey * ret;
 
-	return numOctets;
+    XSECnew(ret, WinCAPICryptoSymmetricKey(m_provApacheKeyStore, alg));
+
+    return ret;
+}
+
+unsigned int WinCAPICryptoProvider::getRandom(unsigned char* buffer, unsigned int numOctets) const {
+
+    if (!CryptGenRandom(m_provApacheKeyStore, numOctets, buffer)) {
+        throw XSECException(XSECException::InternalError,
+            "WinCAPICryptoProvider() - Error generating Random data");
+    }
+
+    return numOctets;
 }
 
 
@@ -372,30 +334,29 @@ unsigned int WinCAPICryptoProvider::getRandom(unsigned char * buffer, unsigned i
 //     Translate a Base64 number to a Windows (little endian) integer
 // --------------------------------------------------------------------------------
 
-BYTE * WinCAPICryptoProvider::b642WinBN(const char * b64, unsigned int b64Len, unsigned int &retLen) {
+BYTE* WinCAPICryptoProvider::b642WinBN(const char* b64, unsigned int b64Len, unsigned int& retLen) {
 
-	BYTE * os;
-	XSECnew(os, BYTE[b64Len]);
-	ArrayJanitor<BYTE> j_os(os);
+    BYTE * os;
+    XSECnew(os, BYTE[b64Len]);
+    ArrayJanitor<BYTE> j_os(os);
 
-	// Decode
-	XSCryptCryptoBase64 b;
+    // Decode
+    XSCryptCryptoBase64 b;
 
-	b.decodeInit();
-	retLen = b.decode((unsigned char *) b64, b64Len, os, b64Len);
-	retLen += b.decodeFinish(&os[retLen], b64Len - retLen);
+    b.decodeInit();
+    retLen = b.decode((unsigned char *) b64, b64Len, os, b64Len);
+    retLen += b.decodeFinish(&os[retLen], b64Len - retLen);
 
-	BYTE * ret;
-	XSECnew(ret, BYTE[retLen]);
+    BYTE * ret;
+    XSECnew(ret, BYTE[retLen]);
 
-	BYTE * j = os;
-	BYTE * k = ret + retLen - 1;
+    BYTE * j = os;
+    BYTE * k = ret + retLen - 1;
 
-	for (unsigned int i = 0; i < retLen ; ++i)
-		*k-- = *j++;
+    for (unsigned int i = 0; i < retLen ; ++i)
+        *k-- = *j++;
 
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
@@ -405,34 +366,33 @@ BYTE * WinCAPICryptoProvider::b642WinBN(const char * b64, unsigned int b64Len, u
 unsigned char * WinCAPICryptoProvider::WinBN2b64(BYTE * n, DWORD nLen, unsigned int &retLen) {
 
 
-	// First reverse
-	BYTE * rev;;
-	XSECnew(rev, BYTE[nLen]);
-	ArrayJanitor<BYTE> j_rev(rev);
+    // First reverse
+    BYTE * rev;;
+    XSECnew(rev, BYTE[nLen]);
+    ArrayJanitor<BYTE> j_rev(rev);
 
-	BYTE * j = n;
-	BYTE * k = rev + nLen - 1;
+    BYTE * j = n;
+    BYTE * k = rev + nLen - 1;
 
-	for (unsigned int i = 0; i < nLen ; ++i)
-		*k-- = *j++;
+    for (unsigned int i = 0; i < nLen ; ++i)
+        *k-- = *j++;
 
-	
-	unsigned char * b64;
-	// Naieve length calculation
-	unsigned int bufLen = nLen * 2 + 4;
 
-	XSECnew(b64, unsigned char[bufLen]);
-	ArrayJanitor<unsigned char> j_b64(b64);
+    unsigned char * b64;
+    // Naieve length calculation
+    unsigned int bufLen = nLen * 2 + 4;
 
-	XSCryptCryptoBase64 b;
+    XSECnew(b64, unsigned char[bufLen]);
+    ArrayJanitor<unsigned char> j_b64(b64);
 
-	b.encodeInit();
-	retLen = b.encode(rev, (unsigned int) nLen, b64, bufLen);
-	retLen += b.encodeFinish(&b64[retLen], bufLen - retLen);
+    XSCryptCryptoBase64 b;
 
-	j_b64.release();
-	return b64;
+    b.encodeInit();
+    retLen = b.encode(rev, (unsigned int) nLen, b64, bufLen);
+    retLen += b.encodeFinish(&b64[retLen], bufLen - retLen);
 
+    j_b64.release();
+    return b64;
 }
 
 #endif /* XSEC_HAVE_WINCAPI */

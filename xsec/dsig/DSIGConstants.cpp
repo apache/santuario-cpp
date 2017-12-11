@@ -438,53 +438,52 @@ void DSIGConstants::destroy() {
 //			URI Mappings
 // --------------------------------------------------------------------------------
 
-bool getHashMethod(const XMLCh * URI, hashMethod & hm) {
+bool getHashMethod(const XMLCh * URI, XSECCryptoHash::HashType& type) {
 
 	if (strEquals(URI, s_md5)) {
 
-		hm = HASH_MD5;
+		type = XSECCryptoHash::HASH_MD5;
 		return true;
 
 	}
 
 	if (strEquals(URI, s_sha1)) {
 
-		hm = HASH_SHA1;
+		type = XSECCryptoHash::HASH_SHA1;
 		return true;
 	}
 
 	if (strEquals(URI, s_sha224)) {
 
-		hm = HASH_SHA224;
+		type = XSECCryptoHash::HASH_SHA224;
 		return true;
 	}
 
 	if (strEquals(URI, s_sha256)) {
 
-		hm = HASH_SHA256;
+		type = XSECCryptoHash::HASH_SHA256;
 		return true;
 	}
 
 	if (strEquals(URI, s_sha384)) {
 
-		hm = HASH_SHA384;
+		type = XSECCryptoHash::HASH_SHA384;
 		return true;
 	}
 
 	if (strEquals(URI, s_sha512)) {
 
-		hm = HASH_SHA512;
+		type = XSECCryptoHash::HASH_SHA512;
 		return true;
 	}
 
-	hm = HASH_NONE;
+	type = XSECCryptoHash::HASH_NONE;
 	return false;
-
 }
 
 bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 								  signatureMethod & sm,
-								  hashMethod & hm) {
+								  XSECCryptoHash::HashType& type) {
 
 
 	// The easy ones!
@@ -492,7 +491,7 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 	if (strEquals(URI, DSIGConstants::s_unicodeStrURIDSA_SHA1)) {
 
 		sm = SIGNATURE_DSA;
-		hm = HASH_SHA1;
+		type = XSECCryptoHash::HASH_SHA1;
 
 		return true;
 
@@ -501,7 +500,7 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 	if (strEquals(URI, DSIGConstants::s_unicodeStrURIRSA_SHA1)) {
 
 		sm = SIGNATURE_RSA;
-		hm = HASH_SHA1;
+		type = XSECCryptoHash::HASH_SHA1;
 
 		return true;
 
@@ -510,7 +509,7 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 	if (strEquals(URI, DSIGConstants::s_unicodeStrURIHMAC_SHA1)) {
 
 		sm = SIGNATURE_HMAC;
-		hm = HASH_SHA1;
+		type = XSECCryptoHash::HASH_SHA1;
 
 		return true;
 
@@ -530,7 +529,7 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 			// Determine a trailing hash method
 			if (URI[cnt+4] != chDash)
 				return false;
-			return getHashMethod(&(URI[cnt+5]), hm);
+			return getHashMethod(&(URI[cnt+5]), type);
 
 		}
 		else if (XMLString::compareNString(&URI[cnt], s_rsa, 3) == 0) {
@@ -538,14 +537,14 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 			sm = SIGNATURE_RSA;
 			if (URI[cnt+3] != chDash)
 				return false;
-			return getHashMethod(&(URI[cnt+4]), hm);
+			return getHashMethod(&(URI[cnt+4]), type);
 		}
 		else if (XMLString::compareNString(&URI[cnt], s_ecdsa, 5) == 0) {
 
 			sm = SIGNATURE_ECDSA;
 			if (URI[cnt+5] != chDash)
 				return false;
-			return getHashMethod(&(URI[cnt+6]), hm);
+			return getHashMethod(&(URI[cnt+6]), type);
 		}
 
 	}
@@ -559,19 +558,18 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
             sm = SIGNATURE_DSA;
             if (URI[cnt+3] != chDash)
                 return false;
-            return getHashMethod(&(URI[cnt+4]), hm);
+            return getHashMethod(&(URI[cnt+4]), type);
         }
 
     }
 
 	sm = SIGNATURE_NONE;
-	hm = HASH_NONE;
+	type = XSECCryptoHash::HASH_NONE;
 	return false;
 
 }
 
-bool XSECmapURIToHashMethod(const XMLCh * URI,
-							hashMethod & hm) {
+bool XSECmapURIToHashType(const XMLCh * URI, XSECCryptoHash::HashType& type) {
 
 
 	// Check this is a known prefix on the URI.
@@ -582,23 +580,23 @@ bool XSECmapURIToHashMethod(const XMLCh * URI,
 
 		// This is actually cheating - this will return SHA256 (as an example), even if
 		// the base URI is the original DSIG uri (ie not base-more)
-		return getHashMethod(&URI[blen], hm);
+		return getHashMethod(&URI[blen], type);
 
 	}
 
 	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURISIGBASEMORE, bmlen) == 0) {
 
-		return getHashMethod(&URI[bmlen], hm);
+		return getHashMethod(&URI[bmlen], type);
 
 	}
 
 	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURIXENC, belen) == 0) {
 
-		return getHashMethod(&URI[belen], hm);
+		return getHashMethod(&URI[belen], type);
 
 	}
 
-	hm = HASH_NONE;
+	type = XSECCryptoHash::HASH_NONE;
 	return false;
 }
 
@@ -644,22 +642,22 @@ bool XSECmapURIToMaskGenerationFunc(const XMLCh * URI, maskGenerationFunc & mgf)
 	XMLSize_t len = XMLString::stringLen(DSIGConstants::s_unicodeStrURIMGF1_BASE);
 	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURIMGF1_BASE, len) == 0) {
 
-        hashMethod hm;
-		if (getHashMethod(&URI[len], hm)) {
-            switch (hm) {
-                case HASH_SHA1:
+        XSECCryptoHash::HashType type;
+		if (getHashMethod(&URI[len], type)) {
+            switch (type) {
+                case XSECCryptoHash::HASH_SHA1:
                     mgf = MGF1_SHA1;
                     return true;
-                case HASH_SHA224:
+                case XSECCryptoHash::HASH_SHA224:
                     mgf = MGF1_SHA224;
                     return true;
-                case HASH_SHA256:
+                case XSECCryptoHash::HASH_SHA256:
                     mgf = MGF1_SHA256;
                     return true;
-                case HASH_SHA384:
+                case XSECCryptoHash::HASH_SHA384:
                     mgf = MGF1_SHA384;
                     return true;
-                case HASH_SHA512:
+                case XSECCryptoHash::HASH_SHA512:
                     mgf = MGF1_SHA512;
                     return true;
                 default:

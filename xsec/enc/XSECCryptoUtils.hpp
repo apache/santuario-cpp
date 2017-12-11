@@ -45,10 +45,10 @@
 //           XKMS Limited-Use Shared Secret handling
 // --------------------------------------------------------------------------------
 
-#define XKMSAuthenticationValue					0x01
-#define	XKMSRevocationCodeIdenfitierEncoding1	0x02
-#define	XKMSRevocationCodeIdenfitierEncoding2	0x03
-#define XKMSKeyEncryption						0x04
+#define XKMSAuthenticationValue                    0x01
+#define    XKMSRevocationCodeIdenfitierEncoding1    0x02
+#define    XKMSRevocationCodeIdenfitierEncoding2    0x03
+#define XKMSKeyEncryption                        0x04
 
 int XSEC_EXPORT CalculateXKMSAuthenticationKey(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
 int XSEC_EXPORT CalculateXKMSRevocationCodeIdentifierEncoding1(unsigned char * input, int inputLen, unsigned char * output, int maxOutputLen);
@@ -74,13 +74,13 @@ unsigned int XSEC_EXPORT DecodeFromBase64(const char * input, unsigned char * ou
 // Convert an ASN.1 format DSA signature (!!!) to the two component integers
 // NOTE - both r and s must be at least 20 bytes long
 
-bool XSEC_EXPORT ASN2DSASig(const unsigned char * input, unsigned char * r, unsigned char * s);
+bool XSEC_EXPORT ASN2DSASig(const unsigned char* input, unsigned char* r, unsigned char* s);
 
 // --------------------------------------------------------------------------------
 //           Calculate correct OIDs for an RSA sig
 // --------------------------------------------------------------------------------
 
-unsigned char * getRSASigOID(hashMethod hm, int &oidLen);
+unsigned char* getRSASigOID(XSECCryptoHash::HashType type, int& oidLen);
 
 #endif /* XSECCRYPTOUTILS_INCLUDE */
 

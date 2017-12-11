@@ -36,7 +36,6 @@
 #define XSECCRYPTOKEY_INCLUDE
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/dsig/DSIGConstants.hpp>
 
 /**
  * \ingroup crypto

@@ -87,6 +87,10 @@ WinCAPICryptoX509::~WinCAPICryptoX509() {
 
 }
 
+const XMLCh * WinCAPICryptoX509::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVWinCAPI;
+}
+
 // load functions
 
 void WinCAPICryptoX509::loadX509Base64Bin(const char * buf, unsigned int len) {

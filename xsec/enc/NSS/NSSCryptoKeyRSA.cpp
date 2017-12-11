@@ -53,7 +53,6 @@ NSSCryptoKeyRSA::NSSCryptoKeyRSA(SECKEYPublicKey * pubkey, SECKEYPrivateKey * pr
   
   mp_modulus  = NULL;
   mp_exponent = NULL;
-
 };
 
 // --------------------------------------------------------------------------------
@@ -64,19 +63,22 @@ NSSCryptoKeyRSA::~NSSCryptoKeyRSA() {
 
   // Clean up
 
-	if (mp_pubkey != 0)
-		SECKEY_DestroyPublicKey(mp_pubkey);
+    if (mp_pubkey != 0)
+        SECKEY_DestroyPublicKey(mp_pubkey);
 
   if (mp_privkey != 0)
-		SECKEY_DestroyPrivateKey(mp_privkey);
+        SECKEY_DestroyPrivateKey(mp_privkey);
 
-	if (mp_modulus != NULL)
-		 SECITEM_FreeItem(mp_modulus, PR_TRUE);
+    if (mp_modulus != NULL)
+         SECITEM_FreeItem(mp_modulus, PR_TRUE);
 
-	if (mp_exponent != NULL)
-		SECITEM_FreeItem(mp_exponent, PR_TRUE);
-
+    if (mp_exponent != NULL)
+        SECITEM_FreeItem(mp_exponent, PR_TRUE);
 };
+
+const XMLCh * NSSCryptoKeyESA::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVNSS;
+}
 
 // --------------------------------------------------------------------------------
 //           Get key type
@@ -84,72 +86,64 @@ NSSCryptoKeyRSA::~NSSCryptoKeyRSA() {
 
 XSECCryptoKey::KeyType NSSCryptoKeyRSA::getKeyType() const {
 
-	// Find out what we have
-	if (mp_pubkey == 0) {
+    // Find out what we have
+    if (mp_pubkey == 0) {
 
-		if (mp_privkey != 0)
-			return KEY_RSA_PRIVATE;
+        if (mp_privkey != 0)
+            return KEY_RSA_PRIVATE;
 
-		if (mp_exponent == NULL || mp_modulus == NULL)
-			return KEY_NONE;
-		else
-			return KEY_RSA_PUBLIC;
+        if (mp_exponent == NULL || mp_modulus == NULL)
+            return KEY_NONE;
+        else
+            return KEY_RSA_PUBLIC;
 
-	}
+    }
 
-	if (mp_privkey != 0)
-		return KEY_RSA_PAIR;
+    if (mp_privkey != 0)
+        return KEY_RSA_PAIR;
 
-	return KEY_RSA_PUBLIC;
+    return KEY_RSA_PUBLIC;
 }
 
 // --------------------------------------------------------------------------------
 //           Set OAEP parameters
 // --------------------------------------------------------------------------------
 
-void NSSCryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int paramsLen) {
+void NSSCryptoKeyRSA::setOAEPparams(unsigned char* params, unsigned int paramsLen) {
 
   if (params != NULL && paramsLen != 0) {
 
-		throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-			"NSS::setOAEPParams - OAEP parameters are not supported by NSS");
+        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+            "NSS::setOAEPParams - OAEP parameters are not supported by NSS");
 
   }
-
 }
 
 void NSSCryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
 
-	if (mgf != MGF1_SHA1)
-		throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-			"NSS::setMGF - NSS does not support pluggable MGF for OAEP");
-
+    if (mgf != MGF1_SHA1)
+        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+            "NSS::setMGF - NSS does not support pluggable MGF for OAEP");
 }
 
 // --------------------------------------------------------------------------------
 //           Get OAEP parameters length
 // --------------------------------------------------------------------------------
 
-unsigned int NSSCryptoKeyRSA::getOAEPparamsLen(void) const {
-
-	return 0;
-
+unsigned int NSSCryptoKeyRSA::getOAEPparamsLen() const {
+    return 0;
 }
 
 // --------------------------------------------------------------------------------
 //           Get OAEP parameters
 // --------------------------------------------------------------------------------
 
-const unsigned char * NSSCryptoKeyRSA::getOAEPparams(void) const {
-
-	return NULL;
-
+const unsigned char * NSSCryptoKeyRSA::getOAEPparams() const {
+    return NULL;
 }
 
 maskGenerationFunc NSSCryptoKeyRSA::getMGF() const {
-
     return MGF1_SHA1;
-
 }
 
 
@@ -157,14 +151,14 @@ maskGenerationFunc NSSCryptoKeyRSA::getMGF() const {
 //           Load modulus
 // --------------------------------------------------------------------------------
 
-void NSSCryptoKeyRSA::loadPublicModulusBase64BigNums(const char * b64, unsigned int len) {
+void NSSCryptoKeyRSA::loadPublicModulusBase64BigNums(const char* b64, unsigned int len) {
 
-	if (mp_modulus != NULL) {
+    if (mp_modulus != NULL) {
 
-		SECITEM_FreeItem(mp_modulus, PR_TRUE);
-		mp_modulus = NULL;		// In case we get an exception
+        SECITEM_FreeItem(mp_modulus, PR_TRUE);
+        mp_modulus = NULL;        // In case we get an exception
 
-	}
+    }
 
   mp_modulus = NSSCryptoProvider::b642SI(b64, len);
 
@@ -174,14 +168,14 @@ void NSSCryptoKeyRSA::loadPublicModulusBase64BigNums(const char * b64, unsigned 
 //           Load exponent
 // --------------------------------------------------------------------------------
 
-void NSSCryptoKeyRSA::loadPublicExponentBase64BigNums(const char * b64, unsigned int len) {
+void NSSCryptoKeyRSA::loadPublicExponentBase64BigNums(const char* b64, unsigned int len) {
 
-	if (mp_exponent != NULL) {
+    if (mp_exponent != NULL) {
 
-		SECITEM_FreeItem(mp_exponent, PR_TRUE);
-		mp_exponent = NULL;		// In case we get an exception
+        SECITEM_FreeItem(mp_exponent, PR_TRUE);
+        mp_exponent = NULL;        // In case we get an exception
 
-	}
+    }
 
   mp_exponent = NSSCryptoProvider::b642SI(b64, len);
 
@@ -191,10 +185,10 @@ void NSSCryptoKeyRSA::loadPublicExponentBase64BigNums(const char * b64, unsigned
 //           Import key
 // --------------------------------------------------------------------------------
 
-void NSSCryptoKeyRSA::importKey(void) const {
+void NSSCryptoKeyRSA::importKey() const {
 
-	if (mp_pubkey != 0 || mp_exponent == NULL || mp_modulus == NULL)
-		return;
+    if (mp_pubkey != 0 || mp_exponent == NULL || mp_modulus == NULL)
+        return;
 
 
   PRArenaPool * arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
@@ -202,7 +196,7 @@ void NSSCryptoKeyRSA::importKey(void) const {
   if(arena == NULL) {
 
       throw XSECCryptoException(XSECCryptoException::GeneralError,
-			  "NSS:RSA Error attempting create new arena");
+              "NSS:RSA Error attempting create new arena");
 
   }
 
@@ -213,7 +207,7 @@ void NSSCryptoKeyRSA::importKey(void) const {
       PORT_FreeArena(arena, PR_FALSE);
 
       throw XSECCryptoException(XSECCryptoException::GeneralError,
-			  "NSS:RSA Error attempting create new arena");
+              "NSS:RSA Error attempting create new arena");
 
   }
 
@@ -227,7 +221,7 @@ void NSSCryptoKeyRSA::importKey(void) const {
     PORT_FreeArena(arena, PR_FALSE);
 
     throw XSECCryptoException(XSECCryptoException::DSAError,
-		  "NSS:RSA Error attempting to import modulus");
+          "NSS:RSA Error attempting to import modulus");
 
   }
 
@@ -238,7 +232,7 @@ void NSSCryptoKeyRSA::importKey(void) const {
     PORT_FreeArena(arena, PR_FALSE);
 
     throw XSECCryptoException(XSECCryptoException::DSAError,
-		  "NSS:RSA Error attempting to import exponent");
+          "NSS:RSA Error attempting to import exponent");
 
   }
 
@@ -249,40 +243,37 @@ void NSSCryptoKeyRSA::importKey(void) const {
 // --------------------------------------------------------------------------------
 
 bool NSSCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * hashBuf, 
-								 unsigned int hashLen,
-								 const char * base64Signature,
-								 unsigned int sigLen,
-								 hashMethod hm) const {
+                                 unsigned int hashLen,
+                                 const char * base64Signature,
+                                 unsigned int sigLen,
+                                 XSECCryptoHash::HashType type) const {
 
-	// Use the currently loaded key to validate the Base64 encoded signature
+    // Use the currently loaded key to validate the Base64 encoded signature
 
-	if (mp_pubkey == 0) {
+    if (mp_pubkey == 0) {
 
       // Try to import from the parameters
-		  importKey();
+          importKey();
 
       if (mp_pubkey == 0) {
-
-			    throw XSECCryptoException(XSECCryptoException::RSAError,
-				      "NSS:RSA - Attempt to validate signature with empty key");
-
+          throw XSECCryptoException(XSECCryptoException::RSAError,
+                "NSS:RSA - Attempt to validate signature with empty key");
       }
+    }
 
-	}
+    // Decode the signature
+    unsigned char * rawSig;
+    unsigned int rawSigLen;
+    XSECnew(rawSig, unsigned char[sigLen]);
+    ArrayJanitor<unsigned char> j_rawSig(rawSig);
 
-	// Decode the signature
-	unsigned char * rawSig;
-	unsigned int rawSigLen;
-	XSECnew(rawSig, unsigned char[sigLen]);
-	ArrayJanitor<unsigned char> j_rawSig(rawSig);
+    // Decode the signature
+    XSCryptCryptoBase64 b64;
 
-	// Decode the signature
-	XSCryptCryptoBase64 b64;
+    b64.decodeInit();
+    rawSigLen = b64.decode((unsigned char *) base64Signature, sigLen, rawSig, sigLen);
+    rawSigLen += b64.decodeFinish(&rawSig[rawSigLen], sigLen - rawSigLen);
 
-	b64.decodeInit();
-	rawSigLen = b64.decode((unsigned char *) base64Signature, sigLen, rawSig, sigLen);
-	rawSigLen += b64.decodeFinish(&rawSig[rawSigLen], sigLen - rawSigLen);
-	
   SECItem signature;
   signature.type = siBuffer;
   signature.data = rawSig;
@@ -296,21 +287,21 @@ bool NSSCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * hashB
   SGNDigestInfo *di = 0;
   SECItem * res;
 
-  switch (hm) {
+  switch (type) {
 
-  case (HASH_MD5):
+  case (XSECCryptoHash::HASH_MD5):
       hashalg = SEC_OID_MD5;
       break;
-  case (HASH_SHA1):
+  case (XSECCryptoHash::HASH_SHA1):
       hashalg = SEC_OID_SHA1;
       break;
-  case (HASH_SHA256):
+  case (XSECCryptoHash::HASH_SHA256):
       hashalg = SEC_OID_SHA256;
       break;
-  case (HASH_SHA384):
+  case (XSECCryptoHash::HASH_SHA384):
       hashalg = SEC_OID_SHA384;
       break;
-  case (HASH_SHA512):
+  case (XSECCryptoHash::HASH_SHA512):
       hashalg = SEC_OID_SHA512;
       break;
   default:
@@ -333,21 +324,20 @@ bool NSSCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * hashB
           "NSS:RSA - Error creating digest info");
   }
 
-  res = SEC_ASN1EncodeItem(arena, &data, di, NSS_Get_sgn_DigestInfoTemplate(NULL, 0));
+      res = SEC_ASN1EncodeItem(arena, &data, di, NSS_Get_sgn_DigestInfoTemplate(NULL, 0));
 
-  if (!res) {
+      if (!res) {
       SGN_DestroyDigestInfo(di);
       PORT_FreeArena(arena, PR_FALSE);
 
       throw XSECCryptoException(XSECCryptoException::RSAError,
           "NSS:RSA - Error encoding digest info for RSA sign");
-  }
+      }
 
-	// Verify signature
-	SECStatus s = PK11_Verify(mp_pubkey, &signature, &data, NULL);
+    // Verify signature
+    SECStatus s = PK11_Verify(mp_pubkey, &signature, &data, NULL);
 
-  return s == SECSuccess;
-
+    return s == SECSuccess;
 }
 
 // --------------------------------------------------------------------------------
@@ -355,110 +345,103 @@ bool NSSCryptoKeyRSA::verifySHA1PKCS1Base64Signature(const unsigned char * hashB
 // --------------------------------------------------------------------------------
 
 unsigned int NSSCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * hashBuf,
-		unsigned int hashLen,
-		char * base64SignatureBuf,
-		unsigned int base64SignatureBufLen,
-		hashMethod hm) const {
+        unsigned int hashLen,
+        char * base64SignatureBuf,
+        unsigned int base64SignatureBufLen,
+        XSECCryptoHash::HashType type) const {
 
-	// Sign a pre-calculated hash using this key
+    // Sign a pre-calculated hash using this key
+    if (mp_privkey == 0) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Attempt to sign data using a public or un-loaded key");
+    }
 
-	if (mp_privkey == 0) {
-		
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Attempt to sign data using a public or un-loaded key");
-		
-	}
-	
-	unsigned char * rawSig;
-	XSECnew(rawSig, unsigned char[base64SignatureBufLen]);
-	ArrayJanitor<unsigned char> j_rawSig(rawSig);
-	
-	SECItem signature;
-	signature.type = siBuffer;
-	signature.data = rawSig;
-	signature.len = base64SignatureBufLen;
-	
-	SECItem data;
-	data.data = 0;
-	SECOidTag hashalg;
-	PRArenaPool * arena = 0;
-	SGNDigestInfo *di = 0;
-	SECItem * res;
+    unsigned char * rawSig;
+    XSECnew(rawSig, unsigned char[base64SignatureBufLen]);
+    ArrayJanitor<unsigned char> j_rawSig(rawSig);
 
-	switch (hm) {
+    SECItem signature;
+    signature.type = siBuffer;
+    signature.data = rawSig;
+    signature.len = base64SignatureBufLen;
 
-	case (HASH_MD5):
-		hashalg = SEC_OID_MD5;
-		break;
-	case (HASH_SHA1):
-		hashalg = SEC_OID_SHA1;
-		break;
-	case (HASH_SHA256):
-		hashalg = SEC_OID_SHA256;
-		break;
-	case (HASH_SHA384):
-		hashalg = SEC_OID_SHA384;
-		break;
-	case (HASH_SHA512):
-		hashalg = SEC_OID_SHA512;
-		break;
-	default:
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Unsupported hash algorithm in RSA sign");
-	}
+    SECItem data;
+    data.data = 0;
+    SECOidTag hashalg;
+    PRArenaPool * arena = 0;
+    SGNDigestInfo *di = 0;
+    SECItem * res;
 
-	arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
-	if (!arena) {
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Error creating arena");
-	}
+    switch (type) {
 
-	di = SGN_CreateDigestInfo(hashalg, hashBuf, hashLen);	
-	if (di == NULL) {
-		
-		PORT_FreeArena(arena, PR_FALSE);
+    case (XSECCryptoHash::HASH_MD5):
+        hashalg = SEC_OID_MD5;
+        break;
+    case (XSECCryptoHash::HASH_SHA1):
+        hashalg = SEC_OID_SHA1;
+        break;
+    case (XSECCryptoHash::HASH_SHA256):
+        hashalg = SEC_OID_SHA256;
+        break;
+    case (XSECCryptoHash::HASH_SHA384):
+        hashalg = SEC_OID_SHA384;
+        break;
+    case (XSECCryptoHash::HASH_SHA512):
+        hashalg = SEC_OID_SHA512;
+        break;
+    default:
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Unsupported hash algorithm in RSA sign");
+    }
 
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Error creating digest info");
-	}
+    arena = PORT_NewArena(DER_DEFAULT_CHUNKSIZE);
+    if (!arena) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Error creating arena");
+    }
 
-	res = SEC_ASN1EncodeItem(arena, &data, di, NSS_Get_sgn_DigestInfoTemplate(NULL, 0));
+    di = SGN_CreateDigestInfo(hashalg, hashBuf, hashLen);
+    if (di == NULL) {
+        PORT_FreeArena(arena, PR_FALSE);
 
-	if (!res) {
-		SGN_DestroyDigestInfo(di);
-		PORT_FreeArena(arena, PR_FALSE);
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Error creating digest info");
+    }
 
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Error encoding digest info for RSA sign");
-	}
+    res = SEC_ASN1EncodeItem(arena, &data, di, NSS_Get_sgn_DigestInfoTemplate(NULL, 0));
 
-/*	data.type = siBuffer;
-	data.data = hashBuf;
-	data.len = hashLen;*/
+    if (!res) {
+        SGN_DestroyDigestInfo(di);
+        PORT_FreeArena(arena, PR_FALSE);
 
-	/* As of V1.3.1 - create a DigestInfo block */
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Error encoding digest info for RSA sign");
+    }
 
-	
-	SECStatus s = PK11_Sign(mp_privkey, &signature, &data);
-	
-	SGN_DestroyDigestInfo(di);
-	PORT_FreeArena(arena, PR_FALSE);
+/*    data.type = siBuffer;
+    data.data = hashBuf;
+    data.len = hashLen;*/
 
-	if (s != SECSuccess) {
-		
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Error during signing operation");
-		
-	}
-	
-	// Now encode
-	XSCryptCryptoBase64 b64;
-	b64.encodeInit();
-	unsigned int ret = b64.encode(signature.data, signature.len, (unsigned char *) base64SignatureBuf, base64SignatureBufLen);
-	ret += b64.encodeFinish((unsigned char *) &base64SignatureBuf[ret], base64SignatureBufLen - ret);
-	
-	return ret;
-	
+    /* As of V1.3.1 - create a DigestInfo block */
+
+
+    SECStatus s = PK11_Sign(mp_privkey, &signature, &data);
+
+    SGN_DestroyDigestInfo(di);
+    PORT_FreeArena(arena, PR_FALSE);
+
+    if (s != SECSuccess) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Error during signing operation");
+    }
+
+    // Now encode
+    XSCryptCryptoBase64 b64;
+    b64.encodeInit();
+    unsigned int ret = b64.encode(signature.data, signature.len, (unsigned char *) base64SignatureBuf, base64SignatureBufLen);
+    ret += b64.encodeFinish((unsigned char *) &base64SignatureBuf[ret], base64SignatureBufLen - ret);
+
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
@@ -467,62 +450,45 @@ unsigned int NSSCryptoKeyRSA::signSHA1PKCS1Base64Signature(unsigned char * hashB
 
 XSECCryptoKey * NSSCryptoKeyRSA::clone() const {
 
-	NSSCryptoKeyRSA * ret;
+    NSSCryptoKeyRSA * ret;
 
-	XSECnew(ret, NSSCryptoKeyRSA(mp_pubkey, mp_privkey));
-	
-	if (mp_pubkey != 0) {
+    XSECnew(ret, NSSCryptoKeyRSA(mp_pubkey, mp_privkey));
 
-    ret->mp_pubkey = SECKEY_CopyPublicKey(mp_pubkey);
-  
-    if (ret->mp_pubkey == 0) {
-
-      throw XSECCryptoException(XSECCryptoException::MemoryError,
-		    "NSS:RSA Error attempting to clone (copy) public key");
-
+    if (mp_pubkey != 0) {
+        ret->mp_pubkey = SECKEY_CopyPublicKey(mp_pubkey);
+        if (ret->mp_pubkey == 0) {
+            throw XSECCryptoException(XSECCryptoException::MemoryError,
+                    "NSS:RSA Error attempting to clone (copy) public key");
+        }
     }
 
-  }
-
-  if (mp_privkey != 0) {
-
-    ret->mp_privkey = SECKEY_CopyPrivateKey(mp_privkey);
-
-    if (ret->mp_privkey == 0) {
-
-      throw XSECCryptoException(XSECCryptoException::MemoryError,
-		    "NSS:RSA Error attempting to clone (copy) private key");
-
+    if (mp_privkey != 0) {
+        ret->mp_privkey = SECKEY_CopyPrivateKey(mp_privkey);
+        if (ret->mp_privkey == 0) {
+            throw XSECCryptoException(XSECCryptoException::MemoryError,
+                    "NSS:RSA Error attempting to clone (copy) private key");
+        }
     }
 
-  }
-
-  // Clone modulus
-  if (mp_modulus != 0) {
-    ret->mp_modulus = SECITEM_DupItem(mp_modulus);
-
-    if (ret->mp_modulus == 0) {
-
-      throw XSECCryptoException(XSECCryptoException::MemoryError,
-	  	  "NSS:RSA Error attempting to clone (copy) modulus");
-
+    // Clone modulus
+    if (mp_modulus != 0) {
+        ret->mp_modulus = SECITEM_DupItem(mp_modulus);
+        if (ret->mp_modulus == 0) {
+            throw XSECCryptoException(XSECCryptoException::MemoryError,
+                    "NSS:RSA Error attempting to clone (copy) modulus");
+        }
     }
-  }
 
-  // Clone exponent
-  if (mp_exponent != 0) {
-    ret->mp_exponent = SECITEM_DupItem(mp_exponent);
-
-    if (ret->mp_exponent == 0) {
-
-      throw XSECCryptoException(XSECCryptoException::MemoryError,
-		    "NSS:RSA Error attempting to clone (copy) exponent");
-
+    // Clone exponent
+    if (mp_exponent != 0) {
+        ret->mp_exponent = SECITEM_DupItem(mp_exponent);
+        if (ret->mp_exponent == 0) {
+            throw XSECCryptoException(XSECCryptoException::MemoryError,
+                    "NSS:RSA Error attempting to clone (copy) exponent");
+        }
     }
-  }
 
-  return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
@@ -530,28 +496,26 @@ XSECCryptoKey * NSSCryptoKeyRSA::clone() const {
 // --------------------------------------------------------------------------------
 
 unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
-								 unsigned char * plainBuf, 
-								 unsigned int inLength,
-								 unsigned int maxOutLength,
-								 PaddingType padding,
-								 hashMethod hm) const {
+                                 unsigned char * plainBuf,
+                                 unsigned int inLength,
+                                 unsigned int maxOutLength,
+                                 PaddingType padding,
+                                 XSECCryptoHash::HashType type) const {
 
-	// Perform a decrypt
-	if (mp_privkey == 0) {
+    // Perform a decrypt
+    if (mp_privkey == 0) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Attempt to decrypt data with empty key");
+    }
 
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Attempt to decrypt data with empty key");
+    unsigned int decryptSize = inLength;
 
-  }
+    SECStatus s;
+    unsigned char *ptr = NULL;
 
-	unsigned int decryptSize = inLength;
+    switch (padding) {
 
-  SECStatus s;
-  unsigned char *ptr = NULL;
-
-	switch (padding) {
-
-	case XSECCryptoKeyRSA::PAD_PKCS_1_5 :
+    case XSECCryptoKeyRSA::PAD_PKCS_1_5 :
 
     s = PK11_PubDecryptRaw(mp_privkey,
                            plainBuf,
@@ -562,47 +526,42 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 
     if (s != SECSuccess) {
 
-			throw XSECCryptoException(XSECCryptoException::RSAError,
-				"NSS:RSA privateKeyDecrypt - Error Decrypting PKCS1_5 padded RSA encrypt");
+            throw XSECCryptoException(XSECCryptoException::RSAError,
+                "NSS:RSA privateKeyDecrypt - Error Decrypting PKCS1_5 padded RSA encrypt");
 
-		}
+        }
 
         //do the padding (http://www.w3.org/TR/xmlenc-core/#rsa-1_5)
         ptr = (unsigned char*) memchr(plainBuf, 0x02, decryptSize);
-		if( ptr )
-		{
-			unsigned int bytesToRemove = ((ptr-plainBuf)+1);
-			memmove(plainBuf, ptr+1, decryptSize-bytesToRemove);
-			decryptSize -= bytesToRemove;
-		}
+        if( ptr )
+        {
+            unsigned int bytesToRemove = ((ptr-plainBuf)+1);
+            memmove(plainBuf, ptr+1, decryptSize-bytesToRemove);
+            decryptSize -= bytesToRemove;
+        }
 
-		ptr = (unsigned char*) memchr(plainBuf, 0x00, decryptSize);
-		if( ptr )
-		{
-			unsigned int bytesToRemove = ((ptr-plainBuf)+1);
-			memmove(plainBuf, ptr+1, decryptSize-bytesToRemove);
-			decryptSize -= bytesToRemove;
-		}
+        ptr = (unsigned char*) memchr(plainBuf, 0x00, decryptSize);
+        if( ptr )
+        {
+            unsigned int bytesToRemove = ((ptr-plainBuf)+1);
+            memmove(plainBuf, ptr+1, decryptSize-bytesToRemove);
+            decryptSize -= bytesToRemove;
+        }
 
-		break;
+        break;
 
-	case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
-
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - OAEP padding method not supported in NSS yet");
-
-		break;
+    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - OAEP padding method not supported in NSS yet");
+        break;
 
 
-	default :
+    default :
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Unknown padding method");
+    }
 
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Unknown padding method");
-
-	}
-
-	return decryptSize;
-
+    return decryptSize;
 }
 
 // --------------------------------------------------------------------------------
@@ -610,38 +569,33 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 // --------------------------------------------------------------------------------
 
 unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
-								 unsigned char * cipherBuf, 
-								 unsigned int inLength,
-								 unsigned int maxOutLength,
-								 PaddingType padding,
-								 hashMethod hm) const {
+                                 unsigned char * cipherBuf,
+                                 unsigned int inLength,
+                                 unsigned int maxOutLength,
+                                 PaddingType padding,
+                                 XSECCryptoHash::HashType type) const {
 
-	// Perform an encrypt
-	if (mp_pubkey == 0) {
+    // Perform an encrypt
+    if (mp_pubkey == 0) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Attempt to encrypt data with empty key");
+    }
 
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Attempt to encrypt data with empty key");
+    unsigned int encryptSize = SECKEY_PublicKeyStrength(mp_pubkey);
 
-  }
+    if (maxOutLength < encryptSize) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Too small buffer for encrypted buffer output");
+    }
 
-	unsigned int encryptSize = SECKEY_PublicKeyStrength(mp_pubkey);
+    SECStatus s;
 
-  if (maxOutLength < encryptSize) {
+    unsigned char * buf;
+    XSECnew(buf, unsigned char[encryptSize]);
+    ArrayJanitor<unsigned char> j_buf(buf);
 
-    throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Too small buffer for encrypted buffer output");
-
-  }
-
-  SECStatus s;
-
-  unsigned char * buf;
-  XSECnew(buf, unsigned char[encryptSize]);
-  ArrayJanitor<unsigned char> j_buf(buf);
-
-	switch (padding) {
-
-	case XSECCryptoKeyRSA::PAD_PKCS_1_5 :
+    switch (padding) {
+    case XSECCryptoKeyRSA::PAD_PKCS_1_5 :
 
     // do the padding (http://www.w3.org/TR/xmlenc-core/#rsa-1_5)
     {
@@ -650,10 +604,8 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
       SECStatus s = PK11_GenerateRandom(buf, encryptSize);
 
       if (s != SECSuccess) {
-      
-        throw XSECException(XSECException::InternalError,
-			    "NSSCryptoKeyRSA() - Error generating Random data");
-
+          throw XSECException(XSECException::InternalError,
+                "NSSCryptoKeyRSA() - Error generating Random data");
       }
 
       // first byte have to be 0x02 
@@ -663,11 +615,10 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
       // check that there are no 0x00 bytes among random data
       for (unsigned int i = 2; i < encryptSize - inLength - 1; i++) {
 
-        while (buf[i] == 0x00) {
-          // replace all 0x00 occurences in random data with random value
-          PK11_GenerateRandom(&buf[i], 1);
-        }
-
+          while (buf[i] == 0x00) {
+              // replace all 0x00 occurences in random data with random value
+              PK11_GenerateRandom(&buf[i], 1);
+          }
       }
 
       // before key add 0x00 byte
@@ -675,37 +626,29 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 
       // at the end of input buffer (to be encrypted) add key
       memcpy(&buf[encryptSize - inLength], inBuf, inLength);
-
     }
 
     // encrypt
     s = PK11_PubEncryptRaw(mp_pubkey, cipherBuf, (unsigned char*)buf, encryptSize, NULL);
 
     if (s != SECSuccess) {
-
-			throw XSECCryptoException(XSECCryptoException::RSAError,
-				"NSS:RSA publicKeyEncrypt - Error performing encrypt");
-
+            throw XSECCryptoException(XSECCryptoException::RSAError,
+                "NSS:RSA publicKeyEncrypt - Error performing encrypt");
     }
 
-  	break;
+      break;
 
-	case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - OAEP padding method not supported in NSS yet");
+        break;
 
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - OAEP padding method not supported in NSS yet");
+    default :
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Unknown padding method");
+    }
 
-		break;
-
-	default :
-
-		throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Unknown padding method");
-
-	}
-
-	return encryptSize;
-
+    return encryptSize;
 }
 
 // --------------------------------------------------------------------------------
@@ -714,20 +657,15 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 
 unsigned int NSSCryptoKeyRSA::getLength(void)  const {
 
-  unsigned int ret = 0;
+    unsigned int ret = 0;
 
-  if (mp_pubkey != 0) {
+      if (mp_pubkey != 0) {
+          ret = SECKEY_PublicKeyStrength(mp_pubkey);
+      } else if (mp_privkey != 0) {
+          ret = PK11_GetPrivateModulusLen(mp_privkey);
+      }
 
-    ret = SECKEY_PublicKeyStrength(mp_pubkey);
-
-  } else if (mp_privkey != 0) {
-
-    ret = PK11_GetPrivateModulusLen(mp_privkey);
-
-  }
-
-  return ret;
-
+      return ret;
 }
 
 // --------------------------------------------------------------------------------
@@ -736,28 +674,22 @@ unsigned int NSSCryptoKeyRSA::getLength(void)  const {
 
 void NSSCryptoKeyRSA::loadParamsFromKey(void) {
 
-	if (mp_pubkey == 0)
-			return;
+    if (mp_pubkey == 0)
+        return;
 
-  mp_modulus = SECITEM_DupItem(&(mp_pubkey->u.rsa.modulus));
+    mp_modulus = SECITEM_DupItem(&(mp_pubkey->u.rsa.modulus));
 
-  if (mp_modulus == 0)
-  {
+    if (mp_modulus == 0) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Error during extracting modulus from public key");
+    }
 
-    throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Error during extracting modulus from public key");
- 
-  }
+    mp_exponent = SECITEM_DupItem(&(mp_pubkey->u.rsa.publicExponent));
 
-  mp_exponent = SECITEM_DupItem(&(mp_pubkey->u.rsa.publicExponent));
-
-  if (mp_exponent == 0)
-  {
-
-    throw XSECCryptoException(XSECCryptoException::RSAError,
-			"NSS:RSA - Error during extracting exponent from public key");
-
-  }
+    if (mp_exponent == 0) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "NSS:RSA - Error during extracting exponent from public key");
+    }
 }
 
 // --------------------------------------------------------------------------------
@@ -766,26 +698,22 @@ void NSSCryptoKeyRSA::loadParamsFromKey(void) {
 
 unsigned int NSSCryptoKeyRSA::getExponentBase64BigNums(char * b64, unsigned int len) {
 
-	if (mp_pubkey == 0 && mp_exponent == 0) {
+    if (mp_pubkey == 0 && mp_exponent == 0) {
+        return 0;    // Nothing we can do
+    }
 
-		return 0;	// Nothing we can do
+    if (mp_exponent == NULL) {
+        loadParamsFromKey();
+    }
 
-	}
+    unsigned int bLen = 0;
+    unsigned char * b =  NSSCryptoProvider::SI2b64(mp_exponent, bLen);
+    if (bLen > len)
+        bLen = len;
+    memcpy(b64, b, bLen);
+    delete[] b;
 
-	if (mp_exponent == NULL) {
-
-		loadParamsFromKey();
-
-	}
-
-	unsigned int bLen = 0;
-	unsigned char * b =  NSSCryptoProvider::SI2b64(mp_exponent, bLen);
-	if (bLen > len)
-		bLen = len;
-	memcpy(b64, b, bLen);
-	delete[] b;
-
-	return bLen;
+    return bLen;
 }
 
 // --------------------------------------------------------------------------------
@@ -794,26 +722,22 @@ unsigned int NSSCryptoKeyRSA::getExponentBase64BigNums(char * b64, unsigned int 
 
 unsigned int NSSCryptoKeyRSA::getModulusBase64BigNums(char * b64, unsigned int len) {
 
-	if (mp_pubkey == 0 && mp_modulus == 0) {
+    if (mp_pubkey == 0 && mp_modulus == 0) {
+        return 0;    // Nothing we can do
+    }
 
-		return 0;	// Nothing we can do
+    if (mp_modulus == NULL) {
+        loadParamsFromKey();
+    }
 
-	}
+    unsigned int bLen = 0;
+    unsigned char * b =  NSSCryptoProvider::SI2b64(mp_modulus, bLen);
+    if (bLen > len)
+        bLen = len;
+    memcpy(b64, b, bLen);
+    delete[] b;
 
-	if (mp_modulus == NULL) {
-
-		loadParamsFromKey();
-
-	}
-
-	unsigned int bLen = 0;
-	unsigned char * b =  NSSCryptoProvider::SI2b64(mp_modulus, bLen);
-	if (bLen > len)
-		bLen = len;
-	memcpy(b64, b, bLen);
-	delete[] b;
-
-	return bLen;
+    return bLen;
 }
 
 #endif /* XSEC_HAVE_NSS */

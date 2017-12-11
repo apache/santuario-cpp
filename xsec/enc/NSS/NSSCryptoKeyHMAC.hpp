@@ -85,7 +85,7 @@ public :
 	 * \brief Return the NSS string identifier
 	 */
 
-	virtual const XMLCh * getProviderName() const {return DSIGConstants::s_unicodeStrPROVNSS;}
+	virtual const XMLCh * getProviderName() const;
 
 	//@}
 

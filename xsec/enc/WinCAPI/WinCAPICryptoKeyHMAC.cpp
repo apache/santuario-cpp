@@ -28,6 +28,7 @@
  *
  */
 
+#include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoKeyHMAC.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
@@ -42,6 +43,10 @@ WinCAPICryptoKeyHMAC::WinCAPICryptoKeyHMAC(HCRYPTPROV prov) :m_keyBuf("") {
 	m_p = prov;
 
 };
+
+const XMLCh * WinCAPICryptoKeyHMAC::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVWinCAPI;
+}
 
 void WinCAPICryptoKeyHMAC::setKey(unsigned char * inBuf, unsigned int inLength) {
 

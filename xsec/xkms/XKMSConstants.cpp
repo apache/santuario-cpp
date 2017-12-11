@@ -26,6 +26,8 @@
  *
  */
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include <xsec/xkms/XKMSConstants.hpp>
 
 #include <xercesc/util/XMLUniDefs.hpp>
@@ -1826,3 +1828,5 @@ void XKMSConstants::destroy() {
     s_unicodeStrURISOAP11 = NULL;
     s_unicodeStrURISOAP12 = NULL;
 }
+
+#endif /* XSEC_XKMS_ENABLED */

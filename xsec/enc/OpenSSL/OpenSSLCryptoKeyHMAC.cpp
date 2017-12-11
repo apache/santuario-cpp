@@ -28,9 +28,9 @@
  *
  */
 
-#include <xsec/framework/XSECDefs.hpp>
 #if defined (XSEC_HAVE_OPENSSL)
 
+#include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #include <xsec/framework/XSECError.hpp>
 
@@ -39,7 +39,11 @@ OpenSSLCryptoKeyHMAC::OpenSSLCryptoKeyHMAC() :m_keyBuf("") {
 	m_keyBuf.isSensitive();
 	m_keyLen = 0;
 
-};
+}
+
+const XMLCh * OpenSSLCryptoKeyHMAC::getProviderName() const {
+	return DSIGConstants::s_unicodeStrPROVOpenSSL;
+}
 
 void OpenSSLCryptoKeyHMAC::setKey(unsigned char * inBuf, unsigned int inLength) {
 

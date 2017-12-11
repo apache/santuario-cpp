@@ -51,32 +51,28 @@ int NSSCryptoProvider::m_initialised = 0;
 // --------------------------------------------------------------------------------
 
 void NSSCryptoProvider::Init(const char * dbDir) {
+    ++m_initialised;
 
-	++m_initialised;
+    if (m_initialised > 1)
+        return;
 
-	if (m_initialised > 1)
-		return;
+    SECStatus s;
 
-	SECStatus s;
+    if (dbDir != NULL)
+        s = NSS_Init(dbDir);
+    else
+        s = NSS_NoDB_Init(NULL);
 
-	if (dbDir != NULL)
-		s = NSS_Init(dbDir);
-	else
-		s = NSS_NoDB_Init(NULL);
+    if (s != SECSuccess) {
 
-	if (s != SECSuccess) {
+        throw XSECCryptoException(XSECCryptoException::MemoryError,
+            "NSSCryptoProvider:NSSCryptoProvider - Error initializing NSS");
 
-		throw XSECCryptoException(XSECCryptoException::MemoryError,
-			"NSSCryptoProvider:NSSCryptoProvider - Error initializing NSS");
-
-	}
-
+    }
 }
 
 NSSCryptoProvider::NSSCryptoProvider(const char * dbDir) {
-
-	Init(dbDir);
-
+    Init(dbDir);
 }
 
 
@@ -86,9 +82,7 @@ NSSCryptoProvider::NSSCryptoProvider(const char * dbDir) {
 
 NSSCryptoProvider::NSSCryptoProvider()
 {
-
-	Init(NULL);
-
+    Init(NULL);
 }
 
 // --------------------------------------------------------------------------------
@@ -97,12 +91,11 @@ NSSCryptoProvider::NSSCryptoProvider()
 
 NSSCryptoProvider::~NSSCryptoProvider()
 {
-
   if (m_initialised == 1) {
 
     PK11_LogoutAll();
 
-	  SECStatus s = NSS_Shutdown();
+      SECStatus s = NSS_Shutdown();
 
     // Note that NSS will fail to shut down if any memory leaks are detected (NSS
     // objects were not released). This is security measure to prevent abuse of your
@@ -110,13 +103,12 @@ NSSCryptoProvider::~NSSCryptoProvider()
     if (s != SECSuccess) {
 
       //throw XSECCryptoException(XSECCryptoException::GeneralError,
-		  //	"NSSCryptoProvider:NSSCryptoProvider - Error shuting down NSS");
+          //    "NSSCryptoProvider:NSSCryptoProvider - Error shuting down NSS");
 
     }
 
   }
   m_initialised--;
-
 }
 
 // --------------------------------------------------------------------------------
@@ -124,139 +116,78 @@ NSSCryptoProvider::~NSSCryptoProvider()
 // --------------------------------------------------------------------------------
 
 const XMLCh * NSSCryptoProvider::getProviderName() const {
-
-	return DSIGConstants::s_unicodeStrPROVNSS;
-
+    return DSIGConstants::s_unicodeStrPROVNSS;
 }
 
 unsigned int NSSCryptoProvider::getMaxHashSize() const {
-	return NSS_MAX_HASH_SIZE;
+    return 128;
 }
 
-
-// --------------------------------------------------------------------------------
-//           Hash SHA
-// --------------------------------------------------------------------------------
-
-XSECCryptoHash	* NSSCryptoProvider::hashSHA(int length) const {
-
-	NSSCryptoHash * ret;
-
-  switch (length) {
-
-  case 160: XSECnew(ret, NSSCryptoHash(XSECCryptoHash::HASH_SHA1));
-		break;
-	case 256: XSECnew(ret, NSSCryptoHash(XSECCryptoHash::HASH_SHA256));
-		break;
-	case 384: XSECnew(ret, NSSCryptoHash(XSECCryptoHash::HASH_SHA384));
-		break;
-	case 512: XSECnew(ret, NSSCryptoHash(XSECCryptoHash::HASH_SHA512));
-		break;
-	default:
-    ret = NULL;
-	}
-
-	return ret;
-
-}
-
-// --------------------------------------------------------------------------------
-//           Hash HMAC SHA
-// --------------------------------------------------------------------------------
-
-XSECCryptoHash * NSSCryptoProvider::hashHMACSHA(int length) const {
-
-	NSSCryptoHashHMAC * ret;
-
-  switch (length) {
-
-  case 160: XSECnew(ret, NSSCryptoHashHMAC(XSECCryptoHash::HASH_SHA1));
-		break;
-	case 256: XSECnew(ret, NSSCryptoHashHMAC(XSECCryptoHash::HASH_SHA256));
-		break;
-	case 384: XSECnew(ret, NSSCryptoHashHMAC(XSECCryptoHash::HASH_SHA384));
-		break;
-	case 512: XSECnew(ret, NSSCryptoHashHMAC(XSECCryptoHash::HASH_SHA512));
-		break;
-	default:
-    ret = NULL;
-	}
-
-	return ret;
-
-}
 
 // --------------------------------------------------------------------------------
 //           Hash MD5
 // --------------------------------------------------------------------------------
 
-XSECCryptoHash	* NSSCryptoProvider::hashMD5() const {
+XSECCryptoHash* NSSCryptoProvider::hashMD5(XSECCryptoHash::HashType type) const {
+    NSSCryptoHash* ret;
 
-	NSSCryptoHash * ret;
+    XSECnew(ret, NSSCryptoHash(type));
 
-	XSECnew(ret, NSSCryptoHash(XSECCryptoHash::HASH_MD5));
-
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //           Hash HMAC MD5
 // --------------------------------------------------------------------------------
 
-XSECCryptoHash * NSSCryptoProvider::hashHMACMD5()const {
+XSECCryptoHash* NSSCryptoProvider::HMAC(XSECCryptoHash::HashType type)const {
+    NSSCryptoHashHMAC* ret;
 
-	NSSCryptoHashHMAC * ret;
+    XSECnew(ret, NSSCryptoHashHMAC(type));
 
-	XSECnew(ret, NSSCryptoHashHMAC(XSECCryptoHash::HASH_MD5));
-
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //           Get HMAC key
 // --------------------------------------------------------------------------------
 
-XSECCryptoKeyHMAC * NSSCryptoProvider::keyHMAC(void) const {
+XSECCryptoKeyHMAC* NSSCryptoProvider::keyHMAC(void) const {
 
-	NSSCryptoKeyHMAC * ret;
+    NSSCryptoKeyHMAC* ret;
 
-	XSECnew(ret, NSSCryptoKeyHMAC());
+    XSECnew(ret, NSSCryptoKeyHMAC());
 
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //           Get DSA key
 // --------------------------------------------------------------------------------
 
-XSECCryptoKeyDSA * NSSCryptoProvider::keyDSA() const {
-	
-	NSSCryptoKeyDSA * ret;
+XSECCryptoKeyDSA* NSSCryptoProvider::keyDSA() const {
 
-	XSECnew(ret, NSSCryptoKeyDSA());
+    NSSCryptoKeyDSA * ret;
 
-	return ret;
+    XSECnew(ret, NSSCryptoKeyDSA());
 
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //           Get RSA key
 // --------------------------------------------------------------------------------
 
-XSECCryptoKeyRSA * NSSCryptoProvider::keyRSA() const {
-	
-	NSSCryptoKeyRSA * ret;
+XSECCryptoKeyRSA* NSSCryptoProvider::keyRSA() const {
 
-	XSECnew(ret, NSSCryptoKeyRSA());
+    NSSCryptoKeyRSA * ret;
 
-	return ret;
+    XSECnew(ret, NSSCryptoKeyRSA());
 
+    return ret;
 }
 
-XSECCryptoKeyEC * NSSCryptoProvider::keyEC() const {
+XSECCryptoKeyEC* NSSCryptoProvider::keyEC() const {
 
     throw XSECCryptoException(XSECCryptoException::UnsupportedError,
         "NSSCryptoProvider::keyEC - EC support not available");
@@ -272,100 +203,94 @@ XSECCryptoKey* NSSCryptoProvider::keyDER(const char* buf, unsigned long len, boo
 //           Get symmetric key
 // --------------------------------------------------------------------------------
 
-XSECCryptoSymmetricKey	* NSSCryptoProvider::keySymmetric(
-                               XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
+XSECCryptoSymmetricKey* NSSCryptoProvider::keySymmetric(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
 
-	// Only temporary
+    // Only temporary
 
-	NSSCryptoSymmetricKey * ret;
-	
-	XSECnew(ret, NSSCryptoSymmetricKey(alg));
+    NSSCryptoSymmetricKey * ret;
 
-	return ret;
+    XSECnew(ret, NSSCryptoSymmetricKey(alg));
 
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //           Get X509 class
 // --------------------------------------------------------------------------------
 
-XSECCryptoX509 * NSSCryptoProvider::X509() const {
+XSECCryptoX509* NSSCryptoProvider::X509() const {
 
-	NSSCryptoX509 * ret;
+    NSSCryptoX509 * ret;
 
-	XSECnew(ret, NSSCryptoX509());
+    XSECnew(ret, NSSCryptoX509());
 
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //           Get Base64
 // --------------------------------------------------------------------------------
 
-XSECCryptoBase64 * NSSCryptoProvider::base64() const {
+XSECCryptoBase64* NSSCryptoProvider::base64() const {
 
-	// NSS does provide a Base64 decoder/encoder,
-	// but rather use the internal implementation.
+    // NSS does provide a Base64 decoder/encoder,
+    // but rather use the internal implementation.
 
-	XSCryptCryptoBase64 * ret;
+    XSCryptCryptoBase64 * ret;
 
-	XSECnew(ret, XSCryptCryptoBase64());
+    XSECnew(ret, XSCryptCryptoBase64());
 
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
 //     Translate a Base64 number to a SECItem
 // --------------------------------------------------------------------------------
 
-SECItem * NSSCryptoProvider::b642SI(const char * b64, unsigned int b64Len) {
+SECItem* NSSCryptoProvider::b642SI(const char* b64, unsigned int b64Len) {
 
     SECItem * rv;
 
     unsigned char * os;
-	XSECnew(os, unsigned char[b64Len]);
-	ArrayJanitor<unsigned char> j_os(os);
+    XSECnew(os, unsigned char[b64Len]);
+    ArrayJanitor<unsigned char> j_os(os);
 
-	// Decode
-	XSCryptCryptoBase64 b;
+    // Decode
+    XSCryptCryptoBase64 b;
 
-	b.decodeInit();
-	unsigned int retLen = b.decode((unsigned char *) b64, b64Len, os, b64Len);
-	retLen += b.decodeFinish(&os[retLen], b64Len - retLen);
+    b.decodeInit();
+    unsigned int retLen = b.decode((unsigned char *) b64, b64Len, os, b64Len);
+    retLen += b.decodeFinish(&os[retLen], b64Len - retLen);
 
-	rv = SECITEM_AllocItem(NULL, NULL, retLen);
-	rv->len = retLen;
-	memcpy(rv->data, os, retLen);
+    rv = SECITEM_AllocItem(NULL, NULL, retLen);
+    rv->len = retLen;
+    memcpy(rv->data, os, retLen);
 
-	return rv;
-
+    return rv;
 }
 
 // --------------------------------------------------------------------------------
 //     Translate a SECItem to a Base64 I2OSP number 
 // --------------------------------------------------------------------------------
 
-unsigned char * NSSCryptoProvider::SI2b64(SECItem * n, unsigned int &retLen) {
+unsigned char* NSSCryptoProvider::SI2b64(SECItem* n, unsigned int& retLen) {
 
-	unsigned char * b64;
-	// Naieve length calculation
-	unsigned int bufLen = n->len * 2 + 4;
+    unsigned char * b64;
+    // Naieve length calculation
+    unsigned int bufLen = n->len * 2 + 4;
 
-	XSECnew(b64, unsigned char[bufLen]);
-	ArrayJanitor<unsigned char> j_b64(b64);
+    XSECnew(b64, unsigned char[bufLen]);
+    ArrayJanitor<unsigned char> j_b64(b64);
 
   // Encode
-	XSCryptCryptoBase64 b;
+    XSCryptCryptoBase64 b;
 
-	b.encodeInit();
-	retLen = b.encode(n->data, (unsigned int) n->len, b64, bufLen);
-	retLen += b.encodeFinish(&b64[retLen], bufLen - retLen);
+    b.encodeInit();
+    retLen = b.encode(n->data, (unsigned int) n->len, b64, bufLen);
+    retLen += b.encodeFinish(&b64[retLen], bufLen - retLen);
 
-	j_b64.release();
-	return b64;
-
+    j_b64.release();
+    return b64;
 }
 
 // --------------------------------------------------------------------------------
@@ -374,28 +299,24 @@ unsigned char * NSSCryptoProvider::SI2b64(SECItem * n, unsigned int &retLen) {
 
 bool NSSCryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) const {
 
-	switch (alg) {
+    switch (alg) {
 
-	case (XSECCryptoHash::HASH_SHA1) :
-	case (XSECCryptoHash::HASH_MD5) :
+    case (XSECCryptoHash::HASH_SHA1) :
+    case (XSECCryptoHash::HASH_MD5) :
+    case (XSECCryptoHash::HASH_SHA256) :
+    case (XSECCryptoHash::HASH_SHA384) :
+    case (XSECCryptoHash::HASH_SHA512) :
+    case (XSECCryptoHash::HASH_SHA224) :
 
-		return true;
+        return true;
 
-	case (XSECCryptoHash::HASH_SHA256) :
-	case (XSECCryptoHash::HASH_SHA384) :
-	case (XSECCryptoHash::HASH_SHA512) :
-	case (XSECCryptoHash::HASH_SHA224) :
+    default:
 
-		return false;
+        return false;
 
-	default:
+    }
 
-		return false;
-
-	}
-
-	return false;
-
+    return false;
 }
 
 // --------------------------------------------------------------------------------
@@ -404,27 +325,26 @@ bool NSSCryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) const {
 
 bool NSSCryptoProvider::algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyType alg) const {
 
-	switch (alg) {
+    switch (alg) {
 
-	case (XSECCryptoSymmetricKey::KEY_AES_128) :
-	case (XSECCryptoSymmetricKey::KEY_AES_192) :
-	case (XSECCryptoSymmetricKey::KEY_AES_256) :
+    case (XSECCryptoSymmetricKey::KEY_AES_128) :
+    case (XSECCryptoSymmetricKey::KEY_AES_192) :
+    case (XSECCryptoSymmetricKey::KEY_AES_256) :
 
-		//return m_haveAES;
+        //return m_haveAES;
     return true;
 
-	case (XSECCryptoSymmetricKey::KEY_3DES_192) :
+    case (XSECCryptoSymmetricKey::KEY_3DES_192) :
 
-		return true;
+        return true;
 
-	default:
+    default:
 
-		return false;
+        return false;
 
-	}
+    }
 
-	return false;
-
+    return false;
 }
 
 
@@ -432,19 +352,16 @@ bool NSSCryptoProvider::algorithmSupported(XSECCryptoSymmetricKey::SymmetricKeyT
 //           Generate random data
 // --------------------------------------------------------------------------------
 
-unsigned int NSSCryptoProvider::getRandom(unsigned char * buffer, unsigned int numOctets) const {
+unsigned int NSSCryptoProvider::getRandom(unsigned char* buffer, unsigned int numOctets) const {
 
   SECStatus s = PK11_GenerateRandom(buffer, numOctets);
 
   if (s != SECSuccess) {
-
-		throw XSECException(XSECException::InternalError,
-			"NSSCryptoProvider() - Error generating Random data");
-
+        throw XSECException(XSECException::InternalError,
+            "NSSCryptoProvider() - Error generating Random data");
   }
 
-	return numOctets;
-
+    return numOctets;
 }
 
 #endif /* XSEC_HAVE_NSS */

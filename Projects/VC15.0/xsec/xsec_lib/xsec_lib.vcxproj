@@ -512,6 +512,7 @@
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoSymmetricKey.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoX509.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSCrypt\XSCryptCryptoBase64.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\transformers\TXFMHash.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\winutils\XSECSOAPRequestorSimpleWin32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
@@ -548,11 +549,9 @@
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMConcatChains.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMDocObject.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMEnvelope.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\transformers\TXFMMD5.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMOutputFile.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMParser.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMSB.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\transformers\TXFMSHA1.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMURL.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMXPath.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMXPathFilter.cpp" />
@@ -566,12 +565,7 @@
     <ClCompile Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedKeyImpl.cpp" />
     <ClCompile Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedTypeImpl.cpp" />
     <ClCompile Include="..\..\..\..\xsec\xenc\impl\XENCEncryptionMethodImpl.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\xkms\XKMSConstants.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\xsec\xkms\XKMSConstants.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\xsec\canon\XSECC14n20010315.hpp" />
@@ -648,6 +642,7 @@
     <ClInclude Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoX509.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\XSCrypt\XSCryptCryptoBase64.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\XSECVersion.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\transformers\TXFMHash.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECAutoPtr.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECBinTXFMInputStream.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECDOMUtils.hpp" />
@@ -689,11 +684,9 @@
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMConcatChains.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMDocObject.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMEnvelope.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\transformers\TXFMMD5.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMOutputFile.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMParser.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMSB.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\transformers\TXFMSHA1.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMURL.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMXPath.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMXPathFilter.hpp" />
@@ -715,240 +708,45 @@
     <ClInclude Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedKeyImpl.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedTypeImpl.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xenc\impl\XENCEncryptionMethodImpl.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSAuthentication.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSCompoundRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSCompoundResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSConstants.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSKeyBindingAbstractType.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSLocateRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSLocateResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSMessageAbstractType.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSMessageFactory.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSNotBoundAuthentication.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSPendingRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSPrototypeKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSQueryKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRecoverKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRecoverRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRecoverResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRegisterRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRegisterResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSReissueKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSReissueRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSReissueResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRequestAbstractType.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRespondWith.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSResponseMechanism.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSResultType.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRevokeKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRevokeRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRevokeResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRSAKeyPair.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSStatus.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSStatusRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSStatusResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSUnverifiedKeyBinding.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSUseKeyWith.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSValidateRequest.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSValidateResult.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSValidityInterval.hpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSAuthentication.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSCompoundRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSCompoundResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSConstants.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSKeyBindingAbstractType.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSLocateRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSLocateResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSMessageAbstractType.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSMessageFactory.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSNotBoundAuthentication.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSPendingRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSPrototypeKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSQueryKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRecoverKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRecoverRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRecoverResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRegisterRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRegisterResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSReissueKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSReissueRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSReissueResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRequestAbstractType.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRespondWith.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSResponseMechanism.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSResultType.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRevokeKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRevokeRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRevokeResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSRSAKeyPair.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSStatus.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSStatusRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSStatusResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSUnverifiedKeyBinding.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSUseKeyWith.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSValidateRequest.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSValidateResult.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\XKMSValidityInterval.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\..\..\xsec\framework\version.rc" />

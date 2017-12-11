@@ -240,7 +240,7 @@ frameworkinclude_HEADERS = \
 
 transformersinclude_HEADERS = \
   transformers/TXFMXPathFilter.hpp \
-  transformers/TXFMSHA1.hpp \
+  transformers/TXFMHash.hpp \
   transformers/TXFMParser.hpp \
   transformers/TXFMOutputFile.hpp \
   transformers/TXFMURL.hpp \
@@ -248,7 +248,6 @@ transformersinclude_HEADERS = \
   transformers/TXFMCipher.hpp \
   transformers/TXFMEnvelope.hpp \
   transformers/TXFMChain.hpp \
-  transformers/TXFMMD5.hpp \
   transformers/TXFMDocObject.hpp \
   transformers/TXFMConcatChains.hpp \
   transformers/TXFMSB.hpp \
@@ -444,15 +443,14 @@ txfm_sources = \
   transformers/TXFMEnvelope.cpp \
   transformers/TXFMBase64.cpp \
   transformers/TXFMXPathFilter.cpp \
-  transformers/TXFMSHA1.cpp \
+  transformers/TXFMHash.cpp \
   transformers/TXFMC14n.cpp \
   transformers/TXFMURL.cpp \
   transformers/TXFMOutputFile.cpp \
   transformers/TXFMXPath.cpp \
   transformers/TXFMXSL.cpp \
   transformers/TXFMDocObject.cpp \
-  transformers/TXFMConcatChains.cpp \
-  transformers/TXFMMD5.cpp
+  transformers/TXFMConcatChains.cpp
 
 # Utility files.  Note we don't worry about checking
 # if the UNIX stuff is necessary - we just assume that

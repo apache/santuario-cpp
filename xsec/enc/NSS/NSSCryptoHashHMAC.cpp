@@ -156,6 +156,30 @@ void NSSCryptoHashHMAC::setKey(const XSECCryptoKey *key) {
 
 		break;
 
+	case (XSECCryptoHash::HASH_SHA224) :
+
+		hmacType = CKM_SHA224_HMAC;
+
+		break;
+
+	case (XSECCryptoHash::HASH_SHA256) :
+
+		hmacType = CKM_SHA256_HMAC;
+
+		break;
+
+	case (XSECCryptoHash::HASH_SHA384) :
+
+		hmacType = CKM_SHA384_HMAC;
+
+		break;
+
+	case (XSECCryptoHash::HASH_SHA512) :
+
+		hmacType = CKM_SHA512_HMAC;
+
+		break;
+
 	case (XSECCryptoHash::HASH_MD5) :
 
 		hmacType = CKM_MD5_HMAC;

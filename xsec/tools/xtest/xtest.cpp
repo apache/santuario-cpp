@@ -128,10 +128,11 @@ XERCES_CPP_NAMESPACE_USE
 //           Global variables
 // --------------------------------------------------------------------------------
 
-bool	 g_printDocs = false;
-bool	 g_useWinCAPI = false;
-bool	 g_useNSS = false;
+bool g_printDocs = false;
+bool g_useWinCAPI = false;
+bool g_useNSS = false;
 bool g_haveAES = true;
+bool g_testGCM = true;
 
 
 // --------------------------------------------------------------------------------
@@ -2091,17 +2092,47 @@ void unitTestEncrypt(DOMImplementation *impl) {
 			unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES192_CBC, false);
 			unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES192_CBC, true);
 
-		// 256 AES
+		    // 256 AES
 			ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
 			ks->setKey((unsigned char *) s_keyStr, 32);
 
 			cerr << "Unit testing AES 256 bit CBC encryption" << endl;
 			unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES256_CBC, false);
 			unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES256_CBC, true);
+
+            if (g_testGCM) {
+                // 128 AES-GCM
+                ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
+                ks->setKey((unsigned char *)s_keyStr, 16);
+
+                cerr << "Unit testing AES 128 bit GCM encryption" << endl;
+                unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES128_GCM, false);
+                unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES128_GCM, true);
+
+                //192 AES-GCM
+                ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
+                ks->setKey((unsigned char *)s_keyStr, 24);
+
+                cerr << "Unit testing AES 192 bit GCM encryption" << endl;
+                unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES192_GCM, false);
+                unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES192_GCM, true);
+
+                // 256 AES-GCM
+                ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
+                ks->setKey((unsigned char *)s_keyStr, 32);
+
+                cerr << "Unit testing AES 256 bit GCM encryption" << endl;
+                unitTestElementContentEncrypt(impl, ks->clone(), DSIGConstants::s_unicodeStrURIAES256_GCM, false);
+                unitTestElementContentEncrypt(impl, ks, DSIGConstants::s_unicodeStrURIAES256_GCM, true);
+            }
+            else {
+                cerr << "Skipped AES-GCM Element tests" << endl;
+            }
 		}
 
-		else
-			cerr << "Skipped AES Element tests" << endl;
+        else {
+            cerr << "Skipped AES Element tests" << endl;
+        }
 
 		// 192 3DES
 		ks = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
@@ -2257,7 +2288,6 @@ void testEncrypt(DOMImplementation *impl) {
 		XSECCryptoSymmetricKey * k2;
 		
 		if (g_haveAES) {
-
 			k2 = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
 			k2->setKey((unsigned char *) s_keyStr, 16);
 		}
@@ -2265,7 +2295,6 @@ void testEncrypt(DOMImplementation *impl) {
 		else {
 			k2 = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 			k2->setKey((unsigned char *) s_keyStr, 24);
-
 		}
 
 		cipher2->setKEK(k2);
@@ -2424,6 +2453,8 @@ void printUsage(void) {
 	cerr << "         Only run basic encryption test\n\n";
 	cerr << "     --encryption-unit-only/-u\n";
 	cerr << "         Only run encryption unit tests\n\n";
+    cerr << "     --no-gcm\n";
+    cerr << "         Exclude AES-GCM tests\n\n";
 }
 // --------------------------------------------------------------------------------
 //           Main
@@ -2501,7 +2532,11 @@ int main(int argc, char **argv) {
 			doEncryptionUnitTests = false;
 			paramCount++;
 		}
-/*		else if (stricmp(argv[paramCount], "--xkms-only") == 0 || stricmp(argv[paramCount], "-x") == 0) {
+        else if (_stricmp(argv[paramCount], "--no-gcm") == 0) {
+            g_testGCM = false;
+            paramCount++;
+        }
+        /*		else if (stricmp(argv[paramCount], "--xkms-only") == 0 || stricmp(argv[paramCount], "-x") == 0) {
 			doEncryptionTest = false;
 			doSignatureTest = false;
 			doEncryptionUnitTests = false;

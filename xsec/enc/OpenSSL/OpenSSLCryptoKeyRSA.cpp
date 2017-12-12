@@ -263,9 +263,10 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
 	mp_rsaKey(NULL),
 	mp_oaepParams(NULL),
 	m_oaepParamsLen(0),
+        m_mgf(MGF1_SHA1),
 	mp_accumE(NULL),
-	mp_accumN(NULL),
-	m_mgf(MGF1_SHA1) {
+	mp_accumN(NULL)
+{
 };
 
 OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {

@@ -25,6 +25,7 @@
  * $Id$
  *
  */
+#include <xsec/framework/XSECDefs.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 

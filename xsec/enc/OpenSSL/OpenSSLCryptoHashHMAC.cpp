@@ -28,6 +28,8 @@
  *
  */
 
+#include <xsec/framework/XSECDefs.hpp>
+
 #if defined (XSEC_HAVE_OPENSSL)
 
 #include <xsec/dsig/DSIGConstants.hpp>

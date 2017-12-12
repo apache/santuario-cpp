@@ -76,7 +76,7 @@ NSSCryptoKeyRSA::~NSSCryptoKeyRSA() {
         SECITEM_FreeItem(mp_exponent, PR_TRUE);
 };
 
-const XMLCh * NSSCryptoKeyESA::getProviderName() const {
+const XMLCh * NSSCryptoKeyRSA::getProviderName() const {
 	return DSIGConstants::s_unicodeStrPROVNSS;
 }
 

@@ -1871,7 +1871,7 @@ void unitTestSmallElement(DOMImplementation *impl) {
 }
 
 
-void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, const XMLCh* algorithm) {
+void unitTestKeyEncrypt(DOMImplementation* impl, XSECCryptoKey* k, const XMLCh* algorithm, const XMLCh* mgf=NULL) {
 
 	// Create a document that we will embed the encrypted key in
 	DOMDocument *doc = impl->createDocument(
@@ -1902,7 +1902,7 @@ void unitTestKeyEncrypt(DOMImplementation *impl, XSECCryptoKey * k, const XMLCh*
 		cipher->setKEK(k);
 
 		XENCEncryptedKey * encryptedKey;
-		encryptedKey = cipher->encryptKey(toEncryptStr, (unsigned int) strlen((char *) toEncryptStr), algorithm);
+		encryptedKey = cipher->encryptKey(toEncryptStr, (unsigned int) strlen((char *) toEncryptStr), algorithm, mgf);
 		Janitor<XENCEncryptedKey> j_encryptedKey(encryptedKey);
 
 		rootElem->appendChild(encryptedKey->getElement());
@@ -1988,18 +1988,42 @@ void unitTestEncrypt(DOMImplementation *impl) {
 
 			cerr << "RSA OAEP key wrap... ";
 			k = new OpenSSLCryptoKeyRSA(pk);
-			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1);
+			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1, DSIGConstants::s_unicodeStrURIMGF1_SHA1);
 
 			cerr << "RSA OAEP key wrap + params... ";
 			k = new OpenSSLCryptoKeyRSA(pk);
 			k->setOAEPparams(s_tstOAEPparams, (unsigned int) strlen((char *) s_tstOAEPparams));
-			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1);
+			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1, DSIGConstants::s_unicodeStrURIMGF1_SHA1);
 
             cerr << "RSA OAEP 1.1 key wrap... ";
             k = new OpenSSLCryptoKeyRSA(pk);
-            unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP);
+            unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP, DSIGConstants::s_unicodeStrURIMGF1_SHA1);
 
-			BIO_free(bioMem);
+            if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA224)) {
+                cerr << "RSA OAEP 1.1 key wrap with MGF1+SHA224... ";
+                k = new OpenSSLCryptoKeyRSA(pk);
+                unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP, DSIGConstants::s_unicodeStrURIMGF1_SHA224);
+            }
+
+            if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA256)) {
+                cerr << "RSA OAEP 1.1 key wrap with MGF1+SHA256... ";
+                k = new OpenSSLCryptoKeyRSA(pk);
+                unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP, DSIGConstants::s_unicodeStrURIMGF1_SHA256);
+            }
+
+            if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA384)) {
+                cerr << "RSA OAEP 1.1 key wrap with MGF1+SHA384... ";
+                k = new OpenSSLCryptoKeyRSA(pk);
+                unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP, DSIGConstants::s_unicodeStrURIMGF1_SHA384);
+            }
+
+            if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA512)) {
+                cerr << "RSA OAEP 1.1 key wrap with MGF1+SHA512... ";
+                k = new OpenSSLCryptoKeyRSA(pk);
+                unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP, DSIGConstants::s_unicodeStrURIMGF1_SHA512);
+            }
+
+            BIO_free(bioMem);
 			EVP_PKEY_free(pk);
 		}
 #endif

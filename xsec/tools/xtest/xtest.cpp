@@ -810,8 +810,11 @@ void unitTestLongSHA(DOMImplementation * impl) {
 		// Add a Reference
 		if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA224)) {
 			cerr << "224 ... ";
-			ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
+			ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
 				DSIGConstants::s_unicodeStrURISHA224);
+		}
+		else {
+		    ref[0] = NULL;
 		}
 
         if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA256)) {
@@ -819,17 +822,26 @@ void unitTestLongSHA(DOMImplementation * impl) {
             ref[1] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
                 DSIGConstants::s_unicodeStrURISHA256);
         }
+        else {
+            ref[1] = NULL;
+        }
 
         if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA384)) {
             cerr << "384 ... ";
             ref[2] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
                 DSIGConstants::s_unicodeStrURISHA384);
         }
+        else {
+            ref[2] = NULL;
+        }
 
         if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA512)) {
             cerr << "512 ... ";
             ref[3] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
                 DSIGConstants::s_unicodeStrURISHA512);
+        }
+        else {
+            ref[3] = NULL;
         }
 
 		// Get a key
@@ -896,6 +908,9 @@ void unitTestLongSHA(DOMImplementation * impl) {
 
 		int i;
 		for (i = 0; i < 4; ++i) {
+		    if (ref[i] == NULL) {
+		        continue;
+		    }
 
 			cerr << "    Calculating hash for reference " << shastrings[i] << " ... ";
 

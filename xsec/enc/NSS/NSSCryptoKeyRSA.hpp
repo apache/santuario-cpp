@@ -142,26 +142,6 @@ public :
     virtual const unsigned char* getOAEPparams() const;
 
     /**
-     * \brief Set the MGF
-     *
-     * By default, the library expects crypto implementations to perform
-     * OAEP padding with MGF_SHA1.  This call allows the library (or user)
-     * to set a different choice.
-     *
-     * @param mgf the MGF constant identifying the function to use
-     */
-
-    virtual void setMGF(maskGenerationFunc mgf);
-
-    /**
-     * \brief Get the MGF
-     *
-     * @returns the MGF constant in use
-     */
-
-    virtual enum maskGenerationFunc getMGF() const;
-
-    /**
      * \brief Verify a SHA1 PKCS1 encoded signature
      *
      * The library will call this function to validate an RSA signature
@@ -180,7 +160,7 @@ public :
                                  unsigned int hashLen,
                                  const char* base64Signature,
                                  unsigned int sigLen,
-								 XSECCryptoHash::HashType type) const;
+                                 XSECCryptoHash::HashType type) const;
 
     /**
      * \brief Create a signature
@@ -203,7 +183,7 @@ public :
                                 unsigned int hashLen,
                                 char* base64SignatureBuf,
                                 unsigned int base64SignatureBufLen,
-								XSECCryptoHash::HashType type) const;
+                                XSECCryptoHash::HashType type) const;
 
     /**
      * \brief Decrypt using private key
@@ -226,8 +206,8 @@ public :
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType hashType,
-								 const XMLCh* mgfURI=NULL) const;
+                 XSECCryptoHash::HashType hashType,
+                 const XMLCh* mgfURI=NULL) const;
 
     /**
      * \brief Encrypt using a public key
@@ -250,8 +230,8 @@ public :
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType hashType,
-								 const XMLCh* mgfURI=NULL) const;
+                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* mgfURI=NULL) const;
 
     /**
      * \brief Obtain the length of an RSA key

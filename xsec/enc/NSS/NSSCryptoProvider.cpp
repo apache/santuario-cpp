@@ -306,12 +306,9 @@ bool NSSCryptoProvider::algorithmSupported(XSECCryptoHash::HashType alg) const {
     case (XSECCryptoHash::HASH_SHA256) :
     case (XSECCryptoHash::HASH_SHA384) :
     case (XSECCryptoHash::HASH_SHA512) :
-    case (XSECCryptoHash::HASH_SHA224) :
-
         return true;
 
     default:
-
         return false;
 
     }

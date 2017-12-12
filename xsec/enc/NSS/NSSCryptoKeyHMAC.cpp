@@ -26,9 +26,10 @@
  *
  */
 
+#include <xsec/dsig/DSIGConstants.hpp>
+#include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/NSS/NSSCryptoKeyHMAC.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/enc/XSECCryptoException.hpp>
 
 #if defined (XSEC_HAVE_NSS)
 

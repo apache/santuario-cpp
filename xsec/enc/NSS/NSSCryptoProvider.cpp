@@ -125,10 +125,10 @@ unsigned int NSSCryptoProvider::getMaxHashSize() const {
 
 
 // --------------------------------------------------------------------------------
-//           Hash MD5
+//           Hash
 // --------------------------------------------------------------------------------
 
-XSECCryptoHash* NSSCryptoProvider::hashMD5(XSECCryptoHash::HashType type) const {
+XSECCryptoHash* NSSCryptoProvider::hash(XSECCryptoHash::HashType type) const {
     NSSCryptoHash* ret;
 
     XSECnew(ret, NSSCryptoHash(type));
@@ -137,7 +137,7 @@ XSECCryptoHash* NSSCryptoProvider::hashMD5(XSECCryptoHash::HashType type) const 
 }
 
 // --------------------------------------------------------------------------------
-//           Hash HMAC MD5
+//           Hash HMAC
 // --------------------------------------------------------------------------------
 
 XSECCryptoHash* NSSCryptoProvider::HMAC(XSECCryptoHash::HashType type)const {

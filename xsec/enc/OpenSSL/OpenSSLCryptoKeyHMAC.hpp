@@ -20,7 +20,7 @@
 /*
  * XSEC
  *
- * XSECCryptoKeyHMAC := HMAC Keys
+ * OpenSSLXSECCryptoKeyHMAC := HMAC Keys
  *
  * Author(s): Berin Lautenbach
  *

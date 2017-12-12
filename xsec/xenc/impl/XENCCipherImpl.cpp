@@ -819,7 +819,11 @@ XENCEncryptedData * XENCCipherImpl::encryptTXFMChain(TXFMChain * plainText, cons
 //			Encrypt a key
 // --------------------------------------------------------------------------------
 
-XENCEncryptedKey * XENCCipherImpl::encryptKey(const unsigned char * keyBuffer, unsigned int keyLen, const XMLCh * algorithmURI) {
+XENCEncryptedKey * XENCCipherImpl::encryptKey(
+        const unsigned char* keyBuffer,
+        unsigned int keyLen,
+        const XMLCh* algorithmURI,
+        const XMLCh* mgfURI) {
 
     if (mp_kek == NULL) {
         throw XSECException(XSECException::CipherError, "XENCCipherImpl::encryptKey - No KEK set");
@@ -836,6 +840,9 @@ XENCEncryptedKey * XENCCipherImpl::encryptKey(const unsigned char * keyBuffer, u
     Janitor<XENCEncryptedKeyImpl> j_encryptedKey(encryptedKey);
 
     encryptedKey->createBlankEncryptedKey(XENCCipherData::VALUE_TYPE, algorithmURI, s_noData);
+
+    if (mgfURI)
+        encryptedKey->getEncryptionMethod()->setMGF(mgfURI);
 
     // Create a transform chain to do pass the key to the encrypto
 

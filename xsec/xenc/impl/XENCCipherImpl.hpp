@@ -92,10 +92,11 @@ public:
 		const XMLCh * algorithmURI);
 
 	// Encrypt a key
-	virtual XENCEncryptedKey * encryptKey(
-		const unsigned char * keyBuffer,
+	virtual XENCEncryptedKey* encryptKey(
+		const unsigned char* keyBuffer,
 		unsigned int keyLen,
-		const XMLCh * algorithmURI
+		const XMLCh* algorithmURI,
+		const XMLCh* mgfURI=NULL
 	);
 	// Encrypt octet streams
 	virtual XENCEncryptedData * encryptBinInputStream(

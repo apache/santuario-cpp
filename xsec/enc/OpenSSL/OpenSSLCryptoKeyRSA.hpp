@@ -123,26 +123,6 @@ public :
     virtual const unsigned char* getOAEPparams() const;
 
     /**
-     * \brief Set the MGF
-     *
-     * By default, the library expects crypto implementations to perform
-     * OAEP padding with MGF_SHA1.  This call allows the library (or user)
-     * to set a different choice.
-     *
-     * @param mgf the MGF constant identifying the function to use
-     */
-
-    virtual void setMGF(maskGenerationFunc mgf);
-
-    /**
-     * \brief Get the MGF
-     *
-     * @returns the MGF constant in use
-     */
-
-    virtual enum maskGenerationFunc getMGF(void) const;
-
-    /**
      * \brief Verify a SHA1 PKCS1 encoded signature
      *
      * The library will call this function to validate an RSA signature
@@ -161,7 +141,7 @@ public :
                                  unsigned int hashLen,
                                  const char* base64Signature,
                                  unsigned int sigLen,
-								 XSECCryptoHash::HashType type) const;
+                                 XSECCryptoHash::HashType type) const;
 
     /**
      * \brief Create a signature
@@ -184,7 +164,7 @@ public :
         unsigned int hashLen,
         char* base64SignatureBuf,
         unsigned int base64SignatureBufLen,
-		XSECCryptoHash::HashType type) const;
+        XSECCryptoHash::HashType type) const;
 
     /**
      * \brief Decrypt using private key
@@ -197,8 +177,9 @@ public :
      * @param inLength bytes of cipher text to decrypt
      * @param maxOutLength size of outputBuffer
      * @param padding Type of padding (PKCS 1.5 or OAEP)
-     * @param type Hash Method for OAEP encryption (OAEPParams should be
+     * @param hashType Hash Method for OAEP encryption (OAEPParams should be
      * set using setOAEPparams()
+     * @param mgfURI algorithm identifier for OAEP mask generation function
      */
 
     virtual unsigned int privateDecrypt(const unsigned char* inBuf,
@@ -206,7 +187,8 @@ public :
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType type) const;
+                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* mgfURI=NULL) const;
 
 
     /**
@@ -220,8 +202,9 @@ public :
      * @param inLength bytes of plain text to encrypt
      * @param maxOutLength size of outputBuffer
      * @param padding Type of padding (PKCS 1.5 or OAEP)
-     * @param type Hash Method for OAEP encryption (OAEPParams should be
+     * @param hashType Hash Method for OAEP encryption (OAEPParams should be
      * set using setOAEPparams()
+     * @param mgfURI algorithm identifier for OAEP mask generation function
      */
 
     virtual unsigned int publicEncrypt(const unsigned char* inBuf,
@@ -229,7 +212,8 @@ public :
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType type) const;
+                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* mgfURI=NULL) const;
 
     /**
      * \brief Obtain the length of an RSA key
@@ -305,7 +289,6 @@ private:
     RSA* mp_rsaKey;
     unsigned char* mp_oaepParams;
     unsigned int m_oaepParamsLen;
-    maskGenerationFunc m_mgf;
 
     BIGNUM *mp_accumE, *mp_accumN;
     void setEBase(BIGNUM *eBase);

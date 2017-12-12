@@ -736,17 +736,8 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 	    }
 
         const XMLCh* mgfalg = encryptionMethod->getMGF();
-        if (mgfalg && *mgfalg) {
-            maskGenerationFunc mgf;
-            if (!XSECmapURIToMaskGenerationFunc(mgfalg, mgf)) {
-	            safeBuffer sb;
-	            sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown MGF URI : ");
-	            sb.sbXMLChCat(mgfalg);
-
-	            throw XSECException(XSECException::AlgorithmMapperError,
-	                sb.rawXMLChBuffer());
-            }
-            rsa->setMGF(mgf);
+        if (!mgfalg || !*mgfalg) {
+            mgfalg = DSIGConstants::s_unicodeStrURIMGF1_SHA1;
         }
 
 		// Read out any OAEP params
@@ -772,15 +763,17 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 			rsa->setOAEPparams(oaepParamsBuf, sz);
 
 		}
-		else
+		else {
 			rsa->setOAEPparams(NULL, 0);
+		}
 
 		decryptLen = rsa->privateDecrypt(cipherSB.rawBuffer(), 
 												  decBuf, 
 												  offset, 
 												  rsa->getLength(), 
 												  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-												  hashType);
+												  hashType,
+												  mgfalg);
 
 	}
 
@@ -937,7 +930,7 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 
 	unsigned int encryptLen;
 
-	// Do decrypt
+	// Do encrypt
 	if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_1_5)) {
 		encryptLen = rsa->publicEncrypt(plainSB.rawBuffer(), 
 												  encBuf, 
@@ -965,22 +958,8 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 	    }
 
         const XMLCh* mgfalg = encryptionMethod->getMGF();
-        if (mgfalg && *mgfalg) {
-            maskGenerationFunc mgf;
-            if (!XSECmapURIToMaskGenerationFunc(mgfalg, mgf)) {
-	            safeBuffer sb;
-	            sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown MGF URI : ");
-	            sb.sbXMLChCat(mgfalg);
-
-	            throw XSECException(XSECException::AlgorithmMapperError,
-	                sb.rawXMLChBuffer());
-            }
-            rsa->setMGF(mgf);
-        }
-        else if (rsa->getMGF() != MGF1_SHA1) {
-            safeBuffer sb;
-            if (maskGenerationFunc2URI(sb, rsa->getMGF()))
-                encryptionMethod->setMGF(sb.rawXMLChBuffer());
+        if (!mgfalg || !*mgfalg) {
+            mgfalg = DSIGConstants::s_unicodeStrURIMGF1_SHA1;
         }
 
 		// Check for OAEP params
@@ -1002,7 +981,6 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 			XSECAutoPtrXMLCh xBuf((char *) oaepParamsB64);
 
 			encryptionMethod->setOAEPparams(xBuf.get());
-
 		}
 
 		encryptLen = rsa->publicEncrypt(plainSB.rawBuffer(), 
@@ -1010,7 +988,8 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 										  offset, 
 										  rsa->getLength(), 
 										  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-										  hashType);
+										  hashType,
+										  mgfalg);
 
 	}
 	else {

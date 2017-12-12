@@ -33,10 +33,11 @@
 
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp>
+#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSECCryptoUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
+#include <xsec/utils/XSECAlgorithmSupport.hpp>
 
 #include <openssl/err.h>
 #include <openssl/rand.h>
@@ -259,11 +260,39 @@ namespace {
 
 };
 
+const EVP_MD* getDigestFromHashType(XSECCryptoHash::HashType type) {
+
+    const EVP_MD* evp_md = NULL;
+
+    switch (type) {
+        case XSECCryptoHash::HASH_SHA1:
+            evp_md = EVP_get_digestbyname("SHA1");
+            break;
+        case XSECCryptoHash::HASH_SHA224:
+            evp_md = EVP_get_digestbyname("SHA224");
+            break;
+        case XSECCryptoHash::HASH_SHA256:
+            evp_md = EVP_get_digestbyname("SHA256");
+            break;
+        case XSECCryptoHash::HASH_SHA384:
+            evp_md = EVP_get_digestbyname("SHA384");
+            break;
+        case XSECCryptoHash::HASH_SHA512:
+            evp_md = EVP_get_digestbyname("SHA512");
+            break;
+
+        default:
+            ;
+    }
+
+    return evp_md;
+}
+
+
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
 	mp_rsaKey(NULL),
 	mp_oaepParams(NULL),
 	m_oaepParamsLen(0),
-        m_mgf(MGF1_SHA1),
 	mp_accumE(NULL),
 	mp_accumN(NULL)
 {
@@ -304,20 +333,12 @@ void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char* params, unsigned int para
         mp_oaepParams = NULL;
 }
 
-void OpenSSLCryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
-    m_mgf = mgf;
-}
-
 unsigned int OpenSSLCryptoKeyRSA::getOAEPparamsLen() const {
     return m_oaepParamsLen;
 }
 
 const unsigned char * OpenSSLCryptoKeyRSA::getOAEPparams() const {
     return mp_oaepParams;
-}
-
-maskGenerationFunc OpenSSLCryptoKeyRSA::getMGF() const {
-    return m_mgf;
 }
 
 // Generic key functions
@@ -410,8 +431,7 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) :
 	mp_oaepParams(NULL),
 	m_oaepParamsLen(0),
 	mp_accumE(NULL),
-	mp_accumN(NULL),
-	m_mgf(MGF1_SHA1)
+	mp_accumN(NULL)
 {
 
     // Create a new key to be loaded as we go
@@ -657,7 +677,8 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
 		unsigned int inLength,
 		unsigned int maxOutLength,
 		PaddingType padding,
-		XSECCryptoHash::HashType type) const {
+		XSECCryptoHash::HashType hashType,
+		const XMLCh* mgfURI) const {
 
     // Perform a decrypt
     if (mp_rsaKey == NULL) {
@@ -703,58 +724,23 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
         {
+            const EVP_MD* evp_md = getDigestFromHashType(hashType);
+            if (evp_md == NULL) {
+                throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                    "OpenSSL:RSA - OAEP digest algorithm not supported");
+            }
+
+
+            const EVP_MD* mgf_md = getDigestFromHashType(XSECAlgorithmSupport::getMGF1HashType(mgfURI));
+            if (mgf_md == NULL) {
+                throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                    "OpenSSL:RSA - OAEP MGF algorithm not supported");
+            }
+
             unsigned char * tBuf;
             int num = RSA_size(mp_rsaKey);
             XSECnew(tBuf, unsigned char[num]);
             ArrayJanitor<unsigned char> j_tBuf(tBuf);
-            const EVP_MD* evp_md = NULL;
-            const EVP_MD* mgf_md = NULL;
-
-            switch (type) {
-                case XSECCryptoHash::HASH_SHA1:
-                    evp_md = EVP_get_digestbyname("SHA1");
-                    break;
-                case XSECCryptoHash::HASH_SHA224:
-                    evp_md = EVP_get_digestbyname("SHA224");
-                    break;
-                case XSECCryptoHash::HASH_SHA256:
-                    evp_md = EVP_get_digestbyname("SHA256");
-                    break;
-                case XSECCryptoHash::HASH_SHA384:
-                    evp_md = EVP_get_digestbyname("SHA384");
-                    break;
-                case XSECCryptoHash::HASH_SHA512:
-                    evp_md = EVP_get_digestbyname("SHA512");
-                    break;
-            }
-
-            if (evp_md == NULL) {
-                throw XSECCryptoException(XSECCryptoException::MDError,
-                    "OpenSSL:RSA - OAEP digest algorithm not supported by this version of OpenSSL"); 
-            }
-
-            switch (m_mgf) {
-                case MGF1_SHA1:
-                    mgf_md = EVP_get_digestbyname("SHA1");
-                    break;
-                case MGF1_SHA224:
-                    mgf_md = EVP_get_digestbyname("SHA224");
-                    break;
-                case MGF1_SHA256:
-                    mgf_md = EVP_get_digestbyname("SHA256");
-                    break;
-                case MGF1_SHA384:
-                    mgf_md = EVP_get_digestbyname("SHA384");
-                    break;
-                case MGF1_SHA512:
-                    mgf_md = EVP_get_digestbyname("SHA512");
-                    break;
-            }
-
-            if (mgf_md == NULL) {
-                throw XSECCryptoException(XSECCryptoException::MDError,
-                    "OpenSSL:RSA - MGF not supported by this version of OpenSSL");
-            }
 
             decryptSize = RSA_private_decrypt(inLength,
 #if defined(XSEC_OPENSSL_CONST_BUFFERS)
@@ -823,7 +809,8 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
 		unsigned int inLength,
 		unsigned int maxOutLength,
 		PaddingType padding,
-		XSECCryptoHash::HashType type) const {
+		XSECCryptoHash::HashType hashType,
+		const XMLCh* mgfURI) const {
 
     // Perform an encrypt
     if (mp_rsaKey == NULL) {
@@ -863,60 +850,23 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
                     "OpenSSL:RSA publicKeyEncrypt - Not enough space in cipherBuf");
             }
 
-            const EVP_MD* evp_md = NULL;
-            const EVP_MD* mgf_md = NULL;
-
-            switch (type) {
-                case XSECCryptoHash::HASH_SHA1:
-                    evp_md = EVP_get_digestbyname("SHA1");
-                    break;
-                case XSECCryptoHash::HASH_SHA224:
-                    evp_md = EVP_get_digestbyname("SHA224");
-                    break;
-                case XSECCryptoHash::HASH_SHA256:
-                    evp_md = EVP_get_digestbyname("SHA256");
-                    break;
-                case XSECCryptoHash::HASH_SHA384:
-                    evp_md = EVP_get_digestbyname("SHA384");
-                    break;
-                case XSECCryptoHash::HASH_SHA512:
-                    evp_md = EVP_get_digestbyname("SHA512");
-                    break;
-            }
-
+            const EVP_MD* evp_md = getDigestFromHashType(hashType);
             if (evp_md == NULL) {
-                throw XSECCryptoException(XSECCryptoException::MDError,
-                    "OpenSSL:RSA - OAEP digest algorithm not supported by this version of OpenSSL"); 
+                throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                    "OpenSSL:RSA - OAEP digest algorithm not supported");
             }
 
-            switch (m_mgf) {
-                case MGF1_SHA1:
-                    mgf_md = EVP_get_digestbyname("SHA1");
-                    break;
-                case MGF1_SHA224:
-                    mgf_md = EVP_get_digestbyname("SHA224");
-                    break;
-                case MGF1_SHA256:
-                    mgf_md = EVP_get_digestbyname("SHA256");
-                    break;
-                case MGF1_SHA384:
-                    mgf_md = EVP_get_digestbyname("SHA384");
-                    break;
-                case MGF1_SHA512:
-                    mgf_md = EVP_get_digestbyname("SHA512");
-                    break;
-            }
 
+            const EVP_MD* mgf_md = getDigestFromHashType(XSECAlgorithmSupport::getMGF1HashType(mgfURI));
             if (mgf_md == NULL) {
-                throw XSECCryptoException(XSECCryptoException::MDError,
-                    "OpenSSL:RSA - MGF not supported by this version of OpenSSL");
+                throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                    "OpenSSL:RSA - OAEP MGF algorithm not supported");
             }
 
             XSECnew(tBuf, unsigned char[num]);
             ArrayJanitor<unsigned char> j_tBuf(tBuf);
 
             // First add the padding
-
             encryptSize = RSA_padding_add_PKCS1_OAEP(tBuf,
                                                      num,
 //#if defined(XSEC_OPENSSL_CONST_BUFFERS)

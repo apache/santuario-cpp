@@ -774,7 +774,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 	
 	// This tests an enveloping signature as the root node, using SHA224/256/384/512
 
-	cerr << "Creating long SHA references using SHA512 HMAC... ";
+	cerr << "Creating long SHA references using HMAC... ";
 	
 	try {
 		
@@ -813,15 +813,24 @@ void unitTestLongSHA(DOMImplementation * impl) {
 			ref[0] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
 				DSIGConstants::s_unicodeStrURISHA224);
 		}
-		cerr << "256 ... ";
-		ref[1] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"), 
-			DSIGConstants::s_unicodeStrURISHA256);
-		cerr << "384 ... ";
-		ref[2] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
-			DSIGConstants::s_unicodeStrURISHA384);
-		cerr << "512 ... ";
-		ref[3] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
-			DSIGConstants::s_unicodeStrURISHA512);
+
+        if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA256)) {
+            cerr << "256 ... ";
+            ref[1] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
+                DSIGConstants::s_unicodeStrURISHA256);
+        }
+
+        if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA384)) {
+            cerr << "384 ... ";
+            ref[2] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
+                DSIGConstants::s_unicodeStrURISHA384);
+        }
+
+        if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA512)) {
+            cerr << "512 ... ";
+            ref[3] = sig->createReference(MAKE_UNICODE_STRING("#ObjectId"),
+                DSIGConstants::s_unicodeStrURISHA512);
+        }
 
 		// Get a key
 		cerr << "signing ... ";
@@ -1094,24 +1103,30 @@ void unitTestRSA(DOMImplementation * impl) {
 	cerr << "Unit testing RSA-SHA1 signature ... ";
 	unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA1);
 
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA224)) {
+        cerr << "Unit testing RSA-SHA224 signature ... ";
+        unitTestRSASig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA224);
+    }
+
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA256)) {
+        cerr << "Unit testing RSA-SHA256 signature ... ";
+        unitTestRSASig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA256);
+    }
+
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA384)) {
+        cerr << "Unit testing RSA-SHA384 signature ... ";
+        unitTestRSASig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA384);
+    }
+
 	if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA512)) {
-		cerr << "Unit testing RSA-SHA224 signature ... ";
-		unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA224);
-		cerr << "Unit testing RSA-SHA256 signature ... ";
-		unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA256);
-		cerr << "Unit testing RSA-SHA384 signature ... ";
-		unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA384);
 		cerr << "Unit testing RSA-SHA512 signature ... ";
 		unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA512);
 	}
-	else
-		cerr << "Skipping non SHA 224/256/384/512 RSA signatures" << endl;
 
 	cerr << "Unit testing RSA-MD5 signature ... ";
-	unitTestRSASig(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_MD5);
-	
-		
+	unitTestRSASig(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_MD5);		
 }
+
 void unitTestSignature(DOMImplementation * impl) {
 
 	// Test an enveloping signature

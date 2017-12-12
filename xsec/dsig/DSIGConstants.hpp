@@ -200,15 +200,6 @@ enum xpathFilterType {
 
 };
 
-enum maskGenerationFunc {
-    MGF_NONE                = 0,                // No MGF defined
-    MGF1_SHA1               = 1,                // MGF1-SHA1
-    MGF1_SHA224             = 2,                // MGF1-SHA224
-    MGF1_SHA256             = 3,                // MGF1-SHA256
-    MGF1_SHA384             = 4,                // MGF1-SHA384
-    MGF1_SHA512             = 5                 // MGF1-SHA512
-};
-
 // --------------------------------------------------------------------------------
 //           Some utility functions
 // --------------------------------------------------------------------------------
@@ -256,47 +247,6 @@ bool canonicalizationMethod2URI(safeBuffer& uri, canonicalizationMethod cm) {
 	return true;
 
 }
-
-
-inline
-bool maskGenerationFunc2URI(safeBuffer& uri, maskGenerationFunc mgf) {
-
-	switch (mgf) {
-
-	case (MGF1_SHA1) :
-
-		uri = URI_ID_MGF1_SHA1;
-		break;
-
-	case (MGF1_SHA224) :
-
-		uri = URI_ID_MGF1_SHA224;
-		break;
-
-	case (MGF1_SHA256) :
-
-		uri = URI_ID_MGF1_SHA256;
-		break;
-
-	case (MGF1_SHA384) :
-
-		uri = URI_ID_MGF1_SHA384;
-		break;
-
-	case (MGF1_SHA512) :
-
-		uri = URI_ID_MGF1_SHA512;
-		break;
-
-	default:
-		return false;
-
-	}
-
-	return true;
-
-}
-
 
 // --------------------------------------------------------------------------------
 //           Constant Strings Class
@@ -463,8 +413,5 @@ bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh* URI,
 bool XSEC_EXPORT XSECmapURIToHashType(const XMLCh* URI, XSECCryptoHash::HashType& type);
 bool XSEC_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh* URI,
 							canonicalizationMethod& cm);
-
-bool XSEC_EXPORT XSECmapURIToMaskGenerationFunc(const XMLCh* URI,
-												  maskGenerationFunc& mgf);
 
 #endif /* DSIGCONSTANTS_HEADER */

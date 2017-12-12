@@ -460,6 +460,7 @@ txfm_sources = \
 utils_sources = \
   utils/unixutils/XSECURIResolverGenericUnix.cpp \
   utils/unixutils/XSECBinHTTPURIInputStream.cpp \
+  utils/XSECAlgorithmSupport.cpp \
   utils/XSECBinTXFMInputStream.cpp \
   utils/XSECXPathNodeList.cpp \
   utils/XSECSafeBuffer.cpp \

@@ -28,13 +28,14 @@
  *
  */
 
+#if defined (XSEC_HAVE_WINCAPI)
+
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoProvider.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoKeyRSA.hpp>
 #include <xsec/enc/XSCrypt/XSCryptCryptoBase64.hpp>
 #include <xsec/framework/XSECError.hpp>
-
-#if defined (XSEC_HAVE_WINCAPI)
+#include <xsec/utils/XSECAlgorithmSupport.hpp>
 
 #include <xercesc/util/Janitor.hpp>
 
@@ -150,23 +151,12 @@ void WinCAPICryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int par
             "WinCAPI::setOAEPParams - OAEP parameters are not supported by Windows Crypto API");
 }
 
-void WinCAPICryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
-
-    if (mgf != MGF1_SHA1)
-        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-            "WinCAPI::setMGF - Windows Crypto API does not support pluggable MGF for OAEP");
-}
-
 unsigned int WinCAPICryptoKeyRSA::getOAEPparamsLen() const {
     return 0;
 }
 
 const unsigned char * WinCAPICryptoKeyRSA::getOAEPparams() const {
     return NULL;
-}
-
-maskGenerationFunc WinCAPICryptoKeyRSA::getMGF() const {
-    return MGF1_SHA1;
 }
 
 // --------------------------------------------------------------------------------
@@ -550,10 +540,11 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType type) const {
+								 XSECCryptoHash::HashType hashType,
+								 const XMLCh* mgfURI) const {
 
     // Perform a decrypt
-    if (m_key == 0) {
+    if (m_key == NULL) {
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "WinCAPI:RSA - Attempt to decrypt data with empty key");
     }
@@ -561,8 +552,9 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
     // Have to reverse ordering of input :
     DWORD decryptSize = inLength;
     // memcpy(plainBuf, inBuf, inLength);
-    for (unsigned int i = 0; i < inLength; ++i)
+    for (unsigned int i = 0; i < inLength; ++i) {
         plainBuf[i] = inBuf[inLength - 1 - i];
+    }
 
     switch (padding) {
 
@@ -583,10 +575,15 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
 
+        if (XSECAlgorithmSupport::getMGF1HashType(mgfURI) != XSECCryptoHash::HASH_SHA1) {
+            throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                "WinCAPI:RSA - Unsupported OAEP MGF algorithm");
+        }
+
         if (!CryptDecrypt(m_key,
                          0,
                          TRUE,
-                         (type == XSECCryptoHash::HASH_SHA1) ? CRYPT_OAEP : CRYPT_DECRYPT_RSA_NO_PADDING_CHECK,
+                         (hashType == XSECCryptoHash::HASH_SHA1) ? CRYPT_OAEP : CRYPT_DECRYPT_RSA_NO_PADDING_CHECK,
                          plainBuf,
                          &decryptSize)) {
 
@@ -615,7 +612,8 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType type) const {
+								 XSECCryptoHash::HashType hashType,
+								 const XMLCh* mgfURI) const {
 
     // Perform an encrypt
     if (m_key == 0) {
@@ -651,9 +649,13 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
 
-        if (type != XSECCryptoHash::HASH_SHA1) {
+        if (hashType != XSECCryptoHash::HASH_SHA1) {
             throw XSECCryptoException(XSECCryptoException::RSAError,
                 "WinCAPI:RSA - OAEP padding method requires SHA-1 digest method");
+        }
+        else if (XSECAlgorithmSupport::getMGF1HashType(mgfURI) != XSECCryptoHash::HASH_SHA1) {
+            throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                "WinCAPI:RSA - Unsupported OAEP MGF algorithm");
         }
 
         if (!CryptEncrypt(m_key,

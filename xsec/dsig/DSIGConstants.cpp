@@ -634,38 +634,3 @@ bool XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
 
 	return true;
 }
-
-bool XSECmapURIToMaskGenerationFunc(const XMLCh * URI, maskGenerationFunc & mgf) {
-
-
-	// Check this is a known prefix on the URI.
-	XMLSize_t len = XMLString::stringLen(DSIGConstants::s_unicodeStrURIMGF1_BASE);
-	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURIMGF1_BASE, len) == 0) {
-
-        XSECCryptoHash::HashType type;
-		if (getHashMethod(&URI[len], type)) {
-            switch (type) {
-                case XSECCryptoHash::HASH_SHA1:
-                    mgf = MGF1_SHA1;
-                    return true;
-                case XSECCryptoHash::HASH_SHA224:
-                    mgf = MGF1_SHA224;
-                    return true;
-                case XSECCryptoHash::HASH_SHA256:
-                    mgf = MGF1_SHA256;
-                    return true;
-                case XSECCryptoHash::HASH_SHA384:
-                    mgf = MGF1_SHA384;
-                    return true;
-                case XSECCryptoHash::HASH_SHA512:
-                    mgf = MGF1_SHA512;
-                    return true;
-                default:
-                    ;
-            }
-        }
-	}
-
-	mgf = MGF_NONE;
-	return false;
-}

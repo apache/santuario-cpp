@@ -519,6 +519,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\xsec\utils\XSECAlgorithmSupport.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECBinTXFMInputStream.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECDOMUtils.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECNameSpaceExpander.cpp" />
@@ -643,6 +644,7 @@
     <ClInclude Include="..\..\..\..\xsec\enc\XSCrypt\XSCryptCryptoBase64.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\XSECVersion.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMHash.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\utils\XSECAlgorithmSupport.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECAutoPtr.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECBinTXFMInputStream.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECDOMUtils.hpp" />

@@ -119,13 +119,6 @@ void NSSCryptoKeyRSA::setOAEPparams(unsigned char* params, unsigned int paramsLe
   }
 }
 
-void NSSCryptoKeyRSA::setMGF(maskGenerationFunc mgf) {
-
-    if (mgf != MGF1_SHA1)
-        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-            "NSS::setMGF - NSS does not support pluggable MGF for OAEP");
-}
-
 // --------------------------------------------------------------------------------
 //           Get OAEP parameters length
 // --------------------------------------------------------------------------------
@@ -140,10 +133,6 @@ unsigned int NSSCryptoKeyRSA::getOAEPparamsLen() const {
 
 const unsigned char * NSSCryptoKeyRSA::getOAEPparams() const {
     return NULL;
-}
-
-maskGenerationFunc NSSCryptoKeyRSA::getMGF() const {
-    return MGF1_SHA1;
 }
 
 
@@ -500,7 +489,8 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 XSECCryptoHash::HashType type) const {
+                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* mgfURI) const {
 
     // Perform a decrypt
     if (mp_privkey == 0) {
@@ -573,7 +563,8 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 XSECCryptoHash::HashType type) const {
+                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* mgfURI) const {
 
     // Perform an encrypt
     if (mp_pubkey == 0) {

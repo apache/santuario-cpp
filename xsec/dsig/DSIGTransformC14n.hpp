@@ -94,15 +94,6 @@ public:
 	//@{
 
 	/**
-	 * \brief Determine the transform type.
-	 *
-	 * Used to determine what the type of the transform is.
-	 *
-	 */
-
-	virtual transformType getTransformType() const;
-
-	/**
 	 * \brief Create the Canonicalising transformer element.
 	 *
 	 * Implemented by each Transform class and used by the DSIGSignature
@@ -139,16 +130,16 @@ public:
 	//@{
 	
 	/**
-	 * \brief Change canonicalisation method.
+	 * \brief Change canonicalization method.
 	 *
-	 * Set the canonicalisation method to the type indicated.  If this changes
+	 * Set the canonicalization method to the type indicated.  If this changes
 	 * the transform from Exclusive to Standard C14n, any associated
 	 * InclusiveNamespaces children will be removed.
 	 *
 	 * If this is moving from one form of Exclusive to another, any InclusiveNamespace
 	 * children will remain.
 	 *
-	 * @param method Type of canicaliser required.
+	 * @param method Type of canonicalizer required.
 	 *
 	 * @see canonicalizationMethod
 	 */
@@ -156,20 +147,20 @@ public:
 	void setCanonicalizationMethod(canonicalizationMethod method);
 
 	/**
-	 * \brief Get canonicalisation type.
+	 * \brief Get canonicalization type.
 	 *
-	 * Return the type of canonicalisation to the caller.
+	 * Return the type of canonicalization to the caller.
 	 *
-	 * @returns Canonicalisation type.
+	 * @returns Canonicalization type.
 	 * @see canonicalizationMethod
 	 */
 
-	canonicalizationMethod getCanonicalizationMethod(void);
+	canonicalizationMethod getCanonicalizationMethod() const;
 
 	/**
 	 * \brief Add a namespace prefix to the InclusiveNamespaces list
 	 *
-	 * Exclusive canonicalisation includes the ability to define a PrefixList of
+	 * Exclusive canonicalization includes the ability to define a PrefixList of
 	 * namespace prefixes that will not be treated exclusively, rather they will
 	 * be handled as per normal C14n.
 	 *
@@ -202,7 +193,7 @@ public:
 	 * @note The pointer returned is owned by the Transform structure - do not delete.
 	 */
 
-	 const XMLCh * getPrefixList(void);
+	 const XMLCh * getPrefixList() const;
 
 	 /**
 	  * \brief Delete all inclusive namespaces.
@@ -211,7 +202,7 @@ public:
 	  * namespaces list.
 	  */
 
-	 void clearInclusiveNamespaces(void);
+	 void clearInclusiveNamespaces();
 
 	//@}
 

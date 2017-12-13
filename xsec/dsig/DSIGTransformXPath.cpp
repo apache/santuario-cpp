@@ -69,12 +69,6 @@ DSIGTransformXPath::~DSIGTransformXPath() {};
 // --------------------------------------------------------------------------------
 //           Interface Methods
 // --------------------------------------------------------------------------------
-	
-transformType DSIGTransformXPath::getTransformType() const {
-
-	return TRANSFORM_XPATH;
-
-}
 
 void DSIGTransformXPath::appendTransformer(TXFMChain * input) {
 
@@ -176,7 +170,7 @@ void DSIGTransformXPath::load(void) {
 //           XPath Transform Specific Methods
 // --------------------------------------------------------------------------------
 
-void DSIGTransformXPath::setExpression(const char * expr) {
+void DSIGTransformXPath::setExpression(const char* expr) {
 
 	mp_exprTextNode->setNodeValue(MAKE_UNICODE_STRING(expr));
 
@@ -186,7 +180,7 @@ void DSIGTransformXPath::setExpression(const char * expr) {
 
 
 
-const char * DSIGTransformXPath::getExpression(void) {
+const char* DSIGTransformXPath::getExpression() const {
 
 	return m_expr.rawCharBuffer();
 

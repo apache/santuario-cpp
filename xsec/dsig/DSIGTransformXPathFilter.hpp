@@ -113,15 +113,6 @@ public:
 	//@{
 
 	/**
-	 * \brief Determine the transform type.
-	 *
-	 * Used to determine what the type of the transform is.
-	 *
-	 */
-
-	virtual transformType getTransformType() const;
-
-	/**
 	 * \brief Create the XPath Filter Transformer class.
 	 *
 	 * Create the transformer associated with this XPath transform.
@@ -180,7 +171,7 @@ public:
 	 * @returns The number of expressions
 	 */
 
-	unsigned int getExprNum(void);
+	unsigned int getExprNum() const;
 
 	/**
 	 * \brief Get expression.
@@ -192,7 +183,7 @@ public:
 	 * @returns The indicated expression
 	 */
 
-	DSIGXPathFilterExpr * expr(unsigned int n);
+	DSIGXPathFilterExpr * expr(unsigned int n) const;
 
 	//@}
 	

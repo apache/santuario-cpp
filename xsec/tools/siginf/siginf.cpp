@@ -134,130 +134,113 @@ void levelSet(unsigned int level) {
 
 }
 
-void outputTransform(DSIGTransform * t, unsigned int level) {
+void outputTransform(const DSIGTransform * t, unsigned int level) {
 
-	switch (t->getTransformType()) {
 
-	case (TRANSFORM_BASE64) :
-
+    if (dynamic_cast<const DSIGTransformBase64*>(t)) {
 		cout << "Base64 Decode" << endl;
-		return;
+    }
+    else if (dynamic_cast<const DSIGTransformC14n*>(t)) {
+        switch (dynamic_cast<const DSIGTransformC14n*>(t)->getCanonicalizationMethod()) {
+        case CANON_C14N_NOC:
+            cout << "c14n 1.0 canonicalization (without comments)" << endl;
+            break;
 
-	case (TRANSFORM_C14N) : 
-		cout << "c14n 1.0 canonicalisation ";
-		if (((DSIGTransformC14n *) t)->getCanonicalizationMethod() == CANON_C14N_NOC)
-			cout << "(without comments)" << endl;
-		else
-			cout << "(with comments)" << endl;
-		return;
+        case CANON_C14N_COM:
+            cout << "c14n 1.0 canonicalization (with comments)" << endl;
+            break;
 
-	case (TRANSFORM_C14N11) : 
-		cout << "c14n 1.1 canonicalisation ";
-		if (((DSIGTransformC14n *) t)->getCanonicalizationMethod() == CANON_C14N11_NOC)
-			cout << "(without comments)" << endl;
-		else
-			cout << "(with comments)" << endl;
-		return;
+        case CANON_C14N11_NOC:
+            cout << "c14n 1.1 canonicalization (without comments)" << endl;
+            break;
 
-    case (TRANSFORM_EXC_C14N) :
+        case CANON_C14N11_COM:
+            cout << "c14n 1.1 canonicalization (with comments)" << endl;
+            break;
 
-		cout << "Exclusive c14n 1.0 canonicalisation ";
-		if (((DSIGTransformC14n *) t)->getCanonicalizationMethod() == CANON_C14NE_NOC)
-			cout << "(without comments)" << endl;
-		else
-			cout << "(with comments)" << endl;
+        case CANON_C14NE_NOC:
+            cout << "Exclusive c14n 1.0 canonicalization (without comments)" << endl;
+            if (dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList() != NULL) {
+                levelSet(level);
+                cout << "Inclusive prefixes : " <<
+                    X2C(dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList()).str() << endl;
+            }
+            break;
 
-		// Check for inclusive namespaces
+        case CANON_C14NE_COM:
+            cout << "Exclusive c14n 1.0 canonicalization (with comments)" << endl;
+            if (dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList() != NULL) {
+                levelSet(level);
+                cout << "Inclusive prefixes : " <<
+                    X2C(dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList()).str() << endl;
+            }
+            break;
 
-		if (((DSIGTransformC14n *) t)->getPrefixList() != NULL) {
-			levelSet(level);
-			cout << "Inclusive prefixes : " << 
-				X2C(((DSIGTransformC14n *) t)->getPrefixList()).str() << endl;
-		}
-		return;
+        case CANON_NONE:
+            cout << "Unknown c14n method" << endl;
+        }
+    }
+    else if (dynamic_cast<const DSIGTransformEnvelope*>(t)) {
+        cout << "enveloped signature" << endl;
+    }
+    else if (dynamic_cast<const DSIGTransformXPath*>(t)) {
+        const DSIGTransformXPath* xp = dynamic_cast<const DSIGTransformXPath*>(t);
 
-	case (TRANSFORM_ENVELOPED_SIGNATURE) :
+        cout << "XPath" << endl;
+        // Check for namespaces
+        DOMNamedNodeMap* atts = xp->getNamespaces();
 
-		cout << "enveloped signature" << endl;
-		return;
+        if (atts != 0) {
+            XMLSize_t s = atts->getLength();
+            for (XMLSize_t i = 0 ; i < s; ++i) {
+                levelSet(level);
+                cout << "Namespace : " << X2C(atts->item(i)->getNodeName()).str() <<
+                    "=\"" << X2C(atts->item(i)->getNodeValue()).str() << "\"\n";
+            }
+        }
+        levelSet(level);
+        // Hmm - this is really a bug.  This should return a XMLCh string
+        cout << "Expr : " << xp->getExpression() << endl;
+    }
+    else if (dynamic_cast<const DSIGTransformXPathFilter*>(t)) {
+        const DSIGTransformXPathFilter * xpf = dynamic_cast<const DSIGTransformXPathFilter*>(t);
 
-	case (TRANSFORM_XPATH) :
-		{
-			DSIGTransformXPath * xp = (DSIGTransformXPath *) t;
-			
-			cout << "XPath" << endl;
-			// Check for namespaces
-			DOMNamedNodeMap * atts = xp->getNamespaces();
+        cout << "XPath-Filter2" << endl;
 
-			if (atts != 0) {
+        unsigned int s = xpf->getExprNum();
 
-				XMLSize_t s = atts->getLength();
-				for (XMLSize_t i = 0 ; i < s; ++i) {
-					levelSet(level);
-					cout << "Namespace : " << X2C(atts->item(i)->getNodeName()).str() <<
-						"=\"" << X2C(atts->item(i)->getNodeValue()).str() << "\"\n";
-				}
-			}
-			levelSet(level);
-			// Hmm - this is really a bug.  This should return a XMLCh string
-			cout << "Expr : " << xp->getExpression() << endl;
-			return;
-		}
+        for (unsigned int i = 0; i < s; ++i) {
 
-	case (TRANSFORM_XPATH_FILTER) :
-		{
-			DSIGTransformXPathFilter * xpf = (DSIGTransformXPathFilter *) t;
+            levelSet(level);
+            cout << "Filter : ";
 
-			cout << "XPath-Filter2" << endl;
+            const DSIGXPathFilterExpr * e = xpf->expr(i);
 
-			unsigned int s = xpf->getExprNum();
-			
-			for (unsigned int i = 0; i < s; ++i) {
+            switch (e->getFilterType()) {
 
-				levelSet(level);
-				cout << "Filter : ";
+            case FILTER_UNION :
+                cout << "union : \"";
+                break;
+            case FILTER_INTERSECT :
+                cout << "intersect : \"";
+                break;
+            default :
+                cout << "subtract : \"";
+            }
 
-				DSIGXPathFilterExpr * e = xpf->expr(i);
-
-				switch (e->getFilterType()) {
-
-				case FILTER_UNION :
-					cout << "union : \"";
-					break;
-				case FILTER_INTERSECT :
-					cout << "intersect : \"";
-					break;
-				default :
-					cout << "subtract : \"";
-
-				}
-
-				// Now the expression
-				char * str = XMLString::transcode(e->getFilter());
-				cout << str << "\"" << endl;
-				XSEC_RELEASE_XMLCH(str);
-
-			}
-
-			break;
-
-		}
-
-	case (TRANSFORM_XSLT) :
-		{
-
-			cout << "XSLT" << endl;
-			// Really should serialise and output stylesheet.
-			return;
-			
-		}
-
-	default :
-
+            // Now the expression
+            char * str = XMLString::transcode(e->getFilter());
+            cout << str << "\"" << endl;
+            XSEC_RELEASE_XMLCH(str);
+        }
+    }
+    else if (dynamic_cast<const DSIGTransformXSL*>(t)) {
+        cout << "XSLT" << endl;
+        // Really should serialise and output stylesheet.
+    }
+    else {
 		cout << "unknown transform type" << endl;
-
-	}
-
+    }
 }
 		
 void outputReferences(DSIGReferenceList *rl, unsigned int level) {

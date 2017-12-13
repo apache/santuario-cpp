@@ -99,15 +99,6 @@ public:
 	//@{
 
 	/**
-	 * \brief Determine the transform type.
-	 *
-	 * Used to determine what the type of the transform is.
-	 *
-	 */
-
-	virtual transformType getTransformType() const;
-
-	/**
 	 * \brief Create the Base 64transformer element.
 	 *
 	 * Implemented by each Transform class and used by the DSIGSignature

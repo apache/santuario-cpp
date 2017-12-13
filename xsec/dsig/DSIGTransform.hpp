@@ -120,15 +120,6 @@ public:
 	//@{
 
 	/**
-	 * \brief Determine the transform type.
-	 *
-	 * Used to determine what the type of the transform is.
-	 *
-	 */
-
-	virtual transformType getTransformType() const = 0;
-	
-	/**
 	 * \brief Create the transformer element and append to an existing Chain.
 	 *
 	 * Implemented by each Transform class and used by the DSIGSignature

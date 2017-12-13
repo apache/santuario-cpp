@@ -40,36 +40,34 @@ XERCES_CPP_NAMESPACE_USE
 
 // Constructors and Destructors
 
-DSIGSignedInfo::DSIGSignedInfo(DOMDocument *doc, 
-		XSECSafeBufferFormatter * pFormatter, 
-		DOMNode *signedInfoNode, const XSECEnv * env) {
+DSIGSignedInfo::DSIGSignedInfo(DOMDocument* doc,
+		XSECSafeBufferFormatter* pFormatter,
+		DOMNode* signedInfoNode, const XSECEnv* env) {
 
 	mp_doc = doc;
 	m_HMACOutputLength = 0;
 	mp_formatter = pFormatter;
 	mp_signedInfoNode = signedInfoNode;
-	m_canonicalizationMethod = CANON_NONE;
+	mp_canonicalizationMethod = NULL;
 	mp_algorithmURI = NULL;
 	mp_env = env;
 	mp_referenceList = NULL;
 	m_loaded = false;
-
 }
 
-DSIGSignedInfo::DSIGSignedInfo(DOMDocument *doc, 
-		XSECSafeBufferFormatter * pFormatter, 
-		const XSECEnv * env) {
+DSIGSignedInfo::DSIGSignedInfo(DOMDocument* doc,
+		XSECSafeBufferFormatter* pFormatter,
+		const XSECEnv* env) {
 
 	mp_doc = doc;
 	m_HMACOutputLength = 0;
 	mp_formatter = pFormatter;
 	mp_signedInfoNode = NULL;
-	m_canonicalizationMethod = CANON_NONE;
+	mp_canonicalizationMethod = NULL;
 	mp_algorithmURI = NULL;
 	mp_env = env;
 	mp_referenceList = NULL;
 	m_loaded = false;
-
 }
 
 DSIGSignedInfo::~DSIGSignedInfo() {
@@ -77,44 +75,18 @@ DSIGSignedInfo::~DSIGSignedInfo() {
 	mp_formatter = NULL;
 	mp_env = NULL;
 	if (mp_referenceList != NULL) {
-
 		delete mp_referenceList;
 		mp_referenceList = NULL;
-
 	}
-
 }
-
-DOMNode * DSIGSignedInfo::getDOMNode() const {
-
-	return mp_signedInfoNode;
-
-}
-
-canonicalizationMethod DSIGSignedInfo::getCanonicalizationMethod(void) const {
-
-	return m_canonicalizationMethod;
-
-}
-
-int DSIGSignedInfo::getHMACOutputLength() const {
-
-	return m_HMACOutputLength;
-
-}
-
-
 
 
 // --------------------------------------------------------------------------------
 //           Verify each reference element
 // --------------------------------------------------------------------------------
 
-
-bool DSIGSignedInfo::verify(safeBuffer &errStr) const {
-
+bool DSIGSignedInfo::verify(safeBuffer& errStr) const {
 	return DSIGReference::verifyReferenceList(mp_referenceList, errStr);
-
 }
 
 // --------------------------------------------------------------------------------
@@ -122,9 +94,7 @@ bool DSIGSignedInfo::verify(safeBuffer &errStr) const {
 // --------------------------------------------------------------------------------
 
 void DSIGSignedInfo::hash(bool interlockingReferences) const {
-
 	DSIGReference::hashReferenceList(mp_referenceList, interlockingReferences);
-
 }
 
 // --------------------------------------------------------------------------------
@@ -132,16 +102,16 @@ void DSIGSignedInfo::hash(bool interlockingReferences) const {
 // --------------------------------------------------------------------------------
 
 
-DSIGReference * DSIGSignedInfo::createReference(
-		const XMLCh * URI,
-		const XMLCh * hashAlgorithmURI, 
-		const XMLCh * type) {
+DSIGReference* DSIGSignedInfo::createReference(
+		const XMLCh* URI,
+		const XMLCh* hashAlgorithmURI,
+		const XMLCh* type) {
 
-	DSIGReference * ref;
+	DSIGReference* ref;
 	XSECnew(ref, DSIGReference(mp_env));
 	Janitor<DSIGReference> j_ref(ref);
 
-	DOMNode *refNode = ref->createBlankReference(URI, hashAlgorithmURI, type);
+	DOMNode* refNode = ref->createBlankReference(URI, hashAlgorithmURI, type);
 
 	// Add the node to the end of the childeren
 	mp_signedInfoNode->appendChild(refNode);
@@ -154,7 +124,7 @@ DSIGReference * DSIGSignedInfo::createReference(
 	return ref;
 }
 
-DSIGReference * DSIGSignedInfo::removeReference(DSIGReferenceList::size_type index) {
+DSIGReference* DSIGSignedInfo::removeReference(DSIGReferenceList::size_type index) {
 
     DSIGReference* ret = mp_referenceList ? mp_referenceList->removeReference(index): NULL;
     if (ret && mp_signedInfoNode) {
@@ -163,7 +133,6 @@ DSIGReference * DSIGSignedInfo::removeReference(DSIGReferenceList::size_type ind
     }
 
     return ret;
-
 }
 
 
@@ -171,24 +140,21 @@ DSIGReference * DSIGSignedInfo::removeReference(DSIGReferenceList::size_type ind
 //           Create an empty SignedInfo
 // --------------------------------------------------------------------------------
 
-DOMElement * DSIGSignedInfo::createBlankSignedInfo(
-			const XMLCh * canonicalizationAlgorithmURI,
-			const XMLCh * signatureAlgorithmURI) {
+DOMElement* DSIGSignedInfo::createBlankSignedInfo(
+			const XMLCh* canonicalizationAlgorithmURI,
+			const XMLCh* signatureAlgorithmURI) {
 
 	safeBuffer str;
-	const XMLCh * prefixNS = mp_env->getDSIGNSPrefix();
+	const XMLCh* prefixNS = mp_env->getDSIGNSPrefix();
 
 	makeQName(str, prefixNS, "SignedInfo");
 
-	DOMElement *ret = mp_doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, 
+	DOMElement* ret = mp_doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG,
 								str.rawXMLChBuffer());
 	
 	mp_signedInfoNode = ret;
 
-	// Now create the algorithm parts
-	XSECmapURIToCanonicalizationMethod(canonicalizationAlgorithmURI, m_canonicalizationMethod);
-
-	// Canonicalisation
+	// Canonicalization
 
 	DOMElement *canMeth = mp_doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, 
 			makeQName(str, prefixNS, "CanonicalizationMethod").rawXMLChBuffer());
@@ -199,6 +165,9 @@ DOMElement * DSIGSignedInfo::createBlankSignedInfo(
 
 	canMeth->setAttributeNS(NULL,DSIGConstants::s_unicodeStrAlgorithm,
 		canonicalizationAlgorithmURI);
+
+	// Store the method URI internally.
+	mp_canonicalizationMethod = canMeth->getAttributeNS(NULL, DSIGConstants::s_unicodeStrAlgorithm);
 
 	// Now the SignatureMethod
 
@@ -227,23 +196,18 @@ DOMElement * DSIGSignedInfo::createBlankSignedInfo(
 //           Load the SignedInfo
 // --------------------------------------------------------------------------------
 
-void DSIGSignedInfo::load(void) {
-
+void DSIGSignedInfo::load() {
 
 	if (mp_signedInfoNode == 0) {
-
 		// Attempt to load an empty signature element
 		throw XSECException(XSECException::LoadEmptySignedInfo);
-
 	}
 
 	if (!strEquals(getDSIGLocalName(mp_signedInfoNode), "SignedInfo")) {
-
 		throw XSECException(XSECException::LoadNonSignedInfo);
-
 	}
 
-	DOMNode * tmpSI = mp_signedInfoNode->getFirstChild();
+	DOMNode* tmpSI = mp_signedInfoNode->getFirstChild();
 
 	// Check for CanonicalizationMethod
 
@@ -257,68 +221,22 @@ void DSIGSignedInfo::load(void) {
 	}
 
 	if (tmpSI == 0 || !strEquals(getDSIGLocalName(tmpSI), "CanonicalizationMethod")) {
-
 		throw XSECException(XSECException::ExpectedDSIGChildNotFound, 
 				"Expected <CanonicalizationMethod> as first child of <SignedInfo>");
-
 	}
 
 	// Determine what the canonicalization method is
-	DOMNamedNodeMap *tmpAtts = tmpSI->getAttributes();
+	DOMNamedNodeMap* tmpAtts = tmpSI->getAttributes();
 
-	DOMNode *algorithm = tmpAtts->getNamedItem(DSIGConstants::s_unicodeStrAlgorithm);
+	DOMNode* algorithm = tmpAtts->getNamedItem(DSIGConstants::s_unicodeStrAlgorithm);
 
 	if (algorithm == 0) {
-
 		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
 					"Expected Algorithm attribute in <CanonicalizationMethod>");
-
 	}
 
-	safeBuffer tmpSB;
+	mp_canonicalizationMethod = algorithm->getNodeValue();
 
-	tmpSB << (*mp_formatter << algorithm->getNodeValue());
-
-	if (tmpSB.sbStrcmp(URI_ID_C14N_NOC) == 0) {
-
-		m_canonicalizationMethod = CANON_C14N_NOC;
-
-	}
-
-	else if (tmpSB.sbStrcmp(URI_ID_C14N_COM) == 0) {
-
-		m_canonicalizationMethod = CANON_C14N_COM;
-
-	}
-
-	else if (tmpSB.sbStrcmp(URI_ID_C14N11_NOC) == 0) {
-
-        m_canonicalizationMethod = CANON_C14N11_NOC;
-
-    }
-
-    else if (tmpSB.sbStrcmp(URI_ID_C14N11_COM) == 0) {
-
-        m_canonicalizationMethod = CANON_C14N11_COM;
-
-    }
-
-    else if (tmpSB.sbStrcmp(URI_ID_EXC_C14N_COM) == 0) {
-
-		m_canonicalizationMethod = CANON_C14NE_COM;
-
-	}
-
-	else if (tmpSB.sbStrcmp(URI_ID_EXC_C14N_NOC) == 0) {
-
-		m_canonicalizationMethod = CANON_C14NE_NOC;
-
-	}
-
-	else {
-
-		throw XSECException(XSECException::UnknownCanonicalization);
-	}
 
 	// Now load the SignatureMethod
 
@@ -334,7 +252,6 @@ void DSIGSignedInfo::load(void) {
 	}
 
 	if (tmpSI == 0 || !strEquals(getDSIGLocalName(tmpSI), "SignatureMethod")) {
-
 		throw XSECException(XSECException::ExpectedDSIGChildNotFound, 
 				"Expected <SignatureMethod> as child of <SignedInfo>");
 	}
@@ -347,10 +264,8 @@ void DSIGSignedInfo::load(void) {
 	algorithm = tmpAtts->getNamedItem(DSIGConstants::s_unicodeStrAlgorithm);
 	
 	if (algorithm == 0) {
-
 		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
 					"Expected Algorithm attribute in <SignatureMethod>");
-
 	}
 	
 	mp_algorithmURI = algorithm->getNodeValue();
@@ -358,7 +273,7 @@ void DSIGSignedInfo::load(void) {
 	/* NOTE - as of version 1.3.1 all code relating to parsing the algorithm 
 	 * has been removed.  This should all be handled inside the algorithm mappers.
 	 * Having code here restricts available algorithms, as this code is not extended for
-	 * new algorthms.
+	 * new algorithms.
 	 */
 
 	/* Look for maximum output value. Really only applies to HMACs, but as we no
@@ -406,12 +321,8 @@ void DSIGSignedInfo::load(void) {
 	}
 
 	if (tmpSI != NULL) {
-
 		// Have an element node - should be a reference, so let's load the list
-
 		mp_referenceList = DSIGReference::loadReferenceListFromXML(mp_env, tmpSI);
-
 	}
 
 }
-

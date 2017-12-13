@@ -58,7 +58,7 @@ public:
 
 	TXFMOutputFile(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc) : 
 		TXFMBase(doc) {input = NULL;}
-	~TXFMOutputFile();
+	virtual ~TXFMOutputFile();
 
 	// Methods to set the inputs
 

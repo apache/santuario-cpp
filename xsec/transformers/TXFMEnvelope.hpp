@@ -50,7 +50,7 @@ private:
 public:
 
 	TXFMEnvelope(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMEnvelope();
+	virtual ~TXFMEnvelope();
 
 	// Methods to set the inputs
 

@@ -43,7 +43,7 @@ public:
 	// Constructors and destructors
 
 	TXFMBase64(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, bool decode = true);
-	~TXFMBase64();
+	virtual ~TXFMBase64();
 
 	// Methods to get tranform output type and input requirement
 

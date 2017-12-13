@@ -347,7 +347,7 @@ DSIGSignature * XKMSMessageAbstractTypeImpl::addSignature(
 
 	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer(), hashAlgorithm);
 	ref->appendEnvelopedSignatureTransform();
-	ref->appendCanonicalizationTransform(CANON_C14NE_COM);
+	ref->appendCanonicalizationTransform(DSIGConstants::s_unicodeStrURIEXC_C14N_COM);
 
 	/* Embed the signature in the document */
 	DOMNode * c = mp_messageAbstractTypeElement->getFirstChild();

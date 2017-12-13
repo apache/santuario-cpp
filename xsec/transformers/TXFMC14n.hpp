@@ -32,46 +32,42 @@
 #include <xsec/utils/XSECNameSpaceExpander.hpp>
 
 /**
- * \brief Transformer to handle canonicalisation transforms
+ * \brief Transformer to handle canonicalization transforms
  * @ingroup internal
  */
 
 class XSEC_EXPORT TXFMC14n : public TXFMBase {
-
-private:
-
-	XSECC14n20010315		* mp_c14n;			// The actual canonicaliser
-
 public:
 
-	TXFMC14n(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMC14n();
+    TXFMC14n(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc);
+    virtual ~TXFMC14n();
 
-	// Methods to set the inputs
+    // Methods to set the inputs
 
-	void setInput(TXFMBase *newInput);
+    void setInput(TXFMBase* newInput);
 
-	// Methods to get tranform output type and input requirement
+    // Methods to get tranform output type and input requirement
 
-	virtual TXFMBase::ioType getInputType(void) const;
-	virtual TXFMBase::ioType getOutputType(void) const;
-	virtual TXFMBase::nodeType getNodeType(void) const;
+    virtual TXFMBase::ioType getInputType() const;
+    virtual TXFMBase::ioType getOutputType() const;
+    virtual TXFMBase::nodeType getNodeType() const;
 
-	// Overrid comment acivation
-	virtual void activateComments(void);
+    // Override comment acivation
+    virtual void activateComments();
 
-	// Set exclusive
-	virtual void setExclusive();
-	virtual void setExclusive(safeBuffer & NSList);
+    // Set exclusive
+    virtual void setExclusive();
+    virtual void setExclusive(safeBuffer& NSList);
 
-	// Set inclusive 1.1
-	virtual void setInclusive11();
+    // Set inclusive 1.1
+    virtual void setInclusive11();
 
-	// Methods to get output data
+    // Methods to get output data
 
-	virtual unsigned int readBytes(XMLByte * const toFill, const unsigned int maxToFill);
+    virtual unsigned int readBytes(XMLByte* const toFill, const unsigned int maxToFill);
 
 private:
-	TXFMC14n();
-};
+    TXFMC14n();
 
+    XSECC14n20010315* mp_c14n;
+};

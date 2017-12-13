@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 
+#include "../utils/XSECAlgorithmSupport.hpp"
+
 #include <xercesc/util/Janitor.hpp>
 
 XERCES_CPP_NAMESPACE_USE
@@ -42,22 +44,27 @@ XERCES_CPP_NAMESPACE_USE
 //           Constructors and Destructors
 // --------------------------------------------------------------------------------
 
-DSIGTransformC14n::DSIGTransformC14n(const XSECEnv * env, DOMNode * node) :
+DSIGTransformC14n::DSIGTransformC14n(const XSECEnv* env, DOMNode* node) :
 DSIGTransform(env, node) {
 
-	m_cMethod = CANON_NONE;
-	mp_inclNSNode = NULL;
-	mp_inclNSStr = NULL;
+    m_cMethod = NULL;
+    mp_inclNSNode = NULL;
+    mp_inclNSStr = NULL;
+    m_exclusive = false;
+    m_comments = false;
+    m_onedotone = false;
 }
 
 
-DSIGTransformC14n::DSIGTransformC14n(const XSECEnv * env) :
+DSIGTransformC14n::DSIGTransformC14n(const XSECEnv* env) :
 DSIGTransform(env) {
 
-	m_cMethod = CANON_NONE;
-	mp_inclNSNode = NULL;
-	mp_inclNSStr = NULL;
-
+    m_cMethod = NULL;
+    mp_inclNSNode = NULL;
+    mp_inclNSStr = NULL;
+    m_exclusive = false;
+    m_comments = false;
+    m_onedotone = false;
 }
 
 DSIGTransformC14n::~DSIGTransformC14n() {};
@@ -66,153 +73,116 @@ DSIGTransformC14n::~DSIGTransformC14n() {};
 //           Interface Methods
 // --------------------------------------------------------------------------------
 
-void DSIGTransformC14n::appendTransformer(TXFMChain * input) {
+void DSIGTransformC14n::appendTransformer(TXFMChain* input) {
 
-	TXFMC14n * c;
+    TXFMC14n* c;
 
-	XSECnew(c, TXFMC14n(mp_txfmNode->getOwnerDocument()));
-	input->appendTxfm(c);
+    XSECnew(c, TXFMC14n(mp_txfmNode->getOwnerDocument()));
+    input->appendTxfm(c);
 
-	switch (m_cMethod) {
+    if (m_comments)
+        c->activateComments();
+    else
+        c->stripComments();
 
-	case (CANON_C14N_NOC) :
-	case (CANON_C14N11_NOC) :
-	case (CANON_C14NE_NOC) :
-		c->stripComments();
-		break;
-	case (CANON_C14N_COM) :
-    case (CANON_C14N11_COM) :
-	case (CANON_C14NE_COM) :
-		c->activateComments();
-		break;
-	default:
-		break;
-	}
-
-	// Check for exclusive and 1.1
-	if (m_cMethod == CANON_C14NE_COM || m_cMethod == CANON_C14NE_NOC) {
-
-		if (mp_inclNSStr == NULL) {
-
-			c->setExclusive();
-
-		}
-		else {
-
-			safeBuffer incl;
-			incl << (*(mp_env->getSBFormatter()) << mp_inclNSStr);
-			c->setExclusive(incl);
-
-		}
-
-	}
-	else if (m_cMethod == CANON_C14N11_COM || m_cMethod == CANON_C14N11_NOC) {
-	    c->setInclusive11();
-	}
-
+    // Check for exclusive and 1.1
+    if (m_exclusive) {
+        if (mp_inclNSStr == NULL) {
+            c->setExclusive();
+        }
+        else {
+            safeBuffer incl;
+            incl << (*(mp_env->getSBFormatter()) << mp_inclNSStr);
+            c->setExclusive(incl);
+        }
+    }
+    else if (m_onedotone) {
+        c->setInclusive11();
+    }
 }
 
-DOMElement * DSIGTransformC14n::createBlankTransform(DOMDocument * parentDoc) {
+DOMElement* DSIGTransformC14n::createBlankTransform(DOMDocument* parentDoc) {
 
-	safeBuffer str;
-	const XMLCh * prefix;
-	DOMElement *ret;
-	DOMDocument *doc = mp_env->getParentDocument();
+    safeBuffer str;
+    const XMLCh * prefix;
+    DOMElement *ret;
+    DOMDocument *doc = mp_env->getParentDocument();
 
-	prefix = mp_env->getDSIGNSPrefix();
+    prefix = mp_env->getDSIGNSPrefix();
 
-	// Create the transform node
-	makeQName(str, prefix, "Transform");
-	ret = doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, str.rawXMLChBuffer());
-	ret->setAttributeNS(NULL,DSIGConstants::s_unicodeStrAlgorithm, DSIGConstants::s_unicodeStrURIC14N_NOC);
+    // Create the transform node
+    makeQName(str, prefix, "Transform");
+    ret = doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, str.rawXMLChBuffer());
+    ret->setAttributeNS(NULL,DSIGConstants::s_unicodeStrAlgorithm, DSIGConstants::s_unicodeStrURIC14N_NOC);
 
-	mp_txfmNode = ret;
-	mp_inclNSStr = NULL;
-	mp_inclNSNode = NULL;
+    m_cMethod = ret->getAttributeNS(NULL, DSIGConstants::s_unicodeStrAlgorithm);
+    m_comments = false;
+    m_exclusive = false;
+    m_onedotone = false;
 
-	return ret;
+    mp_txfmNode = ret;
+    mp_inclNSStr = NULL;
+    mp_inclNSNode = NULL;
 
+    return ret;
 }
 
-void DSIGTransformC14n::load(void) {
+void DSIGTransformC14n::load() {
 
-	const XMLCh * uri;
-	DOMNamedNodeMap * atts;
-	DOMNode *att;
+    const XMLCh* uri;
+    DOMNamedNodeMap* atts;
+    DOMNode* att;
 
-	// Read the URI for the type
-	if (mp_txfmNode == NULL) {
-
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Expected <Transform> Node in DSIGTrasnformC14n::load");
-
-	}
-
-	atts = mp_txfmNode->getAttributes();
-
-	if (atts == NULL ||
-		((att = atts->getNamedItem(DSIGConstants::s_unicodeStrAlgorithm)) == NULL)) {
-
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Expected to find Algorithm attribute in <Transform> node");
-
-	}
-
-	uri = att->getNodeValue();
-
-	if (strEquals(uri, DSIGConstants::s_unicodeStrURIC14N_COM)) {
-		m_cMethod = CANON_C14N_COM;
-	}
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIC14N_NOC)) {
-		m_cMethod = CANON_C14N_NOC;
-	}
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIC14N11_COM)) {
-        m_cMethod = CANON_C14N11_COM;
+    // Read the URI for the type
+    if (mp_txfmNode == NULL) {
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Expected <Transform> Node in DSIGTrasnformC14n::load");
     }
-    else if (strEquals(uri, DSIGConstants::s_unicodeStrURIC14N11_NOC)) {
-        m_cMethod = CANON_C14N11_NOC;
+
+    atts = mp_txfmNode->getAttributes();
+
+    if (atts == NULL ||
+        ((att = atts->getNamedItem(DSIGConstants::s_unicodeStrAlgorithm)) == NULL)) {
+
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Expected to find Algorithm attribute in <Transform> node");
     }
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIEXC_C14N_COM)) {
-		m_cMethod = CANON_C14NE_COM;
-	}
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIEXC_C14N_NOC)) {
-		m_cMethod = CANON_C14NE_NOC;
-	}
-	else {
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Unexpected URI found in canonicalisation <Transform>");
-	}
 
-	// Determine whether there is an InclusiveNamespaces list
+    m_cMethod = att->getNodeValue();
 
-	if (m_cMethod == CANON_C14NE_NOC || m_cMethod == CANON_C14NE_COM) {
+    if (!XSECAlgorithmSupport::evalCanonicalizationMethod(m_cMethod, m_exclusive, m_comments, m_onedotone)) {
+        throw XSECException(XSECException::TransformError,
+            "Unexpected URI found in canonicalization <Transform>");
+    }
 
-		// Exclusive, so there may be an InclusiveNamespaces node
+    // Determine whether there is an InclusiveNamespaces list
 
-		DOMNode * inclNSNode = mp_txfmNode->getFirstChild();
+    if (m_exclusive) {
 
-		while (inclNSNode != NULL && (inclNSNode->getNodeType() != DOMNode::ELEMENT_NODE ||
-			!strEquals(getECLocalName(inclNSNode), "InclusiveNamespaces")))
-				inclNSNode = inclNSNode->getNextSibling();
+        // Exclusive, so there may be an InclusiveNamespaces node
 
-		if (inclNSNode != 0) {
+        DOMNode* inclNSNode = mp_txfmNode->getFirstChild();
 
-			mp_inclNSNode = static_cast<DOMElement *>(inclNSNode);
+        while (inclNSNode != NULL && (inclNSNode->getNodeType() != DOMNode::ELEMENT_NODE ||
+            !strEquals(getECLocalName(inclNSNode), "InclusiveNamespaces")))
+                inclNSNode = inclNSNode->getNextSibling();
 
-			// Have a prefix list
-			atts = mp_inclNSNode->getAttributes();
-			safeBuffer inSB;
+        if (inclNSNode != 0) {
 
-			if (atts == 0 || ((att = atts->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))) == NULL)) {
-				throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-					"Expected PrefixList in InclusiveNamespaces");
-			}
+            mp_inclNSNode = static_cast<DOMElement *>(inclNSNode);
 
-			mp_inclNSStr = att->getNodeValue();
+            // Have a prefix list
+            atts = mp_inclNSNode->getAttributes();
+            safeBuffer inSB;
 
-		}
-	}
+            if (atts == 0 || ((att = atts->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))) == NULL)) {
+                throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+                    "Expected PrefixList in InclusiveNamespaces");
+            }
 
+            mp_inclNSStr = att->getNodeValue();
+        }
+    }
 }
 
 // --------------------------------------------------------------------------------
@@ -220,162 +190,139 @@ void DSIGTransformC14n::load(void) {
 // --------------------------------------------------------------------------------
 
 
-void DSIGTransformC14n::setCanonicalizationMethod(canonicalizationMethod method) {
+void DSIGTransformC14n::setCanonicalizationMethod(const XMLCh* uri) {
 
-	const XMLCh * m = canonicalizationMethod2UNICODEURI(method);
+    bool exclusive;
+    bool comments;
+    bool onedotone;
 
-	if (strEquals(m, DSIGConstants::s_unicodeStrEmpty) || mp_txfmNode == NULL) {
+    if (mp_txfmNode == NULL || !XSECAlgorithmSupport::evalCanonicalizationMethod(uri, exclusive, comments, onedotone)) {
+        throw XSECException(XSECException::TransformError,
+            "Either method unknown or Node not set in setCanonicalizationMethod");
+    }
 
-		throw XSECException(XSECException::TransformError,
-			"Either method unknown or Node not set in setCanonicalizationMethod");
+    // Switching from exclusive to inclusive?
+    if (!exclusive && m_exclusive) {
+        if (mp_inclNSNode != 0) {
 
-	}
+            mp_txfmNode->removeChild(mp_inclNSNode);
+            mp_inclNSNode->release();        // No longer required
 
-	if (method == CANON_C14N_NOC || method == CANON_C14N_COM || method == CANON_C14N11_NOC || method == CANON_C14N11_COM) {
+            mp_inclNSNode = NULL;
+            mp_inclNSStr = NULL;
+        }
+    }
 
-		if (m_cMethod == CANON_C14NE_NOC || m_cMethod == CANON_C14NE_COM) {
+    // Now do the set.
+    ((DOMElement *) mp_txfmNode)->setAttributeNS(NULL, DSIGConstants::s_unicodeStrAlgorithm, uri);
+    m_cMethod = ((DOMElement *) mp_txfmNode)->getAttributeNS(NULL, DSIGConstants::s_unicodeStrAlgorithm);
 
-			if (mp_inclNSNode != 0) {
-
-				mp_txfmNode->removeChild(mp_inclNSNode);
-				mp_inclNSNode->release();		// No longer required
-
-				mp_inclNSNode = NULL;
-				mp_inclNSStr = NULL;
-
-			}
-		}
-
-	}
-
-	// Now do the set.
-
-	((DOMElement *) mp_txfmNode)->setAttributeNS(NULL,MAKE_UNICODE_STRING("Algorithm"), m);
-	m_cMethod = method;
-
+    m_exclusive = exclusive;
+    m_comments = comments;
+    m_onedotone = onedotone;
 }
 
-canonicalizationMethod DSIGTransformC14n::getCanonicalizationMethod() const {
-
-	return m_cMethod;
-
+const XMLCh* DSIGTransformC14n::getCanonicalizationMethod() const {
+    return m_cMethod;
 }
 
 void DSIGTransformC14n::createInclusiveNamespaceNode() {
 
-	// Creates an empty inclusiveNamespace node.  Does _not_ set the prefixlist attribute
+    // Creates an empty inclusiveNamespace node.  Does _not_ set the prefixlist attribute
 
-	if (mp_inclNSNode != NULL)
-		return;		// Already exists
+    if (mp_inclNSNode != NULL)
+        return;        // Already exists
 
-	safeBuffer str;
-	const XMLCh * prefix;
-	DOMDocument *doc = mp_env->getParentDocument();
+    safeBuffer str;
+    const XMLCh * prefix;
+    DOMDocument *doc = mp_env->getParentDocument();
 
-	// Use the Exclusive Canonicalisation prefix
-	prefix = mp_env->getECNSPrefix();
+    // Use the Exclusive Canonicalisation prefix
+    prefix = mp_env->getECNSPrefix();
 
-	// Create the transform node
-	makeQName(str, prefix, "InclusiveNamespaces");
-	mp_inclNSNode = doc->createElementNS(DSIGConstants::s_unicodeStrURIEC, str.rawXMLChBuffer());
+    // Create the transform node
+    makeQName(str, prefix, "InclusiveNamespaces");
+    mp_inclNSNode = doc->createElementNS(DSIGConstants::s_unicodeStrURIEC, str.rawXMLChBuffer());
 
-	// Add the node to the owner element
-	mp_env->doPrettyPrint(mp_txfmNode);
-	mp_txfmNode->appendChild(mp_inclNSNode);
-	mp_env->doPrettyPrint(mp_txfmNode);
+    // Add the node to the owner element
+    mp_env->doPrettyPrint(mp_txfmNode);
+    mp_txfmNode->appendChild(mp_inclNSNode);
+    mp_env->doPrettyPrint(mp_txfmNode);
 
-	// Set the namespace attribute
-	if (prefix[0] == '\0') {
-		str.sbTranscodeIn("xmlns");
-	}
-	else {
-		str.sbTranscodeIn("xmlns:");
-		str.sbXMLChCat(prefix);
-	}
+    // Set the namespace attribute
+    if (prefix[0] == '\0') {
+        str.sbTranscodeIn("xmlns");
+    }
+    else {
+        str.sbTranscodeIn("xmlns:");
+        str.sbXMLChCat(prefix);
+    }
 
-	mp_inclNSNode->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
-							str.rawXMLChBuffer(),
-							DSIGConstants::s_unicodeStrURIEC);
+    mp_inclNSNode->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
+                            str.rawXMLChBuffer(),
+                            DSIGConstants::s_unicodeStrURIEC);
 }
 
-void DSIGTransformC14n::setInclusiveNamespaces(const XMLCh * ns) {
+void DSIGTransformC14n::setInclusiveNamespaces(const XMLCh* ns) {
 
-	// Set all the namespaces at once
+    // Set all the namespaces at once
 
-	if (m_cMethod != CANON_C14NE_COM && m_cMethod != CANON_C14NE_NOC) {
+    if (!m_exclusive) {
+        throw XSECException(XSECException::TransformError,
+            "Cannot set inclusive namespaces on non Exclusive Canonicalization");
+    }
 
-		throw XSECException(XSECException::TransformError,
-			"Cannot set inclusive namespaces on non Exclusive Canonicalisation");
+    if (mp_inclNSNode == NULL) {
+        // Create the transform node
+        createInclusiveNamespaceNode();
+    }
 
-	}
+    // Now create the prefix list
 
-	if (mp_inclNSNode == NULL) {
-
-		// Create the transform node
-		createInclusiveNamespaceNode();
-
-
-	}
-
-	// Now create the prefix list
-
-	mp_inclNSNode->setAttributeNS(NULL,MAKE_UNICODE_STRING("PrefixList"), ns);
-	mp_inclNSStr = mp_inclNSNode->getAttributes()->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))->getNodeValue();
-
+    mp_inclNSNode->setAttributeNS(NULL,MAKE_UNICODE_STRING("PrefixList"), ns);
+    mp_inclNSStr = mp_inclNSNode->getAttributes()->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))->getNodeValue();
 }
 
 
-void DSIGTransformC14n::addInclusiveNamespace(const char * ns) {
+void DSIGTransformC14n::addInclusiveNamespace(const char* ns) {
 
-	if (m_cMethod != CANON_C14NE_COM && m_cMethod != CANON_C14NE_NOC) {
+    if (!m_exclusive) {
+        throw XSECException(XSECException::TransformError,
+            "Cannot set inclusive namespaces on non Exclusive Canonicalization");
+    }
 
-		throw XSECException(XSECException::TransformError,
-			"Cannot set inclusive namespaces on non Exclusive Canonicalisation");
+    if (mp_inclNSNode == NULL) {
+        // Create the transform node
+        createInclusiveNamespaceNode();
 
-	}
+        // Now create the prefix list
 
-	if (mp_inclNSNode == NULL) {
+        mp_inclNSNode->setAttributeNS(NULL,MAKE_UNICODE_STRING("PrefixList"), MAKE_UNICODE_STRING(ns));
+        mp_inclNSStr = mp_inclNSNode->getAttributes()->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))->getNodeValue();
+    }
+    else {
+        // More tricky
+        safeBuffer str;
 
-		// Create the transform node
-		createInclusiveNamespaceNode();
-
-		// Now create the prefix list
-
-		mp_inclNSNode->setAttributeNS(NULL,MAKE_UNICODE_STRING("PrefixList"), MAKE_UNICODE_STRING(ns));
-		mp_inclNSStr = mp_inclNSNode->getAttributes()->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))->getNodeValue();
-
-	}
-
-	else {
-
-		// More tricky
-		safeBuffer str;
-
-		str << (*(mp_env->getSBFormatter()) << mp_inclNSStr);
-		str.sbStrcatIn(" ");
-		str.sbStrcatIn((char *) ns);
-		mp_inclNSNode->setAttributeNS(NULL,MAKE_UNICODE_STRING("PrefixList"), str.sbStrToXMLCh());
-		mp_inclNSStr = mp_inclNSNode->getAttributes()->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))->getNodeValue();
-
-	}
-
+        str << (*(mp_env->getSBFormatter()) << mp_inclNSStr);
+        str.sbStrcatIn(" ");
+        str.sbStrcatIn((char *) ns);
+        mp_inclNSNode->setAttributeNS(NULL,MAKE_UNICODE_STRING("PrefixList"), str.sbStrToXMLCh());
+        mp_inclNSStr = mp_inclNSNode->getAttributes()->getNamedItem(MAKE_UNICODE_STRING("PrefixList"))->getNodeValue();
+    }
 }
 
-const XMLCh * DSIGTransformC14n::getPrefixList() const {
-
-	return mp_inclNSStr;
-
+const XMLCh* DSIGTransformC14n::getPrefixList() const {
+    return mp_inclNSStr;
 }
 
 void DSIGTransformC14n::clearInclusiveNamespaces() {
 
-	if (mp_inclNSNode != 0) {
+    if (mp_inclNSNode != 0) {
+        mp_txfmNode->removeChild(mp_inclNSNode);
+        mp_inclNSNode->release();        // No longer required
 
-		mp_txfmNode->removeChild(mp_inclNSNode);
-		mp_inclNSNode->release();		// No longer required
-
-		mp_inclNSNode = NULL;
-		mp_inclNSStr = NULL;
-
-	}
+        mp_inclNSNode = NULL;
+        mp_inclNSStr = NULL;
+    }
 }

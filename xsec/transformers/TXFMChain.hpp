@@ -51,7 +51,7 @@ public:
 	// Constructors/destructors
 
 	TXFMChain(TXFMBase * baseTxfm, bool deleteChainWhenDone = true);
-	~TXFMChain();
+	virtual ~TXFMChain();
 
 	// Manipulate
 	void appendTxfm(TXFMBase * txfm);

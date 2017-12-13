@@ -141,42 +141,36 @@ void outputTransform(const DSIGTransform * t, unsigned int level) {
 		cout << "Base64 Decode" << endl;
     }
     else if (dynamic_cast<const DSIGTransformC14n*>(t)) {
-        switch (dynamic_cast<const DSIGTransformC14n*>(t)->getCanonicalizationMethod()) {
-        case CANON_C14N_NOC:
+        const XMLCh* cm = dynamic_cast<const DSIGTransformC14n*>(t)->getCanonicalizationMethod();
+        if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N_NOC)) {
             cout << "c14n 1.0 canonicalization (without comments)" << endl;
-            break;
-
-        case CANON_C14N_COM:
+        }
+        else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N_COM)) {
             cout << "c14n 1.0 canonicalization (with comments)" << endl;
-            break;
-
-        case CANON_C14N11_NOC:
+        }
+        else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N11_NOC)) {
             cout << "c14n 1.1 canonicalization (without comments)" << endl;
-            break;
-
-        case CANON_C14N11_COM:
+        }
+        else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N11_COM)) {
             cout << "c14n 1.1 canonicalization (with comments)" << endl;
-            break;
-
-        case CANON_C14NE_NOC:
+        }
+        else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIEXC_C14N_NOC)) {
             cout << "Exclusive c14n 1.0 canonicalization (without comments)" << endl;
             if (dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList() != NULL) {
                 levelSet(level);
                 cout << "Inclusive prefixes : " <<
                     X2C(dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList()).str() << endl;
             }
-            break;
-
-        case CANON_C14NE_COM:
+        }
+        else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIEXC_C14N_COM)) {
             cout << "Exclusive c14n 1.0 canonicalization (with comments)" << endl;
             if (dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList() != NULL) {
                 levelSet(level);
                 cout << "Inclusive prefixes : " <<
                     X2C(dynamic_cast<const DSIGTransformC14n*>(t)->getPrefixList()).str() << endl;
             }
-            break;
-
-        case CANON_NONE:
+        }
+        else {
             cout << "Unknown c14n method" << endl;
         }
     }
@@ -292,46 +286,30 @@ void outputSignatureInfo(DSIGSignature *sig, bool skipReferences) {
 
 	// First get some information about the main signature
 	cout << "Signature (Signed Info) settings : " << endl;
-	cout << "    Canonicalisation Method : ";
+	cout << "    Canonicalization Method : ";
 	
-	switch (sig->getCanonicalizationMethod()) {
-
-	case (CANON_C14N_NOC) :
-
-		cout << "c14n 1.0 (without comments)";
-		break;
-
-	case (CANON_C14N_COM) :
-
-		cout << "c14n 1.0 (with comments)";
-		break;
-
-	case (CANON_C14N11_NOC) :
-
-		cout << "c14n 1.1 (without comments)";
-		break;
-
-	case (CANON_C14N11_COM) :
-
-		cout << "c14n 1.1 (with comments)";
-		break;
-
-    case (CANON_C14NE_NOC) :
-
-		cout << "exclusive c14n 1.0 (without comments)";
-		break;
-
-	case (CANON_C14NE_COM) :
-
-		cout << "exclusive c14n 1.0 (with comments)";
-		break;
-
-	default :
-
-		cout << "none set";
-		break;
-
-	}
+    const XMLCh* cm = sig->getCanonicalizationMethod();
+    if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N_NOC)) {
+        cout << "c14n 1.0 canonicalization (without comments)" << endl;
+    }
+    else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N_COM)) {
+        cout << "c14n 1.0 canonicalization (with comments)" << endl;
+    }
+    else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N11_NOC)) {
+        cout << "c14n 1.1 canonicalization (without comments)" << endl;
+    }
+    else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIC14N11_COM)) {
+        cout << "c14n 1.1 canonicalization (with comments)" << endl;
+    }
+    else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIEXC_C14N_NOC)) {
+        cout << "Exclusive c14n 1.0 canonicalization (without comments)" << endl;
+    }
+    else if (XMLString::equals(cm, DSIGConstants::s_unicodeStrURIEXC_C14N_COM)) {
+        cout << "Exclusive c14n 1.0 canonicalization (with comments)" << endl;
+    }
+    else {
+        cout << "Unknown c14n method" << endl;
+    }
 
 	cout << endl;
 
@@ -355,7 +333,7 @@ void outputSignatureInfo(DSIGSignature *sig, bool skipReferences) {
 	}
 }
 
-void printUsage(void) {
+void printUsage() {
 
 	cerr << "\nUsage: siginf [options] <input file name>\n\n";
 	cerr << "     Where options are :\n\n";
@@ -498,7 +476,6 @@ int evaluate(int argc, char ** argv) {
 	prov.releaseSignature(sig);
 	// Janitor will clean up the parser
 	return 0;
-
 }
 
 

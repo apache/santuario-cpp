@@ -159,17 +159,6 @@ XSEC_USING_XERCES(XMLString);
 
 // Enumerated Types
 
-enum canonicalizationMethod {
-
-    CANON_NONE                    = 0,            // No method defined
-    CANON_C14N_NOC                = 1,            // C14n without comments
-    CANON_C14N_COM                = 2,             // C14n with comments
-    CANON_C14NE_NOC                = 3,            // C14n Exclusive (without comments)
-    CANON_C14NE_COM                = 4,            // C14n Exlusive (with Comments
-    CANON_C14N11_NOC            = 5,            // C14n 1.1 without comments
-    CANON_C14N11_COM            = 6             // C14n 1.1 with comments
-};
-
 enum signatureMethod {
 
     SIGNATURE_NONE                = 0,            // No method defined
@@ -186,54 +175,6 @@ enum xpathFilterType {
     FILTER_SUBTRACT            = 2        /** Results should be subtracted from prev nodeset */
 
 };
-
-// --------------------------------------------------------------------------------
-//           Some utility functions
-// --------------------------------------------------------------------------------
-
-inline
-bool canonicalizationMethod2URI(safeBuffer& uri, canonicalizationMethod cm) {
-
-    switch (cm) {
-
-    case (CANON_C14N_NOC) :
-
-        uri = URI_ID_C14N_NOC;
-        break;
-
-    case (CANON_C14N_COM) :
-
-        uri = URI_ID_C14N_COM;
-        break;
-
-    case (CANON_C14NE_NOC) :
-
-        uri = URI_ID_EXC_C14N_NOC;
-        break;
-
-    case (CANON_C14NE_COM) :
-
-        uri = URI_ID_EXC_C14N_COM;
-        break;
-
-    case (CANON_C14N11_NOC) :
-
-        uri = URI_ID_C14N11_NOC;
-        break;
-
-    case (CANON_C14N11_COM) :
-
-        uri = URI_ID_C14N11_COM;
-        break;
-
-    default :
-        return false;        // Unknown type
-
-    }
-
-    return true;
-
-}
 
 // --------------------------------------------------------------------------------
 //           Constant Strings Class
@@ -351,38 +292,6 @@ public:
 };
 
 
-
-
-inline
-const XMLCh* canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
-
-    switch (cm) {
-
-    case (CANON_C14N_NOC) :
-
-        return DSIGConstants::s_unicodeStrURIC14N_NOC;
-
-    case (CANON_C14N_COM) :
-
-        return DSIGConstants::s_unicodeStrURIC14N_COM;
-
-    case (CANON_C14NE_NOC) :
-
-        return DSIGConstants::s_unicodeStrURIEXC_C14N_NOC;
-
-    case (CANON_C14NE_COM) :
-
-        return DSIGConstants::s_unicodeStrURIEXC_C14N_COM;
-
-    default :
-        break;
-
-    }
-
-    return DSIGConstants::s_unicodeStrEmpty;
-
-}
-
 // --------------------------------------------------------------------------------
 //            URI Inverse Mappings
 // --------------------------------------------------------------------------------
@@ -397,7 +306,5 @@ const XMLCh* canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
 bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh* URI,
                                                   signatureMethod& sm,
                                                   XSECCryptoHash::HashType& type);
-bool XSEC_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh* URI,
-                            canonicalizationMethod& cm);
 
 #endif /* DSIGCONSTANTS_HEADER */

@@ -20,7 +20,7 @@
 /*
  * XSEC
  *
- * DSIGSignature := Class for checking and setting up signature nodes in a DSIG signature					 
+ * DSIGSignature := Class for checking and setting up signature nodes in a DSIG signature
  *
  * Author(s): Berin Lautenbach
  *
@@ -59,6 +59,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
 
+#include "../utils/XSECAlgorithmSupport.hpp"
+
 // Xerces includes
 
 #include <xercesc/dom/DOMNamedNodeMap.hpp>
@@ -71,42 +73,42 @@ XERCES_CPP_NAMESPACE_USE
 // --------------------------------------------------------------------------------
 
 
-void DSIGSignature::Initialise(void) {
+void DSIGSignature::Initialise() {
 
-	DSIGAlgorithmHandlerDefault def;
-	
-	// Register default signature algorithm handlers
+    DSIGAlgorithmHandlerDefault def;
 
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA1, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_MD5, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA224, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA256, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA384, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA512, def);
-	
+    // Register default signature algorithm handlers
+
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA1, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_MD5, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA224, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA256, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA384, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIRSA_SHA512, def);
+
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIDSA_SHA1, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIDSA_SHA256, def);
 
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA1, def);
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA224, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA256, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA384, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA512, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA256, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA384, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIECDSA_SHA512, def);
 
     XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA1, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA224, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA256, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA384, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA512, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA224, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA256, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA384, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIHMAC_SHA512, def);
 
-	// Register default hashing algorithm handlers
+    // Register default hashing algorithm handlers
 
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA1, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA224, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA256, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA384, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA512, def);
-	XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIMD5, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA1, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA224, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA256, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA384, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURISHA512, def);
+    XSECPlatformUtils::registerAlgorithmHandler(DSIGConstants::s_unicodeStrURIMD5, def);
 
 }
 
@@ -115,74 +117,53 @@ void DSIGSignature::Initialise(void) {
 //           Get the Canonicalised BYTE_STREAM of the SignedInfo
 // --------------------------------------------------------------------------------
 
-XSECBinTXFMInputStream * DSIGSignature::makeBinInputStream(void) const {
+XSECBinTXFMInputStream* DSIGSignature::makeBinInputStream() const {
 
-	TXFMBase * txfm;
+    TXFMBase* txfm;
 
-	// Create the starting point for the transform list
+    // Create the starting point for the transform list
 
-	XSECnew(txfm, TXFMDocObject(mp_doc));
+    XSECnew(txfm, TXFMDocObject(mp_doc));
 
-	TXFMChain * chain;
-	XSECnew(chain, TXFMChain(txfm));
-	Janitor<TXFMChain> j_chain(chain);
+    TXFMChain* chain;
+    XSECnew(chain, TXFMChain(txfm));
+    Janitor<TXFMChain> j_chain(chain);
 
-	((TXFMDocObject *) txfm)->setInput(mp_doc, mp_signedInfo->getDOMNode());
-	
-	// canonicalise the SignedInfo content
+    ((TXFMDocObject*) txfm)->setInput(mp_doc, mp_signedInfo->getDOMNode());
 
-	switch (mp_signedInfo->getCanonicalizationMethod()) {
+    // canonicalize the SignedInfo content
 
-	case CANON_C14N_NOC :
+    bool exclusive;
+    bool comments;
+    bool onedotone;
+    if (XSECAlgorithmSupport::evalCanonicalizationMethod(mp_signedInfo->getCanonicalizationMethod(),
+            exclusive, comments, onedotone)) {
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		txfm->stripComments();
-		
-		break;
+        XSECnew(txfm, TXFMC14n(mp_doc));
+        chain->appendTxfm(txfm);
 
-	case CANON_C14N_COM :
+        if (comments)
+            txfm->activateComments();
+        else
+            txfm->stripComments();
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		txfm->activateComments();
+        if (exclusive)
+            ((TXFMC14n*) txfm)->setExclusive();
 
-		break;
+        if (onedotone)
+            ((TXFMC14n*) txfm)->setInclusive11();
 
-	case CANON_C14NE_NOC :
+    } else {
+        throw XSECException(XSECException::SigVfyError,
+            "Unknown CanonicalizationMethod in DSIGSignature::makeBinInputStream()");
+    }
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		((TXFMC14n *) txfm)->setExclusive();
-		txfm->stripComments();
-		
-		break;
+    // Now create the InputStream
 
-	case CANON_C14NE_COM :
+    XSECBinTXFMInputStream* ret = new XSECBinTXFMInputStream(chain);
+    j_chain.release();
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		((TXFMC14n *) txfm)->setExclusive();
-		txfm->activateComments();
-
-		break;
-
-	default :
-
-		throw XSECException(XSECException::SigVfyError,
-			"Canonicalisation method unknown in DSIGSignature::makeBinInputStream()");
-
-	}
-
-	// Now create the InputStream
-
-	XSECBinTXFMInputStream * ret;
-
-	ret = new XSECBinTXFMInputStream(chain);
-	j_chain.release();
-
-	return ret;
-
+    return ret;
 }
 
 
@@ -190,22 +171,16 @@ XSECBinTXFMInputStream * DSIGSignature::makeBinInputStream(void) const {
 //           Get the list of references
 // --------------------------------------------------------------------------------
 
-DSIGReferenceList * DSIGSignature::getReferenceList(void) {
-
-	return mp_signedInfo ? mp_signedInfo->getReferenceList() : NULL;
-
+DSIGReferenceList* DSIGSignature::getReferenceList() {
+    return mp_signedInfo ? mp_signedInfo->getReferenceList() : NULL;
 }
 
-const DSIGReferenceList * DSIGSignature::getReferenceList(void) const {
-
-	return mp_signedInfo ? mp_signedInfo->getReferenceList() : NULL;
-
+const DSIGReferenceList* DSIGSignature::getReferenceList() const {
+    return mp_signedInfo ? mp_signedInfo->getReferenceList() : NULL;
 }
 
-const XMLCh * DSIGSignature::getAlgorithmURI() const {
-
+const XMLCh* DSIGSignature::getAlgorithmURI() const {
     return mp_signedInfo ? mp_signedInfo->getAlgorithmURI() : NULL;
-
 }
 
 // --------------------------------------------------------------------------------
@@ -213,78 +188,67 @@ const XMLCh * DSIGSignature::getAlgorithmURI() const {
 // --------------------------------------------------------------------------------
 
 
-void DSIGSignature::setURIResolver(XSECURIResolver * resolver) {
-
-	mp_env->setURIResolver(resolver);
-
+void DSIGSignature::setURIResolver(XSECURIResolver* resolver) {
+    mp_env->setURIResolver(resolver);
 }
 
-XSECURIResolver * DSIGSignature::getURIResolver(void) const {
-
-	return mp_env->getURIResolver();
-
+XSECURIResolver* DSIGSignature::getURIResolver() const {
+    return mp_env->getURIResolver();
 }
 
-void DSIGSignature::setKeyInfoResolver(XSECKeyInfoResolver * resolver) {
+void DSIGSignature::setKeyInfoResolver(XSECKeyInfoResolver* resolver) {
 
-	if (mp_KeyInfoResolver != 0)
-		delete mp_KeyInfoResolver;
+    if (mp_KeyInfoResolver != 0)
+        delete mp_KeyInfoResolver;
 
-	mp_KeyInfoResolver = resolver->clone();
-
+    mp_KeyInfoResolver = resolver->clone();
 }
 
-XSECKeyInfoResolver * DSIGSignature::getKeyInfoResolver(void) const {
-
-	return mp_KeyInfoResolver;
-
+XSECKeyInfoResolver* DSIGSignature::getKeyInfoResolver() const {
+    return mp_KeyInfoResolver;
 }
 
 // --------------------------------------------------------------------------------
 //           Object Handling
 // --------------------------------------------------------------------------------
 
-DSIGObject * DSIGSignature::appendObject(void) {
+DSIGObject* DSIGSignature::appendObject() {
 
-	DSIGObject * ret;
-	XSECnew(ret, DSIGObject(mp_env));
-	DOMElement * elt = ret->createBlankObject();
+    DSIGObject* ret;
+    XSECnew(ret, DSIGObject(mp_env));
+    DOMElement* elt = ret->createBlankObject();
 
-	mp_sigNode->appendChild(elt);
-	mp_env->doPrettyPrint(mp_sigNode);
+    mp_sigNode->appendChild(elt);
+    mp_env->doPrettyPrint(mp_sigNode);
 
-	m_objects.push_back(ret);
+    m_objects.push_back(ret);
 
-	return ret;
-
-}
-
-int DSIGSignature::getObjectLength(void) const {
-
-	return (unsigned int) m_objects.size();
+    return ret;
 
 }
 
-DSIGObject * DSIGSignature::getObjectItem(int i) {
-
-	if ( i < 0 || i >= ((int) m_objects.size())) {
-		throw XSECException(XSECException::ObjectError,
-			"DSIGSignature::getObjectItem - index out of range");
-	}
-
-	return m_objects[i];
-
+int DSIGSignature::getObjectLength() const {
+    return (unsigned int) m_objects.size();
 }
 
-const DSIGObject * DSIGSignature::getObjectItem(int i) const {
+DSIGObject* DSIGSignature::getObjectItem(int i) {
 
-	if ( i < 0 || i >= ((int) m_objects.size())) {
-		throw XSECException(XSECException::ObjectError,
-			"DSIGSignature::getObjectItem - index out of range");
-	}
+    if ( i < 0 || i >= ((int) m_objects.size())) {
+        throw XSECException(XSECException::ObjectError,
+            "DSIGSignature::getObjectItem - index out of range");
+    }
 
-	return m_objects[i];
+    return m_objects[i];
+}
 
+const DSIGObject* DSIGSignature::getObjectItem(int i) const {
+
+    if ( i < 0 || i >= ((int) m_objects.size())) {
+        throw XSECException(XSECException::ObjectError,
+            "DSIGSignature::getObjectItem - index out of range");
+    }
+
+    return m_objects[i];
 }
 
 // --------------------------------------------------------------------------------
@@ -293,96 +257,91 @@ const DSIGObject * DSIGSignature::getObjectItem(int i) const {
 
 // Constructors and Destructors
 
-DSIGSignature::DSIGSignature(DOMDocument *doc, DOMNode *sigNode) :
-		m_loaded(false),
-		mp_doc(doc),
-		mp_sigNode(sigNode),
-		mp_signedInfo(NULL),
-		mp_signatureValueNode(NULL),
-		m_keyInfoList(NULL),
-		mp_KeyInfoNode(NULL),
-		m_errStr(""),
-		mp_signingKey(NULL),
-		mp_KeyInfoResolver(NULL),
-		m_interlockingReferences(false) {
+DSIGSignature::DSIGSignature(DOMDocument* doc, DOMNode* sigNode) :
+        m_loaded(false),
+        mp_doc(doc),
+        mp_sigNode(sigNode),
+        mp_signedInfo(NULL),
+        mp_signatureValueNode(NULL),
+        m_keyInfoList(NULL),
+        mp_KeyInfoNode(NULL),
+        m_errStr(""),
+        mp_signingKey(NULL),
+        mp_KeyInfoResolver(NULL),
+        m_interlockingReferences(false) {
 
-	// Set up our formatter
-	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes, 
-												XMLFormatter::UnRep_CharRef));
+    // Set up our formatter
+    XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes,
+                                                XMLFormatter::UnRep_CharRef));
 
-	// Set up the environment
-	XSECnew(mp_env, XSECEnv(doc));
+    // Set up the environment
+    XSECnew(mp_env, XSECEnv(doc));
 
-	m_keyInfoList.setEnvironment(mp_env);
-
+    m_keyInfoList.setEnvironment(mp_env);
 }
 
-DSIGSignature::DSIGSignature(void) :
-		m_loaded(false),
-		mp_doc(NULL),
-		mp_sigNode(NULL),
-		mp_signedInfo(NULL),
-		mp_signatureValueNode(NULL),
-		m_keyInfoList(NULL),
-		mp_KeyInfoNode(NULL),
-		m_errStr(""),
-		mp_signingKey(NULL),
-		mp_KeyInfoResolver(NULL),
-		m_interlockingReferences(false) {
+DSIGSignature::DSIGSignature() :
+        m_loaded(false),
+        mp_doc(NULL),
+        mp_sigNode(NULL),
+        mp_signedInfo(NULL),
+        mp_signatureValueNode(NULL),
+        m_keyInfoList(NULL),
+        mp_KeyInfoNode(NULL),
+        m_errStr(""),
+        mp_signingKey(NULL),
+        mp_KeyInfoResolver(NULL),
+        m_interlockingReferences(false) {
 
-	// Set up our formatter
-	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes, 
-												XMLFormatter::UnRep_CharRef));
+    // Set up our formatter
+    XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes,
+                                                XMLFormatter::UnRep_CharRef));
 
-	XSECnew(mp_env, XSECEnv(NULL));
+    XSECnew(mp_env, XSECEnv(NULL));
 
-	m_keyInfoList.setEnvironment(mp_env);
-
+    m_keyInfoList.setEnvironment(mp_env);
 }
 
 DSIGSignature::~DSIGSignature() {
 
-	if (mp_env != NULL)
-		delete mp_env;
+    if (mp_env != NULL)
+        delete mp_env;
 
-	if (mp_signingKey != NULL) {
+    if (mp_signingKey != NULL) {
 
-		delete mp_signingKey;
-		mp_signingKey = NULL;
+        delete mp_signingKey;
+        mp_signingKey = NULL;
 
-	}
+    }
 
-	if (mp_signedInfo != NULL) {
+    if (mp_signedInfo != NULL) {
 
-		delete mp_signedInfo;
-		mp_signedInfo = NULL;
+        delete mp_signedInfo;
+        mp_signedInfo = NULL;
 
-	}
+    }
 
-	if (mp_formatter != NULL) {
+    if (mp_formatter != NULL) {
 
-		delete mp_formatter;
-		mp_formatter = NULL;
-	}
+        delete mp_formatter;
+        mp_formatter = NULL;
+    }
 
-	if (mp_KeyInfoResolver != NULL) {
-		delete mp_KeyInfoResolver;
-		mp_KeyInfoResolver = NULL;
-	}
+    if (mp_KeyInfoResolver != NULL) {
+        delete mp_KeyInfoResolver;
+        mp_KeyInfoResolver = NULL;
+    }
 
-	// Delete any object items
-	for (int i = 0; i < ((int) m_objects.size()); ++i) {
-		delete (m_objects[i]);
-	}
-
+    // Delete any object items
+    for (int i = 0; i < ((int) m_objects.size()); ++i) {
+        delete (m_objects[i]);
+    }
 }
 
 // Actions
 
-const XMLCh * DSIGSignature::getErrMsgs() const {
-
-	return m_errStr.rawXMLChBuffer();
-
+const XMLCh* DSIGSignature::getErrMsgs() const {
+    return m_errStr.rawXMLChBuffer();
 }
 
 // --------------------------------------------------------------------------------
@@ -390,117 +349,101 @@ const XMLCh * DSIGSignature::getErrMsgs() const {
 // --------------------------------------------------------------------------------
 
 void DSIGSignature::setPrettyPrint(bool flag) {
-
-	mp_env->setPrettyPrintFlag(flag);
-
+    mp_env->setPrettyPrintFlag(flag);
 }
 
 
-bool DSIGSignature::getPrettyPrint(void) const {
-
-	return mp_env->getPrettyPrintFlag();
-
+bool DSIGSignature::getPrettyPrint() const {
+    return mp_env->getPrettyPrintFlag();
 }
 
 // --------------------------------------------------------------------------------
 //           Creating signatures from blank
 // --------------------------------------------------------------------------------
 
-void DSIGSignature::setDSIGNSPrefix(const XMLCh * prefix) {
-
-	mp_env->setDSIGNSPrefix(prefix);
-
+void DSIGSignature::setDSIGNSPrefix(const XMLCh* prefix) {
+    mp_env->setDSIGNSPrefix(prefix);
 }
 
-void DSIGSignature::setECNSPrefix(const XMLCh * prefix) {
-
-	mp_env->setECNSPrefix(prefix);
-
+void DSIGSignature::setECNSPrefix(const XMLCh* prefix) {
+    mp_env->setECNSPrefix(prefix);
 }
 
-void DSIGSignature::setXPFNSPrefix(const XMLCh * prefix) {
-
-	mp_env->setXPFNSPrefix(prefix);
-
+void DSIGSignature::setXPFNSPrefix(const XMLCh* prefix) {
+    mp_env->setXPFNSPrefix(prefix);
 }
 
 // get
 
-const XMLCh * DSIGSignature::getDSIGNSPrefix() const {
-
-	return mp_env->getDSIGNSPrefix();
-
+const XMLCh* DSIGSignature::getDSIGNSPrefix() const {
+    return mp_env->getDSIGNSPrefix();
 }
 
 
-const XMLCh * DSIGSignature::getECNSPrefix() const {
-
-	return mp_env->getECNSPrefix();
-
+const XMLCh* DSIGSignature::getECNSPrefix() const {
+    return mp_env->getECNSPrefix();
 }
 
-const XMLCh * DSIGSignature::getXPFNSPrefix() const {
-
-	return mp_env->getXPFNSPrefix();
-
+const XMLCh* DSIGSignature::getXPFNSPrefix() const {
+    return mp_env->getXPFNSPrefix();
 }
 
-DOMElement *DSIGSignature::createBlankSignature(
-		DOMDocument *doc,
-		const XMLCh * canonicalizationAlgorithmURI,
-		const XMLCh * signatureAlgorithmURI) {
+DOMElement*DSIGSignature::createBlankSignature(
+        DOMDocument* doc,
+        const XMLCh* canonicalizationAlgorithmURI,
+        const XMLCh* signatureAlgorithmURI) {
 
-	// "New" method to create a blank signature, based on URIs.
+    // "New" method to create a blank signature, based on URIs.
 
-	mp_doc = doc;
-	mp_env->setParentDocument(doc);
+    mp_doc = doc;
+    mp_env->setParentDocument(doc);
 
-	const XMLCh * prefixNS = mp_env->getDSIGNSPrefix();
+    const XMLCh* prefixNS = mp_env->getDSIGNSPrefix();
 
-	safeBuffer str;
+    safeBuffer str;
 
-	makeQName(str, prefixNS, "Signature");
+    makeQName(str, prefixNS, "Signature");
 
-	DOMElement *sigNode = doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, str.rawXMLChBuffer());
+    DOMElement*sigNode = doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, str.rawXMLChBuffer());
 
-	if (prefixNS[0] == '\0') {
-		str.sbTranscodeIn("xmlns");
-	}
-	else {
-		str.sbTranscodeIn("xmlns:");
-		str.sbXMLChCat(prefixNS);
-	}
+    if (prefixNS[0] == '\0') {
+        str.sbTranscodeIn("xmlns");
+    }
+    else {
+        str.sbTranscodeIn("xmlns:");
+        str.sbXMLChCat(prefixNS);
+    }
 
-	sigNode->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS, 
-							str.rawXMLChBuffer(), 
-							DSIGConstants::s_unicodeStrURIDSIG);
+    sigNode->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
+                            str.rawXMLChBuffer(),
+                            DSIGConstants::s_unicodeStrURIDSIG);
 
-	mp_sigNode = sigNode;
+    mp_sigNode = sigNode;
 
-	mp_env->doPrettyPrint(mp_sigNode);
+    mp_env->doPrettyPrint(mp_sigNode);
 
-	// Create the skeleton SignedInfo
-	XSECnew(mp_signedInfo, DSIGSignedInfo(mp_doc, mp_formatter, mp_env));
-	
-	mp_sigNode->appendChild(mp_signedInfo->createBlankSignedInfo(
-		canonicalizationAlgorithmURI, signatureAlgorithmURI));
-	mp_env->doPrettyPrint(mp_sigNode);
+    // Create the skeleton SignedInfo
+    XSECnew(mp_signedInfo, DSIGSignedInfo(mp_doc, mp_formatter, mp_env));
 
-	// Create a dummy signature value (dummy until signed)
+    mp_sigNode->appendChild(mp_signedInfo->createBlankSignedInfo(
+        canonicalizationAlgorithmURI, signatureAlgorithmURI));
+    mp_env->doPrettyPrint(mp_sigNode);
 
-	makeQName(str, mp_env->getDSIGNSPrefix(), "SignatureValue");
-	DOMElement *sigValNode = doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG, 
-												  str.rawXMLChBuffer());
-	mp_signatureValueNode = sigValNode;
-	mp_sigNode->appendChild(sigValNode);
-	mp_env->doPrettyPrint(mp_sigNode);
+    // Create a dummy signature value (dummy until signed)
 
-	// Some text to mark this as a template only
-	sigValNode->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("Not yet signed")));
+    makeQName(str, mp_env->getDSIGNSPrefix(), "SignatureValue");
+    DOMElement*sigValNode = doc->createElementNS(DSIGConstants::s_unicodeStrURIDSIG,
+                                                  str.rawXMLChBuffer());
+    mp_signatureValueNode = sigValNode;
+    mp_sigNode->appendChild(sigValNode);
+    mp_env->doPrettyPrint(mp_sigNode);
 
-	m_loaded = true;
-	
-	return sigNode;
+    // Some text to mark this as a template only
+    sigValNode->appendChild(doc->createTextNode(MAKE_UNICODE_STRING("Not yet signed")));
+
+    m_loaded = true;
+
+    return sigNode;
 }
 
 
@@ -509,16 +452,15 @@ DOMElement *DSIGSignature::createBlankSignature(
 //           Creating References
 // --------------------------------------------------------------------------------
 
-DSIGReference * DSIGSignature::createReference(
-		const XMLCh * URI,
-		const XMLCh * hashAlgorithmURI, 
-		const XMLCh * type) {
+DSIGReference* DSIGSignature::createReference(
+        const XMLCh* URI,
+        const XMLCh* hashAlgorithmURI,
+        const XMLCh* type) {
 
-	return mp_signedInfo->createReference(URI, hashAlgorithmURI, type);
-
+    return mp_signedInfo->createReference(URI, hashAlgorithmURI, type);
 }
 
-DSIGReference * DSIGSignature::removeReference(DSIGReferenceList::size_type index) {
+DSIGReference* DSIGSignature::removeReference(DSIGReferenceList::size_type index) {
     return mp_signedInfo ? mp_signedInfo->removeReference(index) : NULL;
 }
 
@@ -526,109 +468,101 @@ DSIGReference * DSIGSignature::removeReference(DSIGReferenceList::size_type inde
 //           Manipulation of KeyInfo elements
 // --------------------------------------------------------------------------------
 
-void DSIGSignature::clearKeyInfo(void) {
+void DSIGSignature::clearKeyInfo() {
 
-	if (mp_KeyInfoNode == 0)
-		return;
+    if (mp_KeyInfoNode == 0)
+        return;
 
-	if (mp_sigNode->removeChild(mp_KeyInfoNode) != mp_KeyInfoNode) {
+    if (mp_sigNode->removeChild(mp_KeyInfoNode) != mp_KeyInfoNode) {
 
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Attempted to remove KeyInfo node but it is no longer a child of <Signature>");
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Attempted to remove KeyInfo node but it is no longer a child of <Signature>");
 
-	}
+    }
 
-	mp_KeyInfoNode->release();		// No longer required
+    mp_KeyInfoNode->release();        // No longer required
 
-	mp_KeyInfoNode = NULL;
+    mp_KeyInfoNode = NULL;
 
-	// Clear out the list
-	m_keyInfoList.empty();
-
-}
-
-void DSIGSignature::createKeyInfoElement(void) {
-
-	if (mp_KeyInfoNode != NULL)
-		return;
-
-	safeBuffer str;
-
-	makeQName(str, mp_env->getDSIGNSPrefix(), "KeyInfo");
-
-	mp_KeyInfoNode = m_keyInfoList.createKeyInfo();
-
-	// Append the node to the end of the signature
-	
-	DOMNode * afterSignatureValue = mp_signatureValueNode->getNextSibling();
-	while (afterSignatureValue != 0 && afterSignatureValue->getNodeType() != DOMNode::ELEMENT_NODE)
-		afterSignatureValue = afterSignatureValue->getNextSibling();
-
-	if (afterSignatureValue == 0) {
-		mp_sigNode->appendChild(mp_KeyInfoNode);
-		mp_env->doPrettyPrint(mp_sigNode);
-	}
-	else {
-		mp_sigNode->insertBefore(mp_KeyInfoNode, afterSignatureValue);
-		if (mp_env->getPrettyPrintFlag() == true)
-			mp_sigNode->insertBefore(mp_doc->createTextNode(DSIGConstants::s_unicodeStrNL),
-				afterSignatureValue);
-	}
+    // Clear out the list
+    m_keyInfoList.empty();
 
 }
 
-DSIGKeyInfoValue * DSIGSignature::appendDSAKeyValue(const XMLCh * P, 
-						   const XMLCh * Q, 
-						   const XMLCh * G, 
-						   const XMLCh * Y) {
+void DSIGSignature::createKeyInfoElement() {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendDSAKeyValue(P, Q, G, Y);
+    if (mp_KeyInfoNode != NULL)
+        return;
 
+    safeBuffer str;
+
+    makeQName(str, mp_env->getDSIGNSPrefix(), "KeyInfo");
+
+    mp_KeyInfoNode = m_keyInfoList.createKeyInfo();
+
+    // Append the node to the end of the signature
+
+    DOMNode* afterSignatureValue = mp_signatureValueNode->getNextSibling();
+    while (afterSignatureValue != 0 && afterSignatureValue->getNodeType() != DOMNode::ELEMENT_NODE)
+        afterSignatureValue = afterSignatureValue->getNextSibling();
+
+    if (afterSignatureValue == 0) {
+        mp_sigNode->appendChild(mp_KeyInfoNode);
+        mp_env->doPrettyPrint(mp_sigNode);
+    }
+    else {
+        mp_sigNode->insertBefore(mp_KeyInfoNode, afterSignatureValue);
+        if (mp_env->getPrettyPrintFlag() == true)
+            mp_sigNode->insertBefore(mp_doc->createTextNode(DSIGConstants::s_unicodeStrNL),
+                afterSignatureValue);
+    }
 }
 
-DSIGKeyInfoValue * DSIGSignature::appendRSAKeyValue(const XMLCh * modulus, 
-						   const XMLCh * exponent) {
+DSIGKeyInfoValue* DSIGSignature::appendDSAKeyValue(const XMLCh* P,
+                           const XMLCh* Q,
+                           const XMLCh* G,
+                           const XMLCh* Y) {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendRSAKeyValue(modulus, exponent);
+    createKeyInfoElement();
+    return m_keyInfoList.appendDSAKeyValue(P, Q, G, Y);
+}
 
+DSIGKeyInfoValue* DSIGSignature::appendRSAKeyValue(const XMLCh* modulus,
+                           const XMLCh* exponent) {
+
+    createKeyInfoElement();
+    return m_keyInfoList.appendRSAKeyValue(modulus, exponent);
 }
 
 
-DSIGKeyInfoX509 * DSIGSignature::appendX509Data(void) {
+DSIGKeyInfoX509* DSIGSignature::appendX509Data() {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendX509Data();
-
+    createKeyInfoElement();
+    return m_keyInfoList.appendX509Data();
 }
 
-DSIGKeyInfoName * DSIGSignature::appendKeyName(const XMLCh * name, bool isDName) {
+DSIGKeyInfoName* DSIGSignature::appendKeyName(const XMLCh* name, bool isDName) {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendKeyName(name, isDName);
-
+    createKeyInfoElement();
+    return m_keyInfoList.appendKeyName(name, isDName);
 }
 
-DSIGKeyInfoPGPData * DSIGSignature::appendPGPData(const XMLCh * id, const XMLCh * packet) {
+DSIGKeyInfoPGPData* DSIGSignature::appendPGPData(const XMLCh* id, const XMLCh* packet) {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendPGPData(id, packet);
-
+    createKeyInfoElement();
+    return m_keyInfoList.appendPGPData(id, packet);
 }
 
-DSIGKeyInfoSPKIData * DSIGSignature::appendSPKIData(const XMLCh * sexp) {
+DSIGKeyInfoSPKIData* DSIGSignature::appendSPKIData(const XMLCh* sexp) {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendSPKIData(sexp);
-
+    createKeyInfoElement();
+    return m_keyInfoList.appendSPKIData(sexp);
 }
 
-DSIGKeyInfoMgmtData * DSIGSignature::appendMgmtData(const XMLCh * data) {
+DSIGKeyInfoMgmtData* DSIGSignature::appendMgmtData(const XMLCh* data) {
 
-	createKeyInfoElement();
-	return m_keyInfoList.appendMgmtData(data);
-
+    createKeyInfoElement();
+    return m_keyInfoList.appendMgmtData(data);
 }
 
 // --------------------------------------------------------------------------------
@@ -636,428 +570,398 @@ DSIGKeyInfoMgmtData * DSIGSignature::appendMgmtData(const XMLCh * data) {
 // --------------------------------------------------------------------------------
 
 
-void DSIGSignature::load(void) {
+void DSIGSignature::load() {
 
-	// Load all the information from the source document into local variables for easier
-	// manipulation by the other functions in the class
+    // Load all the information from the source document into local variables for easier
+    // manipulation by the other functions in the class
 
-	if (mp_sigNode == NULL) {
+    if (mp_sigNode == NULL) {
 
-		// Attempt to load an empty signature element
-		throw XSECException(XSECException::LoadEmptySignature);
+        // Attempt to load an empty signature element
+        throw XSECException(XSECException::LoadEmptySignature);
 
-	}
+    }
 
-	if (!strEquals(getDSIGLocalName(mp_sigNode), "Signature")) {
+    if (!strEquals(getDSIGLocalName(mp_sigNode), "Signature")) {
 
-		throw XSECException(XSECException::LoadNonSignature);
+        throw XSECException(XSECException::LoadNonSignature);
 
-	}
+    }
 
-	m_loaded = true;
+    m_loaded = true;
 
-	// Find the prefix being used so that we can later use it to manipulate the signature
-	mp_env->setDSIGNSPrefix(mp_sigNode->getPrefix());
+    // Find the prefix being used so that we can later use it to manipulate the signature
+    mp_env->setDSIGNSPrefix(mp_sigNode->getPrefix());
 
-	// Now check for SignedInfo
-	DOMNode *tmpElt = mp_sigNode->getFirstChild();
+    // Now check for SignedInfo
+    DOMNode*tmpElt = mp_sigNode->getFirstChild();
 
-	while (tmpElt != 0 && (tmpElt->getNodeType() != DOMNode::ELEMENT_NODE))
-		// Skip text and comments
-		tmpElt = tmpElt->getNextSibling();
+    while (tmpElt != 0 && (tmpElt->getNodeType() != DOMNode::ELEMENT_NODE))
+        // Skip text and comments
+        tmpElt = tmpElt->getNextSibling();
 
-	if (tmpElt == 0 || !strEquals(getDSIGLocalName(tmpElt), "SignedInfo")) {
+    if (tmpElt == 0 || !strEquals(getDSIGLocalName(tmpElt), "SignedInfo")) {
 
-			throw XSECException(XSECException::ExpectedDSIGChildNotFound, 
-					"Expected <SignedInfo> as first child of <Signature>");
+            throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+                    "Expected <SignedInfo> as first child of <Signature>");
 
-	}
+    }
 
-	// Have a signed info
+    // Have a signed info
 
-	XSECnew(mp_signedInfo, DSIGSignedInfo(mp_doc, mp_formatter, tmpElt, mp_env));
-	mp_signedInfo->load();
+    XSECnew(mp_signedInfo, DSIGSignedInfo(mp_doc, mp_formatter, tmpElt, mp_env));
+    mp_signedInfo->load();
 
-	// Look at Signature Value
-	tmpElt = findNextElementChild(tmpElt);
-	if (tmpElt == 0 || !strEquals(getDSIGLocalName(tmpElt), "SignatureValue")) {
+    // Look at Signature Value
+    tmpElt = findNextElementChild(tmpElt);
+    if (tmpElt == 0 || !strEquals(getDSIGLocalName(tmpElt), "SignatureValue")) {
 
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Expected <SignatureValue> node");
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Expected <SignatureValue> node");
 
-	}
+    }
 
-	DOMNode *tmpSV = tmpElt->getFirstChild();
-	while (tmpSV != 0 && tmpSV->getNodeType() != DOMNode::TEXT_NODE)
-		tmpSV = tmpSV->getNextSibling();
+    DOMNode*tmpSV = tmpElt->getFirstChild();
+    while (tmpSV != 0 && tmpSV->getNodeType() != DOMNode::TEXT_NODE)
+        tmpSV = tmpSV->getNextSibling();
 
-	if (tmpSV == 0)
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-		"Expected TEXT child of <SignatureValue>");
+    if (tmpSV == 0)
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+        "Expected TEXT child of <SignatureValue>");
 
-	mp_signatureValueNode = tmpElt;
-	
-	// The signature value is transcoded to local code page, as it is easier
-	// to work with, and should be low ASCII in any case (Base64)
+    mp_signatureValueNode = tmpElt;
 
-	m_signatureValueSB.sbTranscodeIn(tmpSV->getNodeValue());
+    // The signature value is transcoded to local code page, as it is easier
+    // to work with, and should be low ASCII in any case (Base64)
+
+    m_signatureValueSB.sbTranscodeIn(tmpSV->getNodeValue());
 
 
-	// Now look at KeyInfo
-	tmpElt = findNextElementChild(tmpElt);
+    // Now look at KeyInfo
+    tmpElt = findNextElementChild(tmpElt);
 
-	if (tmpElt != 0 && strEquals(getDSIGLocalName(tmpElt), "KeyInfo")) {
+    if (tmpElt != 0 && strEquals(getDSIGLocalName(tmpElt), "KeyInfo")) {
 
-		// Have a keyInfo
+        // Have a keyInfo
 
-		mp_KeyInfoNode = tmpElt;		// In case we later want to manipulate it
+        mp_KeyInfoNode = tmpElt;        // In case we later want to manipulate it
 
-		m_keyInfoList.loadListFromXML(tmpElt);
+        m_keyInfoList.loadListFromXML(tmpElt);
 
-		tmpElt = findNextElementChild(tmpElt);
-	}
+        tmpElt = findNextElementChild(tmpElt);
+    }
 
-	while (tmpElt != 0 && strEquals(getDSIGLocalName(tmpElt), "Object")) {
+    while (tmpElt != 0 && strEquals(getDSIGLocalName(tmpElt), "Object")) {
 
-		DSIGObject * obj;
-		XSECnew(obj, DSIGObject(mp_env, tmpElt));
-		obj->load();
+        DSIGObject* obj;
+        XSECnew(obj, DSIGObject(mp_env, tmpElt));
+        obj->load();
 
-		m_objects.push_back(obj);
+        m_objects.push_back(obj);
 
-		tmpElt = findNextElementChild(tmpElt);
+        tmpElt = findNextElementChild(tmpElt);
 
-	}
+    }
 /*
-	* Strictly speaking, this should remain, but it causes too many problems with non
-	* conforming signatures
+    * Strictly speaking, this should remain, but it causes too many problems with non
+    * conforming signatures
 
-	if (tmpElt != 0) {
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound, 
-			"DSIGSignature::load - Unexpected (non Object) Element found at end of signature");
-	}
+    if (tmpElt != 0) {
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "DSIGSignature::load - Unexpected (non Object) Element found at end of signature");
+    }
 */
 }
 
-TXFMChain * DSIGSignature::getSignedInfoInput(void) const {
+TXFMChain* DSIGSignature::getSignedInfoInput() const {
 
-	TXFMBase * txfm;
-	TXFMChain * chain;
+    TXFMBase* txfm;
+    TXFMChain* chain;
 
-	// First we calculate the hash.  Start off by creating a starting point
-	XSECnew(txfm, TXFMDocObject(mp_doc));
-	XSECnew(chain, TXFMChain(txfm));
-	Janitor<TXFMChain> j_chain(chain);
+    // First we calculate the hash.  Start off by creating a starting point
+    XSECnew(txfm, TXFMDocObject(mp_doc));
+    XSECnew(chain, TXFMChain(txfm));
+    Janitor<TXFMChain> j_chain(chain);
 
-	((TXFMDocObject *) txfm)->setInput(mp_doc, mp_signedInfo->getDOMNode());
-	
-	// canonicalise the SignedInfo content
+    ((TXFMDocObject*) txfm)->setInput(mp_doc, mp_signedInfo->getDOMNode());
 
-	switch (mp_signedInfo->getCanonicalizationMethod()) {
+    // canonicalise the SignedInfo content
 
-	case CANON_C14N_NOC :
+    bool exclusive;
+    bool comments;
+    bool onedotone;
+    if (XSECAlgorithmSupport::evalCanonicalizationMethod(mp_signedInfo->getCanonicalizationMethod(),
+            exclusive, comments, onedotone)) {
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		txfm->stripComments();
-		
-		break;
+        XSECnew(txfm, TXFMC14n(mp_doc));
+        chain->appendTxfm(txfm);
 
-	case CANON_C14N_COM :
+        if (comments)
+            txfm->activateComments();
+        else
+            txfm->stripComments();
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		txfm->activateComments();
+        if (exclusive)
+            ((TXFMC14n*) txfm)->setExclusive();
 
-		break;
+        if (onedotone)
+            ((TXFMC14n*) txfm)->setInclusive11();
 
-	case CANON_C14NE_NOC :
+    } else {
+        throw XSECException(XSECException::SigVfyError,
+            "Unknown CanonicalizationMethod in DSIGSignature::calculateSignedInfoHash()");
+    }
 
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		((TXFMC14n *) txfm)->setExclusive();
-		txfm->stripComments();
-		
-		break;
-
-	case CANON_C14NE_COM :
-
-		XSECnew(txfm, TXFMC14n(mp_doc));
-		chain->appendTxfm(txfm);
-		((TXFMC14n *) txfm)->setExclusive();
-		txfm->activateComments();
-
-		break;
-
-	default :
-
-		throw XSECException(XSECException::SigVfyError,
-			"Canonicalisation method unknown in DSIGSignature::calculateSignedInfoHash()");
-
-	}
-	
-	j_chain.release();
-	return chain;
-
+    j_chain.release();
+    return chain;
 }
 
-unsigned int DSIGSignature::calculateSignedInfoHash(unsigned char * hashBuf, 
-													unsigned int hashBufLen) const {
+unsigned int DSIGSignature::calculateSignedInfoHash(unsigned char* hashBuf,
+                                                    unsigned int hashBufLen) const {
 
-	// Get the SignedInfo input bytes
-	TXFMChain * chain = getSignedInfoInput();
-	Janitor<TXFMChain> j_chain(chain);
+    // Get the SignedInfo input bytes
+    TXFMChain* chain = getSignedInfoInput();
+    Janitor<TXFMChain> j_chain(chain);
 
-	// Check for debugging sink for the data
-	TXFMBase* sink = XSECPlatformUtils::GetReferenceLoggingSink(mp_doc);
-	if (sink)
-		chain->appendTxfm(sink);
+    // Check for debugging sink for the data
+    TXFMBase* sink = XSECPlatformUtils::GetReferenceLoggingSink(mp_doc);
+    if (sink)
+        chain->appendTxfm(sink);
 
-	// Setup Hash
-	// First find the appropriate handler for the URI
-	XSECAlgorithmHandler * handler = 
-		XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
-					mp_signedInfo->getAlgorithmURI());
+    // Setup Hash
+    // First find the appropriate handler for the URI
+    XSECAlgorithmHandler* handler =
+        XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
+                    mp_signedInfo->getAlgorithmURI());
 
-	if (handler == NULL) {
+    if (handler == NULL) {
+        throw XSECException(XSECException::SigVfyError,
+            "Hash method unknown in DSIGSignature::calculateSignedInfoHash()");
+    }
 
-
-		throw XSECException(XSECException::SigVfyError,
-			"Hash method unknown in DSIGSignature::calculateSignedInfoHash()");
-
-	}
-
-	if (!handler->appendSignatureHashTxfm(chain, mp_signedInfo->getAlgorithmURI(), mp_signingKey)) {
-
-		throw XSECException(XSECException::SigVfyError,
-			"Unexpected error in handler whilst appending Signature Hash transform");
-
-	}
+    if (!handler->appendSignatureHashTxfm(chain, mp_signedInfo->getAlgorithmURI(), mp_signingKey)) {
+        throw XSECException(XSECException::SigVfyError,
+            "Unexpected error in handler whilst appending Signature Hash transform");
+    }
 
 
-	// Write hash to the buffer
-	return chain->getLastTxfm()->readBytes((XMLByte *) hashBuf, hashBufLen);
-
+    // Write hash to the buffer
+    return chain->getLastTxfm()->readBytes((XMLByte*) hashBuf, hashBufLen);
 }
 
-unsigned int DSIGSignature::calculateSignedInfoAndReferenceHash(unsigned char * hashBuf, 
-													unsigned int hashBufLen) const {
+unsigned int DSIGSignature::calculateSignedInfoAndReferenceHash(unsigned char* hashBuf,
+                                                    unsigned int hashBufLen) const {
 
-	// Set up the reference list hashes - including any manifests
-	mp_signedInfo->hash(m_interlockingReferences);
-	// calculaet signed InfoHash
-	return calculateSignedInfoHash(hashBuf,hashBufLen);
+    // Set up the reference list hashes - including any manifests
+    mp_signedInfo->hash(m_interlockingReferences);
+    // calculaet signed InfoHash
+    return calculateSignedInfoHash(hashBuf,hashBufLen);
 }
 
 // --------------------------------------------------------------------------------
 //           Verify a signature
 // --------------------------------------------------------------------------------
 
-bool DSIGSignature::verifySignatureOnlyInternal(void) const {
+bool DSIGSignature::verifySignatureOnlyInternal() const {
 
-	unsigned char hash[4096];
+    unsigned char hash[4096];
 
-	if (!m_loaded) {
+    if (!m_loaded) {
 
-		// Need to call "load" prior to checking a signature
-		throw XSECException(XSECException::SigVfyError,
-					"DSIGSignature::verify() called prior to DSIGSignature::load()");
+        // Need to call "load" prior to checking a signature
+        throw XSECException(XSECException::SigVfyError,
+                    "DSIGSignature::verify() called prior to DSIGSignature::load()");
 
-	}
+    }
 
-	// FIX: CVE-2009-0217
+    // FIX: CVE-2009-0217
 
-	if (mp_signedInfo->getHMACOutputLength() > 0 && mp_signedInfo->getHMACOutputLength() < 80) {
-	    throw XSECException(XSECException::SigVfyError,
+    if (mp_signedInfo->getHMACOutputLength() > 0 && mp_signedInfo->getHMACOutputLength() < 80) {
+        throw XSECException(XSECException::SigVfyError,
             "DSIGSignature::verify() - HMACOutputLength is unsafe");
-	}
+    }
 
-	// Try to find a key
-	if (mp_signingKey == NULL) {
+    // Try to find a key
+    if (mp_signingKey == NULL) {
 
-//		// Try to load a key from the KeyInfo list
-//		if ((mp_signingKey = m_keyInfoList.findKey()) == NULL) {
+//        // Try to load a key from the KeyInfo list
+//        if ((mp_signingKey = m_keyInfoList.findKey()) == NULL) {
 
-//			throw XSECException(XSECException::SigVfyError,
-//				"DSIGSignature::verify() - no verification key loaded and cannot determine from KeyInfo list");
-//		}
+//            throw XSECException(XSECException::SigVfyError,
+//                "DSIGSignature::verify() - no verification key loaded and cannot determine from KeyInfo list");
+//        }
 
-		if (mp_KeyInfoResolver == NULL) {
-			
-			throw XSECException(XSECException::SigVfyError,
-				"DSIGSignature::verify() - no verification key loaded and no KeyInfoResolver loaded");
+        if (mp_KeyInfoResolver == NULL) {
 
-		}
-		
-		if ((mp_signingKey = mp_KeyInfoResolver->resolveKey(&m_keyInfoList)) == NULL) {
+            throw XSECException(XSECException::SigVfyError,
+                "DSIGSignature::verify() - no verification key loaded and no KeyInfoResolver loaded");
 
-			throw XSECException(XSECException::SigVfyError,
-				"DSIGSignature::verify() - no verification key loaded and cannot determine from KeyInfoResolver");
-		}
+        }
 
-	}
+        if ((mp_signingKey = mp_KeyInfoResolver->resolveKey(&m_keyInfoList)) == NULL) {
 
-	// Get the SignedInfo input bytes
-	TXFMChain * chain = getSignedInfoInput();
-	Janitor<TXFMChain> j_chain(chain);
+            throw XSECException(XSECException::SigVfyError,
+                "DSIGSignature::verify() - no verification key loaded and cannot determine from KeyInfoResolver");
+        }
 
-	calculateSignedInfoHash(hash, 4096);
+    }
 
-	// Now set up to verify
-	// First find the appropriate handler for the URI
-	XSECAlgorithmHandler * handler = 
-		XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
-					mp_signedInfo->getAlgorithmURI());
+    // Get the SignedInfo input bytes
+    TXFMChain* chain = getSignedInfoInput();
+    Janitor<TXFMChain> j_chain(chain);
 
-	if (handler == NULL) {
+    calculateSignedInfoHash(hash, 4096);
 
-		throw XSECException(XSECException::SigVfyError,
-			"Hash method unknown in DSIGSignature::verifySignatureOnlyInternal()");
+    // Now set up to verify
+    // First find the appropriate handler for the URI
+    XSECAlgorithmHandler* handler =
+        XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
+                    mp_signedInfo->getAlgorithmURI());
 
-	}
+    if (handler == NULL) {
 
-	bool sigVfyRet = handler->verifyBase64Signature(chain, 
-		mp_signedInfo->getAlgorithmURI(), 
-		m_signatureValueSB.rawCharBuffer(), 
-		mp_signedInfo->getHMACOutputLength(),
-		mp_signingKey);
+        throw XSECException(XSECException::SigVfyError,
+            "Hash method unknown in DSIGSignature::verifySignatureOnlyInternal()");
 
-	if (!sigVfyRet)
-		m_errStr.sbXMLChCat("Validation of <SignedInfo> failed");
+    }
 
-	return sigVfyRet;
+    bool sigVfyRet = handler->verifyBase64Signature(chain,
+        mp_signedInfo->getAlgorithmURI(),
+        m_signatureValueSB.rawCharBuffer(),
+        mp_signedInfo->getHMACOutputLength(),
+        mp_signingKey);
 
+    if (!sigVfyRet)
+        m_errStr.sbXMLChCat("Validation of <SignedInfo> failed");
+
+    return sigVfyRet;
 }
 
-bool DSIGSignature::verifySignatureOnly(void) const {
-
-	m_errStr.sbTranscodeIn("");
-	return verifySignatureOnlyInternal();
-
+bool DSIGSignature::verifySignatureOnly() const {
+    m_errStr.sbTranscodeIn("");
+    return verifySignatureOnlyInternal();
 }
 
-bool DSIGSignature::verify(void) const {
+bool DSIGSignature::verify() const {
 
-	// We have a (hopefully) fully loaded signature.  Need to 
-	// verify
+    // We have a (hopefully) fully loaded signature.  Need to
+    // verify
 
-	bool referenceCheckResult;
+    bool referenceCheckResult;
 
-	if (!m_loaded) {
+    if (!m_loaded) {
 
-		// Need to call "load" prior to checking a signature
-		throw XSECException(XSECException::SigVfyError,
-					"DSIGSignature::verify() called prior to DSIGSignature::load()");
+        // Need to call "load" prior to checking a signature
+        throw XSECException(XSECException::SigVfyError,
+                    "DSIGSignature::verify() called prior to DSIGSignature::load()");
 
-	}
+    }
 
-	// Reset
-	m_errStr.sbXMLChIn(DSIGConstants::s_unicodeStrEmpty);
+    // Reset
+    m_errStr.sbXMLChIn(DSIGConstants::s_unicodeStrEmpty);
 
-	// First thing to do is check the references
+    // First thing to do is check the references
 
-	referenceCheckResult = mp_signedInfo->verify(m_errStr);
+    referenceCheckResult = mp_signedInfo->verify(m_errStr);
 
-	// Check the signature
+    // Check the signature
 
-	bool sigVfyResult = verifySignatureOnlyInternal();
+    bool sigVfyResult = verifySignatureOnlyInternal();
 
-	return sigVfyResult & referenceCheckResult;
+    return sigVfyResult & referenceCheckResult;
 }
 
 // --------------------------------------------------------------------------------
 //           Sign the XML document that has been previously loaded
 // --------------------------------------------------------------------------------
 
-void DSIGSignature::sign(void) {
+void DSIGSignature::sign() {
 
-	// We have a (hopefully) fully loaded signature.  Need to 
-	// sign
+    // We have a (hopefully) fully loaded signature.  Need to
+    // sign
 
-	if (!m_loaded) {
+    if (!m_loaded) {
 
-		// Need to call "load" prior to checking a signature
-		throw XSECException(XSECException::SigVfyError,
-					"DSIGSignature::sign() called prior to DSIGSignature::load()");
+        // Need to call "load" prior to checking a signature
+        throw XSECException(XSECException::SigVfyError,
+                    "DSIGSignature::sign() called prior to DSIGSignature::load()");
 
-	}
+    }
 
-	// Check we have a key
-	if (mp_signingKey == NULL) {
+    // Check we have a key
+    if (mp_signingKey == NULL) {
 
-		throw XSECException(XSECException::SigVfyError,
-			"DSIGSignature::sign() - no signing key loaded");
-		
-
-	}
-
-	// Reset error string in case we have any reference problems.
-	m_errStr.sbXMLChIn(DSIGConstants::s_unicodeStrEmpty);
-
-	// Set up the reference list hashes - including any manifests
-	mp_signedInfo->hash(m_interlockingReferences);
-
-	// Get the SignedInfo input bytes
-	TXFMChain * chain = getSignedInfoInput();
-	Janitor<TXFMChain> j_chain(chain);
-
-	// Calculate the hash to be signed
-
-	safeBuffer b64Buf;
-
-	XSECAlgorithmHandler * handler = 
-		XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
-					mp_signedInfo->getAlgorithmURI());
-
-	if (handler == NULL) {
+        throw XSECException(XSECException::SigVfyError,
+            "DSIGSignature::sign() - no signing key loaded");
 
 
-		throw XSECException(XSECException::SigVfyError,
-			"Hash method unknown in DSIGSignature::sign()");
+    }
 
-	}
+    // Reset error string in case we have any reference problems.
+    m_errStr.sbXMLChIn(DSIGConstants::s_unicodeStrEmpty);
 
-	if (!handler->signToSafeBuffer(chain, mp_signedInfo->getAlgorithmURI(), 
-								   mp_signingKey, mp_signedInfo->getHMACOutputLength(), b64Buf)) {
+    // Set up the reference list hashes - including any manifests
+    mp_signedInfo->hash(m_interlockingReferences);
 
-		throw XSECException(XSECException::SigVfyError,
-			"Unexpected error in handler whilst appending Signature Hash transform");
+    // Get the SignedInfo input bytes
+    TXFMChain* chain = getSignedInfoInput();
+    Janitor<TXFMChain> j_chain(chain);
 
-	}
+    // Calculate the hash to be signed
 
-	// Now we have the signature - place it in the DOM structures
+    safeBuffer b64Buf;
 
-	DOMNode *tmpElt = mp_signatureValueNode->getFirstChild();
+    XSECAlgorithmHandler* handler =
+        XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
+                    mp_signedInfo->getAlgorithmURI());
 
-	while (tmpElt != NULL && tmpElt->getNodeType() != DOMNode::TEXT_NODE)
-		tmpElt = tmpElt->getNextSibling();
+    if (handler == NULL) {
 
-	if (tmpElt == NULL) {
-		// Need to create the underlying TEXT_NODE
-		DOMDocument * doc = mp_signatureValueNode->getOwnerDocument();
-		tmpElt = doc->createTextNode(b64Buf.sbStrToXMLCh());
-		mp_signatureValueNode->appendChild(tmpElt);
-	}
-	else {
-		tmpElt->setNodeValue(b64Buf.sbStrToXMLCh());
-	}
 
-	// And copy to the local buffer
-	m_signatureValueSB = b64Buf;
-	
+        throw XSECException(XSECException::SigVfyError,
+            "Hash method unknown in DSIGSignature::sign()");
+
+    }
+
+    if (!handler->signToSafeBuffer(chain, mp_signedInfo->getAlgorithmURI(),
+                                   mp_signingKey, mp_signedInfo->getHMACOutputLength(), b64Buf)) {
+
+        throw XSECException(XSECException::SigVfyError,
+            "Unexpected error in handler whilst appending Signature Hash transform");
+
+    }
+
+    // Now we have the signature - place it in the DOM structures
+
+    DOMNode*tmpElt = mp_signatureValueNode->getFirstChild();
+
+    while (tmpElt != NULL && tmpElt->getNodeType() != DOMNode::TEXT_NODE)
+        tmpElt = tmpElt->getNextSibling();
+
+    if (tmpElt == NULL) {
+        // Need to create the underlying TEXT_NODE
+        DOMDocument* doc = mp_signatureValueNode->getOwnerDocument();
+        tmpElt = doc->createTextNode(b64Buf.sbStrToXMLCh());
+        mp_signatureValueNode->appendChild(tmpElt);
+    }
+    else {
+        tmpElt->setNodeValue(b64Buf.sbStrToXMLCh());
+    }
+
+    // And copy to the local buffer
+    m_signatureValueSB = b64Buf;
 }
 
 // --------------------------------------------------------------------------------
 //           Key Management
 // --------------------------------------------------------------------------------
 
-void DSIGSignature::setSigningKey(XSECCryptoKey *k) {
+void DSIGSignature::setSigningKey(XSECCryptoKey* k) {
 
-	if (mp_signingKey != NULL)
-		delete mp_signingKey;
+    if (mp_signingKey != NULL)
+        delete mp_signingKey;
 
-	mp_signingKey = k;
-
+    mp_signingKey = k;
 }
 
 // --------------------------------------------------------------------------------
@@ -1070,52 +974,38 @@ void DSIGSignature::setSigningKey(XSECCryptoKey *k) {
  */
 
 void DSIGSignature::setIdByAttributeName(bool flag) {
-
-	mp_env->setIdByAttributeName(flag);
-
+    mp_env->setIdByAttributeName(flag);
 }
 
-bool DSIGSignature::getIdByAttributeName(void) const {
-
-	return mp_env->getIdByAttributeName();
-
+bool DSIGSignature::getIdByAttributeName() const {
+    return mp_env->getIdByAttributeName();
 }
 
 
-void DSIGSignature::registerIdAttributeName(const XMLCh * name) {
-
-	mp_env->registerIdAttributeName(name);
-
+void DSIGSignature::registerIdAttributeName(const XMLCh* name) {
+    mp_env->registerIdAttributeName(name);
 }
 
-bool DSIGSignature::deregisterIdAttributeName(const XMLCh * name) {
-
-	return mp_env->deregisterIdAttributeName(name);
-
+bool DSIGSignature::deregisterIdAttributeName(const XMLCh* name) {
+    return mp_env->deregisterIdAttributeName(name);
 }
 
-void DSIGSignature::registerIdAttributeNameNS(const XMLCh * ns, const XMLCh * name) {
-
-	mp_env->registerIdAttributeNameNS(ns, name);
-
+void DSIGSignature::registerIdAttributeNameNS(const XMLCh* ns, const XMLCh* name) {
+    mp_env->registerIdAttributeNameNS(ns, name);
 }
 
-bool DSIGSignature::deregisterIdAttributeNameNS(const XMLCh * ns, const XMLCh * name) {
-
-	return mp_env->deregisterIdAttributeNameNS(ns, name);
-
+bool DSIGSignature::deregisterIdAttributeNameNS(const XMLCh* ns, const XMLCh* name) {
+    return mp_env->deregisterIdAttributeNameNS(ns, name);
 }
 
 // --------------------------------------------------------------------------------
 //           Other functions
 // --------------------------------------------------------------------------------
 
-const XMLCh * DSIGSignature::getSignatureValue(void) const {
+const XMLCh* DSIGSignature::getSignatureValue() const {
 
-	if (mp_signatureValueNode == NULL)
-		return NULL;
+    if (mp_signatureValueNode == NULL)
+        return NULL;
 
-	return findFirstChildOfType(mp_signatureValueNode, DOMNode::TEXT_NODE)->getNodeValue();
-
+    return findFirstChildOfType(mp_signatureValueNode, DOMNode::TEXT_NODE)->getNodeValue();
 }
-

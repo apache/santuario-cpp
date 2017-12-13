@@ -228,16 +228,6 @@ public:
 	);
 
 	/**
-	 * \brief Append a Canonicalization Transform to the Reference.
-	 *
-	 * @param cm The type of canonicalisation to be added.
-	 * @returns The newly create canonicalisation transform
-	 * @deprecated Use the AlgorithmURI based method instead
-	 */
-
-	DSIGTransformC14n * appendCanonicalizationTransform(canonicalizationMethod cm);
-
-	/**
 	 * \brief Append a "debug" transformer.
 	 *
 	 * This method allows applications to provide a TXFM that will be appended

@@ -26,7 +26,6 @@
 // XSEC
 
 #include <xsec/dsig/DSIGConstants.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #include "../utils/XSECAlgorithmSupport.hpp"
 
@@ -107,32 +106,32 @@ static XMLCh s_md5[] = {
 static bool getHashType(const XMLCh* URI, XSECCryptoHash::HashType& type)
 {
 
-    if (strEquals(URI, s_md5)) {
+    if (XMLString::equals(URI, s_md5)) {
         type = XSECCryptoHash::HASH_MD5;
         return true;
     }
 
-    if (strEquals(URI, s_sha1)) {
+    if (XMLString::equals(URI, s_sha1)) {
         type = XSECCryptoHash::HASH_SHA1;
         return true;
     }
 
-    if (strEquals(URI, s_sha224)) {
+    if (XMLString::equals(URI, s_sha224)) {
         type = XSECCryptoHash::HASH_SHA224;
         return true;
     }
 
-    if (strEquals(URI, s_sha256)) {
+    if (XMLString::equals(URI, s_sha256)) {
         type = XSECCryptoHash::HASH_SHA256;
         return true;
     }
 
-    if (strEquals(URI, s_sha384)) {
+    if (XMLString::equals(URI, s_sha384)) {
         type = XSECCryptoHash::HASH_SHA384;
         return true;
     }
 
-    if (strEquals(URI, s_sha512)) {
+    if (XMLString::equals(URI, s_sha512)) {
         type = XSECCryptoHash::HASH_SHA512;
         return true;
     }
@@ -178,4 +177,46 @@ XSECCryptoHash::HashType XSECAlgorithmSupport::getMGF1HashType(const XMLCh* uri)
     }
 
     return XSECCryptoHash::HASH_NONE;
+}
+
+bool XSECAlgorithmSupport::evalCanonicalizationMethod(
+        const XMLCh* uri, bool& exclusive, bool& comments, bool& onedotone)
+{
+    // Quick and dirty but inefficient
+    if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIC14N_NOC)) {
+        exclusive = false;
+        comments = false;
+        onedotone = false;
+    }
+    else if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIC14N_COM)) {
+        exclusive = false;
+        comments = true;
+        onedotone = false;
+    }
+    else if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIEXC_C14N_NOC)) {
+        exclusive = true;
+        comments = false;
+        onedotone = false;
+    }
+    else if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIEXC_C14N_COM)) {
+        exclusive = true;
+        comments = true;
+        onedotone = false;
+    }
+    else if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIC14N11_NOC)) {
+        exclusive = false;
+        comments = false;
+        onedotone = true;
+    }
+    else if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIC14N11_COM)) {
+        exclusive = false;
+        comments = true;
+        onedotone = true;
+    }
+    else {
+        // Unknown
+        return false;
+    }
+
+    return true;
 }

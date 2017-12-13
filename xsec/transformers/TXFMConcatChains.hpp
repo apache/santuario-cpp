@@ -54,7 +54,7 @@ class XSEC_EXPORT TXFMConcatChains : public TXFMBase {
 public:
 
 	TXFMConcatChains(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMConcatChains();
+	virtual ~TXFMConcatChains();
 
 	// Methods to set the inputs.  For the concat class, this will
 	// append the input to the last appended chain

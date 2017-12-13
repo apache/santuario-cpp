@@ -72,12 +72,6 @@ DSIGTransformXPathFilter::~DSIGTransformXPathFilter() {
 
 }
 
-transformType DSIGTransformXPathFilter::getTransformType() const {
-
-	return TRANSFORM_XPATH_FILTER;
-
-}
-
 
 void DSIGTransformXPathFilter::appendTransformer(TXFMChain * input) {
 
@@ -201,14 +195,14 @@ void DSIGTransformXPathFilter::load(void) {
 //           Retrieve expression information
 // --------------------------------------------------------------------------------
 
-unsigned int DSIGTransformXPathFilter::getExprNum(void) {
+unsigned int DSIGTransformXPathFilter::getExprNum() const {
 
 	return (unsigned int) m_exprs.size();
 
 }
 
 
-DSIGXPathFilterExpr * DSIGTransformXPathFilter::expr(unsigned int n) {
+DSIGXPathFilterExpr* DSIGTransformXPathFilter::expr(unsigned int n) const {
 
 	if (n < m_exprs.size())
 		return m_exprs[n];

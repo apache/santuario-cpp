@@ -66,16 +66,6 @@ DSIGTransformC14n::~DSIGTransformC14n() {};
 //           Interface Methods
 // --------------------------------------------------------------------------------
 
-transformType DSIGTransformC14n::getTransformType() const {
-
-	if ((m_cMethod == CANON_C14NE_NOC) || (m_cMethod == CANON_C14NE_COM))
-		return TRANSFORM_EXC_C14N;
-	else if ((m_cMethod == CANON_C14N11_NOC) || (m_cMethod == CANON_C14N11_COM))
-        return TRANSFORM_C14N11;
-	return TRANSFORM_C14N;
-
-}
-
 void DSIGTransformC14n::appendTransformer(TXFMChain * input) {
 
 	TXFMC14n * c;
@@ -265,13 +255,13 @@ void DSIGTransformC14n::setCanonicalizationMethod(canonicalizationMethod method)
 
 }
 
-canonicalizationMethod DSIGTransformC14n::getCanonicalizationMethod(void) {
+canonicalizationMethod DSIGTransformC14n::getCanonicalizationMethod() const {
 
 	return m_cMethod;
 
 }
 
-void DSIGTransformC14n::createInclusiveNamespaceNode(void) {
+void DSIGTransformC14n::createInclusiveNamespaceNode() {
 
 	// Creates an empty inclusiveNamespace node.  Does _not_ set the prefixlist attribute
 
@@ -371,13 +361,13 @@ void DSIGTransformC14n::addInclusiveNamespace(const char * ns) {
 
 }
 
-const XMLCh * DSIGTransformC14n::getPrefixList(void) {
+const XMLCh * DSIGTransformC14n::getPrefixList() const {
 
 	return mp_inclNSStr;
 
 }
 
-void DSIGTransformC14n::clearInclusiveNamespaces(void) {
+void DSIGTransformC14n::clearInclusiveNamespaces() {
 
 	if (mp_inclNSNode != 0) {
 

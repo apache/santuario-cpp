@@ -60,13 +60,6 @@ DSIGTransformBase64::~DSIGTransformBase64() {};
 // --------------------------------------------------------------------------------
 
 
-transformType DSIGTransformBase64::getTransformType() const {
-
-	return TRANSFORM_BASE64;
-
-}
-
-
 void DSIGTransformBase64::appendTransformer(TXFMChain * input) {
 
 	// If the input is a Nodeset then we need to find the text from the input

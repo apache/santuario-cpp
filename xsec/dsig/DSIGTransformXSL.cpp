@@ -108,13 +108,6 @@ DSIGTransformXSL::~DSIGTransformXSL() {};
 // --------------------------------------------------------------------------------
 
 
-transformType DSIGTransformXSL::getTransformType() const {
-
-	return TRANSFORM_XSLT;
-
-}
-
-
 void DSIGTransformXSL::appendTransformer(TXFMChain * input) {
 
 

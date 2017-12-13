@@ -101,15 +101,6 @@ public:
 	//@{
 
 	/**
-	 * \brief Determine the transform type.
-	 *
-	 * Used to determine what the type of the transform is.
-	 *
-	 */
-
-	virtual transformType getTransformType() const;
-
-	/**
 	 * \brief Create the XPath Transformer class.
 	 *
 	 * Create the transformer associated with this XPath transform.
@@ -169,7 +160,7 @@ public:
 	 * @returns The expression
 	 */
 
-	const char * getExpression(void);
+	const char * getExpression() const;
 
 	/**
 	 * \brief Add a new namespace to the list to be used
@@ -191,7 +182,7 @@ public:
 	 * @returns A pointer to the NamedNodeMap
 	 */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap * getNamespaces(void) {
+	XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap * getNamespaces() const {
 		return mp_NSMap;
 	}
 

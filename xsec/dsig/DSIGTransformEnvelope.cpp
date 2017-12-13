@@ -60,13 +60,6 @@ DSIGTransformEnvelope::~DSIGTransformEnvelope() {};
 // --------------------------------------------------------------------------------
 
 
-transformType DSIGTransformEnvelope::getTransformType() const {
-
-	return TRANSFORM_ENVELOPED_SIGNATURE;
-
-}
-
-
 void DSIGTransformEnvelope::appendTransformer(TXFMChain * input) {
 
 #ifdef XSEC_USE_XPATH_ENVELOPE

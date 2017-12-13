@@ -248,28 +248,19 @@ DSIGTransformXSL * DSIGReference::appendXSLTransform(DOMNode * stylesheet) {
 
 }
 
-DSIGTransformC14n * DSIGReference::appendCanonicalizationTransform(canonicalizationMethod cm) {
+DSIGTransformC14n * DSIGReference::appendCanonicalizationTransform(
+        const XMLCh * canonicalizationAlgorithmURI) {
 
     DOMElement *txfmElt;
     DSIGTransformC14n * txfm;
 
     XSECnew(txfm, DSIGTransformC14n(mp_env));
     txfmElt = txfm->createBlankTransform(mp_env->getParentDocument());
-    txfm->setCanonicalizationMethod(cm);
+    txfm->setCanonicalizationMethod(canonicalizationAlgorithmURI);
 
     addTransform(txfm, txfmElt);
 
     return txfm;
-
-}
-
-DSIGTransformC14n * DSIGReference::appendCanonicalizationTransform(
-        const XMLCh * canonicalizationAlgorithmURI) {
-
-    canonicalizationMethod cm;
-    XSECmapURIToCanonicalizationMethod(canonicalizationAlgorithmURI, cm);
-
-    return appendCanonicalizationTransform(cm);
 
 }
 

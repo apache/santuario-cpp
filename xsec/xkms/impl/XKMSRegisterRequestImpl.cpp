@@ -321,7 +321,7 @@ DSIGSignature * XKMSRegisterRequestImpl::addProofOfPossessionSignature(
 	sb.sbXMLChCat(mp_prototypeKeyBinding->getId());
 
 	DSIGReference *ref = ret->createReference(sb.rawXMLChBuffer(), hashAlgorithm);
-	ref->appendCanonicalizationTransform(CANON_C14NE_COM);
+	ref->appendCanonicalizationTransform(DSIGConstants::s_unicodeStrURIEXC_C14N_COM);
 
 	/* Embed the signature in the document inside a KeyBindingAuthentication element */
 	safeBuffer str;

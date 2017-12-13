@@ -65,7 +65,7 @@ class XSEC_EXPORT TXFMXPathFilter : public TXFMBase {
 public:
 
 	TXFMXPathFilter(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMXPathFilter();
+	virtual ~TXFMXPathFilter();
 
 	// Methods to set the inputs
 

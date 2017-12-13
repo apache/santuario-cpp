@@ -182,13 +182,13 @@ public:
 	/**
 	 * \brief Append a Canonicalization Transform to the Reference.
 	 *
-	 * @param cm The type of canonicalisation to be added.
-	 * @returns The newly create canonicalisation transform
+	 * @param uri The type of canonicalization to be added.
+	 * @returns The newly create canonicalization transform
 	 * @todo Move to DSIGTransformList rather than re-implement in both DSIGReference
 	 * and XENCCipherReference
 	 */
 
-	virtual DSIGTransformC14n * appendCanonicalizationTransform(canonicalizationMethod cm) = 0;
+	virtual DSIGTransformC14n * appendCanonicalizationTransform(const XMLCh* uri) = 0;
 
 	//@}
 

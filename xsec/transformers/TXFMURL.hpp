@@ -54,7 +54,7 @@ private:
 public:
 
 	TXFMURL(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, XSECURIResolver * resolver);
-	~TXFMURL();
+	virtual ~TXFMURL();
 
 	// Methods to set the inputs
 

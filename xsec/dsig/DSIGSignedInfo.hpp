@@ -68,125 +68,125 @@ class XSEC_EXPORT DSIGSignedInfo {
 
 public:
 
-	/** @name Constructors and Destructors */
-	//@{
+    /** @name Constructors and Destructors */
+    //@{
 
-	/**
-	 * \brief Constructor for existing nodes
-	 *
-	 * Called by the library to construct a SignedInfo in cases
-	 * where the DOM Nodes exist and need to be loaded
-	 *
-	 * @param doc The document containing the structure to be loaded
-	 * @param pFormatter A safeBuffer formatter that will translate to UTF-8
-	 * @param signedInfoNode The node at the top of the SignedInfo tree fragment
-	 * @param env Operating environment
-	 */
+    /**
+     * \brief Constructor for existing nodes
+     *
+     * Called by the library to construct a SignedInfo in cases
+     * where the DOM Nodes exist and need to be loaded
+     *
+     * @param doc The document containing the structure to be loaded
+     * @param pFormatter A safeBuffer formatter that will translate to UTF-8
+     * @param signedInfoNode The node at the top of the SignedInfo tree fragment
+     * @param env Operating environment
+     */
 
-	DSIGSignedInfo(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc, 
-		XSECSafeBufferFormatter * pFormatter, 
-		XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *signedInfoNode,
-		const XSECEnv * env);
+    DSIGSignedInfo(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
+        XSECSafeBufferFormatter* pFormatter,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* signedInfoNode,
+        const XSECEnv* env);
 
 
-	/**
-	 * \brief Constructor for building from scratch
-	 *
-	 * Will set up the class in preparation for building the 
-	 * DOM structure 
-	 *
-	 * @param doc The document to use to construct
-	 * @param pFormatter Formatter to use to translate to UTF-8
-	 * @param env Operating environment
-	 */
+    /**
+     * \brief Constructor for building from scratch
+     *
+     * Will set up the class in preparation for building the
+     * DOM structure
+     *
+     * @param doc The document to use to construct
+     * @param pFormatter Formatter to use to translate to UTF-8
+     * @param env Operating environment
+     */
 
-	DSIGSignedInfo(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc,
-				XSECSafeBufferFormatter * pFormatter, 
-				const XSECEnv * env);
+    DSIGSignedInfo(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
+                XSECSafeBufferFormatter* pFormatter,
+                const XSECEnv* env);
 
-	/**
-	 * \brief Destructor
-	 * 
-	 * Delete - but does not destroy the DOM Nodes
-	 *
-	 */
+    /**
+     * \brief Destructor
+     *
+     * Delete - but does not destroy the DOM Nodes
+     *
+     */
 
-	~DSIGSignedInfo();
+    ~DSIGSignedInfo();
 
-	//@}
+    //@}
 
-	/** @name Create and Set */
-	//@{
+    /** @name Create and Set */
+    //@{
 
-	/**
-	 * \brief Load from DOM
-	 *
-	 * Load the SignedInfo from the DOM Document
-	 *
-	 * Does not do any verification of signatures or references - 
-	 * simply loads the values
-	 */
+    /**
+     * \brief Load from DOM
+     *
+     * Load the SignedInfo from the DOM Document
+     *
+     * Does not do any verification of signatures or references -
+     * simply loads the values
+     */
 
-	void load(void);
+    void load();
 
-	/**
-	 * \brief Verify the SignedInfo
-	 *
-	 * Validates each reference contained in the SignedInfo.  Does not
-	 * validate the signature itself - this is done by DSIGSignature
-	 *
-	 * @param errStr The safeBuffer that error messages should be written to.
-	 */
+    /**
+     * \brief Verify the SignedInfo
+     *
+     * Validates each reference contained in the SignedInfo.  Does not
+     * validate the signature itself - this is done by DSIGSignature
+     *
+     * @param errStr The safeBuffer that error messages should be written to.
+     */
 
-	bool verify(safeBuffer &errStr) const;
+    bool verify(safeBuffer& errStr) const;
 
-	/**
-	 * \brief Hash the reference list
-	 *
-	 * Goes through each reference in the SignedInfo (including referenced
-	 * manifests), performs the digest operation and adds the digest
-	 * to the reference element
-	 *
-	 * @param interlockingReferences Set to true if any references depend on other
-	 * references
-	 */
+    /**
+     * \brief Hash the reference list
+     *
+     * Goes through each reference in the SignedInfo (including referenced
+     * manifests), performs the digest operation and adds the digest
+     * to the reference element
+     *
+     * @param interlockingReferences Set to true if any references depend on other
+     * references
+     */
 
-	void hash(bool interlockingReferences) const;
+    void hash(bool interlockingReferences) const;
 
-	/**
-	 * \brief Create an empty SignedInfo
-	 *
-	 * Creates the DOM structure for a SignedInfo
-	 *
-	 * Builds the DOM structures and sets the control
-	 * structures of the SignedInfo
-	 *
-	 * @param canonicalizationAlgorithmURI The canonicalisation method to set the SignedInfo as
-	 * @param signatureAlgorithmURI Signature Method to use
-	 * @param hm Hash method to use (for the SignedInfo, not the references)
-	 */
+    /**
+     * \brief Create an empty SignedInfo
+     *
+     * Creates the DOM structure for a SignedInfo
+     *
+     * Builds the DOM structures and sets the control
+     * structures of the SignedInfo
+     *
+     * @param canonicalizationAlgorithmURI The canonicalisation method to set the SignedInfo as
+     * @param signatureAlgorithmURI Signature Method to use
+     * @param hm Hash method to use (for the SignedInfo, not the references)
+     */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement *
-		createBlankSignedInfo(
-			const XMLCh * canonicalizationAlgorithmURI,
-			const XMLCh * signatureAlgorithmURI
-		);
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMElement*
+        createBlankSignedInfo(
+            const XMLCh* canonicalizationAlgorithmURI,
+            const XMLCh* signatureAlgorithmURI
+        );
 
-	/**
-	 * \brief Create a reference to add to the SignedInfo
-	 *
-	 * Called by DSIGSignature to create and enter a new reference element
-	 *
-	 * @param URI What the reference references
-	 * @param hashAlgorithmURI Digest method to use for the reference
-	 * @param type Reference type
-	 */
+    /**
+     * \brief Create a reference to add to the SignedInfo
+     *
+     * Called by DSIGSignature to create and enter a new reference element
+     *
+     * @param URI What the reference references
+     * @param hashAlgorithmURI Digest method to use for the reference
+     * @param type Reference type
+     */
 
-	DSIGReference * createReference(
-		const XMLCh * URI,
-		const XMLCh * hashAlgorithmURI, 
-		const XMLCh * type
-	);
+    DSIGReference* createReference(
+        const XMLCh* URI,
+        const XMLCh* hashAlgorithmURI,
+        const XMLCh* type
+    );
 
     /**
      * \brief Remove a reference from the list
@@ -202,86 +202,83 @@ public:
      * @param index Point in the list to remove
      */
 
-    DSIGReference * removeReference(DSIGReferenceList::size_type index);
+    DSIGReference* removeReference(DSIGReferenceList::size_type index);
 
-	//@}
+    //@}
 
-	/** @name Getter functions */
-	//@{
+    /** @name Getter functions */
+    //@{
 
-	/**
-	 * \brief Get the node pointing to the top of the DOM fragment
-	 *
-	 * @returns the SignedInfo node
-	 */
+    /**
+     * \brief Get the node pointing to the top of the DOM fragment
+     *
+     * @returns the SignedInfo node
+     */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *getDOMNode(void) const;
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* getDOMNode(void) const {return mp_signedInfoNode;}
 
-	/**
-	 * \brief Get the Algorithm URI
-	 *
-	 * @returns the URI associated with the Algorithm used to generate
-	 * the signature
-	 */
+    /**
+     * \brief Get the Algorithm URI
+     *
+     * @returns the URI associated with the Algorithm used to generate
+     * the signature
+     */
 
-	const XMLCh * getAlgorithmURI() const {return mp_algorithmURI;}
+    const XMLCh* getAlgorithmURI() const {return mp_algorithmURI;}
 
-	/**
-	 * \brief Get the canonicalisation method 
-	 * 
-	 * @returns Canonicalisation method
-	 */
+    /**
+     * \brief Get the canonicalization method
+     *
+     * @returns Canonicalization method
+     */
 
-	canonicalizationMethod getCanonicalizationMethod(void) const;
+    const XMLCh* getCanonicalizationMethod() const {return mp_canonicalizationMethod;}
 
-	/**
-	 * \brief Get HMAC length
-	 * 
-	 * HMAC signatures can be truncated to a nominated length.
-	 * This returns the length used.
-	 */
+    /**
+     * \brief Get HMAC length
+     *
+     * HMAC signatures can be truncated to a nominated length.
+     * This returns the length used.
+     */
 
-	int getHMACOutputLength(void) const;
+    int getHMACOutputLength() const {return m_HMACOutputLength;}
 
-	/**
-	 * \brief Return the list of references
-	 *
-	 * Returns a pointer to the object holding the references
-	 * contained in the SignedInfo
-	 */
+    /**
+     * \brief Return the list of references
+     *
+     * Returns a pointer to the object holding the references
+     * contained in the SignedInfo
+     */
 
-	DSIGReferenceList *getReferenceList (void) {return mp_referenceList;}
+    DSIGReferenceList* getReferenceList () {return mp_referenceList;}
 
-	/**
-	 * \brief Return the list of references
-	 *
-	 * Returns a pointer to the object holding the references
-	 * contained in the SignedInfo
-	 */
+    /**
+     * \brief Return the list of references
+     *
+     * Returns a pointer to the object holding the references
+     * contained in the SignedInfo
+     */
 
-	const DSIGReferenceList *getReferenceList (void) const {return mp_referenceList;}
+    const DSIGReferenceList* getReferenceList () const {return mp_referenceList;}
 
-	//@}
+    //@}
 
 
 private:
+    XSECSafeBufferFormatter* mp_formatter;
+    bool m_loaded;                // Have we already loaded?
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* mp_doc;
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* mp_signedInfoNode;
+    const XMLCh* mp_canonicalizationMethod;
+    DSIGReferenceList* mp_referenceList;
+    int m_HMACOutputLength;
+    const XMLCh* mp_algorithmURI;
+    const XSECEnv* mp_env;
 
-	XSECSafeBufferFormatter		* mp_formatter;
-	bool						m_loaded;				// Have we already loaded?
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument					
-								* mp_doc;
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
-								* mp_signedInfoNode;
-	canonicalizationMethod		m_canonicalizationMethod;
-	DSIGReferenceList			* mp_referenceList;
-	int							m_HMACOutputLength;
-	const XMLCh					* mp_algorithmURI;
-	const XSECEnv				* mp_env;
+    // Not implemented constructors
 
-	// Not implemented constructors
-
-	DSIGSignedInfo();
-	// DSIGSignedInfo & operator= (const DSIGSignedInfo &);
+    DSIGSignedInfo();
+    // DSIGSignedInfo & operator= (const DSIGSignedInfo &);
 
 };
 

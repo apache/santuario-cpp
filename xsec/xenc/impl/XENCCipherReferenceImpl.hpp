@@ -68,7 +68,7 @@ public:
 	virtual DSIGTransformXPath * appendXPathTransform(const char * expr);
 	virtual DSIGTransformXPathFilter * appendXPathFilterTransform(void);
 	virtual DSIGTransformXSL * appendXSLTransform(XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *stylesheet);
-	virtual DSIGTransformC14n * appendCanonicalizationTransform(canonicalizationMethod cm);
+	virtual DSIGTransformC14n * appendCanonicalizationTransform(const XMLCh* uri);
 
 
 private:

@@ -568,38 +568,3 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 	return false;
 
 }
-
-bool XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
-							canonicalizationMethod & cm) {
-
-	// Quick and dirty but inefficient
-	if (strEquals(URI, DSIGConstants::s_unicodeStrURIC14N_NOC)) {
-		cm = CANON_C14N_NOC;
-	}
-	else if (strEquals(URI, DSIGConstants::s_unicodeStrURIC14N_COM)) {
-		cm = CANON_C14N_COM;
-	}
-
-	else if (strEquals(URI, DSIGConstants::s_unicodeStrURIEXC_C14N_COM)) {
-		cm = CANON_C14NE_COM;
-	}
-
-	else if (strEquals(URI, DSIGConstants::s_unicodeStrURIEXC_C14N_NOC)) {
-		cm = CANON_C14NE_NOC;
-	}
-	else if (strEquals(URI, DSIGConstants::s_unicodeStrURIC14N11_NOC)) {
-        cm = CANON_C14N11_NOC;
-    }
-    else if (strEquals(URI, DSIGConstants::s_unicodeStrURIC14N11_COM)) {
-        cm = CANON_C14N11_COM;
-    }
-
-	else {
-
-		// Unknown
-		cm = CANON_NONE;
-		return false;
-	}
-
-	return true;
-}

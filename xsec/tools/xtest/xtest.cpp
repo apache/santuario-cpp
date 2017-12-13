@@ -794,7 +794,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 		sig->setPrettyPrint(true);
 
 		sigNode = sig->createBlankSignature(doc, 
-			DSIGConstants::s_unicodeStrURIC14N_COM,
+			DSIGConstants::s_unicodeStrURIEXC_C14N_COM,
 			DSIGConstants::s_unicodeStrURIHMAC_SHA512);
 
 		doc->appendChild(sigNode);
@@ -877,7 +877,7 @@ void unitTestLongSHA(DOMImplementation * impl) {
 
 		}
 
-		cerr << "OK (verify false) ... serialise and re-verify ... ";
+		cerr << "OK (verify false) ... serialize and re-verify ... ";
 		if (reValidateSig(impl, doc, createHMACKey((unsigned char *) "secret"))) {
 
 			cerr << "bad - should have failed" << endl;

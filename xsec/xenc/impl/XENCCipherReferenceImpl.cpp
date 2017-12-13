@@ -186,14 +186,14 @@ DSIGTransformXSL * XENCCipherReferenceImpl::appendXSLTransform(DOMNode * stylesh
 
 }
 
-DSIGTransformC14n * XENCCipherReferenceImpl::appendCanonicalizationTransform(canonicalizationMethod cm) {
+DSIGTransformC14n * XENCCipherReferenceImpl::appendCanonicalizationTransform(const XMLCh* uri) {
 
 	DOMElement *txfmElt;
 	DSIGTransformC14n * txfm;
 
 	XSECnew(txfm, DSIGTransformC14n(mp_env));
 	txfmElt = txfm->createBlankTransform(mp_env->getParentDocument());
-	txfm->setCanonicalizationMethod(cm);
+	txfm->setCanonicalizationMethod(uri);
 
 	addTransform(txfm, txfmElt);
 

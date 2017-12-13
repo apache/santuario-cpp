@@ -48,7 +48,7 @@ private:
 public:
 
 	TXFMSB(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMSB();
+	virtual ~TXFMSB();
 
 	// Methods to set the inputs
 

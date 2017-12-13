@@ -83,7 +83,7 @@ private:
 public:
 
 	TXFMXPath(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMXPath();
+	virtual ~TXFMXPath();
 
 	// Methods to set the inputs
 

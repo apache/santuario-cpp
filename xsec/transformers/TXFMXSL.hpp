@@ -80,7 +80,7 @@ private:
 public:
 
 	TXFMXSL(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *doc);
-	~TXFMXSL();
+	virtual ~TXFMXSL();
 
 	// Methods to set the inputs
 

@@ -53,7 +53,7 @@ public:
                 bool encrypt,
                 XSECCryptoSymmetricKey::SymmetricKeyMode mode = XSECCryptoSymmetricKey::MODE_CBC,
                 unsigned int taglen = 0);
-	~TXFMCipher();
+	virtual ~TXFMCipher();
 
 	// Methods to get tranform output type and input requirement
 

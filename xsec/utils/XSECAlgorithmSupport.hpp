@@ -67,6 +67,20 @@ public:
      * @returns hash type to use with MGF1
      */
     static XSECCryptoHash::HashType getMGF1HashType(const XMLCh* uri);
+
+    /**
+     * \brief Process a c14n method URI to determine the relevant properties to use.
+     *
+     * Currently the only supported methods are the original 1.0 and 1.1 inclusive and 1.0
+     * exclusive algorithms. Any extension would require significant redesign.
+     *
+     * @param uri algorithm identifier
+     * @param exclusive true on output iff the algorithm was 1.0 Exclusive
+     * @param comments true on output iff the algorithm was a "with-comments" variant
+     * @param onedotone true on output iff the algorithm was 1.1 Inclusive
+     * @returns true iff the algorithm was known
+     */
+    static bool evalCanonicalizationMethod(const XMLCh* uri, bool& exclusive, bool& comments, bool& onedotone);
 };
 
 

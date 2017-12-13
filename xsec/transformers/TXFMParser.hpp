@@ -51,7 +51,7 @@ public:
 	// Constructors and destructors
 
 	TXFMParser(XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument *);
-	~TXFMParser();
+	virtual ~TXFMParser();
 
 	// Methods to get tranform output type and input requirement
 

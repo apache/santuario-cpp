@@ -29,9 +29,10 @@
  */
 
 #include <xsec/framework/XSECDefs.hpp>
+
 #if defined (XSEC_HAVE_OPENSSL)
 
-#include <xsec/framework/XSECDefs.hpp>
+#include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyDSA.hpp>

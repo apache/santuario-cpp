@@ -30,14 +30,16 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
+
+#include <xsec/dsig/DSIGAlgorithmHandlerDefault.hpp>
+#include <xsec/enc/XSECCryptoKey.hpp>
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/transformers/TXFMBase64.hpp>
 #include <xsec/transformers/TXFMHash.hpp>
-#include <xsec/enc/XSECCryptoKey.hpp>
-#include <xsec/framework/XSECError.hpp>
 #include <xsec/utils/XSECDOMUtils.hpp>
 
-#include <xsec/dsig/DSIGAlgorithmHandlerDefault.hpp>
+#include "../utils/XSECAlgorithmSupport.hpp"
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/Janitor.hpp>
@@ -585,17 +587,16 @@ bool DSIGAlgorithmHandlerDefault::appendHashTxfm(
         TXFMChain * inputBytes,
         const XMLCh * URI) const {
 
-    XSECCryptoHash::HashType hashType;
-
     // Is this a URI we recognise?
 
-    if (!XSECmapURIToHashType(URI, hashType)) {
+    XSECCryptoHash::HashType hashType = XSECAlgorithmSupport::getHashType(URI);
+
+    if (hashType == XSECCryptoHash::HASH_NONE) {
         safeBuffer sb;
         sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown Hash URI : ");
         sb.sbXMLChCat(URI);
 
-        throw XSECException(XSECException::AlgorithmMapperError,
-            sb.rawXMLChBuffer());
+        throw XSECException(XSECException::AlgorithmMapperError, sb.rawXMLChBuffer());
     }
 
     TXFMBase * txfm;

@@ -410,7 +410,6 @@ const XMLCh* canonicalizationMethod2UNICODEURI(canonicalizationMethod cm) {
 bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh* URI,
 												  signatureMethod& sm,
 												  XSECCryptoHash::HashType& type);
-bool XSEC_EXPORT XSECmapURIToHashType(const XMLCh* URI, XSECCryptoHash::HashType& type);
 bool XSEC_EXPORT XSECmapURIToCanonicalizationMethod(const XMLCh* URI,
 							canonicalizationMethod& cm);
 

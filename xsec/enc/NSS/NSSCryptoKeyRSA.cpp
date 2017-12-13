@@ -489,7 +489,7 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* hashURI,
                                  const XMLCh* mgfURI) const {
 
     // Perform a decrypt
@@ -563,7 +563,7 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* hashURI,
                                  const XMLCh* mgfURI) const {
 
     // Perform an encrypt

@@ -713,26 +713,14 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 												  decBuf, 
 												  offset, 
 												  rsa->getLength(), 
-												  XSECCryptoKeyRSA::PAD_PKCS_1_5, 
-                                                  XSECCryptoHash::HASH_NONE);
+												  XSECCryptoKeyRSA::PAD_PKCS_1_5);
 	}
 	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
              strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
 
-        XSECCryptoHash::HashType hashType;
 	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
-
-	    // Is this a URI we recognize?
 	    if (!digmeth|| !*digmeth) {
-	        hashType = XSECCryptoHash::HASH_SHA1;
-	    }
-	    else if (!XSECmapURIToHashType(digmeth, hashType)) {
-	        safeBuffer sb;
-	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
-	        sb.sbXMLChCat(digmeth);
-
-	        throw XSECException(XSECException::AlgorithmMapperError,
-	            sb.rawXMLChBuffer());
+	        digmeth = DSIGConstants::s_unicodeStrURISHA1;
 	    }
 
         const XMLCh* mgfalg = encryptionMethod->getMGF();
@@ -772,7 +760,7 @@ unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
 												  offset, 
 												  rsa->getLength(), 
 												  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-												  hashType,
+												  digmeth,
 												  mgfalg);
 
 	}
@@ -936,25 +924,15 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 												  encBuf, 
 												  offset, 
 												  rsa->getLength(), 
-												  XSECCryptoKeyRSA::PAD_PKCS_1_5, 
-												  XSECCryptoHash::HASH_NONE);
+												  XSECCryptoKeyRSA::PAD_PKCS_1_5);
 	}
 
 	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
             strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
-        
-        XSECCryptoHash::HashType hashType;
-        if (encryptionMethod->getDigestMethod() == NULL) {
-            hashType = XSECCryptoHash::HASH_SHA1;
-		    encryptionMethod->setDigestMethod(DSIGConstants::s_unicodeStrURISHA1);
-        }
-        else if (!XSECmapURIToHashType(encryptionMethod->getDigestMethod(), hashType)) {
-	        safeBuffer sb;
-	        sb.sbTranscodeIn("XENCAlgorithmHandlerDefault - Unknown Digest URI : ");
-	        sb.sbXMLChCat(encryptionMethod->getDigestMethod());
 
-	        throw XSECException(XSECException::AlgorithmMapperError,
-	            sb.rawXMLChBuffer());
+	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
+	    if (!digmeth || !*digmeth) {
+	        digmeth = DSIGConstants::s_unicodeStrURISHA1;
 	    }
 
         const XMLCh* mgfalg = encryptionMethod->getMGF();
@@ -988,7 +966,7 @@ bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
 										  offset, 
 										  rsa->getLength(), 
 										  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-										  hashType,
+										  digmeth,
 										  mgfalg);
 
 	}

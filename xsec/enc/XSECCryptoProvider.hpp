@@ -153,7 +153,19 @@ public :
      * Call used by the library to obtain a hashing implementation from the
      * provider.
      *
-     * @returns a pointer to a hashing object.
+     * @param uri hashing algorithm identifier
+     * @returns a pointer to a hashing object
+     */
+    virtual XSECCryptoHash* hash(const XMLCh* uri) const;
+
+    /**
+     * \brief Return a hashing implementation.
+     *
+     * Call used by the library to obtain a hashing implementation from the
+     * provider.
+     *
+     * @param type enumerated hashing algorithm
+     * @returns a pointer to a hashing object
      */
     virtual XSECCryptoHash* hash(XSECCryptoHash::HashType type) const = 0;
 
@@ -164,7 +176,20 @@ public :
      * provider.  The caller will need to set the key in the hash
      * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey().
      *
-     * @returns a pointer to the hashing object.
+     * @param uri hashing algorithm identifier
+     * @returns a pointer to the hashing object
+     */
+    virtual XSECCryptoHash* HMAC(const XMLCh* uri) const;
+
+    /**
+     * \brief Return an HMAC implementation.
+     *
+     * Call used by the library to obtain an HMAC implementation from the
+     * provider.  The caller will need to set the key in the hash
+     * object with an XSECCryptoKeyHMAC using XSECCryptoHash::setKey().
+     *
+     * @param type enumerated hashing algorithm
+     * @returns a pointer to the hashing object
      */
     virtual XSECCryptoHash* HMAC(XSECCryptoHash::HashType type) const = 0;
 

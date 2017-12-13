@@ -37,7 +37,8 @@
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSECCryptoUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECAlgorithmSupport.hpp>
+
+#include "../../utils/XSECAlgorithmSupport.hpp"
 
 #include <openssl/err.h>
 #include <openssl/rand.h>
@@ -677,7 +678,7 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
 		unsigned int inLength,
 		unsigned int maxOutLength,
 		PaddingType padding,
-		XSECCryptoHash::HashType hashType,
+		const XMLCh* hashURI,
 		const XMLCh* mgfURI) const {
 
     // Perform a decrypt
@@ -724,7 +725,7 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
         {
-            const EVP_MD* evp_md = getDigestFromHashType(hashType);
+            const EVP_MD* evp_md = getDigestFromHashType(XSECAlgorithmSupport::getHashType(hashURI));
             if (evp_md == NULL) {
                 throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
                     "OpenSSL:RSA - OAEP digest algorithm not supported");
@@ -809,7 +810,7 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
 		unsigned int inLength,
 		unsigned int maxOutLength,
 		PaddingType padding,
-		XSECCryptoHash::HashType hashType,
+		const XMLCh* hashURI,
 		const XMLCh* mgfURI) const {
 
     // Perform an encrypt
@@ -850,7 +851,7 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
                     "OpenSSL:RSA publicKeyEncrypt - Not enough space in cipherBuf");
             }
 
-            const EVP_MD* evp_md = getDigestFromHashType(hashType);
+            const EVP_MD* evp_md = getDigestFromHashType(XSECAlgorithmSupport::getHashType(hashURI));
             if (evp_md == NULL) {
                 throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
                     "OpenSSL:RSA - OAEP digest algorithm not supported");

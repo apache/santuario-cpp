@@ -48,6 +48,14 @@ class XSECAlgorithmSupport
 public:
 
     /**
+     * \brief Map digest algorithm URI to the corresponding hash type.
+     *
+     * @param uri algorithm identifier
+     * @returns hash type
+     */
+    static XSECCryptoHash::HashType getHashType(const XMLCh* uri);
+
+    /**
      * \brief Map MGF algorithm URI to the corresponding hash type.
      *
      * Currently the only supported function is the MGF1 algorithm, together with

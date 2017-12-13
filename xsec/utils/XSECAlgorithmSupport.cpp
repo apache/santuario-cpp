@@ -26,8 +26,9 @@
 // XSEC
 
 #include <xsec/dsig/DSIGConstants.hpp>
-#include <xsec/utils/XSECAlgorithmSupport.hpp>
 #include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "../utils/XSECAlgorithmSupport.hpp"
 
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
@@ -140,13 +141,39 @@ static bool getHashType(const XMLCh* URI, XSECCryptoHash::HashType& type)
     return false;
 }
 
+XSECCryptoHash::HashType XSECAlgorithmSupport::getHashType(const XMLCh* uri)
+{
+    XSECCryptoHash::HashType type = XSECCryptoHash::HASH_NONE;
+
+    // Check this is a known prefix on the URI.
+    XMLSize_t blen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASE);
+    XMLSize_t bmlen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
+    XMLSize_t belen = XMLString::stringLen(DSIGConstants::s_unicodeStrURIXENC);
+    if (XMLString::compareNString(uri, DSIGConstants::s_unicodeStrURISIGBASE, blen) == 0) {
+
+        // This is actually cheating - this will return SHA256 (as an example), even if
+        // the base URI is the original DSIG uri (ie not base-more)
+        ::getHashType(&uri[blen], type);
+    }
+    else if (XMLString::compareNString(uri, DSIGConstants::s_unicodeStrURISIGBASEMORE, bmlen) == 0) {
+
+        ::getHashType(&uri[bmlen], type);
+    }
+    else if (XMLString::compareNString(uri, DSIGConstants::s_unicodeStrURIXENC, belen) == 0) {
+
+        ::getHashType(&uri[belen], type);
+    }
+
+    return type;
+}
+
 XSECCryptoHash::HashType XSECAlgorithmSupport::getMGF1HashType(const XMLCh* uri)
 {
     // Check this is a known prefix on the URI.
     XMLSize_t len = XMLString::stringLen(DSIGConstants::s_unicodeStrURIMGF1_BASE);
     if (uri != NULL && XMLString::compareNString(uri, DSIGConstants::s_unicodeStrURIMGF1_BASE, len) == 0) {
         XSECCryptoHash::HashType type;
-        getHashType(&uri[len], type);
+        ::getHashType(&uri[len], type);
         return type;
     }
 

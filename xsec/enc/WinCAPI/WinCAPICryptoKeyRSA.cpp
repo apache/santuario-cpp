@@ -35,7 +35,8 @@
 #include <xsec/enc/WinCAPI/WinCAPICryptoKeyRSA.hpp>
 #include <xsec/enc/XSCrypt/XSCryptCryptoBase64.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECAlgorithmSupport.hpp>
+
+#include "../../utils/XSECAlgorithmSupport.hpp"
 
 #include <xercesc/util/Janitor.hpp>
 
@@ -540,8 +541,8 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType hashType,
-								 const XMLCh* mgfURI) const {
+                                 const XMLCh* hashURI,
+                                 const XMLCh* mgfURI) const {
 
     // Perform a decrypt
     if (m_key == NULL) {
@@ -580,10 +581,15 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                 "WinCAPI:RSA - Unsupported OAEP MGF algorithm");
         }
 
+        if (XSECAlgorithmSupport::getHashType(hashURI) != XSECCryptoHash::HASH_SHA1) {
+            throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
+                "WinCAPI:RSA - Unsupported OAEP digest algorithm");
+        }
+
         if (!CryptDecrypt(m_key,
                          0,
                          TRUE,
-                         (hashType == XSECCryptoHash::HASH_SHA1) ? CRYPT_OAEP : CRYPT_DECRYPT_RSA_NO_PADDING_CHECK,
+                         CRYPT_OAEP,
                          plainBuf,
                          &decryptSize)) {
 
@@ -612,8 +618,8 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-								 XSECCryptoHash::HashType hashType,
-								 const XMLCh* mgfURI) const {
+                                 const XMLCh* hashURI,
+                                 const XMLCh* mgfURI) const {
 
     // Perform an encrypt
     if (m_key == 0) {
@@ -649,8 +655,8 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
 
     case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
 
-        if (hashType != XSECCryptoHash::HASH_SHA1) {
-            throw XSECCryptoException(XSECCryptoException::RSAError,
+        if (XSECAlgorithmSupport::getHashType(hashURI) != XSECCryptoHash::HASH_SHA1) {
+            throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
                 "WinCAPI:RSA - OAEP padding method requires SHA-1 digest method");
         }
         else if (XSECAlgorithmSupport::getMGF1HashType(mgfURI) != XSECCryptoHash::HASH_SHA1) {

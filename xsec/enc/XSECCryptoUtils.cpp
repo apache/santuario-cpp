@@ -39,6 +39,7 @@
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
 
+#include "../utils/XSECAlgorithmSupport.hpp"
 #include "../utils/XSECAutoPtr.hpp"
 
 XERCES_CPP_NAMESPACE_USE
@@ -533,4 +534,14 @@ unsigned char* getRSASigOID(XSECCryptoHash::HashType type, int& oidLen) {
         return NULL;
 
     }
+}
+
+XSECCryptoHash* XSECCryptoProvider::hash(const XMLCh* uri) const {
+
+    return hash(XSECAlgorithmSupport::getHashType(uri));
+}
+
+XSECCryptoHash* XSECCryptoProvider::HMAC(const XMLCh* uri) const {
+
+    return HMAC(XSECAlgorithmSupport::getHashType(uri));
 }

@@ -569,37 +569,6 @@ bool XSECmapURIToSignatureMethods(const XMLCh * URI,
 
 }
 
-bool XSECmapURIToHashType(const XMLCh * URI, XSECCryptoHash::HashType& type) {
-
-
-	// Check this is a known prefix on the URI.
-	XMLSize_t blen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASE);
-	XMLSize_t bmlen = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
-	XMLSize_t belen = XMLString::stringLen(DSIGConstants::s_unicodeStrURIXENC);
-	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURISIGBASE, blen) == 0) {
-
-		// This is actually cheating - this will return SHA256 (as an example), even if
-		// the base URI is the original DSIG uri (ie not base-more)
-		return getHashMethod(&URI[blen], type);
-
-	}
-
-	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURISIGBASEMORE, bmlen) == 0) {
-
-		return getHashMethod(&URI[bmlen], type);
-
-	}
-
-	if (XMLString::compareNString(URI, DSIGConstants::s_unicodeStrURIXENC, belen) == 0) {
-
-		return getHashMethod(&URI[belen], type);
-
-	}
-
-	type = XSECCryptoHash::HASH_NONE;
-	return false;
-}
-
 bool XSECmapURIToCanonicalizationMethod(const XMLCh * URI,
 							canonicalizationMethod & cm) {
 

@@ -196,7 +196,7 @@ public :
      * @param inLength bytes of cipher text to decrypt
      * @param maxOutLength size of outputBuffer
      * @param padding Type of padding (PKCS 1.5 or OAEP)
-     * @param hashType Hash Method for OAEP encryption (OAEPParams should be
+     * @param hashURI Hash Method for OAEP encryption (OAEPParams should be
      * set using setOAEPparams()
      * @param mgfURI algorithm identifier for OAEP mask generation function
      */
@@ -206,8 +206,8 @@ public :
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                 XSECCryptoHash::HashType hashType,
-                 const XMLCh* mgfURI=NULL) const;
+                                 const XMLCh* hashURI=NULL,
+                                 const XMLCh* mgfURI=NULL) const;
 
     /**
      * \brief Encrypt using a public key
@@ -220,7 +220,7 @@ public :
      * @param inLength bytes of plain text to encrypt
      * @param maxOutLength size of outputBuffer
      * @param padding Type of padding (PKCS 1.5 or OAEP)
-     * @param hashType Hash Method for OAEP encryption (OAEPParams should be
+     * @param hashURI Hash Method for OAEP encryption (OAEPParams should be
      * set using setOAEPparams()
      * @param mgfURI algorithm identifier for OAEP mask generation function
      */
@@ -230,7 +230,7 @@ public :
                                  unsigned int inLength,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
-                                 XSECCryptoHash::HashType hashType,
+                                 const XMLCh* hashURI=NULL,
                                  const XMLCh* mgfURI=NULL) const;
 
     /**

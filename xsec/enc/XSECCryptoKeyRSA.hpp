@@ -31,7 +31,7 @@
 #ifndef XSECCRYPTOKEYRSA_INCLUDE
 #define XSECCRYPTOKEYRSA_INCLUDE
 
-#include <xsec/dsig/DSIGConstants.hpp>
+#include <xsec/enc/XSECCryptoHash.hpp>
 #include <xsec/enc/XSECCryptoKey.hpp>
 
 /**

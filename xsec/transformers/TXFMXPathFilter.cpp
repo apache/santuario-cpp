@@ -42,7 +42,7 @@ XERCES_CPP_NAMESPACE_USE
 #ifdef XSEC_HAVE_XALAN
 
 #if defined(_MSC_VER)
-#	pragma warning(disable: 4267)
+#    pragma warning(disable: 4267)
 #endif
 
 #include <xalanc/XalanDOM/XalanDocument.hpp>
@@ -62,7 +62,7 @@ XERCES_CPP_NAMESPACE_USE
 #include <xalanc/XSLT/XSLTResultTarget.hpp>
 
 #if defined(_MSC_VER)
-#	pragma warning(default: 4267)
+#    pragma warning(default: 4267)
 #endif
 
 // Xalan namespace usage
@@ -98,638 +98,552 @@ XALAN_USING_XALAN(XSLException)
 
 // Helper functions - come from DSIGXPath
 
-void setXPathNS(DOMDocument *d, 
-				DOMNamedNodeMap *xAtts, 
-			    XSECXPathNodeList &addedNodes,
-				XSECSafeBufferFormatter *formatter,
-				XSECNameSpaceExpander * nse);
+void setXPathNS(DOMDocument* d,
+                DOMNamedNodeMap* xAtts,
+                XSECXPathNodeList& addedNodes,
+                XSECSafeBufferFormatter* formatter,
+                XSECNameSpaceExpander* nse);
 
-void clearXPathNS(DOMDocument *d, 
-				  XSECXPathNodeList &toRemove,
-				  XSECSafeBufferFormatter *formatter,
-				  XSECNameSpaceExpander * nse);
+void clearXPathNS(DOMDocument*d,
+                  XSECXPathNodeList& toRemove,
+                  XSECSafeBufferFormatter* formatter,
+                  XSECNameSpaceExpander* nse);
 
 bool separator(unsigned char c);
-XalanNode * findHereNodeFromXalan(XercesWrapperNavigator * xwn, XalanNode * n, DOMNode *h);
+XalanNode* findHereNodeFromXalan(XercesWrapperNavigator* xwn, XalanNode* n, DOMNode* h);
 
 
+TXFMXPathFilter::TXFMXPathFilter(DOMDocument* doc) :
+    TXFMBase(doc) {
 
-TXFMXPathFilter::TXFMXPathFilter(DOMDocument *doc) : 
-	TXFMBase(doc) {
-
-	document = NULL;
-	XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes, 
-												XMLFormatter::UnRep_CharRef));
-
+    document = NULL;
+    XSECnew(mp_formatter, XSECSafeBufferFormatter("UTF-8",XMLFormatter::NoEscapes,
+                                                XMLFormatter::UnRep_CharRef));
 }
 
 TXFMXPathFilter::~TXFMXPathFilter() {
 
-	lstsVectorType::iterator i;
+    lstsVectorType::iterator i;
 
-	for (i = m_lsts.begin(); i != m_lsts.end(); ++i) {
+    for (i = m_lsts.begin(); i != m_lsts.end(); ++i) {
 
-		if ((*i)->lst != NULL)
-			delete ((*i)->lst);
+        if ((*i)->lst != NULL)
+            delete ((*i)->lst);
 
-		delete (*i);
+        delete (*i);
+    }
 
-	}
-
-	if (mp_formatter != NULL) 
-		delete mp_formatter;
-
-	
+    if (mp_formatter != NULL)
+        delete mp_formatter;
 }
 
 // Methods to set the inputs
 
-void TXFMXPathFilter::setInput(TXFMBase *newInput) {
+void TXFMXPathFilter::setInput(TXFMBase* newInput) {
 
-	if (newInput->getOutputType() == TXFMBase::BYTE_STREAM) {
+    if (newInput->getOutputType() == TXFMBase::BYTE_STREAM) {
 
-		// Need to parse into DOM_NODES
+        // Need to parse into DOM_NODES
 
-		TXFMParser * parser;
-		XSECnew(parser, TXFMParser(mp_expansionDoc));
-		try{
-			parser->setInput(newInput);
-		}
-		catch (...) {
-			delete parser;
-			input = newInput;
-			throw;
-		}
+        TXFMParser * parser;
+        XSECnew(parser, TXFMParser(mp_expansionDoc));
+        try{
+            parser->setInput(newInput);
+        }
+        catch (...) {
+            delete parser;
+            input = newInput;
+            throw;
+        }
 
-		input = parser;
-		parser->expandNameSpaces();
-	}
-	else
-		input = newInput;
+        input = parser;
+        parser->expandNameSpaces();
+    }
+    else {
+        input = newInput;
+    }
 
-	// Set up for the new document
-	document = input->getDocument();
+    // Set up for the new document
+    document = input->getDocument();
 
-	// Expand if necessary
-	this->expandNameSpaces();
+    // Expand if necessary
+    this->expandNameSpaces();
 
-	keepComments = input->getCommentsStatus();
-
+    keepComments = input->getCommentsStatus();
 }
 
-XSECXPathNodeList * TXFMXPathFilter::evaluateSingleExpr(DSIGXPathFilterExpr *expr) {
+XSECXPathNodeList* TXFMXPathFilter::evaluateSingleExpr(DSIGXPathFilterExpr* expr) {
 
-	// Have a single expression that we wish to find the resultant nodeset
-	// for
+    // Have a single expression that we wish to find the resultant nodeset for
 
-	XSECXPathNodeList addedNodes;
-	setXPathNS(document, expr->mp_NSMap, addedNodes, mp_formatter, mp_nse);
+    XSECXPathNodeList addedNodes;
+    setXPathNS(document, expr->mp_NSMap, addedNodes, mp_formatter, mp_nse);
 
-	XPathProcessorImpl	xppi;					// The processor
-	XercesParserLiaison xpl;
-	XercesDOMSupport	xds(xpl);
-	XPathEvaluator		xpe;
-	XPathFactoryDefault xpf;
-	XPathConstructionContextDefault xpcc;
+    XPathProcessorImpl    xppi;                    // The processor
+    XercesParserLiaison xpl;
+    XercesDOMSupport    xds(xpl);
+    XPathEvaluator        xpe;
+    XPathFactoryDefault xpf;
+    XPathConstructionContextDefault xpcc;
 
-	XalanDocument		* xd;
-	XalanNode			* contextNode;
+    XalanDocument        * xd;
+    XalanNode            * contextNode;
 
-	// Xalan can throw exceptions in all functions, so do one broad catch point.
+    // Xalan can throw exceptions in all functions, so do one broad catch point.
 
-	try {
-	
-		// Map to Xalan
-		xd = xpl.createDocument(document);
+    try {
 
-		// For performing mapping
-		XercesDocumentWrapper *xdw = xpl.mapDocumentToWrapper(xd);
-		XercesWrapperNavigator xwn(xdw);
+        // Map to Xalan
+        xd = xpl.createDocument(document);
 
-		// Map the "here" node
+        // For performing mapping
+        XercesDocumentWrapper *xdw = xpl.mapDocumentToWrapper(xd);
+        XercesWrapperNavigator xwn(xdw);
 
-		XalanNode * hereNode = NULL;
+        // Map the "here" node
 
-		hereNode = xwn.mapNode(expr->mp_xpathFilterNode);
+        XalanNode * hereNode = NULL;
 
-		if (hereNode == NULL) {
+        hereNode = xwn.mapNode(expr->mp_xpathFilterNode);
 
-			hereNode = findHereNodeFromXalan(&xwn, xd, expr->mp_exprTextNode);
+        if (hereNode == NULL) {
 
-			if (hereNode == NULL) {
+            hereNode = findHereNodeFromXalan(&xwn, xd, expr->mp_exprTextNode);
 
-				throw XSECException(XSECException::XPathFilterError,
-				   "Unable to find here node in Xalan Wrapper map");
-			}
+            if (hereNode == NULL) {
+                throw XSECException(XSECException::XPathFilterError,
+                   "Unable to find here node in Xalan Wrapper map");
+            }
+        }
 
-		}
+        // Now work out what we have to set up in the new processing
 
-		// Now work out what we have to set up in the new processing
+        XalanDOMString cd;        // For XPath Filter, the root is always the context node
 
-		XalanDOMString cd;		// For XPath Filter, the root is always the context node
+        cd = XalanDOMString("/");        // Root node
 
-		cd = XalanDOMString("/");		// Root node
+        // The context node is the "root" node
+        contextNode =
+            xpe.selectSingleNode(
+            xds,
+            xd,
+            cd.c_str(),
+            xd->getDocumentElement());
 
-		// The context node is the "root" node
-		contextNode =
-			xpe.selectSingleNode(
-			xds,
-			xd,
-			cd.c_str(),
-			xd->getDocumentElement());
+        XPathEnvSupportDefault xpesd;
+        XObjectFactoryDefault            xof;
+        XPathExecutionContextDefault    xpec(xpesd, xds, xof);
 
-		XPathEnvSupportDefault xpesd;
-		XObjectFactoryDefault			xof;
-		XPathExecutionContextDefault	xpec(xpesd, xds, xof);
+        ElementPrefixResolverProxy pr(xd->getDocumentElement(), xpesd, xds);
 
-		ElementPrefixResolverProxy pr(xd->getDocumentElement(), xpesd, xds);
+        // Work around the fact that the XPath implementation is designed for XSLT, so does
+        // not allow here() as a NCName.
 
-		// Work around the fact that the XPath implementation is designed for XSLT, so does
-		// not allow here() as a NCName.
+        // THIS IS A KLUDGE AND SHOULD BE DONE BETTER
 
-		// THIS IS A KLUDGE AND SHOULD BE DONE BETTER
+        safeBuffer k(KLUDGE_PREFIX);
+        k.sbStrcatIn(":");
 
-		safeBuffer k(KLUDGE_PREFIX);
-		k.sbStrcatIn(":");
+        // Map the expression into a local code page string (silly - should be XMLCh)
+        safeBuffer exprSB;
+        exprSB << (*mp_formatter << expr->m_expr.rawXMLChBuffer());
 
-		// Map the expression into a local code page string (silly - should be XMLCh)
-		safeBuffer exprSB;
-		exprSB << (*mp_formatter << expr->m_expr.rawXMLChBuffer());
+        XMLSSize_t offset = exprSB.sbStrstr("here()");
 
-		XMLSSize_t offset = exprSB.sbStrstr("here()");
+        while (offset >= 0) {
 
-		while (offset >= 0) {
+            if (offset == 0 || offset == 1 ||
+                (!(exprSB[offset - 1] == ':' && exprSB[offset - 2] != ':') &&
+                separator(exprSB[offset - 1]))) {
 
-			if (offset == 0 || offset == 1 || 
-				(!(exprSB[offset - 1] == ':' && exprSB[offset - 2] != ':') &&
-				separator(exprSB[offset - 1]))) {
+                exprSB.sbStrinsIn(k.rawCharBuffer(), offset);
+            }
 
-				exprSB.sbStrinsIn(k.rawCharBuffer(), offset);
+            offset = exprSB.sbOffsetStrstr("here()", offset + 11);
+        }
 
-			}
+        // Install the External function in the Environment handler
 
-			offset = exprSB.sbOffsetStrstr("here()", offset + 11);
+        if (hereNode != NULL) {
+            xpesd.installExternalFunctionLocal(XalanDOMString(URI_ID_DSIG), XalanDOMString("here"), DSIGXPathHere(hereNode));
+        }
 
-		}
+        XPath * xp = xpf.create();
 
-		// Install the External function in the Environment handler
+        XalanDOMString Xexpr((char *) exprSB.rawBuffer());
+        xppi.initXPath(*xp, xpcc, Xexpr, pr);
 
-		if (hereNode != NULL) {
+        // Now resolve
 
-			xpesd.installExternalFunctionLocal(XalanDOMString(URI_ID_DSIG), XalanDOMString("here"), DSIGXPathHere(hereNode));
+        XObjectPtr xObj = xp->execute(contextNode, pr, xpec);
 
-		}
+        // Now map to a list that others can use (naieve list at this time)
 
-		XPath * xp = xpf.create();
+        const NodeRefListBase&    lst = xObj->nodeset();
 
-		XalanDOMString Xexpr((char *) exprSB.rawBuffer());
-		xppi.initXPath(*xp, xpcc, Xexpr, pr);
-		
-		// Now resolve
+        int size = (int) lst.getLength();
+        const DOMNode *item;
 
-		XObjectPtr xObj = xp->execute(contextNode, pr, xpec);
+        XSECXPathNodeList * ret;
+        XSECnew(ret, XSECXPathNodeList);
+        Janitor<XSECXPathNodeList> j_ret(ret);
 
-		// Now map to a list that others can use (naieve list at this time)
+        for (int i = 0; i < size; ++ i) {
 
-		const NodeRefListBase&	lst = xObj->nodeset();
-		
-		int size = (int) lst.getLength();
-		const DOMNode *item;
-		
-		XSECXPathNodeList * ret;
-		XSECnew(ret, XSECXPathNodeList);
-		Janitor<XSECXPathNodeList> j_ret(ret);
+            if (lst.item(i) == xd)
+                ret->addNode(document);
+            else {
+                item = xwn.mapNode(lst.item(i));
+                ret->addNode(item);
+            }
+        }
 
-		for (int i = 0; i < size; ++ i) {
+        xpesd.uninstallExternalFunctionGlobal(XalanDOMString(URI_ID_DSIG), XalanDOMString("here"));
 
-			if (lst.item(i) == xd)
-				ret->addNode(document);
-			else {
-				item = xwn.mapNode(lst.item(i));
-				ret->addNode(item);
-			}
-		}
+        clearXPathNS(document, addedNodes, mp_formatter, mp_nse);
 
-		xpesd.uninstallExternalFunctionGlobal(XalanDOMString(URI_ID_DSIG), XalanDOMString("here"));
+        j_ret.release();
+        return ret;
+    }
+    catch (const XSLException &e) {
 
-		clearXPathNS(document, addedNodes, mp_formatter, mp_nse);
+        safeBuffer msg;
 
-		j_ret.release();
-		return ret;
+        // Whatever happens - fix any changes to the original document
+        clearXPathNS(document, addedNodes, mp_formatter, mp_nse);
 
-	}
+        // Collate the exception message into an XSEC message.
+        msg.sbTranscodeIn("Xalan Exception : ");
+        msg.sbXMLChCat(e.getType());
+        msg.sbXMLChCat(" caught.  Message : ");
+        msg.sbXMLChCat(e.getMessage().c_str());
 
-	catch (const XSLException &e) {
+        throw XSECException(XSECException::XPathFilterError,
+            msg.rawXMLChBuffer());
+    }
+    catch (...) {
+        clearXPathNS(document, addedNodes, mp_formatter, mp_nse);
+        throw;
+    }
 
-		safeBuffer msg;
-
-		// Whatever happens - fix any changes to the original document
-		clearXPathNS(document, addedNodes, mp_formatter, mp_nse);
-	
-		// Collate the exception message into an XSEC message.		
-		msg.sbTranscodeIn("Xalan Exception : ");
-		msg.sbXMLChCat(e.getType());
-		msg.sbXMLChCat(" caught.  Message : ");
-		msg.sbXMLChCat(e.getMessage().c_str());
-
-		throw XSECException(XSECException::XPathFilterError,
-			msg.rawXMLChBuffer());
-
-	}
-
-	catch (...) {
-		clearXPathNS(document, addedNodes, mp_formatter, mp_nse);
-		throw;
-	}
-
-	return NULL;
+    return NULL;
 }
 
-bool TXFMXPathFilter::checkNodeInInput(DOMNode * n, DOMNode * attParent) {
+bool TXFMXPathFilter::checkNodeInInput(DOMNode* n, DOMNode* attParent) {
 
-	if (mp_fragment != NULL) {
+    if (mp_fragment != NULL) {
 
-		DOMNode * p = n;
+        DOMNode * p = n;
 
-		/* Check attParent here to reduce cycles */
-		if (attParent != NULL) {
-			if (p == mp_fragment)
-				return true;
-			p = attParent;
-		}
+        /* Check attParent here to reduce cycles */
+        if (attParent != NULL) {
+            if (p == mp_fragment)
+                return true;
+            p = attParent;
+        }
 
-		while (p != NULL) {
+        while (p != NULL) {
 
-			if (p == mp_fragment)
-				return true;
-			
-			p = p->getParentNode();
+            if (p == mp_fragment)
+                return true;
 
-		}
+            p = p->getParentNode();
+        }
 
-		return false;
+        return false;
+    }
 
-	}
-
-	return mp_inputList->hasNode(n);
-
+    return mp_inputList->hasNode(n);
 }
 
-bool TXFMXPathFilter::checkNodeInScope(DOMNode * n) {
+bool TXFMXPathFilter::checkNodeInScope(DOMNode* n) {
 
-	// Walk backwards through the lists
-	lstsVectorType::iterator lstsIter;
+    // Walk backwards through the lists
+    lstsVectorType::iterator lstsIter;
 
-	lstsIter = m_lsts.end();
-	filterSetHolder *sh;
+    lstsIter = m_lsts.end();
+    filterSetHolder *sh;
 
-	while (lstsIter != m_lsts.begin()) {
+    while (lstsIter != m_lsts.begin()) {
 
-		lstsIter--;
-		sh = *lstsIter;
-		if (sh->ancestorInScope != NULL) {
+        lstsIter--;
+        sh = *lstsIter;
+        if (sh->ancestorInScope != NULL) {
 
-			// Have an ancestor in scope, so this node is in this list
-			if (sh->type == FILTER_UNION)
-				// Got this far, must be OK!
-				return true;
-			if (sh->type == FILTER_SUBTRACT)
-				return false;
+            // Have an ancestor in scope, so this node is in this list
+            if (sh->type == DSIGXPathFilterExpr::FILTER_UNION)
+                // Got this far, must be OK!
+                return true;
+            if (sh->type == DSIGXPathFilterExpr::FILTER_SUBTRACT)
+                return false;
+        }
+        else {
+            if (sh->type == DSIGXPathFilterExpr::FILTER_INTERSECT)
+                return false;
+        }
+    }
 
-		}
-		else {
-
-			if (sh->type == FILTER_INTERSECT)
-				return false;
-
-		}
-
-	}
-
-	return true;
-
+    return true;
 }
+
 #if 1
-void TXFMXPathFilter::walkDocument(DOMNode * n) {
 
-	// Non-recursive version
+void TXFMXPathFilter::walkDocument(DOMNode* n) {
 
-	DOMNode * current = n;
-	DOMNode * next;
-	DOMNode * attParent = NULL; 	/* Assign NULL to remove spurious Forte warning */
-	bool done = false;
-	bool treeUp = false;
-	DOMNamedNodeMap * atts = n->getAttributes();
-	int attsSize = -1;
-	int currentAtt = -1;
-	lstsVectorType::iterator lstsIter;
+    // Non-recursive version
 
-	while (done == false && current != NULL) {
+    DOMNode * current = n;
+    DOMNode * next;
+    DOMNode * attParent = NULL;     /* Assign NULL to remove spurious Forte warning */
+    bool done = false;
+    bool treeUp = false;
+    DOMNamedNodeMap * atts = n->getAttributes();
+    int attsSize = -1;
+    int currentAtt = -1;
+    lstsVectorType::iterator lstsIter;
 
-		if (treeUp == true) {
+    while (done == false && current != NULL) {
 
-			if (current == n) {
+        if (treeUp == true) {
 
-				// We are complete.
-				done = true;
+            if (current == n) {
+                // We are complete.
+                done = true;
+            }
+            else {
+                // Remove this node from the ancestor lists
+                for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
-			}
+                    if ((*lstsIter)->ancestorInScope == current) {
+                        (*lstsIter)->ancestorInScope = NULL;
+                    }
+                }
 
-			else {
+                // Check for another sibling
+                next = current->getNextSibling();
 
-				// Remove this node from the ancestor lists
-				for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
+                if (next == NULL) {
+                    current = current->getParentNode();
+                    treeUp = true;
+                }
+                else {
+                    current = next;
+                    treeUp = false;
+                }
+            }
+        } /* treeUp == true */
+        else {
+            // Check if the current node is in the result set.  The walk the children
 
-					if ((*lstsIter)->ancestorInScope == current) {
-						(*lstsIter)->ancestorInScope = NULL;
-					}
-				}
+            // First check if this node is in any lists, and if so,
+            // set the appropriate ancestor nodes (if necessary)
 
+            for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
-				// Check for another sibling
-				next = current->getNextSibling();
+                if ((*lstsIter)->ancestorInScope == NULL &&
+                    (*lstsIter)->lst->hasNode(current)) {
 
-				if (next == NULL) {
+                    (*lstsIter)->ancestorInScope = current;
+                }
+            }
 
-					current = current->getParentNode();
-					treeUp = true;
-				}
+            // Now that the ancestor setup is done, check to see if this node is
+            // in scope.
 
-				else {
+            if (checkNodeInScope(current) &&
+                checkNodeInInput(current, (atts != NULL ? attParent : NULL))) {
 
-					current = next;
-					treeUp = false;
+                m_xpathFilterMap.addNode(current);
+            }
 
-				}
+            // Now find the next node!
 
-			}
+            if (atts != NULL) {
 
-		} /* treeUp == true */
+                // Working on an attribute list
+                currentAtt++;
 
-		else {
+                if (currentAtt == attsSize) {
 
-			// Check if the current node is in the result set.  The walk the children
+                    // Attribute list complete
+                    atts = NULL;
+                    current = attParent;
+                    next = current->getFirstChild();
+                    if (next == NULL)
+                        treeUp = true;
+                    else {
+                        current = next;
+                        treeUp = false;
+                    }
+                }
+                else {
+                    current = atts->item(currentAtt);
+                }
+            }
+            else {
+                // Working on an element or other non-attribute node
+                atts = current->getAttributes();
 
-			// First check if this node is in any lists, and if so,
-			// set the appropriate ancestor nodes (if necessary)
+                if (atts != NULL && ((attsSize = atts->getLength()) > 0)) {
+                    currentAtt = 0;
+                    attParent = current;
+                    current = atts->item(0);
+                    treeUp = false;
+                }
+                else {
+                    atts = NULL;
 
-			for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
+                    next = current->getFirstChild();
 
-				if ((*lstsIter)->ancestorInScope == NULL &&
-					(*lstsIter)->lst->hasNode(current)) {
-
-					(*lstsIter)->ancestorInScope = current;
-
-				}
-
-				// 
-			}
-
-			// Now that the ancestor setup is done, check to see if this node is 
-			// in scope.
-
-			if (checkNodeInScope(current) && 
-				checkNodeInInput(current, (atts != NULL ? attParent : NULL))) {
-
-				m_xpathFilterMap.addNode(current);
-
-			}
-
-			// Now find the next node!
-
-			if (atts != NULL) {
-
-				// Working on an attribute list
-				currentAtt++;
-
-				if (currentAtt == attsSize) {
-
-					// Attribute list complete
-					atts = NULL;
-					current = attParent;
-					next = current->getFirstChild();
-					if (next == NULL)
-						treeUp = true;
-					else {
-						current = next;
-						treeUp = false;
-					}
-
-				}
-
-				else {
-
-					current = atts->item(currentAtt);
-
-				}
-
-			}
-
-			else {
-				// Working on an element or other non-attribute node
-				atts = current->getAttributes();
-
-				if (atts != NULL && ((attsSize = atts->getLength()) > 0)) {
-
-					currentAtt = 0;
-					attParent = current;
-					current = atts->item(0);
-					treeUp = false;
-
-				}
-
-				else {
-
-					atts = NULL;
-
-					next = current->getFirstChild();
-
-					if (next != NULL) {
-						current = next;
-						treeUp = false;
-					}
-
-					else {
-
-						treeUp = true;
-
-					}
-
-				}
-			} /* ! atts == NULL */
-		}
-	} /* while */
+                    if (next != NULL) {
+                        current = next;
+                        treeUp = false;
+                    }
+                    else {
+                        treeUp = true;
+                    }
+                }
+            } /* ! atts == NULL */
+        }
+    } /* while */
 }
 #endif
+
 #if 0
 
 void TXFMXPathFilter::walkDocument(DOMNode * n) {
 
-	// Check if the current node is in the result set.  The walk the children
-	lstsVectorType::iterator lstsIter;
+    // Check if the current node is in the result set.  The walk the children
+    lstsVectorType::iterator lstsIter;
 
-	// First check if this node is in any lists, and if so,
-	// set the appropriate ancestor nodes (if necessary)
+    // First check if this node is in any lists, and if so,
+    // set the appropriate ancestor nodes (if necessary)
 
-	for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
+    for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
-		if ((*lstsIter)->ancestorInScope == NULL &&
-			(*lstsIter)->lst->hasNode(n)) {
+        if ((*lstsIter)->ancestorInScope == NULL && (*lstsIter)->lst->hasNode(n)) {
+            (*lstsIter)->ancestorInScope = n;
+        }
+    }
 
-			(*lstsIter)->ancestorInScope = n;
+    // Now that the ancestor setup is done, check to see if this node is
+    // in scope.
 
-		}
-	}
+    if (checkNodeInScope(n) && checkNodeInInput(n)) {
+        m_xpathFilterMap.addNode(n);
+    }
 
-	// Now that the ancestor setup is done, check to see if this node is 
-	// in scope.
+    // Do any attributes
 
-	if (checkNodeInScope(n) && checkNodeInInput(n)) {
+    DOMNamedNodeMap * atts = n->getAttributes();
+    if (atts != NULL) {
+        unsigned int s = atts->getLength();
+        for (unsigned int i = 0; i < s; ++i) {
+            walkDocument(atts->item(i));
+        }
+    }
 
-		m_xpathFilterMap.addNode(n);
+    // Do any childeren
 
-	}
+    DOMNode * c = n->getFirstChild();
 
-	// Do any attributes
+    while (c != NULL) {
+        walkDocument(c);
+        c = c->getNextSibling();
+    }
 
-	DOMNamedNodeMap * atts = n->getAttributes();
-	
-	if (atts != NULL) {
+    // Now remove from ancestor lists if we are that ancestor
+    for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
 
-		unsigned int s = atts->getLength();
-		for (unsigned int i = 0; i < s; ++i) {
-
-			walkDocument(atts->item(i));
-
-		}
-
-	}
-
-	// Do any childeren
-
-	DOMNode * c = n->getFirstChild();
-
-	while (c != NULL) {
-
-		walkDocument(c);
-		c = c->getNextSibling();
-
-	}
-
-	// Now remove from ancestor lists if we are that ancestor
-	for (lstsIter = m_lsts.begin(); lstsIter != m_lsts.end(); ++lstsIter) {
-
-		if ((*lstsIter)->ancestorInScope == n) {
-			(*lstsIter)->ancestorInScope = NULL;
-		}
-	}
-
+        if ((*lstsIter)->ancestorInScope == n) {
+            (*lstsIter)->ancestorInScope = NULL;
+        }
+    }
 }
 #endif
-void TXFMXPathFilter::evaluateExprs(DSIGTransformXPathFilter::exprVectorType * exprs) {
 
-	if (exprs == NULL || exprs->size() < 1) {
+void TXFMXPathFilter::evaluateExprs(DSIGTransformXPathFilter::exprVectorType* exprs) {
 
-		throw XSECException(XSECException::XPathFilterError,
-			"TXFMXPathFilter::evaluateExpr - no expression list set");
+    if (exprs == NULL || exprs->size() < 1) {
+        throw XSECException(XSECException::XPathFilterError,
+            "TXFMXPathFilter::evaluateExpr - no expression list set");
+    }
 
-	}
+    DSIGTransformXPathFilter::exprVectorType::iterator i;
 
-	DSIGTransformXPathFilter::exprVectorType::iterator i;
+    for (i = exprs->begin(); i != exprs->end(); ++i) {
 
-	for (i = exprs->begin(); i != exprs->end(); ++i) {
+        XSECXPathNodeList * lst = evaluateSingleExpr(*i);
+        filterSetHolder * sh;
+        XSECnew(sh, filterSetHolder);
 
-		XSECXPathNodeList * lst = evaluateSingleExpr(*i);
-		filterSetHolder * sh;
-		XSECnew(sh, filterSetHolder);
+        sh->lst = lst;
+        sh->type = (*i)->m_filterType;
+        sh->ancestorInScope = NULL;
 
-		sh->lst = lst;
-		sh->type = (*i)->m_filterType;
-		sh->ancestorInScope = NULL;
+        if (lst != NULL) {
+            m_lsts.push_back(sh);
+        }
+    }
 
-		if (lst != NULL) {
+    // Well we appear to have successfully run through all the nodelists!
 
-			m_lsts.push_back(sh);
+    mp_fragment = NULL;
+    mp_inputList = NULL;
 
-		}
+    // Find the input nodeset
+    TXFMBase::nodeType inputType = input->getNodeType();
+    switch (inputType) {
 
-	}
+    case DOM_NODE_DOCUMENT :
+        mp_fragment = document;
+        break;
 
-	// Well we appear to have successfully run through all the nodelists!
+    case DOM_NODE_DOCUMENT_FRAGMENT :
+        mp_fragment = input->getFragmentNode();
+        break;
 
-	mp_fragment = NULL;
-	mp_inputList = NULL;
+    case DOM_NODE_XPATH_NODESET :
+        mp_inputList = &(input->getXPathNodeList());
+        break;
 
-	// Find the input nodeset
-	TXFMBase::nodeType inputType = input->getNodeType();
-	switch (inputType) {
+    default :
+        throw XSECException(XSECException::XPathFilterError,
+            "TXFMXPathFilter::evaluateExprs - unknown input type");
 
-	case DOM_NODE_DOCUMENT :
+    }
 
-		mp_fragment = document;
-		break;
-
-	case DOM_NODE_DOCUMENT_FRAGMENT :
-
-		mp_fragment = input->getFragmentNode();
-		break;
-
-	case DOM_NODE_XPATH_NODESET :
-
-		mp_inputList = &(input->getXPathNodeList());
-		break;
-
-	default :
-
-		throw XSECException(XSECException::XPathFilterError,
-			"TXFMXPathFilter::evaluateExprs - unknown input type");
-
-	}
-
-	// Now just recurse through each node in the document
-	walkDocument(document);
-
-
+    // Now just recurse through each node in the document
+    walkDocument(document);
 }
-	
-	
+
+
 // Methods to get tranform output type and input requirement
 
-TXFMBase::ioType TXFMXPathFilter::getInputType(void) const {
-
-	return TXFMBase::DOM_NODES;
-
-}
-TXFMBase::ioType TXFMXPathFilter::getOutputType(void) const {
-
-	return TXFMBase::DOM_NODES;
-
+TXFMBase::ioType TXFMXPathFilter::getInputType() const {
+    return TXFMBase::DOM_NODES;
 }
 
-TXFMBase::nodeType TXFMXPathFilter::getNodeType(void) const {
+TXFMBase::ioType TXFMXPathFilter::getOutputType() const {
+    return TXFMBase::DOM_NODES;
+}
 
-	return TXFMBase::DOM_NODE_XPATH_NODESET;
-
+TXFMBase::nodeType TXFMXPathFilter::getNodeType() const {
+    return TXFMBase::DOM_NODE_XPATH_NODESET;
 }
 
 // Methods to get output data
 
-unsigned int TXFMXPathFilter::readBytes(XMLByte * const toFill, unsigned int maxToFill) {
-
-	return 0;
-
+unsigned int TXFMXPathFilter::readBytes(XMLByte* const toFill, unsigned int maxToFill) {
+    return 0;
 }
 
-DOMDocument *TXFMXPathFilter::getDocument() const {
-
-	return document;
-
+DOMDocument* TXFMXPathFilter::getDocument() const {
+    return document;
 }
 
-XSECXPathNodeList	& TXFMXPathFilter::getXPathNodeList() {
-
-	return m_xpathFilterMap;
-
+XSECXPathNodeList& TXFMXPathFilter::getXPathNodeList() {
+    return m_xpathFilterMap;
 }
 
 #endif /* XSEC_HAVE_XPATH */

@@ -212,10 +212,10 @@ void outputTransform(const DSIGTransform * t, unsigned int level) {
 
             switch (e->getFilterType()) {
 
-            case FILTER_UNION :
+            case DSIGXPathFilterExpr::FILTER_UNION :
                 cout << "union : \"";
                 break;
-            case FILTER_INTERSECT :
+            case DSIGXPathFilterExpr::FILTER_INTERSECT :
                 cout << "intersect : \"";
                 break;
             default :

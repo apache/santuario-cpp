@@ -1261,7 +1261,7 @@ void testSignature(DOMImplementation *impl) {
 			DSIGConstants::s_unicodeStrURISHA1);
 		sig->setXPFNSPrefix(MAKE_UNICODE_STRING("xpf"));
 		DSIGTransformXPathFilter * xpf = ref[7]->appendXPathFilterTransform();
-		xpf->appendFilter(FILTER_INTERSECT, MAKE_UNICODE_STRING("//ADoc/category"));
+		xpf->appendFilter(DSIGXPathFilterExpr::FILTER_INTERSECT, MAKE_UNICODE_STRING("//ADoc/category"));
 
 		ref[8] = sig->createReference(MAKE_UNICODE_STRING(""),
 			DSIGConstants::s_unicodeStrURISHA1);

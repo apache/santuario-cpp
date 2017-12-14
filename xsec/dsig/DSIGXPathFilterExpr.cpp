@@ -43,15 +43,13 @@
 XERCES_CPP_NAMESPACE_USE
 
 XMLCh filterStr[] = {
-
-	chLatin_F,
-	chLatin_i,
-	chLatin_l,
-	chLatin_t,
-	chLatin_e,
-	chLatin_r,
-	chNull
-
+    chLatin_F,
+    chLatin_i,
+    chLatin_l,
+    chLatin_t,
+    chLatin_e,
+    chLatin_r,
+    chNull
 };
 
 
@@ -59,7 +57,7 @@ XMLCh filterStr[] = {
 //           Constructors and Destructors
 // --------------------------------------------------------------------------------
 
-DSIGXPathFilterExpr::DSIGXPathFilterExpr(const XSECEnv * env, DOMNode * node) :
+DSIGXPathFilterExpr::DSIGXPathFilterExpr(const XSECEnv* env, DOMNode* node) :
 mp_env(env),
 mp_xpathFilterNode(node),
 mp_exprTextNode(NULL),
@@ -69,7 +67,7 @@ m_loaded(false) {
 
 }
 
-DSIGXPathFilterExpr::DSIGXPathFilterExpr(const XSECEnv * env) :
+DSIGXPathFilterExpr::DSIGXPathFilterExpr(const XSECEnv* env) :
 mp_env(env),
 mp_xpathFilterNode(NULL),
 mp_exprTextNode(NULL),
@@ -80,154 +78,138 @@ m_loaded(false)  {
 }
 
 
-DSIGXPathFilterExpr::~DSIGXPathFilterExpr() {
-
-	// Nothing to do at the moment
-
-}
+DSIGXPathFilterExpr::~DSIGXPathFilterExpr() {}
 
 // --------------------------------------------------------------------------------
 //           Load existing DOM structure
 // --------------------------------------------------------------------------------
-	
-void DSIGXPathFilterExpr::load(void) {
 
-	// Find the XPath expression
+void DSIGXPathFilterExpr::load() {
 
-	if (mp_xpathFilterNode == NULL ||
-		!strEquals(getXPFLocalName(mp_xpathFilterNode), "XPath")) {
+    // Find the XPath expression
 
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Expected <XPath> as first node in DSIGXPathFilterExpr::load");
+    if (mp_xpathFilterNode == NULL ||
+        !strEquals(getXPFLocalName(mp_xpathFilterNode), "XPath")) {
 
-	}
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Expected <XPath> as first node in DSIGXPathFilterExpr::load");
+    }
 
-		
-	// Check for attributes - in particular any namespaces
 
-	mp_NSMap = mp_xpathFilterNode->getAttributes();
+    // Check for attributes - in particular any namespaces
 
-	// Find the filter type
-	DOMNode * a;
-	if (mp_NSMap == NULL ||
-		((a = mp_NSMap->getNamedItem(filterStr)) == NULL)) {
+    mp_NSMap = mp_xpathFilterNode->getAttributes();
 
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Expected Filter attribute of <XPath> node in in DSIGXPathFilterExpr::load");
+    // Find the filter type
+    DOMNode * a;
+    if (mp_NSMap == NULL ||
+        ((a = mp_NSMap->getNamedItem(filterStr)) == NULL)) {
 
-	}
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Expected Filter attribute of <XPath> node in in DSIGXPathFilterExpr::load");
+    }
 
-	const XMLCh * f = a->getNodeValue();
-	if (strEquals(f, "intersect")) {
-		m_filterType = FILTER_INTERSECT;
-	}
-	else if (strEquals(f, "union")) {
-		m_filterType = FILTER_UNION;
-	}
-	else if (strEquals(f, "subtract")) {
-		m_filterType = FILTER_SUBTRACT;
-	}
-	else {
+    const XMLCh * f = a->getNodeValue();
+    if (strEquals(f, "intersect")) {
+        m_filterType = FILTER_INTERSECT;
+    }
+    else if (strEquals(f, "union")) {
+        m_filterType = FILTER_UNION;
+    }
+    else if (strEquals(f, "subtract")) {
+        m_filterType = FILTER_SUBTRACT;
+    }
+    else {
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+                "DSIGXPathFilterExpr::load Expected on of intersect, union or subtract as filter type");
+    }
 
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-				"DSIGXPathFilterExpr::load Expected on of intersect, union or subtract as filter type");
-	}
+    // Find the text node
+    mp_exprTextNode = findFirstChildOfType(mp_xpathFilterNode, DOMNode::TEXT_NODE);
 
-	// Find the text node
-	mp_exprTextNode = findFirstChildOfType(mp_xpathFilterNode, DOMNode::TEXT_NODE);
+    if (mp_exprTextNode == NULL) {
+        throw XSECException(XSECException::ExpectedDSIGChildNotFound,
+            "Expected Text Node in beneath <XPath> in DSIGXPathFilterExpr::load");
+    }
 
-	if (mp_exprTextNode == NULL) {
-		throw XSECException(XSECException::ExpectedDSIGChildNotFound,
-			"Expected Text Node in beneath <XPath> in DSIGXPathFilterExpr::load");
-	}
+    // Gather the text - hold it in UTF16 format
+    gatherChildrenText(mp_xpathFilterNode, m_expr);
 
-	// Gather the text - hold it in UTF16 format
-	gatherChildrenText(mp_xpathFilterNode, m_expr);
-
-	m_loaded = true;
-
+    m_loaded = true;
 }
 
 // --------------------------------------------------------------------------------
 //           Create a new filter
 // --------------------------------------------------------------------------------
 
-DOMElement * DSIGXPathFilterExpr::setFilter(xpathFilterType filterType,
-						const XMLCh * filterExpr) {
+DOMElement* DSIGXPathFilterExpr::setFilter(DSIGXPathFilterExpr::XPathFilterType filterType,
+                        const XMLCh * filterExpr) {
 
-	if (m_loaded == true) {
+    if (m_loaded == true) {
+        throw XSECException(XSECException::XPathFilterError,
+            "DSIGXPathFilterExpr::setFilter - called when already loaded");
+    }
 
-		throw XSECException(XSECException::XPathFilterError,
-			"DSIGXPathFilterExpr::setFilter - called when already loaded");
+    safeBuffer str;
+    const XMLCh * prefix;
+    DOMDocument *doc = mp_env->getParentDocument();
+    DOMElement * xe;
 
-	}
+    // Create the XPath element
+    prefix = mp_env->getXPFNSPrefix();
+    makeQName(str, prefix, "XPath");
+    xe = doc->createElementNS(DSIGConstants::s_unicodeStrURIXPF, str.rawXMLChBuffer());
+    mp_xpathFilterNode = xe;
 
-	safeBuffer str;
-	const XMLCh * prefix;
-	DOMDocument *doc = mp_env->getParentDocument();
-	DOMElement * xe;
+    // Put in correct namespace
+    prefix = mp_env->getXPFNSPrefix();
 
-	// Create the XPath element
-	prefix = mp_env->getXPFNSPrefix();
-	makeQName(str, prefix, "XPath");
-	xe = doc->createElementNS(DSIGConstants::s_unicodeStrURIXPF, str.rawXMLChBuffer());
-	mp_xpathFilterNode = xe;
+    // Set the namespace attribute
+    if (prefix[0] == '\0') {
+        str.sbTranscodeIn("xmlns");
+    }
+    else {
+        str.sbTranscodeIn("xmlns:");
+        str.sbXMLChCat(prefix);
+    }
 
-	// Put in correct namespace
-	prefix = mp_env->getXPFNSPrefix();
+    xe->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
+                            str.rawXMLChBuffer(),
+                            DSIGConstants::s_unicodeStrURIXPF);
 
-	// Set the namespace attribute
-	if (prefix[0] == '\0') {
-		str.sbTranscodeIn("xmlns");
-	}
-	else {
-		str.sbTranscodeIn("xmlns:");
-		str.sbXMLChCat(prefix);
-	}
+    // Set the filter type
+    m_filterType = filterType;
 
-	xe->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS, 
-							str.rawXMLChBuffer(), 
-							DSIGConstants::s_unicodeStrURIXPF);
+    switch (filterType) {
 
-	// Set the filter type
-	m_filterType = filterType;
+    case FILTER_INTERSECT :
+        xe->setAttributeNS(NULL,MAKE_UNICODE_STRING("Filter"), MAKE_UNICODE_STRING("intersect"));
+        break;
 
-	switch (filterType) {
+    case FILTER_SUBTRACT :
+        xe->setAttributeNS(NULL,MAKE_UNICODE_STRING("Filter"), MAKE_UNICODE_STRING("subtract"));
+        break;
 
-	case FILTER_INTERSECT :
+    case FILTER_UNION :
+        xe->setAttributeNS(NULL,MAKE_UNICODE_STRING("Filter"), MAKE_UNICODE_STRING("union"));
+        break;
 
-		xe->setAttributeNS(NULL,MAKE_UNICODE_STRING("Filter"), MAKE_UNICODE_STRING("intersect"));
-		break;
+    default :
+        mp_xpathFilterNode->release();
+        throw XSECException(XSECException::XPathFilterError,
+            "DSIGXPathFilterExpr::appendFilter - Unexpected Filter Type");
+    }
 
-	case FILTER_SUBTRACT :
+    // Now add the actual filter
 
-		xe->setAttributeNS(NULL,MAKE_UNICODE_STRING("Filter"), MAKE_UNICODE_STRING("subtract"));
-		break;
+    mp_exprTextNode = doc->createTextNode(filterExpr);
+    mp_xpathFilterNode->appendChild(mp_exprTextNode);
 
-	case FILTER_UNION :
+    mp_NSMap = mp_xpathFilterNode->getAttributes();
 
-		xe->setAttributeNS(NULL,MAKE_UNICODE_STRING("Filter"), MAKE_UNICODE_STRING("union"));
-		break;
-
-	default :
-
-		mp_xpathFilterNode->release();
-		throw XSECException(XSECException::XPathFilterError,
-			"DSIGXPathFilterExpr::appendFilter - Unexpected Filter Type");
-
-	}
-
-	// Now add the actual filter
-
-	mp_exprTextNode = doc->createTextNode(filterExpr);
-	mp_xpathFilterNode->appendChild(mp_exprTextNode);
-
-	mp_NSMap = mp_xpathFilterNode->getAttributes();
-
-	m_expr.sbXMLChIn(filterExpr);
-	m_loaded = true;
-	return xe;
-
+    m_expr.sbXMLChIn(filterExpr);
+    m_loaded = true;
+    return xe;
 }
 
 
@@ -235,103 +217,49 @@ DOMElement * DSIGXPathFilterExpr::setFilter(xpathFilterType filterType,
 //           Find the type
 // --------------------------------------------------------------------------------
 
-xpathFilterType DSIGXPathFilterExpr::getFilterType(void) const {
+DSIGXPathFilterExpr::XPathFilterType DSIGXPathFilterExpr::getFilterType() const {
 
-	if (m_loaded == false) {
-		throw XSECException(XSECException::LoadEmptyXPathFilter,
-			"DSIGXPathFilterExpr::Element node loaded");
-	}
+    if (m_loaded == false) {
+        throw XSECException(XSECException::LoadEmptyXPathFilter,
+            "DSIGXPathFilterExpr::Element node loaded");
+    }
 
-	return m_filterType;
-
+    return m_filterType;
 }
 
 // --------------------------------------------------------------------------------
 //           Set and clear namespaces
 // --------------------------------------------------------------------------------
 
-void DSIGXPathFilterExpr::setNamespace(const XMLCh * prefix, const XMLCh * value) {
+void DSIGXPathFilterExpr::setNamespace(const XMLCh* prefix, const XMLCh* value) {
 
-	if (mp_xpathFilterNode == NULL) {
+    if (mp_xpathFilterNode == NULL) {
+        throw XSECException(XSECException::XPathFilterError,
+            "DSIGXPathFilterExpr::setNamespace - load not called");
+    }
 
-		throw XSECException(XSECException::XPathFilterError,
-			"DSIGXPathFilterExpr::setNamespace - load not called");
+    safeBuffer str;
 
-	}
-	
-	safeBuffer str;
+    str.sbTranscodeIn("xmlns:");
+    str.sbXMLChCat(prefix);
 
-	str.sbTranscodeIn("xmlns:");
-	str.sbXMLChCat(prefix);
+    DOMElement* x = static_cast <DOMElement *> (mp_xpathFilterNode);
 
-	DOMElement *x;
+    x->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
+        str.rawXMLChBuffer(),
+        value);
 
-	x = static_cast <DOMElement *> (mp_xpathFilterNode);
-
-	x->setAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
-		str.rawXMLChBuffer(),
-		value);
-
-	mp_NSMap = mp_xpathFilterNode->getAttributes();
-
-
+    mp_NSMap = mp_xpathFilterNode->getAttributes();
 }
 
-void DSIGXPathFilterExpr::deleteNamespace(const XMLCh * prefix) {
+void DSIGXPathFilterExpr::deleteNamespace(const XMLCh* prefix) {
 
-	if (mp_xpathFilterNode == NULL) {
+    if (mp_xpathFilterNode == NULL) {
+        throw XSECException(XSECException::XPathFilterError,
+            "DSIGXPathFilterExpr::deleteNamespace - load not called");
+    }
 
-		throw XSECException(XSECException::XPathFilterError,
-			"DSIGXPathFilterExpr::deleteNamespace - load not called");
+    DOMElement* x = static_cast <DOMElement *> (mp_xpathFilterNode);
 
-	}
-
-	DOMElement *x;
-
-	x = static_cast <DOMElement *> (mp_xpathFilterNode);
-
-	x->removeAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS,
-		prefix);
-
+    x->removeAttributeNS(DSIGConstants::s_unicodeStrURIXMLNS, prefix);
 }
-
-
-
-	/**
-	 * \brief Add a new namespace to the list to be used
-	 *
-	 * Add a new namespace to the XPath Element.
-	 *
-	 * @param prefix NCName of the Namespace to set
-	 * @param value The string with the URI to set
-	 */
-
-//	void setNamespace(const char * prefix, const char * value);
-
-	/**
-	 * \brief Get the list of namespaces.
-	 *
-	 * Returns the DOMNamedNodeMap of the attributes of the XPath transform
-	 * node.  This <em>should</em> only contain namespaces.
-	 *
-	 * @returns A pointer to the NamedNodeMap
-	 */
-
-//	DOMNamedNodeMap * getNamespaces(void) {
-//		return mp_NSMap;
-//	}
-
-	/**
-	 * \brief Delete a namespace to the list to be used
-	 *
-	 * Delete a namespace from the XPath Element.
-	 *
-	 * @param prefix NCName of the Namespace to delete
-	 * @throws XSECException if the NCName does not exist
-	 *
-	 */
-
-//	void deleteNamespace(const char * prefix);
-
-	//@}
-	

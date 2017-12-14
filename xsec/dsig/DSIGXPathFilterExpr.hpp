@@ -57,148 +57,153 @@ class XSEC_EXPORT DSIGXPathFilterExpr {
 
 public:
 
-	/** @name Constructors and Destructors */
-	//@{
+    /**
+     * \brief Enumeration of XPath Filter types
+     */
 
-	/**
-	 * \brief Constructor used for existing XML signatures
-	 *
-	 * Node already exists and is part of an existing XPathFilter tree
-	 *
-	 * @param env The operating environment
-	 * @param node The node that will be used to read the expression in
-	 */
+    enum XPathFilterType {
+        FILTER_UNION            = 0,    /** Results should be added to previous nodeset */
+        FILTER_INTERSECT        = 1,    /** Results should be included if in previous nodeset */
+        FILTER_SUBTRACT         = 2     /** Results should be subtracted from previous nodeset */
+    };
 
-	DSIGXPathFilterExpr(const XSECEnv * env, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * node);
+    /** @name Constructors and Destructors */
+    //@{
 
-	/**
-	 * \brief Builder constructor
-	 *
-	 * Used to create the DOM structure and DSIGSignature elements
-	 *
-	 * @param env The operating Environment
-	 */
+    /**
+     * \brief Constructor used for existing XML signatures
+     *
+     * Node already exists and is part of an existing XPathFilter tree
+     *
+     * @param env The operating environment
+     * @param node The node that will be used to read the expression in
+     */
 
-	DSIGXPathFilterExpr(const XSECEnv * env);
+    DSIGXPathFilterExpr(const XSECEnv* env, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* node);
 
-	/**
-	 * \brief Destructor.
-	 *
-	 * Destroy the DSIGSignature elements.
-	 *
-	 * Does not destroy any associated DOM Nodes
-	 */
-		  
-	~DSIGXPathFilterExpr();
-	
-	//@}
+    /**
+     * \brief Builder constructor
+     *
+     * Used to create the DOM structure and DSIGSignature elements
+     *
+     * @param env The operating Environment
+     */
 
-	/** @name Set and get Information */
+    DSIGXPathFilterExpr(const XSECEnv* env);
 
-	//@{
+    /**
+     * \brief Destructor.
+     *
+     * Destroy the DSIGSignature elements.
+     *
+     * Does not destroy any associated DOM Nodes
+     */
 
-	/**
-	 * \brief Read in existing structure
-	 *
-	 * Reads DOM structure of the XPath expression
-	 */
+    virtual ~DSIGXPathFilterExpr();
 
-	void load(void);
+    //@}
 
-	/**
-	 * \brief Get the filter type
-	 *
-	 * Returns the type of this particular XPath filter
-	 *
-	 * @returns The filter type of this expression
-	 */
+    /** @name Set and get Information */
 
-	xpathFilterType getFilterType(void) const;
+    //@{
 
-	/**
-	 * \brief create from blank
-	 *
-	 * Given the filter type and XPath expression, setup the
-	 * DOMNodes and variables to allow signing and validation
-	 *
-	 * @param filterType Type of this filter to add
-	 * @param filterExpr The XPath expression
-	 */
+    /**
+     * \brief Read in existing structure
+     *
+     * Reads DOM structure of the XPath expression
+     */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * setFilter(xpathFilterType filterType,
-						const XMLCh * filterExpr);
+    void load();
 
-	/**
-	 * \brief Get the filter expression
-	 *
-	 * Returns an XMLCh string containing the filter expression
-	 *
-	 * @returns The filter expression
-	 */
+    /**
+     * \brief Get the filter type
+     *
+     * Returns the type of this particular XPath filter
+     *
+     * @returns The filter type of this expression
+     */
 
-	const XMLCh * getFilter(void) const {return m_expr.rawXMLChBuffer();}
+    XPathFilterType getFilterType() const;
 
-	/**
-	 * \brief Add a new namespace to the list to be used
-	 *
-	 * Add a new namespace to the XPath Element.
-	 *
-	 * @param prefix NCName of the Namespace to set
-	 * @param value The string with the URI to set
-	 */
+    /**
+     * \brief create from blank
+     *
+     * Given the filter type and XPath expression, setup the
+     * DOMNodes and variables to allow signing and validation
+     *
+     * @param filterType Type of this filter to add
+     * @param filterExpr The XPath expression
+     */
 
-	void setNamespace(const XMLCh * prefix, const XMLCh * value);
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* setFilter(XPathFilterType filterType,
+                        const XMLCh* filterExpr);
 
-	/**
-	 * \brief Get the list of namespaces.
-	 *
-	 * Returns the DOMNamedNodeMap of the attributes of the XPath transform
-	 * node.  
-	 *
-	 * @note This will also contain the Filter attribute
-	 *
-	 * @returns A pointer to the NamedNodeMap
-	 */
+    /**
+     * \brief Get the filter expression
+     *
+     * Returns an XMLCh string containing the filter expression
+     *
+     * @returns The filter expression
+     */
 
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap * getNamespaces(void) const {
-		return mp_NSMap;
-	}
+    const XMLCh* getFilter() const {return m_expr.rawXMLChBuffer();}
 
-	/**
-	 * \brief Delete a namespace to the list to be used
-	 *
-	 * Delete a namespace from the XPath Element.
-	 *
-	 * @param prefix NCName of the Namespace to delete
-	 * @throws XSECException if the NCName does not exist
-	 *
-	 */
+    /**
+     * \brief Add a new namespace to the list to be used
+     *
+     * Add a new namespace to the XPath Element.
+     *
+     * @param prefix NCName of the Namespace to set
+     * @param value The string with the URI to set
+     */
 
-	void deleteNamespace(const XMLCh * prefix);
+    void setNamespace(const XMLCh* prefix, const XMLCh* value);
 
-	//@}
-	
+    /**
+     * \brief Get the list of namespaces.
+     *
+     * Returns the DOMNamedNodeMap of the attributes of the XPath transform
+     * node.
+     *
+     * @note This will also contain the Filter attribute
+     *
+     * @returns A pointer to the NamedNodeMap
+     */
+
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap* getNamespaces() const {
+        return mp_NSMap;
+    }
+
+    /**
+     * \brief Delete a namespace to the list to be used
+     *
+     * Delete a namespace from the XPath Element.
+     *
+     * @param prefix NCName of the Namespace to delete
+     * @throws XSECException if the NCName does not exist
+     *
+     */
+
+    void deleteNamespace(const XMLCh* prefix);
+
+    //@}
+
 private:
 
-	// Just let the TXFM read directly
+    // Just let the TXFM read directly
 
-	friend class TXFMXPathFilter;
+    friend class TXFMXPathFilter;
 
-	DSIGXPathFilterExpr();
-	DSIGXPathFilterExpr(const DSIGXPathFilterExpr& theOther);
+    DSIGXPathFilterExpr();
+    DSIGXPathFilterExpr(const DSIGXPathFilterExpr& theOther);
 
-	const XSECEnv				* mp_env;
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
-								* mp_xpathFilterNode;
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNode						
-								* mp_exprTextNode;
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap				
-								* mp_NSMap;
-	safeBuffer					m_expr;
-	xpathFilterType				m_filterType;
-	bool						m_loaded;
-
-
+    const XSECEnv* mp_env;
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* mp_xpathFilterNode;
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* mp_exprTextNode;
+    XERCES_CPP_NAMESPACE_QUALIFIER DOMNamedNodeMap* mp_NSMap;
+    safeBuffer m_expr;
+    XPathFilterType m_filterType;
+    bool m_loaded;
 };
 
 #endif /* DSIGXPATHFILTEREXPR_INCLUDE */

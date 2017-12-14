@@ -168,13 +168,6 @@ enum signatureMethod {
     SIGNATURE_ECDSA                = 4                // ECDSA
 };
 
-enum xpathFilterType {
-
-    FILTER_UNION            = 0,    /** Results should be added to previous nodeset */
-    FILTER_INTERSECT        = 1,    /** Results should be included if in prev nodeset */
-    FILTER_SUBTRACT            = 2        /** Results should be subtracted from prev nodeset */
-
-};
 
 // --------------------------------------------------------------------------------
 //           Constant Strings Class

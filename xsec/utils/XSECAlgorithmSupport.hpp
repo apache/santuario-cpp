@@ -69,6 +69,18 @@ public:
     static XSECCryptoHash::HashType getMGF1HashType(const XMLCh* uri);
 
     /**
+     * \brief Map signature algorithm URI to the corresponding hash type while
+     * verifying the compatibility of an associated key.
+     *
+     * @param uri algorithm identifier
+     * @param key signing key
+     * @param hashType hash type to use
+     */
+    static bool evalSignatureMethod(
+            const XMLCh* uri, const XSECCryptoKey* key, XSECCryptoHash::HashType& hashType
+            );
+
+    /**
      * \brief Process a c14n method URI to determine the relevant properties to use.
      *
      * Currently the only supported methods are the original 1.0 and 1.1 inclusive and 1.0
@@ -80,7 +92,9 @@ public:
      * @param onedotone true on output iff the algorithm was 1.1 Inclusive
      * @returns true iff the algorithm was known
      */
-    static bool evalCanonicalizationMethod(const XMLCh* uri, bool& exclusive, bool& comments, bool& onedotone);
+    static bool evalCanonicalizationMethod(
+            const XMLCh* uri, bool& exclusive, bool& comments, bool& onedotone
+            );
 };
 
 

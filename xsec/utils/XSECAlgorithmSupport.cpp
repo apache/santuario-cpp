@@ -26,6 +26,10 @@
 // XSEC
 
 #include <xsec/dsig/DSIGConstants.hpp>
+#include <xsec/enc/XSECCryptoKeyDSA.hpp>
+#include <xsec/enc/XSECCryptoKeyRSA.hpp>
+#include <xsec/enc/XSECCryptoKeyEC.hpp>
+#include <xsec/enc/XSECCryptoKeyHMAC.hpp>
 
 #include "../utils/XSECAlgorithmSupport.hpp"
 
@@ -37,6 +41,41 @@ XERCES_CPP_NAMESPACE_USE
 // --------------------------------------------------------------------------------
 //            Some useful defines
 // --------------------------------------------------------------------------------
+
+static XMLCh s_dsa[] = {
+
+    chLatin_d,
+    chLatin_s,
+    chLatin_a,
+    chNull
+};
+
+static XMLCh s_rsa[] = {
+
+    chLatin_r,
+    chLatin_s,
+    chLatin_a,
+    chNull
+};
+
+static XMLCh s_ecdsa[] = {
+
+    chLatin_e,
+    chLatin_c,
+    chLatin_d,
+    chLatin_s,
+    chLatin_a,
+    chNull
+};
+
+static XMLCh s_hmac[] = {
+
+    chLatin_h,
+    chLatin_m,
+    chLatin_a,
+    chLatin_c,
+    chNull
+};
 
 static XMLCh s_sha1[] = {
 
@@ -105,7 +144,6 @@ static XMLCh s_md5[] = {
 
 static bool getHashType(const XMLCh* URI, XSECCryptoHash::HashType& type)
 {
-
     if (XMLString::equals(URI, s_md5)) {
         type = XSECCryptoHash::HASH_MD5;
         return true;
@@ -164,6 +202,87 @@ XSECCryptoHash::HashType XSECAlgorithmSupport::getHashType(const XMLCh* uri)
     }
 
     return type;
+}
+
+bool XSECAlgorithmSupport::evalSignatureMethod(
+        const XMLCh* uri, const XSECCryptoKey* key, XSECCryptoHash::HashType& hashType
+        )
+{
+    if (!key) {
+        return false;
+    }
+
+    // The easy ones!
+
+    if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIDSA_SHA1)) {
+        hashType = XSECCryptoHash::HASH_SHA1;
+        return dynamic_cast<const XSECCryptoKeyDSA*>(key) != NULL;
+    }
+
+    if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIRSA_SHA1)) {
+        hashType = XSECCryptoHash::HASH_SHA1;
+        return dynamic_cast<const XSECCryptoKeyRSA*>(key) != NULL;
+    }
+
+    if (XMLString::equals(uri, DSIGConstants::s_unicodeStrURIHMAC_SHA1)) {
+        hashType = XSECCryptoHash::HASH_SHA1;
+        return dynamic_cast<const XSECCryptoKeyHMAC*>(key) != NULL;
+    }
+
+    /* Check to see if we are one of the more exotic RSA signatures */
+    XMLSize_t cnt = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASEMORE);
+
+    if (XMLString::compareNString(uri, DSIGConstants::s_unicodeStrURISIGBASEMORE, cnt) == 0) {
+
+        // Have a "new" algorithm
+        if (XMLString::compareNString(&uri[cnt], s_hmac, 4) == 0) {
+
+            // HMAC
+
+            // Determine a trailing hash method
+            if (uri[cnt+4] != chDash)
+                return false;
+
+            return dynamic_cast<const XSECCryptoKeyHMAC*>(key) != NULL &&
+                    ::getHashType(&(uri[cnt+5]), hashType);
+        }
+        else if (XMLString::compareNString(&uri[cnt], s_rsa, 3) == 0) {
+
+            // RSA
+
+            if (uri[cnt+3] != chDash)
+                return false;
+            return dynamic_cast<const XSECCryptoKeyRSA*>(key) != NULL &&
+                    ::getHashType(&(uri[cnt+4]), hashType);
+        }
+        else if (XMLString::compareNString(&uri[cnt], s_ecdsa, 5) == 0) {
+
+            // ECDSA;
+            if (uri[cnt+5] != chDash)
+                return false;
+
+            return dynamic_cast<const XSECCryptoKeyEC*>(key) != NULL &&
+                    ::getHashType(&(uri[cnt+6]), hashType);
+        }
+    }
+
+    cnt = XMLString::stringLen(DSIGConstants::s_unicodeStrURISIGBASE11);
+
+    if (XMLString::compareNString(uri, DSIGConstants::s_unicodeStrURISIGBASE11, cnt) == 0) {
+
+        if (XMLString::compareNString(&uri[cnt], s_dsa, 3) == 0) {
+
+            // DSA
+
+            if (uri[cnt+3] != chDash)
+                return false;
+
+            return dynamic_cast<const XSECCryptoKeyDSA*>(key) != NULL &&
+                    ::getHashType(&(uri[cnt+4]), hashType);
+        }
+    }
+
+    return false;
 }
 
 XSECCryptoHash::HashType XSECAlgorithmSupport::getMGF1HashType(const XMLCh* uri)

@@ -157,17 +157,6 @@ XSEC_USING_XERCES(XMLString);
 #define PROV_WINCAPI    "WinCAPI Provider"
 #define PROV_NSS        "NSS Provider"
 
-// Enumerated Types
-
-enum signatureMethod {
-
-    SIGNATURE_NONE                = 0,            // No method defined
-    SIGNATURE_DSA                = 1,             // DSA
-    SIGNATURE_HMAC                = 2,            // Hash MAC
-    SIGNATURE_RSA                = 3,            // RSA
-    SIGNATURE_ECDSA                = 4                // ECDSA
-};
-
 
 // --------------------------------------------------------------------------------
 //           Constant Strings Class
@@ -281,23 +270,6 @@ public:
 
     static void create();
     static void destroy();
-
 };
-
-
-// --------------------------------------------------------------------------------
-//            URI Inverse Mappings
-// --------------------------------------------------------------------------------
-
-/* Map URIs to internal enums, if the URIs are known to the library.
-   If they aren't, all these calls will set the Method variables to
-   *_NONE, signifying we don't know them.  Note this is not necessarily
-   an error - the calling application may have installed handlers to handle
-   these URIs, it's just we don't have an internal enum mapping
-*/
-
-bool XSEC_EXPORT XSECmapURIToSignatureMethods(const XMLCh* URI,
-                                                  signatureMethod& sm,
-                                                  XSECCryptoHash::HashType& type);
 
 #endif /* DSIGCONSTANTS_HEADER */

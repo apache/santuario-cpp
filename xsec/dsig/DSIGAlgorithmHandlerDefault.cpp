@@ -53,8 +53,8 @@ XERCES_CPP_NAMESPACE_USE
 // --------------------------------------------------------------------------------
 
 
-bool compareBase64StringToRaw(const char * b64Str, 
-                              unsigned char * raw,
+bool compareBase64StringToRaw(const char* b64Str,
+                              unsigned char* raw,
                               unsigned int rawLen,
                               unsigned int maxCompare = 0) {
     // Decode a base64 buffer and then compare the result to a raw buffer
@@ -148,8 +148,8 @@ bool compareBase64StringToRaw(const char * b64Str,
 }
 
 
-void convertRawToBase64String(safeBuffer &b64SB, 
-                              unsigned char * raw,
+void convertRawToBase64String(safeBuffer& b64SB,
+                              unsigned char* raw,
                               unsigned int rawLen,
                               unsigned int maxBits = 0) {
 
@@ -162,10 +162,8 @@ void convertRawToBase64String(safeBuffer &b64SB,
     XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
 
     if (!b64) {
-
         throw XSECException(XSECException::CryptoProviderError,
                 "Error requesting Base64 object from Crypto Provider");
-
     }
 
     Janitor<XSECCryptoBase64> j_b64(b64);
@@ -200,9 +198,9 @@ void convertRawToBase64String(safeBuffer &b64SB,
 //            Clone
 // --------------------------------------------------------------------------------
 
-XSECAlgorithmHandler * DSIGAlgorithmHandlerDefault::clone(void) const {
+XSECAlgorithmHandler* DSIGAlgorithmHandlerDefault::clone() const {
 
-    DSIGAlgorithmHandlerDefault * ret;
+    DSIGAlgorithmHandlerDefault* ret;
     XSECnew(ret, DSIGAlgorithmHandlerDefault);
 
     return ret;
@@ -212,23 +210,13 @@ XSECAlgorithmHandler * DSIGAlgorithmHandlerDefault::clone(void) const {
 //            Add a hash txfm
 // --------------------------------------------------------------------------------
 
-TXFMBase * addHashTxfm(signatureMethod sm, XSECCryptoHash::HashType hashType, const XSECCryptoKey * key,
-                       DOMDocument * doc) {
+TXFMBase* addHashTxfm(XSECCryptoHash::HashType hashType, const XSECCryptoKey* key, DOMDocument* doc) {
 
     // Given a hash method and signature method, create an appropriate TXFM
 
-    TXFMBase * txfm;
+    TXFMBase* txfm;
 
-	if (sm == SIGNATURE_HMAC){
-		if (key->getKeyType() != XSECCryptoKey::KEY_HMAC) {
-			throw XSECException(XSECException::AlgorithmMapperError,
-				"DSIGAlgorithmHandlerDefault::addHashTxfm - non HMAC key passed in to HMAC signature");
-		}
-		XSECnew(txfm, TXFMHash(doc, hashType, key));
-	}
-	else  {
-		XSECnew(txfm, TXFMHash(doc, hashType));
-	}
+    XSECnew(txfm, TXFMHash(doc, hashType, key));
 
     return txfm;
 }
@@ -237,18 +225,17 @@ TXFMBase * addHashTxfm(signatureMethod sm, XSECCryptoHash::HashType hashType, co
 //            Map a Signature hash
 // --------------------------------------------------------------------------------
 
-bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain * inputBytes,
-                                                          const XMLCh * URI,
-                                                          const XSECCryptoKey * key) const {
+bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain* inputBytes,
+                                                          const XMLCh* URI,
+                                                          const XSECCryptoKey* key) const {
 
-    signatureMethod sm;
     XSECCryptoHash::HashType hashType;
 
     // Map to internal constants
 
-    if (!XSECmapURIToSignatureMethods(URI, sm, hashType)) {
+    if (!XSECAlgorithmSupport::evalSignatureMethod(URI, key, hashType)) {
         safeBuffer sb;
-        sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown URI : ");
+        sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown or key-incompatible URI : ");
         sb.sbXMLChCat(URI);
 
         throw XSECException(XSECException::AlgorithmMapperError,
@@ -258,7 +245,10 @@ bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain * inputBytes
     // Now append the appropriate hash transform onto the end of the chain
     // If this is an HMAC of some kind - this function will add the appropriate key
 
-    TXFMBase * htxfm = addHashTxfm(sm, hashType, key, inputBytes->getLastTxfm()->getDocument());
+    TXFMBase* htxfm = addHashTxfm(
+            hashType,
+            (key->getKeyType() == XSECCryptoKey::KEY_HMAC ? key : NULL),
+            inputBytes->getLastTxfm()->getDocument());
     inputBytes->appendTxfm(htxfm);
 
     return true;
@@ -270,20 +260,19 @@ bool DSIGAlgorithmHandlerDefault::appendSignatureHashTxfm(TXFMChain * inputBytes
 // --------------------------------------------------------------------------------
 
 unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
-        TXFMChain * inputBytes,
-        const XMLCh * URI,
-        const XSECCryptoKey * key,
+        TXFMChain* inputBytes,
+        const XMLCh* URI,
+        const XSECCryptoKey* key,
         unsigned int outputLength,
-        safeBuffer & result) const {
+        safeBuffer& result) const {
 
-    signatureMethod sm;
     XSECCryptoHash::HashType hashType;
 
     // Map to internal constants
 
-    if (!XSECmapURIToSignatureMethods(URI, sm, hashType)) {
+    if (!XSECAlgorithmSupport::evalSignatureMethod(URI, key, hashType)) {
         safeBuffer sb;
-        sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown URI : ");
+        sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown or key-incompatible URI : ");
         sb.sbXMLChCat(URI);
 
         throw XSECException(XSECException::AlgorithmMapperError,
@@ -293,7 +282,10 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
     // Now append the appropriate hash transform onto the end of the chain
     // If this is an HMAC of some kind - this function will add the appropriate key
 
-    TXFMBase * htxfm = addHashTxfm(sm, hashType, key, inputBytes->getLastTxfm()->getDocument());
+    TXFMBase * htxfm = addHashTxfm(
+            hashType,
+            (key->getKeyType() == XSECCryptoKey::KEY_HMAC ? key : NULL),
+            inputBytes->getLastTxfm()->getDocument());
     inputBytes->appendTxfm(htxfm);
 
     unsigned char hash[4096];
@@ -314,13 +306,6 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
     case (XSECCryptoKey::KEY_DSA_PRIVATE) :
     case (XSECCryptoKey::KEY_DSA_PAIR) :
 
-        if (sm != SIGNATURE_DSA) {
-
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-
-        }
-
         b64Len = ((XSECCryptoKeyDSA *) key)->signBase64Signature(
             hash,
             hashLen,
@@ -328,16 +313,12 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
             MAXB64BUFSIZE);
 
         if (b64Len <= 0) {
-
             throw XSECException(XSECException::AlgorithmMapperError,
                 "Unknown error occurred during a DSA Signing operation");
-
         }
         else if (b64Len >= MAXB64BUFSIZE) {
-
             throw XSECException(XSECException::AlgorithmMapperError,
                 "DSA Signing operation exceeded size of buffer");
-
         }
 
         if (b64Buf[b64Len-1] == '\n')
@@ -350,13 +331,6 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
     case (XSECCryptoKey::KEY_RSA_PRIVATE) :
     case (XSECCryptoKey::KEY_RSA_PAIR) :
 
-        if (sm != SIGNATURE_RSA) {
-
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-
-        }
-
         b64Len = ((XSECCryptoKeyRSA *) key)->signSHA1PKCS1Base64Signature(
             hash,
             hashLen,
@@ -365,16 +339,12 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
             hashType);
 
         if (b64Len <= 0) {
-
             throw XSECException(XSECException::AlgorithmMapperError,
                 "Unknown error occurred during a RSA Signing operation");
-
         }
         else if (b64Len >= MAXB64BUFSIZE) {
-
             throw XSECException(XSECException::AlgorithmMapperError,
                 "RSA Signing operation exceeded size of buffer");
-
         }
 
         // Clean up some "funnies" and make sure the string is NULL terminated
@@ -389,13 +359,6 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
     case (XSECCryptoKey::KEY_EC_PRIVATE) :
     case (XSECCryptoKey::KEY_EC_PAIR) :
 
-        if (sm != SIGNATURE_ECDSA) {
-
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-
-        }
-
         b64Len = ((XSECCryptoKeyEC *) key)->signBase64SignatureDSA(
             hash,
             hashLen,
@@ -403,16 +366,12 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
             MAXB64BUFSIZE);
 
         if (b64Len <= 0) {
-
             throw XSECException(XSECException::AlgorithmMapperError,
                 "Unknown error occurred during an ECDSA Signing operation");
-
         }
         else if (b64Len >= MAXB64BUFSIZE) {
-
             throw XSECException(XSECException::AlgorithmMapperError,
                 "ECDSA Signing operation exceeded size of buffer");
-
         }
 
         if (b64Buf[b64Len-1] == '\n')
@@ -423,13 +382,6 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
         break;
 
     case (XSECCryptoKey::KEY_HMAC) :
-
-        if (sm != SIGNATURE_HMAC) {
-
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-
-        }
 
         // Signature already created, so just translate to base 64 and enter string
 
@@ -448,7 +400,6 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
         break;
 
     default :
-
         throw XSECException(XSECException::AlgorithmMapperError,
             "Key found, but don't know how to sign the document using it");
 
@@ -457,27 +408,25 @@ unsigned int DSIGAlgorithmHandlerDefault::signToSafeBuffer(
     result = b64Buf;
 
     return (unsigned int) strlen(b64Buf);
-
 }
 
 // --------------------------------------------------------------------------------
 //            Verify
 // --------------------------------------------------------------------------------
 bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
-        TXFMChain * inputBytes,
-        const XMLCh * URI,
-        const char * sig,
+        TXFMChain* inputBytes,
+        const XMLCh* URI,
+        const char* sig,
         unsigned int outputLength,
-        const XSECCryptoKey * key) const {
+        const XSECCryptoKey* key) const {
 
-    signatureMethod sm;
     XSECCryptoHash::HashType hashType;
 
     // Map to internal constants
 
-    if (!XSECmapURIToSignatureMethods(URI, sm, hashType)) {
+    if (!XSECAlgorithmSupport::evalSignatureMethod(URI, key, hashType)) {
         safeBuffer sb;
-        sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown URI : ");
+        sb.sbTranscodeIn("DSIGAlgorithmHandlerDefault - Unknown or key-incompatible URI : ");
         sb.sbXMLChCat(URI);
 
         throw XSECException(XSECException::AlgorithmMapperError,
@@ -487,7 +436,10 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
     // Now append the appropriate hash transform onto the end of the chain
     // If this is an HMAC of some kind - this function will add the appropriate key
 
-    TXFMBase * htxfm = addHashTxfm(sm, hashType, key, inputBytes->getLastTxfm()->getDocument());
+    TXFMBase * htxfm = addHashTxfm(
+            hashType,
+            (key->getKeyType() == XSECCryptoKey::KEY_HMAC ? key : NULL),
+            inputBytes->getLastTxfm()->getDocument());
     inputBytes->appendTxfm(htxfm);
 
     unsigned char hash[4096];
@@ -502,11 +454,6 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
     case (XSECCryptoKey::KEY_DSA_PUBLIC) :
     case (XSECCryptoKey::KEY_DSA_PAIR) :
 
-        if (sm != SIGNATURE_DSA) {
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-        }
-
         sigVfyRet = ((XSECCryptoKeyDSA *) key)->verifyBase64Signature(
             hash,
             hashLen,
@@ -517,13 +464,6 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 
     case (XSECCryptoKey::KEY_RSA_PUBLIC) :
     case (XSECCryptoKey::KEY_RSA_PAIR) :
-
-        if (sm != SIGNATURE_RSA) {
-
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-
-        }
 
         sigVfyRet = ((XSECCryptoKeyRSA *) key)->verifySHA1PKCS1Base64Signature(
             hash,
@@ -537,13 +477,6 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
     case (XSECCryptoKey::KEY_EC_PUBLIC) :
     case (XSECCryptoKey::KEY_EC_PAIR) :
 
-        if (sm != SIGNATURE_ECDSA) {
-
-            throw XSECException(XSECException::AlgorithmMapperError,
-                "Key type does not match <SignedInfo> signature type");
-
-        }
-
         sigVfyRet = ((XSECCryptoKeyEC *) key)->verifyBase64SignatureDSA(
             hash,
             hashLen,
@@ -554,7 +487,7 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 
     case (XSECCryptoKey::KEY_HMAC) :
 
-    // Already done - just compare calculated value with read value
+        // Already done - just compare calculated value with read value
 
         // FIX: CVE-2009-0217
         if (outputLength > 0 && (outputLength > (unsigned int)hashLen || outputLength < 80 || outputLength < (unsigned int)hashLen / 2)) {
@@ -570,9 +503,8 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
         break;
 
     default :
-
         throw XSECException(XSECException::AlgorithmMapperError,
-            "Key found, but don't know how to check the signature using it");
+            "Key found, but don't know how to verify the signature using it");
 
     }
 
@@ -584,10 +516,10 @@ bool DSIGAlgorithmHandlerDefault::verifyBase64Signature(
 // --------------------------------------------------------------------------------
 
 bool DSIGAlgorithmHandlerDefault::appendHashTxfm(
-        TXFMChain * inputBytes,
-        const XMLCh * URI) const {
+        TXFMChain* inputBytes,
+        const XMLCh* URI) const {
 
-    // Is this a URI we recognise?
+    // Is this a URI we recognize?
 
     XSECCryptoHash::HashType hashType = XSECAlgorithmSupport::getHashType(URI);
 
@@ -599,8 +531,8 @@ bool DSIGAlgorithmHandlerDefault::appendHashTxfm(
         throw XSECException(XSECException::AlgorithmMapperError, sb.rawXMLChBuffer());
     }
 
-    TXFMBase * txfm;
-    DOMDocument *d = inputBytes->getLastTxfm()->getDocument();
+    TXFMBase* txfm;
+    DOMDocument* d = inputBytes->getLastTxfm()->getDocument();
     XSECnew(txfm, TXFMHash(d, hashType));
 
     inputBytes->appendTxfm(txfm);
@@ -613,11 +545,11 @@ bool DSIGAlgorithmHandlerDefault::appendHashTxfm(
 // --------------------------------------------------------------------------------
 
 unsigned int DSIGAlgorithmHandlerDefault::decryptToSafeBuffer(
-        TXFMChain * cipherText,
-        XENCEncryptionMethod * encryptionMethod,
-        const XSECCryptoKey * key,
-        DOMDocument * doc,
-        safeBuffer & result
+        TXFMChain* cipherText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        DOMDocument* doc,
+        safeBuffer& result
         ) const {
 
     throw XSECException(XSECException::AlgorithmMapperError,
@@ -625,10 +557,10 @@ unsigned int DSIGAlgorithmHandlerDefault::decryptToSafeBuffer(
 }
 
 bool DSIGAlgorithmHandlerDefault::appendDecryptCipherTXFM(
-        TXFMChain * cipherText,
-        XENCEncryptionMethod * encryptionMethod,
-        const XSECCryptoKey * key,
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
+        TXFMChain* cipherText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc
         ) const {
 
     throw XSECException(XSECException::AlgorithmMapperError,
@@ -641,11 +573,11 @@ bool DSIGAlgorithmHandlerDefault::appendDecryptCipherTXFM(
 // --------------------------------------------------------------------------------
 
 bool DSIGAlgorithmHandlerDefault::encryptToSafeBuffer(
-        TXFMChain * plainText,
-        XENCEncryptionMethod * encryptionMethod,
-        const XSECCryptoKey * key,
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
-        safeBuffer & result
+        TXFMChain* plainText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
+        safeBuffer& result
         ) const {
 
     throw XSECException(XSECException::AlgorithmMapperError,
@@ -656,9 +588,9 @@ bool DSIGAlgorithmHandlerDefault::encryptToSafeBuffer(
 //            Key Creation
 // --------------------------------------------------------------------------------
 
-XSECCryptoKey * DSIGAlgorithmHandlerDefault::createKeyForURI(
-        const XMLCh * uri,
-        const unsigned char * keyBuffer,
+XSECCryptoKey* DSIGAlgorithmHandlerDefault::createKeyForURI(
+        const XMLCh* uri,
+        const unsigned char* keyBuffer,
         unsigned int keyLen
         ) const {
 

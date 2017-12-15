@@ -21,7 +21,7 @@
  * XSEC
  *
  * XSECAlgorithmHandlerDefault := Interface class to define handling of
- *								  default encryption algorithms
+ *                                  default encryption algorithms
  *
  * $Id$
  *
@@ -52,74 +52,74 @@ XERCES_CPP_NAMESPACE_USE
 #define _MY_MAX_KEY_SIZE 2048
 
 unsigned char s_3DES_CMS_IV [] = {
-	0x4a,
-	0xdd,
-	0xa2,
-	0x2c,
-	0x79,
-	0xe8,
-	0x21,
-	0x05
+    0x4a,
+    0xdd,
+    0xa2,
+    0x2c,
+    0x79,
+    0xe8,
+    0x21,
+    0x05
 };
 
 unsigned char s_AES_IV [] = {
 
-	0xA6,
-	0xA6,
-	0xA6,
-	0xA6,
-	0xA6,
-	0xA6,
-	0xA6,
-	0xA6
+    0xA6,
+    0xA6,
+    0xA6,
+    0xA6,
+    0xA6,
+    0xA6,
+    0xA6,
+    0xA6
 
 };
 
 // --------------------------------------------------------------------------------
-//			Compare URI to key type
+//            Compare URI to key type
 // --------------------------------------------------------------------------------
 
-void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri, 
-											  const XSECCryptoKey * key,
-											  XSECCryptoKey::KeyType &kt,
-											  XSECCryptoSymmetricKey::SymmetricKeyType &skt,
-											  bool &isSymmetricKeyWrap,
-                                              XSECCryptoSymmetricKey::SymmetricKeyMode &skm,
+void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh* uri,
+                                              const XSECCryptoKey* key,
+                                              XSECCryptoKey::KeyType& kt,
+                                              XSECCryptoSymmetricKey::SymmetricKeyType& skt,
+                                              bool& isSymmetricKeyWrap,
+                                              XSECCryptoSymmetricKey::SymmetricKeyMode& skm,
                                               unsigned int& taglen) const {
 
-	if (key == NULL) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::mapURIToKey - trying to process a NULL key");
-	}
+    if (key == NULL) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::mapURIToKey - trying to process a NULL key");
+    }
 
-	XSECCryptoSymmetricKey * keySymmetric;
-	bool keyOK = false;
+    XSECCryptoSymmetricKey* keySymmetric;
+    bool keyOK = false;
 
-	kt = key->getKeyType();
-	skt = XSECCryptoSymmetricKey::KEY_NONE;
-	isSymmetricKeyWrap = false;
+    kt = key->getKeyType();
+    skt = XSECCryptoSymmetricKey::KEY_NONE;
+    isSymmetricKeyWrap = false;
     skm = XSECCryptoSymmetricKey::MODE_NONE;
     taglen = 0;
-	
-	switch (kt) {
 
-	case XSECCryptoKey::KEY_RSA_PUBLIC :
-	case XSECCryptoKey::KEY_RSA_PAIR :
-	case XSECCryptoKey::KEY_RSA_PRIVATE :
-		keyOK = strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_1_5) ||
-			strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
+    switch (kt) {
+
+    case XSECCryptoKey::KEY_RSA_PUBLIC :
+    case XSECCryptoKey::KEY_RSA_PAIR :
+    case XSECCryptoKey::KEY_RSA_PRIVATE :
+        keyOK = strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_1_5) ||
+            strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
             strEquals(uri, DSIGConstants::s_unicodeStrURIRSA_OAEP);
-		break;
+        break;
 
-	case XSECCryptoKey::KEY_SYMMETRIC :
+    case XSECCryptoKey::KEY_SYMMETRIC :
 
-		keySymmetric = (XSECCryptoSymmetricKey *) key;
-		if (keySymmetric != NULL) {
-			skt = keySymmetric->getSymmetricKeyType();
+        keySymmetric = (XSECCryptoSymmetricKey*) key;
+        if (keySymmetric != NULL) {
+            skt = keySymmetric->getSymmetricKeyType();
 
-			switch (skt) {
+            switch (skt) {
 
-			case XSECCryptoSymmetricKey::KEY_3DES_192 :
+            case XSECCryptoSymmetricKey::KEY_3DES_192 :
                 if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_3DES)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
@@ -129,9 +129,9 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
                     keyOK = true;
                     skm = XSECCryptoSymmetricKey::MODE_CBC;
                 }
-				break;
+                break;
 
-			case XSECCryptoSymmetricKey::KEY_AES_128 :
+            case XSECCryptoSymmetricKey::KEY_AES_128 :
                 if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128) || strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES128_PAD)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
@@ -146,9 +146,9 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
                     skm = XSECCryptoSymmetricKey::MODE_GCM;
                     taglen = 16;
                 }
-				break;
+                break;
 
-			case XSECCryptoSymmetricKey::KEY_AES_192 :
+            case XSECCryptoSymmetricKey::KEY_AES_192 :
                 if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192) || strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES192_PAD)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
@@ -163,9 +163,9 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
                     skm = XSECCryptoSymmetricKey::MODE_GCM;
                     taglen = 16;
                 }
-				break;
+                break;
 
-			case XSECCryptoSymmetricKey::KEY_AES_256 :
+            case XSECCryptoSymmetricKey::KEY_AES_256 :
                 if (strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256) || strEquals(uri, DSIGConstants::s_unicodeStrURIKW_AES256_PAD)) {
                     keyOK = true;
                     isSymmetricKeyWrap = true;
@@ -180,402 +180,388 @@ void XENCAlgorithmHandlerDefault::mapURIToKey(const XMLCh * uri,
                     skm = XSECCryptoSymmetricKey::MODE_GCM;
                     taglen = 16;
                 }
-				break;
+                break;
 
-			default:
-				break;
-			}
-		}
-		break;
+            default:
+                break;
+            }
+        }
+        break;
 
-	default:
-		 break;
-	}
+    default:
+         break;
+    }
 
-	if (keyOK == false) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::mapURIToKey - key inappropriate for URI");
-	}
-
+    if (keyOK == false) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::mapURIToKey - key inappropriate for URI");
+    }
 }
 
 // --------------------------------------------------------------------------------
-//			AES Key wrap/unwrap
+//            AES Key wrap/unwrap
 // --------------------------------------------------------------------------------
 
 unsigned int XENCAlgorithmHandlerDefault::unwrapKeyAES(
-   		TXFMChain * cipherText,
-		const XSECCryptoKey * key,
-		safeBuffer & result) const {
+        TXFMChain* cipherText,
+        const XSECCryptoKey* key,
+        safeBuffer& result) const {
 
-	// Cat the encrypted key
-	XMLByte buf[_MY_MAX_KEY_SIZE];
-	XMLByte aesBuf[16];
-	XMLByte aesOutBuf[16];
-	TXFMBase * b = cipherText->getLastTxfm();
-	unsigned int sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
+    // Cat the encrypted key
+    XMLByte buf[_MY_MAX_KEY_SIZE];
+    XMLByte aesBuf[16];
+    XMLByte aesOutBuf[16];
+    TXFMBase* b = cipherText->getLastTxfm();
+    unsigned int sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
 
-	if (sz <= 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - AES Wrapped Key not found");
-	}
+    if (sz <= 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - AES Wrapped Key not found");
+    }
 
-	if (sz == _MY_MAX_KEY_SIZE) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - Key to decrypt too big!");
-	}
+    if (sz == _MY_MAX_KEY_SIZE) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - Key to decrypt too big!");
+    }
 
-	// Find number of blocks, and ensure we are a multiple of 64 bits
-	if (sz % 8 != 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - AES wrapped key not a multiple of 64");
-	}
+    // Find number of blocks, and ensure we are a multiple of 64 bits
+    if (sz % 8 != 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - AES wrapped key not a multiple of 64");
+    }
 
-	// Do the decrypt - this cast will throw if wrong, but we should
-	// not have been able to get through algorithm checks otherwise
-	XSECCryptoSymmetricKey * sk = (XSECCryptoSymmetricKey *) key;
+    // Do the decrypt - this cast will throw if wrong, but we should
+    // not have been able to get through algorithm checks otherwise
+    XSECCryptoSymmetricKey* sk = (XSECCryptoSymmetricKey*) key;
 
-	int blocks = sz / 8;
-	int n = blocks - 1;
-	for (int j = 5; j >= 0; j--) {
-		for (int i = n ; i > 0 ; --i) {
+    int blocks = sz / 8;
+    int n = blocks - 1;
+    for (int j = 5; j >= 0; j--) {
+        for (int i = n ; i > 0 ; --i) {
 
-			// Gather blocks to decrypt
-			// A
-			memcpy(aesBuf, buf, 8);
-			// Ri
-			memcpy(&aesBuf[8], &buf[8 * i], 8);
-			// A mod t
-			aesBuf[7] ^= ((n * j) + i);
+            // Gather blocks to decrypt
+            // A
+            memcpy(aesBuf, buf, 8);
+            // Ri
+            memcpy(&aesBuf[8], &buf[8* i], 8);
+            // A mod t
+            aesBuf[7] ^= ((n * j) + i);
 
-			// do decrypt
-			sk->decryptInit(false, XSECCryptoSymmetricKey::MODE_ECB);		// No padding
-			int sz = sk->decrypt(aesBuf, aesOutBuf, 16, 16);
-			sz += sk->decryptFinish(&aesOutBuf[sz], 16 - sz);
+            // do decrypt
+            sk->decryptInit(false, XSECCryptoSymmetricKey::MODE_ECB);        // No padding
+            int sz = sk->decrypt(aesBuf, aesOutBuf, 16, 16);
+            sz += sk->decryptFinish(&aesOutBuf[sz], 16 - sz);
 
-			if (sz != 16) {
-				throw XSECException(XSECException::CipherError, 
-					"XENCAlgorithmHandlerDefault - Error performing decrypt in AES Unwrap");
-			}
+            if (sz != 16) {
+                throw XSECException(XSECException::CipherError,
+                    "XENCAlgorithmHandlerDefault - Error performing decrypt in AES Unwrap");
+            }
 
-			// Copy back to where we are
-			// A
-			memcpy(buf, aesOutBuf, 8);
-			// Ri
-			memcpy(&buf[8 * i], &aesOutBuf[8], 8);
+            // Copy back to where we are
+            // A
+            memcpy(buf, aesOutBuf, 8);
+            // Ri
+            memcpy(&buf[8 * i], &aesOutBuf[8], 8);
+        }
+    }
 
-		}
-	}
+    // Check is valid
+    if (memcmp(buf, s_AES_IV, 8) != 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - decrypt failed - AES IV is not correct");
+    }
 
-	// Check is valid
-	if (memcmp(buf, s_AES_IV, 8) != 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - decrypt failed - AES IV is not correct");
-	}
+    // Copy to safebuffer
+    result.sbMemcpyIn(&buf[8], n * 8);
 
-	// Copy to safebuffer
-	result.sbMemcpyIn(&buf[8], n * 8);
-
-	return n * 8;
+    return n * 8;
 }
 
 bool XENCAlgorithmHandlerDefault::wrapKeyAES(
-   		TXFMChain * cipherText,
-		const XSECCryptoKey * key,
-		safeBuffer & result) const {
+        TXFMChain* cipherText,
+        const XSECCryptoKey* key,
+        safeBuffer& result) const {
 
-	// get the raw key
-	XMLByte buf[_MY_MAX_KEY_SIZE + 8];
-	memcpy(buf, s_AES_IV, 8);
-	XMLByte aesBuf[16];
-	XMLByte aesOutBuf[32];  // Give this an extra block for WinCAPI
-	TXFMBase * b = cipherText->getLastTxfm();
-	unsigned int sz = (unsigned int) b->readBytes(&buf[8], _MY_MAX_KEY_SIZE);
+    // get the raw key
+    XMLByte buf[_MY_MAX_KEY_SIZE + 8];
+    memcpy(buf, s_AES_IV, 8);
+    XMLByte aesBuf[16];
+    XMLByte aesOutBuf[32];  // Give this an extra block for WinCAPI
+    TXFMBase* b = cipherText->getLastTxfm();
+    unsigned int sz = (unsigned int) b->readBytes(&buf[8], _MY_MAX_KEY_SIZE);
 
-	if (sz <= 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - Key not found");
-	}
+    if (sz <= 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - Key not found");
+    }
 
-	if (sz == _MY_MAX_KEY_SIZE) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - Key to encrypt too big!");
-	}
+    if (sz == _MY_MAX_KEY_SIZE) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - Key to encrypt too big!");
+    }
 
-	// Find number of blocks, and ensure we are a multiple of 64 bits
-	if (sz % 8 != 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - AES wrapped key not a multiple of 64");
-	}
+    // Find number of blocks, and ensure we are a multiple of 64 bits
+    if (sz % 8 != 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - AES wrapped key not a multiple of 64");
+    }
 
-	// Do the decrypt - this cast will throw if wrong, but we should
-	// not have been able to get through algorithm checks otherwise
-	XSECCryptoSymmetricKey * sk = (XSECCryptoSymmetricKey *) key;
+    // Do the decrypt - this cast will throw if wrong, but we should
+    // not have been able to get through algorithm checks otherwise
+    XSECCryptoSymmetricKey* sk = (XSECCryptoSymmetricKey*) key;
 
-	int n = sz / 8;
+    int n = sz / 8;
 
-	for (int j = 0; j <= 5; ++j) {
-		for (int i = 1 ; i <= n ; ++i) {
+    for (int j = 0; j <= 5; ++j) {
+        for (int i = 1 ; i <= n ; ++i) {
 
-			// Gather blocks to decrypt
-			// A
-			memcpy(aesBuf, buf, 8);
-			// Ri
-			memcpy(&aesBuf[8], &buf[8 * i], 8);
+            // Gather blocks to decrypt
+            // A
+            memcpy(aesBuf, buf, 8);
+            // Ri
+            memcpy(&aesBuf[8], &buf[8 * i], 8);
 
-			// do encrypt
-			sk->encryptInit(false, XSECCryptoSymmetricKey::MODE_ECB);
-			int sz = sk->encrypt(aesBuf, aesOutBuf, 16, 32);
-			sz += sk->encryptFinish(&aesOutBuf[sz], 32 - sz);
+            // do encrypt
+            sk->encryptInit(false, XSECCryptoSymmetricKey::MODE_ECB);
+            int sz = sk->encrypt(aesBuf, aesOutBuf, 16, 32);
+            sz += sk->encryptFinish(&aesOutBuf[sz], 32 - sz);
 
-			if (sz != 16) {
-				throw XSECException(XSECException::CipherError, 
-					"XENCAlgorithmHandlerDefault - Error performing encrypt in AES wrap");
-			}
+            if (sz != 16) {
+                throw XSECException(XSECException::CipherError,
+                    "XENCAlgorithmHandlerDefault - Error performing encrypt in AES wrap");
+            }
 
-			// Copy back to where we are
-			// A
-			memcpy(buf, aesOutBuf, 8);
-			// A mod t
-			buf[7] ^= ((n * j) + i);
-			// Ri
-			memcpy(&buf[8 * i], &aesOutBuf[8], 8);
+            // Copy back to where we are
+            // A
+            memcpy(buf, aesOutBuf, 8);
+            // A mod t
+            buf[7] ^= ((n * j) + i);
+            // Ri
+            memcpy(&buf[8 * i], &aesOutBuf[8], 8);
+        }
+    }
 
-		}
-	}
+    // Now we have to base64 encode
+    XSECCryptoBase64* b64 = XSECPlatformUtils::g_cryptoProvider->base64();
 
-	// Now we have to base64 encode
-	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
+    if (!b64) {
+        throw XSECException(XSECException::CryptoProviderError,
+                "XENCAlgorithmHandlerDefault - Error getting base64 encoder in AES wrap");
+    }
 
-	if (!b64) {
+    Janitor<XSECCryptoBase64> j_b64(b64);
+    unsigned char* b64Buffer;
+    int bufLen = ((n + 1) * 8) * 3;
+    XSECnew(b64Buffer, unsigned char[bufLen + 1]);// Overkill
+    ArrayJanitor<unsigned char> j_b64Buffer(b64Buffer);
 
-		throw XSECException(XSECException::CryptoProviderError, 
-				"XENCAlgorithmHandlerDefault - Error getting base64 encoder in AES wrap");
+    b64->encodeInit();
+    int outputLen = b64->encode (buf, (n+1) * 8, b64Buffer, bufLen);
+    outputLen += b64->encodeFinish(&b64Buffer[outputLen], bufLen - outputLen);
+    b64Buffer[outputLen] = '\0';
 
-	}
+    // Copy to safebuffer
+    result.sbStrcpyIn((const char*) b64Buffer);
 
-	Janitor<XSECCryptoBase64> j_b64(b64);
-	unsigned char * b64Buffer;
-	int bufLen = ((n + 1) * 8) * 3;
-	XSECnew(b64Buffer, unsigned char[bufLen + 1]);// Overkill
-	ArrayJanitor<unsigned char> j_b64Buffer(b64Buffer);
-
-	b64->encodeInit();
-	int outputLen = b64->encode (buf, (n+1) * 8, b64Buffer, bufLen);
-	outputLen += b64->encodeFinish(&b64Buffer[outputLen], bufLen - outputLen);
-	b64Buffer[outputLen] = '\0';
-
-	// Copy to safebuffer
-	result.sbStrcpyIn((const char *) b64Buffer);
-
-	return true;
+    return true;
 }
 
 // --------------------------------------------------------------------------------
-//			DES CMS Key wrap/unwrap
+//            DES CMS Key wrap/unwrap
 // --------------------------------------------------------------------------------
 
 unsigned int XENCAlgorithmHandlerDefault::unwrapKey3DES(
-   		TXFMChain * cipherText,
-		const XSECCryptoKey * key,
-		safeBuffer & result) const {
+        TXFMChain* cipherText,
+        const XSECCryptoKey* key,
+        safeBuffer& result) const {
 
-	// Perform an unwrap on the key
-	safeBuffer cipherSB;
+    // Perform an unwrap on the key
+    safeBuffer cipherSB;
 
-	// Cat the encrypted key
-	XMLByte buf[_MY_MAX_KEY_SIZE];
-	TXFMBase * b = cipherText->getLastTxfm();
-	unsigned int offset = 0;
-	unsigned int sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
+    // Cat the encrypted key
+    XMLByte buf[_MY_MAX_KEY_SIZE];
+    TXFMBase* b = cipherText->getLastTxfm();
+    unsigned int offset = 0;
+    unsigned int sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
 
-	while (sz > 0) {
-		cipherSB.sbMemcpyIn(offset, buf, sz);
-		offset += sz;
-		sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
-	}
+    while (sz > 0) {
+        cipherSB.sbMemcpyIn(offset, buf, sz);
+        offset += sz;
+        sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
+    }
 
-	if (offset > _MY_MAX_KEY_SIZE) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - Key to decrypt too big!");
-	}
+    if (offset > _MY_MAX_KEY_SIZE) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - Key to decrypt too big!");
+    }
 
-	// Do the decrypt - this cast will throw if wrong, but we should
-	// not have been able to get through algorithm checks otherwise
-	XSECCryptoSymmetricKey * sk = (XSECCryptoSymmetricKey *) key;
+    // Do the decrypt - this cast will throw if wrong, but we should
+    // not have been able to get through algorithm checks otherwise
+    XSECCryptoSymmetricKey* sk = (XSECCryptoSymmetricKey*) key;
 
-	sk->decryptInit(false, XSECCryptoSymmetricKey::MODE_CBC, s_3DES_CMS_IV);
-	// If key is bigger than this, then we have a problem
-	sz = sk->decrypt(cipherSB.rawBuffer(), buf, offset, _MY_MAX_KEY_SIZE);
+    sk->decryptInit(false, XSECCryptoSymmetricKey::MODE_CBC, s_3DES_CMS_IV);
+    // If key is bigger than this, then we have a problem
+    sz = sk->decrypt(cipherSB.rawBuffer(), buf, offset, _MY_MAX_KEY_SIZE);
 
-	sz += sk->decryptFinish(&buf[sz], _MY_MAX_KEY_SIZE - sz);
+    sz += sk->decryptFinish(&buf[sz], _MY_MAX_KEY_SIZE - sz);
 
-	if (sz <= 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - Error decrypting key!");
-	}
+    if (sz <= 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - Error decrypting key!");
+    }
 
-	// We now have the first cut, reverse the cipher text
-	XMLByte buf2[_MY_MAX_KEY_SIZE];
-	for (unsigned int i = 0; i < sz; ++ i) {
-		buf2[sz - i - 1] = buf[i];
-	}
+    // We now have the first cut, reverse the cipher text
+    XMLByte buf2[_MY_MAX_KEY_SIZE];
+    for (unsigned int i = 0; i < sz; ++ i) {
+        buf2[sz - i - 1] = buf[i];
+    }
 
-	// decrypt again
-	sk->decryptInit(false);
-	offset = sk->decrypt(buf2, buf, sz, _MY_MAX_KEY_SIZE);
-	offset += sk->decryptFinish(&buf[offset], _MY_MAX_KEY_SIZE - offset);
+    // decrypt again
+    sk->decryptInit(false);
+    offset = sk->decrypt(buf2, buf, sz, _MY_MAX_KEY_SIZE);
+    offset += sk->decryptFinish(&buf[offset], _MY_MAX_KEY_SIZE - offset);
 
-	// Calculate the CMS Key Checksum
-	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hash(XSECCryptoHash::HASH_SHA1);
-	if (!sha1) {
+    // Calculate the CMS Key Checksum
+    XSECCryptoHash* sha1 = XSECPlatformUtils::g_cryptoProvider->hash(XSECCryptoHash::HASH_SHA1);
+    if (!sha1) {
+        throw XSECException(XSECException::CryptoProviderError,
+                "XENCAlgorithmHandlerDefault - Error getting SHA-1 object in 3DES unwrap");
+    }
+    Janitor<XSECCryptoHash> j_sha1(sha1);
+    sha1->reset();
+    sha1->hash(buf, offset - 8);
+    sha1->finish(buf2, _MY_MAX_KEY_SIZE);
 
-		throw XSECException(XSECException::CryptoProviderError, 
-				"XENCAlgorithmHandlerDefault - Error getting SHA-1 object in 3DES unwrap");
+    // Compare
+    for (unsigned int j = 0; j < 8; ++j) {
+        if (buf[offset - 8 + j] != buf2[j]) {
+            throw XSECException(XSECException::CipherError,
+                "XENCAlgorithmHandlerDefault::unwrapKey3DES - CMS Key Checksum does not match");
+        }
+    }
 
-	}
-	Janitor<XSECCryptoHash> j_sha1(sha1);
-	sha1->reset();
-	sha1->hash(buf, offset - 8);
-	sha1->finish(buf2, _MY_MAX_KEY_SIZE);
+    result.sbMemcpyIn(buf, offset - 8);
 
-	// Compare
-	for (unsigned int j = 0; j < 8; ++j) {
-
-		if (buf[offset - 8 + j] != buf2[j]) {
-			throw XSECException(XSECException::CipherError, 
-				"XENCAlgorithmHandlerDefault::unwrapKey3DES - CMS Key Checksum does not match");
-		}
-	}
-
-	result.sbMemcpyIn(buf, offset - 8);
-
-	return offset - 8;
-
+    return offset - 8;
 }
 
 bool XENCAlgorithmHandlerDefault::wrapKey3DES(
-   		TXFMChain * cipherText,
-		const XSECCryptoKey * key,
-		safeBuffer & result) const {
+        TXFMChain* cipherText,
+        const XSECCryptoKey* key,
+        safeBuffer& result) const {
 
-	// Cat the plaintext key
-	XMLByte buf[_MY_MAX_KEY_SIZE + 16];
-	TXFMBase * b = cipherText->getLastTxfm();
-	int offset = 0;
-	unsigned int sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
+    // Cat the plaintext key
+    XMLByte buf[_MY_MAX_KEY_SIZE + 16];
+    TXFMBase* b = cipherText->getLastTxfm();
+    int offset = 0;
+    unsigned int sz = (unsigned int) b->readBytes(buf, _MY_MAX_KEY_SIZE);
 
-	if (sz <= 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::wrapKey3DES - Unable to read key");
-	}
+    if (sz <= 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::wrapKey3DES - Unable to read key");
+    }
 
-	if (sz >= _MY_MAX_KEY_SIZE) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::wrapKey3DES - Key to decrypt too big!");
-	}
+    if (sz >= _MY_MAX_KEY_SIZE) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::wrapKey3DES - Key to decrypt too big!");
+    }
 
-	if (sz % 8 != 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::wrapKey3DES - Key to encrypt not a multiple of 8 bytes");
-	}
+    if (sz % 8 != 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::wrapKey3DES - Key to encrypt not a multiple of 8 bytes");
+    }
 
-	// Calculate the CMS Key Checksum
+    // Calculate the CMS Key Checksum
 
-	// Do the first encrypt
-	XMLByte buf2[_MY_MAX_KEY_SIZE + 16];
+    // Do the first encrypt
+    XMLByte buf2[_MY_MAX_KEY_SIZE + 16];
 
-	XSECCryptoHash * sha1 = XSECPlatformUtils::g_cryptoProvider->hash(XSECCryptoHash::HASH_SHA1);
-	if (!sha1) {
+    XSECCryptoHash* sha1 = XSECPlatformUtils::g_cryptoProvider->hash(XSECCryptoHash::HASH_SHA1);
+    if (!sha1) {
+        throw XSECException(XSECException::CryptoProviderError,
+                "XENCAlgorithmHandlerDefault - Error getting SHA-1 object in 3DES wrap");
+    }
+    Janitor<XSECCryptoHash> j_sha1(sha1);
+    sha1->reset();
+    sha1->hash(buf, sz);
+    sha1->finish(buf2, _MY_MAX_KEY_SIZE);
 
-		throw XSECException(XSECException::CryptoProviderError, 
-				"XENCAlgorithmHandlerDefault - Error getting SHA-1 object in 3DES wrap");
+    for (int j = 0; j < 8 ; ++j)
+        buf[sz++] = buf2[j];
 
-	}
-	Janitor<XSECCryptoHash> j_sha1(sha1);
-	sha1->reset();
-	sha1->hash(buf, sz);
-	sha1->finish(buf2, _MY_MAX_KEY_SIZE);
+    // Do the first encrypt - this cast will throw if wrong, but we should
+    // not have been able to get through algorithm checks otherwise
+    XSECCryptoSymmetricKey* sk = (XSECCryptoSymmetricKey*) key;
 
-	for (int j = 0; j < 8 ; ++j)
-		buf[sz++] = buf2[j];
+    sk->encryptInit(false);
+    // If key is bigger than this, then we have a problem
+    sz = sk->encrypt(buf, buf2, sz, _MY_MAX_KEY_SIZE);
+    sz += sk->encryptFinish(&buf2[sz], _MY_MAX_KEY_SIZE - sz);
 
-	// Do the first encrypt - this cast will throw if wrong, but we should
-	// not have been able to get through algorithm checks otherwise
-	XSECCryptoSymmetricKey * sk = (XSECCryptoSymmetricKey *) key;
+    if (sz <= 0) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::wrapKey3DES - Error encrypting key!");
+    }
 
-	sk->encryptInit(false);
-	// If key is bigger than this, then we have a problem
-	sz = sk->encrypt(buf, buf2, sz, _MY_MAX_KEY_SIZE);
-	sz += sk->encryptFinish(&buf2[sz], _MY_MAX_KEY_SIZE - sz);
+    // We now have the first cut, reverse the cipher text
+    for (unsigned int i = 0; i < sz; ++ i) {
+        buf[sz - i - 1] = buf2[i];
+    }
 
-	if (sz <= 0) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::wrapKey3DES - Error encrypting key!");
-	}
+    // encrypt again
+    sk->encryptInit(false, XSECCryptoSymmetricKey::MODE_CBC, s_3DES_CMS_IV);
+    offset = sk->encrypt(buf, buf2, sz, _MY_MAX_KEY_SIZE);
+    offset += sk->encryptFinish(&buf2[offset], _MY_MAX_KEY_SIZE - offset);
 
-	// We now have the first cut, reverse the cipher text
-	for (unsigned int i = 0; i < sz; ++ i) {
-		buf[sz - i - 1] = buf2[i];
-	}
+    // Base64 encode
+    XSECCryptoBase64* b64 = XSECPlatformUtils::g_cryptoProvider->base64();
 
-	// encrypt again
-	sk->encryptInit(false, XSECCryptoSymmetricKey::MODE_CBC, s_3DES_CMS_IV);
-	offset = sk->encrypt(buf, buf2, sz, _MY_MAX_KEY_SIZE);
-	offset += sk->encryptFinish(&buf2[offset], _MY_MAX_KEY_SIZE - offset);
+    if (!b64) {
+        throw XSECException(XSECException::CryptoProviderError,
+                "XENCAlgorithmHandlerDefault - Error getting base64 encoder in 3DES wrap");
+    }
 
-	// Base64 encode
-	XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
+    Janitor<XSECCryptoBase64> j_b64(b64);
+    unsigned char* b64Buffer;
+    int bufLen = (offset + 9) * 3;
+    XSECnew(b64Buffer, unsigned char[bufLen + 1]);// Overkill
+    ArrayJanitor<unsigned char> j_b64Buffer(b64Buffer);
 
-	if (!b64) {
+    b64->encodeInit();
+    int outputLen = b64->encode (&buf2[8], offset-8, b64Buffer, bufLen);
+    outputLen += b64->encodeFinish(&b64Buffer[outputLen], bufLen - outputLen);
+    b64Buffer[outputLen] = '\0';
 
-		throw XSECException(XSECException::CryptoProviderError, 
-				"XENCAlgorithmHandlerDefault - Error getting base64 encoder in 3DES wrap");
+    // Copy to safebuffer
+    result.sbStrcpyIn((const char*) b64Buffer);
 
-	}
-
-	Janitor<XSECCryptoBase64> j_b64(b64);
-	unsigned char * b64Buffer;
-	int bufLen = (offset + 9) * 3;
-	XSECnew(b64Buffer, unsigned char[bufLen + 1]);// Overkill
-	ArrayJanitor<unsigned char> j_b64Buffer(b64Buffer);
-
-	b64->encodeInit();
-	int outputLen = b64->encode (&buf2[8], offset-8, b64Buffer, bufLen);
-	outputLen += b64->encodeFinish(&b64Buffer[outputLen], bufLen - outputLen);
-	b64Buffer[outputLen] = '\0';
-
-	// Copy to safebuffer
-	result.sbStrcpyIn((const char *) b64Buffer);
-
-	return true;
-
+    return true;
 }
 
 // --------------------------------------------------------------------------------
-//			InputStream decryption
+//            InputStream decryption
 // --------------------------------------------------------------------------------
-	
+
 bool XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM(
-		TXFMChain * cipherText,
-		XENCEncryptionMethod * encryptionMethod,
-		const XSECCryptoKey * key,
-		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc
-		) const {
+        TXFMChain* cipherText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc
+        ) const {
 
-	// We only support this for bulk Symmetric key algorithms
+    // We only support this for bulk Symmetric key algorithms
 
-	XSECCryptoKey::KeyType kt;
-	XSECCryptoSymmetricKey::SymmetricKeyType skt;
-	bool isKeyWrap = false;
+    XSECCryptoKey::KeyType kt;
+    XSECCryptoSymmetricKey::SymmetricKeyType skt;
+    bool isKeyWrap = false;
     XSECCryptoSymmetricKey::SymmetricKeyMode skm;
     unsigned int taglen;
 
-	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
+    mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
     if (kt != XSECCryptoKey::KEY_SYMMETRIC || isKeyWrap == true) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM - only supports bulk symmetric algorithms");
-	}
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM - only supports bulk symmetric algorithms");
+    }
 
     if (skm == XSECCryptoSymmetricKey::MODE_GCM) {
 
@@ -594,30 +580,30 @@ bool XENCAlgorithmHandlerDefault::appendDecryptCipherTXFM(
     }
 
 
-	// Add the decryption TXFM
-	TXFMCipher* tcipher;
-	XSECnew(tcipher, TXFMCipher(doc, key, false));
-	cipherText->appendTxfm(tcipher);
+    // Add the decryption TXFM
+    TXFMCipher* tcipher;
+    XSECnew(tcipher, TXFMCipher(doc, key, false));
+    cipherText->appendTxfm(tcipher);
 
-	return true;
+    return true;
 }
 
 
 // --------------------------------------------------------------------------------
-//			GCM SafeBuffer decryption
+//            GCM SafeBuffer decryption
 // --------------------------------------------------------------------------------
 
 unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
-		TXFMChain * cipherText,
-		const XSECCryptoKey * key,
+        TXFMChain* cipherText,
+        const XSECCryptoKey* key,
         unsigned int taglen,
-		safeBuffer & result) const {
+        safeBuffer& result) const {
 
-	// Only works with symmetric key
+    // Only works with symmetric key
     if (key->getKeyType() != XSECCryptoKey::KEY_SYMMETRIC) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - GCM Decrypt must use symmetric key");
-	}
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - GCM Decrypt must use symmetric key");
+    }
 
     // First read in all the data so we can get to the tag.
     safeBuffer cipherBuf("");
@@ -630,8 +616,8 @@ unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
     }
 
     if (szTotal <= taglen) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - GCM ciphertext size not large enough to include authentication tag");
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - GCM ciphertext size not large enough to include authentication tag");
     }
 
     const unsigned char* cipherPtr = cipherBuf.rawBuffer();
@@ -665,183 +651,174 @@ unsigned int XENCAlgorithmHandlerDefault::doGCMDecryptToSafeBuffer(
 }
 
 // --------------------------------------------------------------------------------
-//			RSA SafeBuffer decryption
+//            RSA SafeBuffer decryption
 // --------------------------------------------------------------------------------
 
 unsigned int XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer(
-		TXFMChain * cipherText,
-		XENCEncryptionMethod * encryptionMethod,
-		const XSECCryptoKey * key,
-		DOMDocument * doc,
-		safeBuffer & result) const {
+        TXFMChain* cipherText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        DOMDocument* doc,
+        safeBuffer& result) const {
 
-	// Only works with RSA_PRIVATE or PAIR
-	if (key->getKeyType() == XSECCryptoKey::KEY_RSA_PUBLIC) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - RSA Decrypt must use private key");
-	}
+    // Only works with RSA_PRIVATE or PAIR
+    if (key->getKeyType() == XSECCryptoKey::KEY_RSA_PUBLIC) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - RSA Decrypt must use private key");
+    }
 
-	// Know this is an RSA key, so just cast
+    // Know this is an RSA key, so just cast
 
-	XSECCryptoKeyRSA * rsa = (XSECCryptoKeyRSA *) key;
+    XSECCryptoKeyRSA* rsa = (XSECCryptoKeyRSA*) key;
 
-	// Allocate an output buffer
-	unsigned char * decBuf;
-	XSECnew(decBuf, unsigned char[rsa->getLength()]);
-	ArrayJanitor<unsigned char> j_decBuf(decBuf);
+    // Allocate an output buffer
+    unsigned char* decBuf;
+    XSECnew(decBuf, unsigned char[rsa->getLength()]);
+    ArrayJanitor<unsigned char> j_decBuf(decBuf);
 
-	// Input
-	TXFMBase * b = cipherText->getLastTxfm();
-	safeBuffer cipherSB;
-	XMLByte buf[1024];
-	unsigned int offset = 0;
+    // Input
+    TXFMBase* b = cipherText->getLastTxfm();
+    safeBuffer cipherSB;
+    XMLByte buf[1024];
+    unsigned int offset = 0;
 
-	unsigned int bytesRead = (unsigned int) b->readBytes(buf, 1024);
-	while (bytesRead > 0) {
-		cipherSB.sbMemcpyIn(offset, buf, bytesRead);
-		offset += bytesRead;
-		bytesRead = (unsigned int) b->readBytes(buf, 1024);
-	}
+    unsigned int bytesRead = (unsigned int) b->readBytes(buf, 1024);
+    while (bytesRead > 0) {
+        cipherSB.sbMemcpyIn(offset, buf, bytesRead);
+        offset += bytesRead;
+        bytesRead = (unsigned int) b->readBytes(buf, 1024);
+    }
 
-	unsigned int decryptLen;
+    unsigned int decryptLen;
 
-	// Now we find out what kind of padding
-	if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_1_5)) {
+    // Now we find out what kind of padding
+    if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_1_5)) {
 
-		// Do decrypt
-		decryptLen = rsa->privateDecrypt(cipherSB.rawBuffer(), 
-												  decBuf, 
-												  offset, 
-												  rsa->getLength(), 
-												  XSECCryptoKeyRSA::PAD_PKCS_1_5);
-	}
-	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
+        // Do decrypt
+        decryptLen = rsa->privateDecrypt(cipherSB.rawBuffer(),
+                                                  decBuf,
+                                                  offset,
+                                                  rsa->getLength(),
+                                                  XSECCryptoKeyRSA::PAD_PKCS_1_5);
+    }
+    else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
              strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
 
-	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
-	    if (!digmeth|| !*digmeth) {
-	        digmeth = DSIGConstants::s_unicodeStrURISHA1;
-	    }
+        const XMLCh* digmeth = encryptionMethod->getDigestMethod();
+        if (!digmeth|| !*digmeth) {
+            digmeth = DSIGConstants::s_unicodeStrURISHA1;
+        }
 
         const XMLCh* mgfalg = encryptionMethod->getMGF();
         if (!mgfalg || !*mgfalg) {
             mgfalg = DSIGConstants::s_unicodeStrURIMGF1_SHA1;
         }
 
-		// Read out any OAEP params
-		unsigned char * oaepParamsBuf = NULL;
-		const XMLCh * oaepParams = encryptionMethod->getOAEPparams();
-		unsigned int sz = 0;
-		if (oaepParams != NULL) {
+        // Read out any OAEP params
+        unsigned char* oaepParamsBuf = NULL;
+        unsigned int oaepParamsLen = 0;
 
-			XSECAutoPtrChar oaepParamsStr(oaepParams);
+        const XMLCh* oaepParams = encryptionMethod->getOAEPparams();
+        if (oaepParams != NULL) {
+            XSECAutoPtrChar oaepParamsStr(oaepParams);
 
-			unsigned int bufLen = (unsigned int) strlen(oaepParamsStr.get());
-			oaepParamsBuf = new unsigned char[bufLen];
-			ArrayJanitor<unsigned char> j_oaepParamsBuf(oaepParamsBuf);
+            unsigned int bufLen = (unsigned int) strlen(oaepParamsStr.get());
+            oaepParamsBuf = new unsigned char[bufLen];
 
-			XSECCryptoBase64 * b64 = 
-				XSECPlatformUtils::g_cryptoProvider->base64();
-			Janitor<XSECCryptoBase64> j_b64(b64);
+            XSECCryptoBase64* b64 = XSECPlatformUtils::g_cryptoProvider->base64();
+            Janitor<XSECCryptoBase64> j_b64(b64);
 
-			b64->decodeInit();
-			sz = b64->decode((unsigned char *) oaepParamsStr.get(), bufLen, oaepParamsBuf, bufLen);
-			sz += b64->decodeFinish(&oaepParamsBuf[sz], bufLen - sz);
+            b64->decodeInit();
+            oaepParamsLen = b64->decode((unsigned char*) oaepParamsStr.get(), bufLen, oaepParamsBuf, bufLen);
+            oaepParamsLen += b64->decodeFinish(&oaepParamsBuf[oaepParamsLen], bufLen - oaepParamsLen);
+        }
 
-			rsa->setOAEPparams(oaepParamsBuf, sz);
+        ArrayJanitor<unsigned char> j_oaepParamsBuf(oaepParamsBuf);
 
-		}
-		else {
-			rsa->setOAEPparams(NULL, 0);
-		}
+        decryptLen = rsa->privateDecrypt(cipherSB.rawBuffer(),
+                                                  decBuf,
+                                                  offset,
+                                                  rsa->getLength(),
+                                                  XSECCryptoKeyRSA::PAD_OAEP_MGFP1,
+                                                  digmeth,
+                                                  mgfalg,
+                                                  oaepParamsBuf,
+                                                  oaepParamsLen);
 
-		decryptLen = rsa->privateDecrypt(cipherSB.rawBuffer(), 
-												  decBuf, 
-												  offset, 
-												  rsa->getLength(), 
-												  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-												  digmeth,
-												  mgfalg);
+    }
 
-	}
+    else {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer - Unknown padding type");
+    }
+    // Copy to output
+    result.sbMemcpyIn(decBuf, decryptLen);
 
-	else {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::doRSADecryptToSafeBuffer - Unknown padding type");
-	}
-	// Copy to output
-	result.sbMemcpyIn(decBuf, decryptLen);
-	
-	memset(decBuf, 0, decryptLen);
+    memset(decBuf, 0, decryptLen);
 
-	return decryptLen;
-
+    return decryptLen;
 }
 
 // --------------------------------------------------------------------------------
-//			SafeBuffer decryption
+//            SafeBuffer decryption
 // --------------------------------------------------------------------------------
 
 unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
-		TXFMChain * cipherText,
-		XENCEncryptionMethod * encryptionMethod,
-		const XSECCryptoKey * key,
-		DOMDocument * doc,
-		safeBuffer & result
-		) const {
+        TXFMChain* cipherText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        DOMDocument* doc,
+        safeBuffer& result
+        ) const {
 
-	XSECCryptoKey::KeyType kt;
-	XSECCryptoSymmetricKey::SymmetricKeyType skt;
-	bool isKeyWrap = false;
+    XSECCryptoKey::KeyType kt;
+    XSECCryptoSymmetricKey::SymmetricKeyType skt;
+    bool isKeyWrap = false;
     XSECCryptoSymmetricKey::SymmetricKeyMode skm;
     unsigned int taglen;
 
-	if (encryptionMethod == NULL) {
-		throw XSECException(XSECException::CipherError,
-			"XENCAlgorithmHandlerDefault::decryptToSafeBuffer - Cannot operate with NULL encryption Method");
-	}
+    if (encryptionMethod == NULL) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::decryptToSafeBuffer - Cannot operate with NULL encryption Method");
+    }
 
 
-	// Check the uri against the key type
-	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
+    // Check the uri against the key type
+    mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
 
-	// RSA?
-	if (kt == XSECCryptoKey::KEY_RSA_PAIR || 
-		kt == XSECCryptoKey::KEY_RSA_PUBLIC || 
-		kt == XSECCryptoKey::KEY_RSA_PRIVATE) {
+    // RSA?
+    if (kt == XSECCryptoKey::KEY_RSA_PAIR ||
+        kt == XSECCryptoKey::KEY_RSA_PUBLIC ||
+        kt == XSECCryptoKey::KEY_RSA_PRIVATE) {
 
-		return doRSADecryptToSafeBuffer(cipherText, encryptionMethod, key, doc, result);
+        return doRSADecryptToSafeBuffer(cipherText, encryptionMethod, key, doc, result);
 
-	}
+    }
 
-	// Ensure is symmetric before we continue
-	if (kt != XSECCryptoKey::KEY_SYMMETRIC) {
-		throw XSECException(XSECException::CipherError,
-			"XENCAlgorithmHandlerDefault::decryptToSafeBuffer - Not an RSA key, but not symmetric");
-	}
+    // Ensure is symmetric before we continue
+    if (kt != XSECCryptoKey::KEY_SYMMETRIC) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::decryptToSafeBuffer - Not an RSA key, but not symmetric");
+    }
 
-	// Key wrap?
+    // Key wrap?
 
-	if (isKeyWrap == true) {
+    if (isKeyWrap == true) {
 
-		if (skt == XSECCryptoSymmetricKey::KEY_AES_128 ||
-			skt == XSECCryptoSymmetricKey::KEY_AES_192 ||
-			skt == XSECCryptoSymmetricKey::KEY_AES_256) {
+        if (skt == XSECCryptoSymmetricKey::KEY_AES_128 ||
+            skt == XSECCryptoSymmetricKey::KEY_AES_192 ||
+            skt == XSECCryptoSymmetricKey::KEY_AES_256) {
 
-			return unwrapKeyAES(cipherText, key, result);
-
-		}
-
-		else if (skt == XSECCryptoSymmetricKey::KEY_3DES_192) {
-			return unwrapKey3DES(cipherText, key, result);
-		}
-
-		else {
-			throw XSECException(XSECException::CipherError,
-				"XENCAlgorithmHandlerDefault::decryptToSafeBuffer - don't know how to do key wrap for algorithm");
-		}
-
-	}
+            return unwrapKeyAES(cipherText, key, result);
+        }
+        else if (skt == XSECCryptoSymmetricKey::KEY_3DES_192) {
+            return unwrapKey3DES(cipherText, key, result);
+        }
+        else {
+            throw XSECException(XSECException::CipherError,
+                "XENCAlgorithmHandlerDefault::decryptToSafeBuffer - don't know how to do key wrap for algorithm");
+        }
+    }
 
     if (skm == XSECCryptoSymmetricKey::MODE_GCM) {
         // GCM doesn't fit the pipelined model of the existing code, so we have a custom
@@ -849,339 +826,327 @@ unsigned int XENCAlgorithmHandlerDefault::decryptToSafeBuffer(
         return doGCMDecryptToSafeBuffer(cipherText, key, taglen, result);
     }
 
-	// It's symmetric and it's not a key wrap or GCM, so just treat as a block algorithm.
+    // It's symmetric and it's not a key wrap or GCM, so just treat as a block algorithm.
 
-	TXFMCipher * tcipher;
-	XSECnew(tcipher, TXFMCipher(doc, key, false));
+    TXFMCipher* tcipher;
+    XSECnew(tcipher, TXFMCipher(doc, key, false));
 
-	cipherText->appendTxfm(tcipher);
+    cipherText->appendTxfm(tcipher);
 
-	// Do the decrypt to the safeBuffer.
+    // Do the decrypt to the safeBuffer.
 
-	result.sbStrcpyIn("");
-	unsigned int offset = 0;
-	XMLByte buf[1024];
-	TXFMBase * b = cipherText->getLastTxfm();
+    result.sbStrcpyIn("");
+    unsigned int offset = 0;
+    XMLByte buf[1024];
+    TXFMBase* b = cipherText->getLastTxfm();
 
-	unsigned int bytesRead = (unsigned int) b->readBytes(buf, 1024);
-	while (bytesRead > 0) {
-		result.sbMemcpyIn(offset, buf, bytesRead);
-		offset += bytesRead;
-		bytesRead = (unsigned int) b->readBytes(buf, 1024);
-	}
+    unsigned int bytesRead = (unsigned int) b->readBytes(buf, 1024);
+    while (bytesRead > 0) {
+        result.sbMemcpyIn(offset, buf, bytesRead);
+        offset += bytesRead;
+        bytesRead = (unsigned int) b->readBytes(buf, 1024);
+    }
 
-	result[offset] = '\0'; 
+    result[offset] = '\0';
 
-	return offset;
-
+    return offset;
 }
 
 // --------------------------------------------------------------------------------
-//			RSA SafeBuffer encryption
+//            RSA SafeBuffer encryption
 // --------------------------------------------------------------------------------
 
 bool XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer(
-		TXFMChain * plainText,
-		XENCEncryptionMethod * encryptionMethod,
-		const XSECCryptoKey * key,
-		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
-		safeBuffer & result
-		) const {
+        TXFMChain* plainText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
+        safeBuffer& result
+        ) const {
 
-	// Only works with RSA_PRIVATE or PAIR
-	if (key->getKeyType() == XSECCryptoKey::KEY_RSA_PRIVATE) {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault - RSA Encrypt must use public key");
-	}
+    // Only works with RSA_PRIVATE or PAIR
+    if (key->getKeyType() == XSECCryptoKey::KEY_RSA_PRIVATE) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault - RSA Encrypt must use public key");
+    }
 
-	XSECCryptoKeyRSA * rsa = (XSECCryptoKeyRSA *) key;
-	
-	// Allocate an output buffer
-	unsigned char * encBuf;
-	XSECnew(encBuf, unsigned char[rsa->getLength()]);
-	ArrayJanitor<unsigned char> j_encBuf(encBuf);
+    XSECCryptoKeyRSA* rsa = (XSECCryptoKeyRSA*) key;
 
-	// Input
-	TXFMBase * b = plainText->getLastTxfm();
-	safeBuffer plainSB;
-	plainSB.isSensitive();
+    // Allocate an output buffer
+    unsigned char* encBuf;
+    XSECnew(encBuf, unsigned char[rsa->getLength()]);
+    ArrayJanitor<unsigned char> j_encBuf(encBuf);
 
-	XMLByte buf[1024];
-	unsigned int offset = 0;
+    // Input
+    TXFMBase* b = plainText->getLastTxfm();
+    safeBuffer plainSB;
+    plainSB.isSensitive();
 
-	unsigned int bytesRead = (unsigned int) b->readBytes(buf, 1024);
-	while (bytesRead > 0) {
-		plainSB.sbMemcpyIn(offset, buf, bytesRead);
-		offset += bytesRead;
-		bytesRead = (unsigned int) b->readBytes(buf, 1024);
-	}
+    XMLByte buf[1024];
+    unsigned int offset = 0;
 
-	unsigned int encryptLen;
+    unsigned int bytesRead = (unsigned int) b->readBytes(buf, 1024);
+    while (bytesRead > 0) {
+        plainSB.sbMemcpyIn(offset, buf, bytesRead);
+        offset += bytesRead;
+        bytesRead = (unsigned int) b->readBytes(buf, 1024);
+    }
 
-	// Do encrypt
-	if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_1_5)) {
-		encryptLen = rsa->publicEncrypt(plainSB.rawBuffer(), 
-												  encBuf, 
-												  offset, 
-												  rsa->getLength(), 
-												  XSECCryptoKeyRSA::PAD_PKCS_1_5);
-	}
+    unsigned int encryptLen;
 
-	else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
+    // Do encrypt
+    if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_1_5)) {
+        encryptLen = rsa->publicEncrypt(plainSB.rawBuffer(),
+                                                  encBuf,
+                                                  offset,
+                                                  rsa->getLength(),
+                                                  XSECCryptoKeyRSA::PAD_PKCS_1_5);
+    }
+
+    else if (strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1) ||
             strEquals(encryptionMethod->getAlgorithm(), DSIGConstants::s_unicodeStrURIRSA_OAEP)) {
 
-	    const XMLCh* digmeth = encryptionMethod->getDigestMethod();
-	    if (!digmeth || !*digmeth) {
-	        digmeth = DSIGConstants::s_unicodeStrURISHA1;
-	    }
+        const XMLCh* digmeth = encryptionMethod->getDigestMethod();
+        if (!digmeth || !*digmeth) {
+            digmeth = DSIGConstants::s_unicodeStrURISHA1;
+        }
 
         const XMLCh* mgfalg = encryptionMethod->getMGF();
         if (!mgfalg || !*mgfalg) {
             mgfalg = DSIGConstants::s_unicodeStrURIMGF1_SHA1;
         }
 
-		// Check for OAEP params
-		int oaepParamsLen = rsa->getOAEPparamsLen();
-		if (oaepParamsLen > 0) {
-			unsigned char * oaepParamsB64;
-			XSECnew(oaepParamsB64, unsigned char[oaepParamsLen * 2]);
-			ArrayJanitor<unsigned char> j_oaepParamsB64(oaepParamsB64);
+        // Read out any OAEP params
+        unsigned char* oaepParamsBuf = NULL;
+        unsigned int oaepParamsLen = 0;
 
-			XSECCryptoBase64 * b64 = 
-				XSECPlatformUtils::g_cryptoProvider->base64();
-			Janitor<XSECCryptoBase64> j_b64(b64);
+        const XMLCh* oaepParams = encryptionMethod->getOAEPparams();
+        if (oaepParams != NULL) {
+            XSECAutoPtrChar oaepParamsStr(oaepParams);
 
-			b64->encodeInit();
-			int sz = b64->encode(rsa->getOAEPparams(), oaepParamsLen, oaepParamsB64, oaepParamsLen *2);
-			sz += b64->encodeFinish(&oaepParamsB64[sz], (oaepParamsLen * 2)  - sz);
-			oaepParamsB64[sz] = '\0';
+            unsigned int bufLen = (unsigned int) strlen(oaepParamsStr.get());
+            oaepParamsBuf = new unsigned char[bufLen];
 
-			XSECAutoPtrXMLCh xBuf((char *) oaepParamsB64);
+            XSECCryptoBase64* b64 = XSECPlatformUtils::g_cryptoProvider->base64();
+            Janitor<XSECCryptoBase64> j_b64(b64);
 
-			encryptionMethod->setOAEPparams(xBuf.get());
-		}
+            b64->decodeInit();
+            oaepParamsLen = b64->decode((unsigned char*) oaepParamsStr.get(), bufLen, oaepParamsBuf, bufLen);
+            oaepParamsLen += b64->decodeFinish(&oaepParamsBuf[oaepParamsLen], bufLen - oaepParamsLen);
+        }
 
-		encryptLen = rsa->publicEncrypt(plainSB.rawBuffer(), 
-										  encBuf, 
-										  offset, 
-										  rsa->getLength(), 
-										  XSECCryptoKeyRSA::PAD_OAEP_MGFP1, 
-										  digmeth,
-										  mgfalg);
+        ArrayJanitor<unsigned char> j_oaepParamsBuf(oaepParamsBuf);
 
-	}
-	else {
-		throw XSECException(XSECException::CipherError, 
-			"XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer - Unknown padding type");
-	}
+        encryptLen = rsa->publicEncrypt(plainSB.rawBuffer(),
+                                          encBuf,
+                                          offset,
+                                          rsa->getLength(),
+                                          XSECCryptoKeyRSA::PAD_OAEP_MGFP1,
+                                          digmeth,
+                                          mgfalg,
+                                          oaepParamsBuf,
+                                          oaepParamsLen);
+    }
+    else {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::doRSAEncryptToSafeBuffer - Unknown padding type");
+    }
 
-	// Now need to base64 encode
-	XSECCryptoBase64 * b64 = 
-		XSECPlatformUtils::g_cryptoProvider->base64();
-	Janitor<XSECCryptoBase64> j_b64(b64);
+    // Now need to base64 encode
+    XSECCryptoBase64* b64 =
+        XSECPlatformUtils::g_cryptoProvider->base64();
+    Janitor<XSECCryptoBase64> j_b64(b64);
 
-	b64->encodeInit();
-	encryptLen = b64->encode(encBuf, encryptLen, buf, 1024);
-	result.sbMemcpyIn(buf, encryptLen);
-	unsigned int finalLen = b64->encodeFinish(buf, 1024);
-	result.sbMemcpyIn(encryptLen, buf, finalLen);
-	result[encryptLen + finalLen] = '\0';
+    b64->encodeInit();
+    encryptLen = b64->encode(encBuf, encryptLen, buf, 1024);
+    result.sbMemcpyIn(buf, encryptLen);
+    unsigned int finalLen = b64->encodeFinish(buf, 1024);
+    result.sbMemcpyIn(encryptLen, buf, finalLen);
+    result[encryptLen + finalLen] = '\0';
 
-	// This is a string, so set the buffer correctly
-	result.setBufferType(safeBuffer::BUFFER_CHAR);
+    // This is a string, so set the buffer correctly
+    result.setBufferType(safeBuffer::BUFFER_CHAR);
 
-	return true;
-
+    return true;
 }
 
 
 // --------------------------------------------------------------------------------
-//			SafeBuffer encryption
+//            SafeBuffer encryption
 // --------------------------------------------------------------------------------
 
 bool XENCAlgorithmHandlerDefault::encryptToSafeBuffer(
-		TXFMChain * plainText,
-		XENCEncryptionMethod * encryptionMethod,
-		const XSECCryptoKey * key,
-		XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * doc,
-		safeBuffer & result
-		) const {
+        TXFMChain* plainText,
+        XENCEncryptionMethod* encryptionMethod,
+        const XSECCryptoKey* key,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* doc,
+        safeBuffer& result
+        ) const {
 
-	XSECCryptoKey::KeyType kt;
-	XSECCryptoSymmetricKey::SymmetricKeyType skt;
-	bool isKeyWrap = false;
+    XSECCryptoKey::KeyType kt;
+    XSECCryptoSymmetricKey::SymmetricKeyType skt;
+    bool isKeyWrap = false;
     XSECCryptoSymmetricKey::SymmetricKeyMode skm;
     unsigned int taglen;
 
-	if (encryptionMethod == NULL) {
-		throw XSECException(XSECException::CipherError,
-			"XENCAlgorithmHandlerDefault::encryptToSafeBuffer - Cannot operate with NULL encryption Method");
-	}
+    if (encryptionMethod == NULL) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::encryptToSafeBuffer - Cannot operate with NULL encryption Method");
+    }
 
 
-	// Check the uri against the key type
-	mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
+    // Check the uri against the key type
+    mapURIToKey(encryptionMethod->getAlgorithm(), key, kt, skt, isKeyWrap, skm, taglen);
 
-	// RSA?
-	if (kt == XSECCryptoKey::KEY_RSA_PRIVATE || 
-		kt == XSECCryptoKey::KEY_RSA_PUBLIC || 
-		kt == XSECCryptoKey::KEY_RSA_PAIR) {
+    // RSA?
+    if (kt == XSECCryptoKey::KEY_RSA_PRIVATE ||
+        kt == XSECCryptoKey::KEY_RSA_PUBLIC ||
+        kt == XSECCryptoKey::KEY_RSA_PAIR) {
 
-		return doRSAEncryptToSafeBuffer(plainText, encryptionMethod, key, doc, result);
+        return doRSAEncryptToSafeBuffer(plainText, encryptionMethod, key, doc, result);
+    }
 
-	}
+    // Ensure is symmetric before we continue
+    if (kt != XSECCryptoKey::KEY_SYMMETRIC) {
+        throw XSECException(XSECException::CipherError,
+            "XENCAlgorithmHandlerDefault::encryptToSafeBuffer - Not an RSA key, but not symmetric");
+    }
 
-	// Ensure is symmetric before we continue
-	if (kt != XSECCryptoKey::KEY_SYMMETRIC) {
-		throw XSECException(XSECException::CipherError,
-			"XENCAlgorithmHandlerDefault::encryptToSafeBuffer - Not an RSA key, but not symmetric");
-	}
+    if (isKeyWrap == true) {
 
-	if (isKeyWrap == true) {
+        if (skt == XSECCryptoSymmetricKey::KEY_AES_128 ||
+            skt == XSECCryptoSymmetricKey::KEY_AES_192 ||
+            skt == XSECCryptoSymmetricKey::KEY_AES_256) {
 
-		if (skt == XSECCryptoSymmetricKey::KEY_AES_128 ||
-			skt == XSECCryptoSymmetricKey::KEY_AES_192 ||
-			skt == XSECCryptoSymmetricKey::KEY_AES_256) {
+            return wrapKeyAES(plainText, key, result);
+        }
 
-			return wrapKeyAES(plainText, key, result);
+        if (skt == XSECCryptoSymmetricKey::KEY_3DES_192) {
+            return wrapKey3DES(plainText, key, result);
+        }
+        else {
+            throw XSECException(XSECException::CipherError,
+                "XENCAlgorithmHandlerDefault::decryptToSafeBuffer - don't know how to do key wrap for algorithm");
+        }
+    }
 
-		}
+    // Must be bulk symmetric - do the encryption
 
-		if (skt == XSECCryptoSymmetricKey::KEY_3DES_192) {
-			return wrapKey3DES(plainText, key, result);
-		}
+    TXFMCipher* tcipher;
+    XSECnew(tcipher, TXFMCipher(doc, key, true, skm, taglen));
+    plainText->appendTxfm(tcipher);
 
-		else {
-			throw XSECException(XSECException::CipherError,
-				"XENCAlgorithmHandlerDefault::decryptToSafeBuffer - don't know how to do key wrap for algorithm");
-		}
+    // Transform to Base64
+    TXFMBase64* tb64;
+    XSECnew(tb64, TXFMBase64(doc, false));
+    plainText->appendTxfm(tb64);
 
-	}
-	
-	// Must be bulk symmetric - do the encryption
+    // Read into the safeBuffer
+    result = "";
 
-	TXFMCipher *tcipher;
-	XSECnew(tcipher, TXFMCipher(doc, key, true, skm, taglen));
-	plainText->appendTxfm(tcipher);
+    result << plainText->getLastTxfm();
 
-	// Transform to Base64
-	TXFMBase64 * tb64;
-	XSECnew(tb64, TXFMBase64(doc, false));
-	plainText->appendTxfm(tb64);
-
-	// Read into the safeBuffer
-	result = "";
-
-	result << plainText->getLastTxfm();
-
-	return true;
-
+    return true;
 }
 // --------------------------------------------------------------------------------
-//			Key Creation
+//            Key Creation
 // --------------------------------------------------------------------------------
 
-XSECCryptoKey * XENCAlgorithmHandlerDefault::createKeyForURI(
-		const XMLCh * uri,
-		const unsigned char * keyBuffer,
-		unsigned int keyLen
-		) const {
+XSECCryptoKey* XENCAlgorithmHandlerDefault::createKeyForURI(
+        const XMLCh* uri,
+        const unsigned char* keyBuffer,
+        unsigned int keyLen
+        ) const {
 
-	XSECCryptoSymmetricKey * sk = NULL;
+    XSECCryptoSymmetricKey* sk = NULL;
 
-	if (strEquals(uri, DSIGConstants::s_unicodeStrURI3DES_CBC)) {
+    if (strEquals(uri, DSIGConstants::s_unicodeStrURI3DES_CBC)) {
         if (keyLen < 192 / 8)
             throw XSECException(XSECException::CipherError, 
-		        "XENCAlgorithmHandlerDefault - key size was invalid");
-		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
-	}
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_GCM)) {
+                "XENCAlgorithmHandlerDefault - key size was invalid");
+        sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
+    }
+    else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES128_GCM)) {
         if (keyLen < 128 / 8)
             throw XSECException(XSECException::CipherError, 
-		        "XENCAlgorithmHandlerDefault - key size was invalid");
-		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
-	}
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_GCM)) {
+                "XENCAlgorithmHandlerDefault - key size was invalid");
+        sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_128);
+    }
+    else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES192_GCM)) {
         if (keyLen < 192 / 8)
             throw XSECException(XSECException::CipherError, 
-		        "XENCAlgorithmHandlerDefault - key size was invalid");
-		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
-	}
-	else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_GCM)) {
+                "XENCAlgorithmHandlerDefault - key size was invalid");
+        sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_192);
+    }
+    else if (strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_CBC) || strEquals(uri, DSIGConstants::s_unicodeStrURIAES256_GCM)) {
         if (keyLen < 256 / 8)
             throw XSECException(XSECException::CipherError, 
-		        "XENCAlgorithmHandlerDefault - key size was invalid");
-		sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
-	}
+                "XENCAlgorithmHandlerDefault - key size was invalid");
+        sk = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_AES_256);
+    }
 
-	if (sk != NULL) {
-		sk->setKey(keyBuffer, keyLen);
-		return sk;
-	}
+    if (sk != NULL) {
+        sk->setKey(keyBuffer, keyLen);
+        return sk;
+    }
 
-	throw XSECException(XSECException::CipherError, 
-		"XENCAlgorithmHandlerDefault - URI Provided, but cannot create associated key");
-
+    throw XSECException(XSECException::CipherError,
+        "XENCAlgorithmHandlerDefault - URI Provided, but cannot create associated key");
 }
 
 
 // --------------------------------------------------------------------------------
-//			Clone
+//            Clone
 // --------------------------------------------------------------------------------
 
-XSECAlgorithmHandler * XENCAlgorithmHandlerDefault::clone(void) const {
+XSECAlgorithmHandler* XENCAlgorithmHandlerDefault::clone(void) const {
 
-	XENCAlgorithmHandlerDefault * ret;
-	XSECnew(ret, XENCAlgorithmHandlerDefault);
+    XENCAlgorithmHandlerDefault* ret;
+    XSECnew(ret, XENCAlgorithmHandlerDefault);
 
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
-//			Unsupported operations
+//            Unsupported operations
 // --------------------------------------------------------------------------------
 
 unsigned int XENCAlgorithmHandlerDefault::signToSafeBuffer(
-		TXFMChain * inputBytes,
-		const XMLCh * URI,
-		const XSECCryptoKey * key,
-		unsigned int outputLength,
-		safeBuffer & result) const {
+        TXFMChain* inputBytes,
+        const XMLCh* URI,
+        const XSECCryptoKey* key,
+        unsigned int outputLength,
+        safeBuffer& result) const {
 
-	throw XSECException(XSECException::AlgorithmMapperError, 
-			"XENCAlgorithmHandlerDefault - Signature operations not supported");
-
+    throw XSECException(XSECException::AlgorithmMapperError,
+            "XENCAlgorithmHandlerDefault - Signature operations not supported");
 }
 
 
 bool XENCAlgorithmHandlerDefault::appendSignatureHashTxfm(
-		TXFMChain * inputBytes,
-		const XMLCh * URI,
-		const XSECCryptoKey * key) const {
+        TXFMChain* inputBytes,
+        const XMLCh* URI,
+        const XSECCryptoKey* key) const {
 
-	throw XSECException(XSECException::AlgorithmMapperError, 
-			"XENCAlgorithmHandlerDefault - Signature operations not supported");
-
+    throw XSECException(XSECException::AlgorithmMapperError,
+            "XENCAlgorithmHandlerDefault - Signature operations not supported");
 }
 
 bool XENCAlgorithmHandlerDefault::verifyBase64Signature(
-		TXFMChain * inputBytes,
-		const XMLCh * URI,
-		const char * sig,
-		unsigned int outputLength,
-		const XSECCryptoKey * key) const {
+        TXFMChain* inputBytes,
+        const XMLCh* URI,
+        const char* sig,
+        unsigned int outputLength,
+        const XSECCryptoKey* key) const {
 
-	throw XSECException(XSECException::AlgorithmMapperError, 
-			"XENCAlgorithmHandlerDefault - Signature operations not supported");
-
+    throw XSECException(XSECException::AlgorithmMapperError,
+            "XENCAlgorithmHandlerDefault - Signature operations not supported");
 }
 
 bool XENCAlgorithmHandlerDefault::appendHashTxfm(
-		TXFMChain * inputBytes,
-		const XMLCh * URI) const {
+        TXFMChain* inputBytes,
+        const XMLCh* URI) const {
 
-	throw XSECException(XSECException::AlgorithmMapperError, 
-			"XENCAlgorithmHandlerDefault - Hash operations not supported");
-
+    throw XSECException(XSECException::AlgorithmMapperError,
+            "XENCAlgorithmHandlerDefault - Hash operations not supported");
 }

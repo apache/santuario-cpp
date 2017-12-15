@@ -291,11 +291,9 @@ const EVP_MD* getDigestFromHashType(XSECCryptoHash::HashType type) {
 
 
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA() :
-	mp_rsaKey(NULL),
-	mp_oaepParams(NULL),
-	m_oaepParamsLen(0),
-	mp_accumE(NULL),
-	mp_accumN(NULL)
+    mp_rsaKey(NULL),
+    mp_accumE(NULL),
+    mp_accumN(NULL)
 {
 };
 
@@ -305,9 +303,6 @@ OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {
     if (mp_rsaKey)
         RSA_free(mp_rsaKey);
 
-    if (mp_oaepParams != NULL)
-        delete[] mp_oaepParams;
-
     if (mp_accumE)
         BN_free(mp_accumE);
 
@@ -316,31 +311,9 @@ OpenSSLCryptoKeyRSA::~OpenSSLCryptoKeyRSA() {
 };
 
 const XMLCh* OpenSSLCryptoKeyRSA::getProviderName() const {
-	return DSIGConstants::s_unicodeStrPROVOpenSSL;
+    return DSIGConstants::s_unicodeStrPROVOpenSSL;
 }
 
-void OpenSSLCryptoKeyRSA::setOAEPparams(unsigned char* params, unsigned int paramsLen) {
-
-    if (mp_oaepParams != NULL) {
-        delete[] mp_oaepParams;
-    }
-
-    m_oaepParamsLen = paramsLen;
-    if (params != NULL) {
-        XSECnew(mp_oaepParams, unsigned char[paramsLen]);
-        memcpy(mp_oaepParams, params, paramsLen);
-    }
-    else
-        mp_oaepParams = NULL;
-}
-
-unsigned int OpenSSLCryptoKeyRSA::getOAEPparamsLen() const {
-    return m_oaepParamsLen;
-}
-
-const unsigned char * OpenSSLCryptoKeyRSA::getOAEPparams() const {
-    return mp_oaepParams;
-}
 
 // Generic key functions
 
@@ -428,11 +401,9 @@ void OpenSSLCryptoKeyRSA::commitEN() {
 // "Hidden" OpenSSL functions
 
 OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) :
-	mp_rsaKey(NULL),
-	mp_oaepParams(NULL),
-	m_oaepParamsLen(0),
-	mp_accumE(NULL),
-	mp_accumN(NULL)
+    mp_rsaKey(NULL),
+    mp_accumE(NULL),
+    mp_accumN(NULL)
 {
 
     // Create a new key to be loaded as we go
@@ -465,11 +436,11 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) :
 // --------------------------------------------------------------------------------
 
 bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(
-		const unsigned char* hashBuf,
-		unsigned int hashLen,
-		const char * base64Signature,
-		unsigned int sigLen,
-		XSECCryptoHash::HashType type) const {
+        const unsigned char* hashBuf,
+        unsigned int hashLen,
+        const char * base64Signature,
+        unsigned int sigLen,
+        XSECCryptoHash::HashType type) const {
 
     // Use the currently loaded key to validate the Base64 encoded signature
 
@@ -584,11 +555,11 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(
 
 
 unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(
-		unsigned char* hashBuf,
+        unsigned char* hashBuf,
         unsigned int hashLen,
         char * base64SignatureBuf,
         unsigned int base64SignatureBufLen,
-		XSECCryptoHash::HashType type) const {
+        XSECCryptoHash::HashType type) const {
 
     // Sign a pre-calculated hash using this key
 
@@ -673,13 +644,15 @@ unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(
 // --------------------------------------------------------------------------------
 
 unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
-		const unsigned char* inBuf,
-		unsigned char* plainBuf,
-		unsigned int inLength,
-		unsigned int maxOutLength,
-		PaddingType padding,
-		const XMLCh* hashURI,
-		const XMLCh* mgfURI) const {
+        const unsigned char* inBuf,
+        unsigned char* plainBuf,
+        unsigned int inLength,
+        unsigned int maxOutLength,
+        PaddingType padding,
+        const XMLCh* hashURI,
+        const XMLCh* mgfURI,
+        unsigned char* params,
+        unsigned int paramslen) const {
 
     // Perform a decrypt
     if (mp_rsaKey == NULL) {
@@ -767,8 +740,8 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
                                                        &tBuf[i],
                                                        decryptSize,
                                                        num,
-                                                       mp_oaepParams,
-                                                       m_oaepParamsLen,
+                                                       params,
+                                                       paramslen,
                                                        evp_md,
                                                        mgf_md);
 
@@ -805,13 +778,15 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
 // --------------------------------------------------------------------------------
 
 unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
-		const unsigned char* inBuf,
-		unsigned char* cipherBuf,
-		unsigned int inLength,
-		unsigned int maxOutLength,
-		PaddingType padding,
-		const XMLCh* hashURI,
-		const XMLCh* mgfURI) const {
+        const unsigned char* inBuf,
+        unsigned char* cipherBuf,
+        unsigned int inLength,
+        unsigned int maxOutLength,
+        PaddingType padding,
+        const XMLCh* hashURI,
+        const XMLCh* mgfURI,
+        unsigned char* params,
+        unsigned int paramslen) const {
 
     // Perform an encrypt
     if (mp_rsaKey == NULL) {
@@ -876,8 +851,8 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
 //                                                   (unsigned char *) inBuf,
 //#endif
                                                      inLength,
-                                                     mp_oaepParams,
-                                                     m_oaepParamsLen,
+                                                     params,
+                                                     paramslen,
                                                      evp_md,
                                                      mgf_md);
 
@@ -910,7 +885,7 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
 //           Size in bytes
 // --------------------------------------------------------------------------------
 
-unsigned int OpenSSLCryptoKeyRSA::getLength(void) const {
+unsigned int OpenSSLCryptoKeyRSA::getLength() const {
 
     if (mp_rsaKey != NULL)
         return RSA_size(mp_rsaKey);
@@ -929,16 +904,6 @@ XSECCryptoKey * OpenSSLCryptoKeyRSA::clone() const {
     XSECnew(ret, OpenSSLCryptoKeyRSA);
 
     ret->mp_rsaKey = RSA_new();
-
-    if (mp_oaepParams != NULL) {
-        XSECnew(ret->mp_oaepParams, unsigned char[m_oaepParamsLen]);
-        memcpy(ret->mp_oaepParams, mp_oaepParams, m_oaepParamsLen);
-        ret->m_oaepParamsLen = m_oaepParamsLen;
-    }
-    else {
-        ret->mp_oaepParams = NULL;
-        ret->m_oaepParamsLen = 0;
-    }
 
     // Duplicate parameters
     const BIGNUM *n=NULL, *e=NULL, *d=NULL;

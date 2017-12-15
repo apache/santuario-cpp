@@ -96,7 +96,9 @@ public:
 		const unsigned char* keyBuffer,
 		unsigned int keyLen,
 		const XMLCh* algorithmURI,
-		const XMLCh* mgfURI=NULL
+		const XMLCh* mgfURI=NULL,
+		unsigned char* oaepParams=NULL,
+		unsigned int oaepParamsLen=0
 	);
 	// Encrypt octet streams
 	virtual XENCEncryptedData * encryptBinInputStream(
@@ -188,4 +190,3 @@ private:
 };
 
 #endif /* XENCCIPHERIMPL_INCLUDE */
-

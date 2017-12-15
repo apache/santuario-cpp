@@ -140,25 +140,6 @@ XSECCryptoKey::KeyType WinCAPICryptoKeyRSA::getKeyType() const {
     return KEY_RSA_PUBLIC;
 }
 
-// --------------------------------------------------------------------------------
-//           OAEP parameters handling
-// --------------------------------------------------------------------------------
-
-
-void WinCAPICryptoKeyRSA::setOAEPparams(unsigned char * params, unsigned int paramsLen) {
-
-    if (params != NULL && paramsLen != 0)
-        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-            "WinCAPI::setOAEPParams - OAEP parameters are not supported by Windows Crypto API");
-}
-
-unsigned int WinCAPICryptoKeyRSA::getOAEPparamsLen() const {
-    return 0;
-}
-
-const unsigned char * WinCAPICryptoKeyRSA::getOAEPparams() const {
-    return NULL;
-}
 
 // --------------------------------------------------------------------------------
 //           Load key from parameters
@@ -542,7 +523,9 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
                                  const XMLCh* hashURI,
-                                 const XMLCh* mgfURI) const {
+                                 const XMLCh* mgfURI,
+                                 unsigned char* params,
+                                 unsigned int paramslen) const {
 
     // Perform a decrypt
     if (m_key == NULL) {
@@ -585,6 +568,10 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
             throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
                 "WinCAPI:RSA - Unsupported OAEP digest algorithm");
         }
+        else if (paramsLen > 0) {
+            throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+                "WinCAPI::setOAEPParams - OAEP parameters are not supported by Windows Crypto API");
+        }
 
         if (!CryptDecrypt(m_key,
                          0,
@@ -619,7 +606,9 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
                                  const XMLCh* hashURI,
-                                 const XMLCh* mgfURI) const {
+                                 const XMLCh* mgfURI,
+                                 unsigned char* params,
+                                 unsigned int paramslen) const {
 
     // Perform an encrypt
     if (m_key == 0) {
@@ -662,6 +651,10 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
         else if (XSECAlgorithmSupport::getMGF1HashType(mgfURI) != XSECCryptoHash::HASH_SHA1) {
             throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
                 "WinCAPI:RSA - Unsupported OAEP MGF algorithm");
+        }
+        else if (paramsLen > 0) {
+            throw XSECCryptoException(XSECCryptoException::UnsupportedError,
+                "WinCAPI::setOAEPParams - OAEP parameters are not supported by Windows Crypto API");
         }
 
         if (!CryptEncrypt(m_key,

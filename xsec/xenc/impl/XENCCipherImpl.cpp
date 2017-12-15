@@ -52,6 +52,7 @@
 #include "XENCEncryptedKeyImpl.hpp"
 #include "XENCEncryptionMethodImpl.hpp"
 #include "XENCAlgorithmHandlerDefault.hpp"
+#include "../utils/XSECAutoPtr.hpp"
 
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/dom/DOMElement.hpp>
@@ -823,7 +824,9 @@ XENCEncryptedKey * XENCCipherImpl::encryptKey(
         const unsigned char* keyBuffer,
         unsigned int keyLen,
         const XMLCh* algorithmURI,
-        const XMLCh* mgfURI) {
+        const XMLCh* mgfURI,
+        unsigned char* oaepParams,
+        unsigned int oaepParamsLen) {
 
     if (mp_kek == NULL) {
         throw XSECException(XSECException::CipherError, "XENCCipherImpl::encryptKey - No KEK set");
@@ -844,7 +847,25 @@ XENCEncryptedKey * XENCCipherImpl::encryptKey(
     if (mgfURI)
         encryptedKey->getEncryptionMethod()->setMGF(mgfURI);
 
-    // Create a transform chain to do pass the key to the encrypto
+    if (oaepParams != NULL && oaepParamsLen > 0) {
+        unsigned char * oaepParamsB64;
+        XSECnew(oaepParamsB64, unsigned char[oaepParamsLen * 2]);
+        ArrayJanitor<unsigned char> j_oaepParamsB64(oaepParamsB64);
+
+        XSECCryptoBase64 * b64 = XSECPlatformUtils::g_cryptoProvider->base64();
+        Janitor<XSECCryptoBase64> j_b64(b64);
+
+        b64->encodeInit();
+        int sz = b64->encode(oaepParams, oaepParamsLen, oaepParamsB64, oaepParamsLen *2);
+        sz += b64->encodeFinish(&oaepParamsB64[sz], (oaepParamsLen * 2)  - sz);
+        oaepParamsB64[sz] = '\0';
+
+        XSECAutoPtrXMLCh xBuf((char*) oaepParamsB64);
+
+        encryptedKey->getEncryptionMethod()->setOAEPparams(xBuf.get());
+    }
+
+    // Create a transform chain to do pass the key to the encryption.
 
     safeBuffer rawKey;
     rawKey.isSensitive();

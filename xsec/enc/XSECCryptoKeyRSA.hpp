@@ -98,38 +98,6 @@ public :
     //@{
 
     /**
-     * \brief Set the OAEPparams string
-     *
-     * By default, the library expects crypto implementations to perform
-     * OAEP padding with no params.  This call allows the library (or user)
-     * to set a params value prior to an encrypt/decrypt operation.
-     *
-     * @param params buffer containing the params data.  Pass in NULL to clear any
-     * old paramters.
-     * @param paramsLen number of bytes in buffer to use.  Pass in 0 to clear any
-     * old parameters.
-     */
-
-    virtual void setOAEPparams(unsigned char* params, unsigned int paramsLen) = 0;
-
-    /**
-     * \brief Get OAEPparams Length
-     *
-     * @returns the number of bytes of the OAEPparams buffer (assuming it has been set)
-     */
-
-    virtual unsigned int getOAEPparamsLen() const = 0;
-
-    /**
-     * \brief Get the OAEPparams
-     *
-     * @returns a pointer to the (crypto object owned) buffer holding the OAEPparams
-     * or NULL if no params are held
-     */
-
-    virtual const unsigned char * getOAEPparams() const = 0;
-
-    /**
      * \brief Verify a SHA1 PKCS1 encoded signature
      *
      * The library will call this function to validate an RSA signature
@@ -187,9 +155,10 @@ public :
      * @param inLength bytes of cipher text to decrypt
      * @param maxOutLength size of outputBuffer
      * @param padding Type of padding (PKCS 1.5 or OAEP)
-     * @param hashURI Hash Method for OAEP encryption (OAEPParams should be
-     * set using setOAEPparams()
+     * @param hashURI Hash Method for OAEP encryption
      * @param mgfURI algorithm identifier for OAEP mask generation function
+     * @param params raw OAEP parameter data, if any
+     * @param paramslen OEP parameter length
      */
 
     virtual unsigned int privateDecrypt(const unsigned char* inBuf,
@@ -198,7 +167,9 @@ public :
                                  unsigned int maxOutLength,
                                  PaddingType padding,
                                  const XMLCh* hashURI=NULL,
-                                 const XMLCh* mgfURI=NULL) const = 0;
+                                 const XMLCh* mgfURI=NULL,
+                                 unsigned char* params=NULL,
+                                 unsigned int paramsLen=0) const = 0;
 
     /**
      * \brief Encrypt using a public key
@@ -211,9 +182,10 @@ public :
      * @param inLength bytes of plain text to encrypt
      * @param maxOutLength size of outputBuffer
      * @param padding Type of padding (PKCS 1.5 or OAEP)
-     * @param hashURI Hash Method for OAEP encryption (OAEPParams should be
-     * set using setOAEPparams()
+     * @param hashURI Hash Method for OAEP encryption
      * @param mgfURI algorithm identifier for OAEP mask generation function
+     * @param params raw OAEP parameter data, if any
+     * @param paramslen OEP parameter length
      */
 
     virtual unsigned int publicEncrypt(const unsigned char* inBuf,
@@ -222,7 +194,9 @@ public :
                                  unsigned int maxOutLength,
                                  PaddingType padding,
                                  const XMLCh* hashURI=NULL,
-                                 const XMLCh* mgfURI=NULL) const = 0;
+                                 const XMLCh* mgfURI=NULL,
+                                 unsigned char* params=NULL,
+                                 unsigned int paramsLen=0) const = 0;
 
     /**
      * \brief Obtain the length of an RSA key
@@ -230,7 +204,7 @@ public :
      * @returns The length of the rsa key (in bytes)
      */
 
-    virtual unsigned int getLength(void) const = 0;
+    virtual unsigned int getLength() const = 0;
 
     //@}
 
@@ -271,7 +245,5 @@ public :
     //@}
 
 };
-
-
 
 #endif /* XSECCRYPTOKEYRSA_INCLUDE */

@@ -108,8 +108,8 @@ public:
      * not a valid EncryptedData DOM structure.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * decryptElement(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* decryptElement(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element
     ) = 0;
 
     /**
@@ -127,8 +127,8 @@ public:
      * not a valid EncryptedData DOM structure.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * decryptElementDetached(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* decryptElementDetached(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element
     ) = 0;
 
     /**
@@ -150,7 +150,7 @@ public:
      * not a valid EncryptedData DOM structure.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * decryptElement() = 0;
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* decryptElement() = 0;
 
     /**
      * \brief Decrypt currently loaded element without replacing it.
@@ -170,7 +170,7 @@ public:
      * not a valid EncryptedData DOM structure.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * decryptElementDetached() = 0;
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* decryptElementDetached() = 0;
 
     /**
      * \brief Decrypt the nominated element and put the output to an InputStream.
@@ -189,8 +189,8 @@ public:
      * not a valid EncryptedData DOM structure.
      */
 
-    virtual XSECBinTXFMInputStream * decryptToBinInputStream(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element
+    virtual XSECBinTXFMInputStream* decryptToBinInputStream(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element
     ) = 0;
 
     /**
@@ -205,8 +205,8 @@ public:
      */
 
     virtual int decryptKey(
-        XENCEncryptedKey * encryptedKey,
-        XMLByte * rawKey,
+        XENCEncryptedKey* encryptedKey,
+        XMLByte* rawKey,
         int maxKeySize
     ) = 0;
 
@@ -223,8 +223,8 @@ public:
      */
 
     virtual int decryptKey(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * keyNode,
-        XMLByte * rawKey,
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* keyNode,
+        XMLByte* rawKey,
         int maxKeySize
     ) = 0;
 
@@ -247,9 +247,9 @@ public:
      * @throws XSECException if the encryption fails.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * encryptElement(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element,
-        const XMLCh * algorithmURI
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* encryptElement(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element,
+        const XMLCh* algorithmURI
     ) = 0;
 
     /**
@@ -266,9 +266,9 @@ public:
      * @throws XSECException if the encryption fails.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * encryptElementDetached(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element,
-        const XMLCh * algorithmURI
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* encryptElementDetached(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element,
+        const XMLCh* algorithmURI
     ) = 0;
 
     /**
@@ -286,9 +286,9 @@ public:
      * @throws XSECException if the encryption fails.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * encryptElementContent(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element,
-        const XMLCh * algorithmURI
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* encryptElementContent(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element,
+        const XMLCh* algorithmURI
     ) = 0;
 
     /**
@@ -307,9 +307,9 @@ public:
      * @throws XSECException if the encryption fails.
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode * encryptElementContentDetached(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element,
-        const XMLCh * algorithmURI
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* encryptElementContentDetached(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* element,
+        const XMLCh* algorithmURI
     ) = 0;
 
     /**
@@ -321,6 +321,8 @@ public:
      * @param keyLen Bytes to encrypt
      * @param algorithmURI algorithm URI to set
      * @param mgfURI RSA-OAEP mask generation algorithm
+     * @param oaepParams RSA-OAEP parameters, if any
+     * @param oaepParamsLen RSA-OAEP parameter length
      *
      * @returns The EncryptedKey element
      */
@@ -329,7 +331,9 @@ public:
         const unsigned char* keyBuffer,
         unsigned int keyLen,
         const XMLCh* algorithmURI,
-        const XMLCh* mgfURI=NULL
+        const XMLCh* mgfURI=NULL,
+        unsigned char* oaepParams=NULL,
+        unsigned int oaepParamsLen=0
     ) = 0;
 
     /**
@@ -344,9 +348,9 @@ public:
      * @returns the EncryptedData element containing the CipherValue of the data
      */
 
-    virtual XENCEncryptedData * encryptBinInputStream(
-        XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream * plainText,
-        const XMLCh * algorithmURI
+    virtual XENCEncryptedData* encryptBinInputStream(
+        XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream* plainText,
+        const XMLCh* algorithmURI
     ) = 0;
 
     /**
@@ -364,9 +368,9 @@ public:
      * @returns the EncryptedData element containing the CipherValue of the data
      */
 
-    virtual XENCEncryptedData * encryptTXFMChain(
-        TXFMChain * plainText,
-        const XMLCh * algorithmURI
+    virtual XENCEncryptedData* encryptTXFMChain(
+        TXFMChain* plainText,
+        const XMLCh* algorithmURI
     ) = 0;
 
     //@}
@@ -382,7 +386,7 @@ public:
      * @returns The DOMDocument that is used by this object
      */
 
-    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument * getDocument() const = 0;
+    virtual XERCES_CPP_NAMESPACE_QUALIFIER DOMDocument* getDocument() const = 0;
 
     /**
      * \brief Get namespace prefix for XENC nodes
@@ -393,7 +397,7 @@ public:
      * @returns XENC namespace prefix
      */
 
-    virtual const XMLCh * getXENCNSPrefix() const = 0;
+    virtual const XMLCh* getXENCNSPrefix() const = 0;
 
     /**
      * \brief Get the EncryptedData element
@@ -404,7 +408,7 @@ public:
      * @returns The last used EncryptedData
      */
 
-    virtual XENCEncryptedData * getEncryptedData() const = 0;
+    virtual XENCEncryptedData* getEncryptedData() const = 0;
 
     /**
      * \brief Tell caller whether PrettyPrinting is active
@@ -444,7 +448,7 @@ public:
      * @note This function will take ownership of the key and delete it when done.
      */
 
-    virtual void setKey(XSECCryptoKey * key) = 0;
+    virtual void setKey(XSECCryptoKey* key) = 0;
 
     /**
      * \brief Set Key Encryption Key for next operation
@@ -459,7 +463,7 @@ public:
      * @note This function will take ownership of the key and delete it when done.
      */
 
-    virtual void setKEK(XSECCryptoKey * key) = 0;
+    virtual void setKEK(XSECCryptoKey* key) = 0;
 
     /**
      * \brief Register a KeyInfoResolver
@@ -475,7 +479,7 @@ public:
      *
      */
 
-    virtual void setKeyInfoResolver(const XSECKeyInfoResolver * resolver) = 0;
+    virtual void setKeyInfoResolver(const XSECKeyInfoResolver* resolver) = 0;
 
     /**
      * \brief Set prefix for XENC nodes
@@ -484,7 +488,7 @@ public:
      * nodes in the XENC namespace
      */
 
-    virtual void setXENCNSPrefix(const XMLCh * prefix) = 0;
+    virtual void setXENCNSPrefix(const XMLCh* prefix) = 0;
 
     /**
      * \brief Set Pretty Print
@@ -539,9 +543,9 @@ public:
      * @returns An XENCEncryptedData object
      */
 
-    virtual XENCEncryptedData * createEncryptedData(XENCCipherData::XENCCipherDataType type,
-                                                    const XMLCh * algorithm,
-                                                    const XMLCh * value) = 0;
+    virtual XENCEncryptedData* createEncryptedData(XENCCipherData::XENCCipherDataType type,
+                                                    const XMLCh* algorithm,
+                                                    const XMLCh* value) = 0;
 
     /**
      * \brief Load an EncryptedKey element
@@ -554,8 +558,8 @@ public:
      * node.
      */
 
-    virtual XENCEncryptedKey * loadEncryptedKey(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * keyNode
+    virtual XENCEncryptedKey* loadEncryptedKey(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* keyNode
         ) = 0;
 
     /**
@@ -572,8 +576,8 @@ public:
      * node.
      */
 
-    virtual XENCEncryptedData * loadEncryptedData(
-        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * dataNode
+    virtual XENCEncryptedData* loadEncryptedData(
+        XERCES_CPP_NAMESPACE_QUALIFIER DOMElement* dataNode
         ) = 0;
 
 

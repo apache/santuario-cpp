@@ -1871,7 +1871,14 @@ void unitTestSmallElement(DOMImplementation *impl) {
 }
 
 
-void unitTestKeyEncrypt(DOMImplementation* impl, XSECCryptoKey* k, const XMLCh* algorithm, const XMLCh* mgf=NULL) {
+void unitTestKeyEncrypt(
+        DOMImplementation* impl,
+        XSECCryptoKey* k,
+        const XMLCh* algorithm,
+        const XMLCh* mgf=NULL,
+        unsigned char* oaepParams=NULL,
+        unsigned int oaepParamsLen=0
+        ) {
 
 	// Create a document that we will embed the encrypted key in
 	DOMDocument *doc = impl->createDocument(
@@ -1902,7 +1909,9 @@ void unitTestKeyEncrypt(DOMImplementation* impl, XSECCryptoKey* k, const XMLCh* 
 		cipher->setKEK(k);
 
 		XENCEncryptedKey * encryptedKey;
-		encryptedKey = cipher->encryptKey(toEncryptStr, (unsigned int) strlen((char *) toEncryptStr), algorithm, mgf);
+		encryptedKey = cipher->encryptKey(
+		        toEncryptStr, (unsigned int) strlen((char *) toEncryptStr), algorithm, mgf, oaepParams, oaepParamsLen
+		        );
 		Janitor<XENCEncryptedKey> j_encryptedKey(encryptedKey);
 
 		rootElem->appendChild(encryptedKey->getElement());
@@ -1992,8 +2001,8 @@ void unitTestEncrypt(DOMImplementation *impl) {
 
 			cerr << "RSA OAEP key wrap + params... ";
 			k = new OpenSSLCryptoKeyRSA(pk);
-			k->setOAEPparams(s_tstOAEPparams, (unsigned int) strlen((char *) s_tstOAEPparams));
-			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1, DSIGConstants::s_unicodeStrURIMGF1_SHA1);
+			unitTestKeyEncrypt(impl, k, DSIGConstants::s_unicodeStrURIRSA_OAEP_MGFP1, DSIGConstants::s_unicodeStrURIMGF1_SHA1,
+			        s_tstOAEPparams, (unsigned int) strlen((char *) s_tstOAEPparams));
 
             cerr << "RSA OAEP 1.1 key wrap... ";
             k = new OpenSSLCryptoKeyRSA(pk);

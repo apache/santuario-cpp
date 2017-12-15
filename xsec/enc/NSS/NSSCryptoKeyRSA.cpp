@@ -105,36 +105,6 @@ XSECCryptoKey::KeyType NSSCryptoKeyRSA::getKeyType() const {
     return KEY_RSA_PUBLIC;
 }
 
-// --------------------------------------------------------------------------------
-//           Set OAEP parameters
-// --------------------------------------------------------------------------------
-
-void NSSCryptoKeyRSA::setOAEPparams(unsigned char* params, unsigned int paramsLen) {
-
-  if (params != NULL && paramsLen != 0) {
-
-        throw XSECCryptoException(XSECCryptoException::UnsupportedError,
-            "NSS::setOAEPParams - OAEP parameters are not supported by NSS");
-
-  }
-}
-
-// --------------------------------------------------------------------------------
-//           Get OAEP parameters length
-// --------------------------------------------------------------------------------
-
-unsigned int NSSCryptoKeyRSA::getOAEPparamsLen() const {
-    return 0;
-}
-
-// --------------------------------------------------------------------------------
-//           Get OAEP parameters
-// --------------------------------------------------------------------------------
-
-const unsigned char * NSSCryptoKeyRSA::getOAEPparams() const {
-    return NULL;
-}
-
 
 // --------------------------------------------------------------------------------
 //           Load modulus
@@ -490,7 +460,9 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
                                  const XMLCh* hashURI,
-                                 const XMLCh* mgfURI) const {
+                                 const XMLCh* mgfURI,
+                                 unsigned char* params,
+                                 unsigned int paramslen) const {
 
     // Perform a decrypt
     if (mp_privkey == 0) {
@@ -564,7 +536,9 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
                                  unsigned int maxOutLength,
                                  PaddingType padding,
                                  const XMLCh* hashURI,
-                                 const XMLCh* mgfURI) const {
+                                 const XMLCh* mgfURI,
+                                 unsigned char* params,
+                                 unsigned int paramslen) const {
 
     // Perform an encrypt
     if (mp_pubkey == 0) {

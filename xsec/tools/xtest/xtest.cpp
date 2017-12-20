@@ -95,6 +95,7 @@ XALAN_USING_XALAN(XalanTransformer)
 #if defined (XSEC_HAVE_OPENSSL)
 #	include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #	include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
+#   include <xsec/enc/OpenSSL/OpenSSLCryptoKeyEC.hpp>
 #	include <openssl/rand.h>
 #	include <openssl/evp.h>
 #	include <openssl/pem.h>
@@ -307,6 +308,14 @@ RlGANAzymDfXwNLFLuG+fAb+zK5FCSnRl12TvUabIzPIRnbptDVKPDRjcQJBALn8\n\
 8cqfvVRjijWj86wm0z0CQFKfRfBRraOZqfmOiAB4+ILhbJwKBBO6avX9TPgMYkyN\n\
 mWKCxS+9fPiy1iI+G+B9xkw2gJ9i8P81t7fsOvdTDFA=\n\
 -----END RSA PRIVATE KEY-----";
+
+char s_tstECPrivateKey[] = "\n\
+-----BEGIN PRIVATE KEY-----\n\
+MIG2AgEAMBAGByqGSM49AgEGBSuBBAAiBIGeMIGbAgEBBDAGJjEIHP3P1fDZV9lG\n\
+lVfblOulUksJ+QdX9SeOswKIiQ9Oc5l6NTswN2bm+IRhaouhZANiAARrJ/UeKETr\n\
+cFdFSM9sjB31PDIB6IdjtwyzMUIAJHlqoQ6IJo3887jvgUZyevY0+CUoS0N3L+9W\n\
+mPgOiq9TRw6O5mrjSk1rmCx+2o2bnk+tWEysp7AWswUgNGgVkhumq9A=\n\
+-----END PRIVATE KEY-----";
 
 static char s_keyStr[] = "abcdefghijklmnopqrstuvwxyzabcdef";
 
@@ -962,9 +971,9 @@ void unitTestLongSHA(DOMImplementation * impl) {
 
 }
 
-void unitTestRSASig(DOMImplementation * impl, XSECCryptoKeyRSA * k, const XMLCh * AlgURI) {
+void unitTestSig(DOMImplementation * impl, XSECCryptoKey * k, const XMLCh * AlgURI) {
 
-	// Given a specific RSA key and particular algorithm URI, sign and validate a document
+	// Given a specific RSA/EC key and particular algorithm URI, sign and validate a document
 
 	try {
 		
@@ -1116,30 +1125,72 @@ void unitTestRSA(DOMImplementation * impl) {
 #endif
 
 	cerr << "Unit testing RSA-SHA1 signature ... ";
-	unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA1);
+	unitTestSig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA1);
 
     if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA224)) {
         cerr << "Unit testing RSA-SHA224 signature ... ";
-        unitTestRSASig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA224);
+        unitTestSig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA224);
     }
 
     if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA256)) {
         cerr << "Unit testing RSA-SHA256 signature ... ";
-        unitTestRSASig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA256);
+        unitTestSig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA256);
     }
 
     if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA384)) {
         cerr << "Unit testing RSA-SHA384 signature ... ";
-        unitTestRSASig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA384);
+        unitTestSig(impl, (XSECCryptoKeyRSA *)rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA384);
     }
 
 	if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA512)) {
 		cerr << "Unit testing RSA-SHA512 signature ... ";
-		unitTestRSASig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA512);
+		unitTestSig(impl, (XSECCryptoKeyRSA *) rsaKey->clone(), DSIGConstants::s_unicodeStrURIRSA_SHA512);
 	}
 
 	cerr << "Unit testing RSA-MD5 signature ... ";
-	unitTestRSASig(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_MD5);		
+	unitTestSig(impl, rsaKey, DSIGConstants::s_unicodeStrURIRSA_MD5);
+}
+
+void unitTestEC(DOMImplementation * impl) {
+#if defined (XSEC_HAVE_OPENSSL) && defined (XSEC_OPENSSL_HAVE_EC)
+
+    /* First we load some keys to use! */
+
+    XSECCryptoKeyEC * ecKey;
+
+    // Load the key
+    BIO * bioMem = BIO_new(BIO_s_mem());
+    BIO_puts(bioMem, s_tstECPrivateKey);
+    EVP_PKEY * pk = PEM_read_bio_PrivateKey(bioMem, NULL, NULL, NULL);
+
+    ecKey = new OpenSSLCryptoKeyEC(pk);
+
+    BIO_free(bioMem);
+    EVP_PKEY_free(pk);
+
+    cerr << "Unit testing ECDSA-SHA1 signature ... ";
+    unitTestSig(impl, (XSECCryptoKeyEC *) ecKey->clone(), DSIGConstants::s_unicodeStrURIECDSA_SHA1);
+
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA224)) {
+        cerr << "Unit testing ECDSA-SHA224 signature ... ";
+        unitTestSig(impl, (XSECCryptoKeyEC *)ecKey->clone(), DSIGConstants::s_unicodeStrURIECDSA_SHA224);
+    }
+
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA256)) {
+        cerr << "Unit testing ECDSA-SHA256 signature ... ";
+        unitTestSig(impl, (XSECCryptoKeyEC *)ecKey->clone(), DSIGConstants::s_unicodeStrURIECDSA_SHA256);
+    }
+
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA384)) {
+        cerr << "Unit testing ECDSA-SHA384 signature ... ";
+        unitTestSig(impl, (XSECCryptoKeyEC *)ecKey->clone(), DSIGConstants::s_unicodeStrURIECDSA_SHA384);
+    }
+
+    if (XSECPlatformUtils::g_cryptoProvider->algorithmSupported(XSECCryptoHash::HASH_SHA512)) {
+        cerr << "Unit testing ECDSA-SHA512 signature ... ";
+    }
+        unitTestSig(impl, (XSECCryptoKeyEC *) ecKey->clone(), DSIGConstants::s_unicodeStrURIECDSA_SHA512);
+#endif
 }
 
 void unitTestSignature(DOMImplementation * impl) {
@@ -1160,6 +1211,9 @@ void unitTestSignature(DOMImplementation * impl) {
 
 	// Test RSA Signatures
 	unitTestRSA(impl);
+
+    // Test EC Signatures
+    unitTestEC(impl);
 }
 
 // --------------------------------------------------------------------------------

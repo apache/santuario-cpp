@@ -47,38 +47,20 @@ XERCES_CPP_NAMESPACE_USE
 
 XSECProvider::XSECProvider() {
 
-	mp_URIResolver = new XSECURIResolverXerces();
+    mp_URIResolver = new XSECURIResolverXerces();
 #ifdef XSEC_XKMS_ENABLED
-	XSECnew(mp_xkmsMessageFactory, XKMSMessageFactoryImpl());
+    XSECnew(mp_xkmsMessageFactory, XKMSMessageFactoryImpl());
 #endif
 }
 
 XSECProvider::~XSECProvider() {
 
-	// First delete signatures
-	
-	SignatureListVectorType::iterator i;
-	
-	for (i = m_activeSignatures.begin(); i != m_activeSignatures.end(); ++i)
-		delete *i;
-
-	m_activeSignatures.clear();
-
-	if (mp_URIResolver != NULL)
-		delete mp_URIResolver;
-
-	// Now delete ciphers
-
-	CipherListVectorType::iterator j;
-	
-	for (j = m_activeCiphers.begin(); j != m_activeCiphers.end(); ++j)
-		delete *j;
-
-	m_activeCiphers.clear();
+    if (mp_URIResolver != NULL)
+        delete mp_URIResolver;
 
 #ifdef XSEC_XKMS_ENABLED
-	// Clean up XKMS stuff
-	delete mp_xkmsMessageFactory;
+    // Clean up XKMS stuff
+    delete mp_xkmsMessageFactory;
 #endif
 }
 
@@ -87,119 +69,69 @@ XSECProvider::~XSECProvider() {
 // --------------------------------------------------------------------------------
 
 
-DSIGSignature * XSECProvider::newSignatureFromDOM(DOMDocument *doc, DOMNode *sigNode) {
+DSIGSignature* XSECProvider::newSignatureFromDOM(DOMDocument* doc, DOMNode* sigNode) {
 
-	DSIGSignature * ret;
+    DSIGSignature* ret;
 
-	XSECnew(ret, DSIGSignature(doc, sigNode));
+    XSECnew(ret, DSIGSignature(doc, sigNode));
 
-	setup(ret);
+    setup(ret);
 
-	return ret;
-
+    return ret;
 }
 
-DSIGSignature * XSECProvider::newSignatureFromDOM(DOMDocument *doc) {
+DSIGSignature* XSECProvider::newSignatureFromDOM(DOMDocument* doc) {
 
-	DSIGSignature * ret;
+    DSIGSignature* ret;
 
-	DOMNode *sigNode = findDSIGNode(doc, "Signature");
+    DOMNode* sigNode = findDSIGNode(doc, "Signature");
 
-	if (sigNode == NULL) {
-		
-		throw XSECException(XSECException::SignatureCreationError,
-			"Could not find a signature node in passed in DOM document");
+    if (sigNode == NULL) {
 
-	}
+        throw XSECException(XSECException::SignatureCreationError,
+            "Could not find a signature node in passed in DOM document");
 
-	XSECnew(ret, DSIGSignature(doc, sigNode));
+    }
 
-	setup(ret);
+    XSECnew(ret, DSIGSignature(doc, sigNode));
 
-	return ret;
+    setup(ret);
 
+    return ret;
 }
 
-DSIGSignature * XSECProvider::newSignature(void) {
+DSIGSignature* XSECProvider::newSignature() {
 
-	DSIGSignature * ret;
+    DSIGSignature* ret;
 
-	XSECnew(ret, DSIGSignature());
+    XSECnew(ret, DSIGSignature());
 
-	setup(ret);
+    setup(ret);
 
-	return ret;
-
+    return ret;
 }
 
-void XSECProvider::releaseSignature(DSIGSignature * toRelease) {
-
-	// Find in the active list
-
-	SignatureListVectorType::iterator i;
-
-	m_providerMutex.lock();
-	i = m_activeSignatures.begin();
-	while (i != m_activeSignatures.end() && *i != toRelease)
-		++i;
-
-	if (i == m_activeSignatures.end()) {
-
-		m_providerMutex.unlock();
-
-		throw XSECException(XSECException::ProviderError,
-			"Attempt to release a signature that was not created by this provider");
-
-	}
-	
-	// For now - remove from list.  Would be better to recycle
-	m_activeSignatures.erase(i);
-	m_providerMutex.unlock();
-	delete toRelease;
-
+void XSECProvider::releaseSignature(DSIGSignature* toRelease) {
+    delete toRelease;
 }
 
 // --------------------------------------------------------------------------------
 //           Cipher Creation/Deletion
 // --------------------------------------------------------------------------------
 
-XENCCipher * XSECProvider::newCipher(DOMDocument * doc) {
+XENCCipher* XSECProvider::newCipher(DOMDocument* doc) {
 
-	XENCCipherImpl * ret;
+    XENCCipherImpl* ret;
 
-	XSECnew(ret, XENCCipherImpl(doc));
+    XSECnew(ret, XENCCipherImpl(doc));
 
-	setup(ret);
+    setup(ret);
 
-	return ret;
-
+    return ret;
 }
 
-void XSECProvider::releaseCipher(XENCCipher * toRelease) {
-
-	// Find in the active list
-
-	CipherListVectorType::iterator i;
-
-	m_providerMutex.lock();
-	i = m_activeCiphers.begin();
-	while (i != m_activeCiphers.end() && *i != toRelease)
-		++i;
-
-	if (i == m_activeCiphers.end()) {
-
-		m_providerMutex.unlock();
-
-		throw XSECException(XSECException::ProviderError,
-			"Attempt to release a cipher that was not created by this provider");
-
-	}
-	
-	// For now - remove from list.  Would be better to recycle
-	m_activeCiphers.erase(i);
-	m_providerMutex.unlock();
-	delete toRelease;
-
+void XSECProvider::releaseCipher(XENCCipher* toRelease) {
+    delete toRelease;
 }
 
 #ifdef XSEC_XKMS_ENABLED
@@ -207,10 +139,8 @@ void XSECProvider::releaseCipher(XENCCipher * toRelease) {
 //           XKMS Methods
 // --------------------------------------------------------------------------------
 
-XKMSMessageFactory * XSECProvider::getXKMSMessageFactory(void) {
-
-	return mp_xkmsMessageFactory;
-
+XKMSMessageFactory* XSECProvider::getXKMSMessageFactory() {
+    return mp_xkmsMessageFactory;
 }
 #endif
 
@@ -219,39 +149,24 @@ XKMSMessageFactory * XSECProvider::getXKMSMessageFactory(void) {
 // --------------------------------------------------------------------------------
 
 
-void XSECProvider::setDefaultURIResolver(XSECURIResolver * resolver) {
+void XSECProvider::setDefaultURIResolver(XSECURIResolver* resolver) {
 
-	if (mp_URIResolver != 0)
-		delete mp_URIResolver;
+    if (mp_URIResolver != 0)
+        delete mp_URIResolver;
 
-	mp_URIResolver = resolver->clone();
-
+    mp_URIResolver = resolver->clone();
 }
 
 // --------------------------------------------------------------------------------
 //           Internal functions
 // --------------------------------------------------------------------------------
 
-void XSECProvider::setup(DSIGSignature *sig) {
+void XSECProvider::setup(DSIGSignature* sig) {
 
-	// Called by all Signature creation methods to set up the sig
-
-	// Add to the active list
-	m_providerMutex.lock();
-	m_activeSignatures.push_back(sig);
-	m_providerMutex.unlock();
-
-	sig->setURIResolver(mp_URIResolver);
-
+    // Called by all Signature creation methods to set up the sig
+    sig->setURIResolver(mp_URIResolver);
 }
 
-void XSECProvider::setup(XENCCipher * cipher) {
-
-	// Called by all Signature creation methods to set up the sig
-
-	// Add to the active list
-	m_providerMutex.lock();
-	m_activeCiphers.push_back(cipher);
-	m_providerMutex.unlock();
+void XSECProvider::setup(XENCCipher* cipher) {
 
 }

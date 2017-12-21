@@ -52,7 +52,7 @@
 #include "XENCEncryptedKeyImpl.hpp"
 #include "XENCEncryptionMethodImpl.hpp"
 #include "XENCAlgorithmHandlerDefault.hpp"
-#include "../utils/XSECAutoPtr.hpp"
+#include "../../utils/XSECAutoPtr.hpp"
 
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/dom/DOMElement.hpp>

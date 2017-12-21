@@ -525,7 +525,7 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
                                  const XMLCh* hashURI,
                                  const XMLCh* mgfURI,
                                  unsigned char* params,
-                                 unsigned int paramslen) const {
+                                 unsigned int paramsLen) const {
 
     // Perform a decrypt
     if (m_key == NULL) {
@@ -608,7 +608,7 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
                                  const XMLCh* hashURI,
                                  const XMLCh* mgfURI,
                                  unsigned char* params,
-                                 unsigned int paramslen) const {
+                                 unsigned int paramsLen) const {
 
     // Perform an encrypt
     if (m_key == 0) {

@@ -129,7 +129,6 @@ DOMElement* DSIGTransformC14n::createBlankTransform(DOMDocument* parentDoc) {
 
 void DSIGTransformC14n::load() {
 
-    const XMLCh* uri;
     DOMNamedNodeMap* atts;
     DOMNode* att;
 

@@ -512,7 +512,7 @@ unsigned int NSSCryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 
         break;
 
-    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP :
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "NSS:RSA - OAEP padding method not supported in NSS yet");
         break;
@@ -603,7 +603,7 @@ unsigned int NSSCryptoKeyRSA::publicEncrypt(const unsigned char * inBuf,
 
       break;
 
-    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP :
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "NSS:RSA - OAEP padding method not supported in NSS yet");
         break;

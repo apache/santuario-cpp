@@ -696,7 +696,7 @@ unsigned int OpenSSLCryptoKeyRSA::privateDecrypt(
 
         break;
 
-    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP :
         {
             const EVP_MD* evp_md = getDigestFromHashType(XSECAlgorithmSupport::getHashType(hashURI));
             if (evp_md == NULL) {
@@ -817,7 +817,7 @@ unsigned int OpenSSLCryptoKeyRSA::publicEncrypt(
 
         break;
 
-    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP :
         {
             unsigned char * tBuf;
             unsigned int num = RSA_size(mp_rsaKey);

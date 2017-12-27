@@ -59,7 +59,7 @@ public :
 
         PAD_NONE        = 0,        /** No padding (Illegal for all enc ops) */
         PAD_PKCS_1_5    = 1,        /** PKCS 1.5 padding */
-        PAD_OAEP_MGFP1  = 2         /** OAEP using MGFP1 as mask function */
+        PAD_OAEP        = 2         /** OAEP */
 
     };
 

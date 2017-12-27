@@ -557,7 +557,7 @@ unsigned int WinCAPICryptoKeyRSA::privateDecrypt(const unsigned char * inBuf,
 
         break;
 
-    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP :
 
         if (XSECAlgorithmSupport::getMGF1HashType(mgfURI) != XSECCryptoHash::HASH_SHA1) {
             throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,
@@ -642,7 +642,7 @@ unsigned int WinCAPICryptoKeyRSA::publicEncrypt(const unsigned char* inBuf,
 
         break;
 
-    case XSECCryptoKeyRSA::PAD_OAEP_MGFP1 :
+    case XSECCryptoKeyRSA::PAD_OAEP :
 
         if (XSECAlgorithmSupport::getHashType(hashURI) != XSECCryptoHash::HASH_SHA1) {
             throw XSECCryptoException(XSECCryptoException::UnsupportedAlgorithm,

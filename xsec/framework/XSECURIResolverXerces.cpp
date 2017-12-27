@@ -44,80 +44,78 @@ XERCES_CPP_NAMESPACE_USE
 //           Constructors and Destructors
 // --------------------------------------------------------------------------------
 
-XSECURIResolverXerces::XSECURIResolverXerces(const XMLCh * baseURI) {
+XSECURIResolverXerces::XSECURIResolverXerces(const XMLCh* baseURI) {
 
-	if (baseURI != 0) {
+    if (baseURI != 0) {
 
-		mp_baseURI = XMLString::replicate(baseURI);
+        mp_baseURI = XMLString::replicate(baseURI);
 
-	}
-	else
-		mp_baseURI = NULL;
-
+    }
+    else
+        mp_baseURI = NULL;
 };
 
 XSECURIResolverXerces::~XSECURIResolverXerces() {
 
-	if (mp_baseURI != NULL)
-		XSEC_RELEASE_XMLCH(mp_baseURI);
+    if (mp_baseURI != NULL)
+        XSEC_RELEASE_XMLCH(mp_baseURI);
 }
 
 // --------------------------------------------------------------------------------
 //           Interface Methods
 // --------------------------------------------------------------------------------
 
-XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream * XSECURIResolverXerces::resolveURI(const XMLCh * uri) {
+XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream* XSECURIResolverXerces::resolveURI(const XMLCh* uri) {
 
-	XSEC_USING_XERCES(URLInputSource);
-	XSEC_USING_XERCES(XMLURL);
-	XSEC_USING_XERCES(BinInputStream);
+    XSEC_USING_XERCES(URLInputSource);
+    XSEC_USING_XERCES(XMLURL);
+    XSEC_USING_XERCES(BinInputStream);
+    XSEC_USING_XERCES(XMLException);
 
-	
-	URLInputSource			* URLS;		// Use Xerces URL Input source
-	BinInputStream			* is;		// To handle the actual input
+    if (uri == NULL) {
+        throw XSECException(XSECException::ErrorOpeningURI,
+            "XSECURIResolverXerces - anonymous references not supported in default URI Resolvers");
+    }
 
-	if (uri == NULL) {
-		throw XSECException(XSECException::ErrorOpeningURI,
-			"XSECURIResolverXerces - anonymous references not supported in default URI Resolvers");
-	}
+    try {
+        URLInputSource* URLS;        // Use Xerces URL Input source
 
-	if (mp_baseURI == 0) {
-		URLS = new URLInputSource(XMLURL(uri));
-	}
-	else {
-		URLS = new URLInputSource(XMLURL(XMLURL(mp_baseURI), uri));
-	}
+        if (mp_baseURI == 0) {
+            URLS = new URLInputSource(XMLURL(uri));
+        }
+        else {
+            URLS = new URLInputSource(XMLURL(XMLURL(mp_baseURI), uri));
+        }
 
-	// makeStream can (and is quite likely to) throw an exception
-	Janitor<URLInputSource> j_URLS(URLS);
+        // makeStream can (and is quite likely to) throw an exception
+        Janitor<URLInputSource> j_URLS(URLS);
 
-	is = URLS->makeStream();
+        BinInputStream* is = URLS->makeStream();
 
-	if (is == NULL) {
+        if (is == NULL) {
+            throw XSECException(XSECException::ErrorOpeningURI,
+                "An error occurred in XSECURIREsolverXerces when opening an URLInputStream");
+        }
 
-		throw XSECException(XSECException::ErrorOpeningURI,
-			"An error occurred in XSECURIREsolverXerces when opening an URLInputStream");
-
-	}
-
-	return is;
-
+        return is;
+    }
+    catch (XMLException& ex) {
+        throw XSECException(XSECException::ErrorOpeningURI,
+            "An error occurred in XSECURIREsolverXerces when opening an URLInputStream");
+    }
 }
 
 
-XSECURIResolver * XSECURIResolverXerces::clone(void) {
+XSECURIResolver* XSECURIResolverXerces::clone() {
 
-	XSECURIResolverXerces * ret;
+    XSECURIResolverXerces* ret = new XSECURIResolverXerces();
 
-	ret = new XSECURIResolverXerces();
+    if (this->mp_baseURI != 0)
+        ret->mp_baseURI = XMLString::replicate(this->mp_baseURI);
+    else
+        ret->mp_baseURI = 0;
 
-	if (this->mp_baseURI != 0)
-		ret->mp_baseURI = XMLString::replicate(this->mp_baseURI);
-	else
-		ret->mp_baseURI = 0;
-
-	return ret;
-
+    return ret;
 }
 
 // --------------------------------------------------------------------------------
@@ -125,11 +123,10 @@ XSECURIResolver * XSECURIResolverXerces::clone(void) {
 // --------------------------------------------------------------------------------
 
 
-void XSECURIResolverXerces::setBaseURI(const XMLCh * uri) {
+void XSECURIResolverXerces::setBaseURI(const XMLCh* uri) {
 
-	if (mp_baseURI != 0)
-		XSEC_RELEASE_XMLCH(mp_baseURI);
+    if (mp_baseURI != 0)
+        XSEC_RELEASE_XMLCH(mp_baseURI);
 
-	mp_baseURI = XMLString::replicate(uri);
-
+    mp_baseURI = XMLString::replicate(uri);
 };

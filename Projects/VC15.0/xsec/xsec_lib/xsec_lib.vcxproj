@@ -534,8 +534,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\xsec\utils\XSECTXFMInputSource.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECXPathNodeList.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\utils\winutils\XSECBinHTTPURIInputStream.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\utils\winutils\XSECURIResolverGenericWin32.cpp" />
     <ClCompile Include="..\..\..\..\xsec\framework\XSECAlgorithmMapper.cpp" />
     <ClCompile Include="..\..\..\..\xsec\framework\XSECEnv.cpp" />
     <ClCompile Include="..\..\..\..\xsec\framework\XSECError.cpp" />
@@ -666,8 +664,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\xsec\utils\XSECTXFMInputSource.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECXPathNodeList.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\utils\winutils\XSECBinHTTPURIInputStream.hpp" />
-    <ClInclude Include="..\..\..\..\xsec\utils\winutils\XSECURIResolverGenericWin32.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\XSECAlgorithmHandler.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\XSECAlgorithmMapper.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\XSECDefs.hpp" />

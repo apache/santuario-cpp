@@ -37,14 +37,9 @@
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
 #include <xsec/framework/XSECException.hpp>
+#include <xsec/framework/XSECURIResolver.hpp>
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
-
-#if defined(_WIN32)
-#   include <xsec/utils/winutils/XSECURIResolverGenericWin32.hpp>
-#else
-#   include <xsec/utils/unixutils/XSECURIResolverGenericUnix.hpp>
-#endif
 
 #if defined (XSEC_HAVE_OPENSSL)
 #   include <xsec/enc/OpenSSL/OpenSSLCryptoKeyDSA.hpp>
@@ -592,7 +587,7 @@ int main(int argc, char **argv) {
 
 #if defined (XSEC_HAVE_OPENSSL)
     
-    // Initialise OpenSSL
+    // Initialize OpenSSL
     ERR_load_crypto_strings();
     BIO * bio_err;
     
@@ -694,7 +689,7 @@ int main(int argc, char **argv) {
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyDSA(pkey);
             }
-#   if defined(XSEC_OPENSSL_HAVE_EC)
+#if defined(XSEC_OPENSSL_HAVE_EC)
             else if (_stricmp(argv[paramCount], "--eckey") == 0 || _stricmp(argv[paramCount], "-e") == 0) {
 
                 // Check type is correct
@@ -707,7 +702,7 @@ int main(int argc, char **argv) {
                 // Create the XSEC OpenSSL interface
                 key = new OpenSSLCryptoKeyEC(pkey);
             }
-#   endif
+#endif
             else {
                 if (EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
                     cerr << "RSA Key requested, but OpenSSL loaded something else\n";
@@ -1118,13 +1113,6 @@ int main(int argc, char **argv) {
 
     XSECProvider * prov = new XSECProvider;
     DSIGSignature * sig = prov->newSignatureFromDOM(theDOM, sigNode);
-
-    // Use the internal URI resolver
-#if defined(_WIN32)
-    XSECURIResolverGenericWin32* theResolver = new XSECURIResolverGenericWin32();
-#else
-    XSECURIResolverGenericUnix* theResolver = new XSECURIResolverGenericUnix();
-#endif 
      
     // Map out base path of the file
     char * filename=argv[argc-1];
@@ -1163,8 +1151,7 @@ int main(int argc, char **argv) {
     // The last "\\" must prefix the filename
     baseURI[lastSlash + 1] = '\0';
 
-    theResolver->setBaseURI(MAKE_UNICODE_STRING(baseURI));
-    sig->setURIResolver(theResolver);
+    sig->getURIResolver()->setBaseURI(MAKE_UNICODE_STRING(baseURI));
 #if XSEC_HAVE_GETCWD_DYN
     free(path);
     free(baseURI);
@@ -1343,7 +1330,6 @@ int main(int argc, char **argv) {
     prov->releaseSignature(sig);
     delete parser;
     delete prov;
-    delete theResolver;
 
     XSECPlatformUtils::Terminate();
 #ifdef XSEC_HAVE_XALAN

@@ -268,10 +268,6 @@ utilsinclude_HEADERS = \
   utils/XSECBinTXFMInputStream.hpp \
   utils/XSECPlatformUtils.hpp 
 
-unixutilsinclude_HEADERS = \
-  utils/unixutils/XSECURIResolverGenericUnix.hpp \
-  utils/unixutils/XSECBinHTTPURIInputStream.hpp
-
 xencinclude_HEADERS = \
   xenc/XENCEncryptionMethod.hpp \
   xenc/XENCEncryptedType.hpp \
@@ -458,8 +454,6 @@ txfm_sources = \
 # make.  Cygwin compiles use the UNIX utilities, not windows
 
 utils_sources = \
-  utils/unixutils/XSECURIResolverGenericUnix.cpp \
-  utils/unixutils/XSECBinHTTPURIInputStream.cpp \
   utils/XSECAlgorithmSupport.cpp \
   utils/XSECBinTXFMInputStream.cpp \
   utils/XSECXPathNodeList.cpp \
@@ -612,11 +606,7 @@ install-exec-hook:
 	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done
 
 EXTRA_DIST = \
-  utils/winutils/XSECURIResolverGenericWin32.cpp \
   utils/winutils/XSECSOAPRequestorSimpleWin32.cpp \
-  utils/winutils/XSECBinHTTPURIInputStream.cpp \
-  utils/winutils/XSECURIResolverGenericWin32.hpp \
-  utils/winutils/XSECBinHTTPURIInputStream.hpp \
   enc/WinCAPI/WinCAPICryptoProvider.cpp \
   enc/WinCAPI/WinCAPICryptoKeyHMAC.hpp \
   enc/WinCAPI/WinCAPICryptoHash.cpp \

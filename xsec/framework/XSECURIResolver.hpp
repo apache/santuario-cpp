@@ -88,8 +88,15 @@ public:
 	 * @returns The octet stream corresponding to the URI.
 	 */
 
-	virtual XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream * 
-		resolveURI(const XMLCh * uri) = 0;
+	virtual XERCES_CPP_NAMESPACE_QUALIFIER BinInputStream*
+		resolveURI(const XMLCh* uri) = 0;
+
+    /**
+     * \brief Set the base URI for relative URIs.
+     *
+     */
+
+    virtual void setBaseURI(const XMLCh* uri) = 0;
 
 	/**
 	 * \brief Clone the resolver to be installed in a new object.
@@ -100,7 +107,7 @@ public:
 	 *
 	 */
 
-	virtual XSECURIResolver * clone(void) = 0;
+	virtual XSECURIResolver* clone() = 0;
 
 	//@}
 

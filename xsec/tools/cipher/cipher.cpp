@@ -42,14 +42,6 @@
 
 #include "XencInteropResolver.hpp"
 
-// ugly :<
-
-#if defined(_WIN32)
-#   include <xsec/utils/winutils/XSECURIResolverGenericWin32.hpp>
-#else
-#   include <xsec/utils/unixutils/XSECURIResolverGenericUnix.hpp>
-#endif
-
 // General
 
 #include <memory.h>

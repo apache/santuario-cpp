@@ -37,15 +37,10 @@
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/framework/XSECException.hpp>
+#include <xsec/framework/XSECURIResolver.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECBinTXFMInputStream.hpp>
-
-#if defined(_WIN32)
-#include <xsec/utils/winutils/XSECURIResolverGenericWin32.hpp>
-#else
-#include <xsec/utils/unixutils/XSECURIResolverGenericUnix.hpp>
-#endif
 
 // General
 
@@ -490,13 +485,6 @@ int main(int argc, char **argv) {
 	DSIGSignature * sig = prov.newSignatureFromDOM(theDOM, sigNode);
 	sig->registerIdAttributeName(MAKE_UNICODE_STRING("ID"));
 
-#if defined(_WIN32)
-	XSECURIResolverGenericWin32 
-#else
-	XSECURIResolverGenericUnix 
-#endif
-		theResolver;
-		 
 	// Map out base path of the file
 #if XSEC_HAVE_GETCWD_DYN
 	char *path = getcwd(NULL, 0);
@@ -525,12 +513,11 @@ int main(int argc, char **argv) {
 	// The last "\\" must prefix the filename
 	baseURI[lastSlash + 1] = '\0';
 
-	theResolver.setBaseURI(MAKE_UNICODE_STRING(baseURI));
+	sig->getURIResolver()->setBaseURI(MAKE_UNICODE_STRING(baseURI));
 #if XSEC_HAVE_GETCWD_DYN
 	free(path);
 	free(baseURI);
 #endif
-	sig->setURIResolver(&theResolver);
 
 
 	try {

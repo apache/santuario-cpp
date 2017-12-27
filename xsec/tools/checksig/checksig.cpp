@@ -40,14 +40,6 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/enc/XSECKeyInfoResolverDefault.hpp>
 
-// ugly :<
-
-#if defined(_WIN32)
-#	include <xsec/utils/winutils/XSECURIResolverGenericWin32.hpp>
-#else
-#	include <xsec/utils/unixutils/XSECURIResolverGenericUnix.hpp>
-#endif
-
 // General
 
 #include <memory.h>
@@ -427,13 +419,6 @@ int evaluate(int argc, char ** argv) {
 		useAnonymousResolver == true ||
 		useInteropResolver == true) {
 
-#if defined(_WIN32)
-		XSECURIResolverGenericWin32 
-#else
-		XSECURIResolverGenericUnix 
-#endif
-			theResolver;
-
 		AnonymousResolver theAnonymousResolver;
 		     
 		// Map out base path of the file
@@ -480,28 +465,18 @@ int evaluate(int argc, char ** argv) {
 #endif
 
 		if (useAnonymousResolver == true) {
-			// AnonymousResolver takes precedence
-			theAnonymousResolver.setBaseURI(baseURIXMLCh);
 			sig->setURIResolver(&theAnonymousResolver);
 		}
-		else if (useXSECURIResolver == true) {
-			theResolver.setBaseURI(baseURIXMLCh);
-			sig->setURIResolver(&theResolver);
-		}
+        sig->getURIResolver()->setBaseURI(baseURIXMLCh);
 
 #if defined (XSEC_HAVE_OPENSSL)
 		if (useInteropResolver == true) {
-
 			InteropResolver ires(&(baseURIXMLCh[8]));
 			sig->setKeyInfoResolver(&ires);
-
 		}
 #endif
 		XSEC_RELEASE_XMLCH(baseURIXMLCh);
-
 	}
-
-
 
 	bool result;
 

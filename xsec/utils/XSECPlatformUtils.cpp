@@ -42,10 +42,6 @@
 
 XERCES_CPP_NAMESPACE_USE
 
-#if defined(_WIN32)
-#include <xsec/utils/winutils/XSECBinHTTPURIInputStream.hpp>
-#endif
-
 #if defined (XSEC_HAVE_OPENSSL)
 #	include <xsec/enc/OpenSSL/OpenSSLCryptoProvider.hpp>
 #endif
@@ -165,11 +161,6 @@ void XSECPlatformUtils::Terminate(void) {
 	DSIGConstants::destroy();
 #ifdef XSEC_XKMS_ENABLED
 	XKMSConstants::destroy();
-#endif
-
-	// Destroy anything platform specific
-#if defined(_WIN32)
-	XSECBinHTTPURIInputStream::Cleanup();
 #endif
 
 }

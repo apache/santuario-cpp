@@ -301,7 +301,7 @@ void outputReferenceList (DSIGReferenceList * lst, outputter & theOutputter, int
 			try {
 				is = ref->makeBinInputStream();
 			}
-			catch (const NetAccessorException& e) {
+			catch (const NetAccessorException&) {
 
 				cerr << "Network error in reference " << theOutputter.getIndex() << endl;
 				is = 0;

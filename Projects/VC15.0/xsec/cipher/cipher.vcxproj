@@ -169,7 +169,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC15/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -178,7 +178,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -197,7 +196,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC15/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -206,7 +205,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -221,13 +219,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC15/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_XKMS_ENABLED;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Xalan-C_1.lib;xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -247,13 +244,12 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC15/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_XKMS_ENABLED;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_XKMS_ENABLED;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>Xalan-C_1.lib;xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -271,7 +267,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -280,7 +276,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -299,7 +294,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -308,7 +303,6 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -323,13 +317,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -349,13 +342,12 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;XSEC_BUILDING_TOOLS;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <AdditionalDependencies>xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>

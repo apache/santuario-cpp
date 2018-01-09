@@ -37,6 +37,8 @@
 #include <xsec/xkms/XKMSConstants.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRecoverRequestImpl.hpp"
 #include "XKMSRecoverKeyBindingImpl.hpp"
 #include "XKMSAuthenticationImpl.hpp"
@@ -255,4 +257,4 @@ XKMSAuthentication * XKMSRecoverRequestImpl::addAuthentication(void) {
 
 }
 
-
+#endif /* XSEC_XKMS_ENABLED */

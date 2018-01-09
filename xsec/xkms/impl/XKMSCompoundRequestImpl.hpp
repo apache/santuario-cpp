@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSCompoundRequest.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRequestAbstractTypeImpl.hpp"
 #include "XKMSMessageFactoryImpl.hpp"
 
@@ -123,4 +125,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSCOMPOUNDREQUESTIMPL_INCLUDE */

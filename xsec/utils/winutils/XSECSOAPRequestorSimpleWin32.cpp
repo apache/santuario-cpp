@@ -35,6 +35,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "../../utils/XSECAutoPtr.hpp"
 
 #define _WINSOCKAPI_
@@ -393,3 +395,5 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
 
     return parseAndUnwrap(responseBuffer.rawCharBuffer(), lent);
 }
+
+#endif /* XSEC_XKMS_ENABLED */

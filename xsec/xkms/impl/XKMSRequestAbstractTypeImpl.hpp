@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRequestAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSMessageAbstractTypeImpl.hpp"
 
 #include <vector>
@@ -184,4 +186,5 @@ private:
 	virtual void setResponseLimit(unsigned int limit) \
 		{m_request.setResponseLimit(limit);}
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSREQUESTABSTRACTTYPEIMPL_INCLUDE */

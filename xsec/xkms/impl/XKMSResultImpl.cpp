@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSResultImpl.hpp"
 
 #include <xercesc/dom/DOM.hpp>
@@ -115,3 +117,4 @@ XKMSMessageAbstractType::messageType XKMSResultImpl::getMessageType(void) {
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

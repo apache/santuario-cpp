@@ -36,6 +36,8 @@
 
 #include <xercesc/dom/DOM.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSUseKeyWithImpl.hpp"
 
 XERCES_CPP_NAMESPACE_USE
@@ -200,3 +202,5 @@ void XKMSUseKeyWithImpl::setIdentifier(const XMLCh * identifier) {
 	mp_identifierAttr->setNodeValue(identifier);
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

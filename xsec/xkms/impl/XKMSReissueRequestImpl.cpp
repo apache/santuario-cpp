@@ -36,6 +36,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSReissueRequestImpl.hpp"
 #include "XKMSAuthenticationImpl.hpp"
 #include "XKMSReissueKeyBindingImpl.hpp"
@@ -344,5 +346,4 @@ DSIGSignature * XKMSReissueRequestImpl::addProofOfPossessionSignature(
 	return ret;
 }
 
-
-
+#endif /* XSEC_XKMS_ENABLED */

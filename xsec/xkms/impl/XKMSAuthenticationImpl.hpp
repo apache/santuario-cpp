@@ -35,6 +35,8 @@
 #include <xsec/framework/XSECProvider.hpp>
 #include <xsec/xkms/XKMSAuthentication.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSKeyBindingAuthenticationImpl;
 class XKMSNotBoundAuthenticationImpl;
 class XSECEnv;
@@ -105,4 +107,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSAUTHENTICATIONIMPL_INCLUDE */

@@ -34,6 +34,8 @@
 #include <xsec/utils/XSECSOAPRequestorSimple.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "../utils/XSECAutoPtr.hpp"
 
 #include <stdio.h>
@@ -312,3 +314,5 @@ void XSECSOAPRequestorSimple::setEnvelopeType(envelopeType et) {
 	m_envelopeType = et;
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

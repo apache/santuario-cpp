@@ -31,6 +31,8 @@
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSResultTypeImpl.hpp"
 
 #include <xercesc/dom/DOM.hpp>
@@ -310,3 +312,4 @@ void XKMSResultTypeImpl::setRequestSignatureValue(const XMLCh * value) {
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

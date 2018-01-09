@@ -47,6 +47,8 @@
 #include <xsec/utils/XSECSafeBuffer.hpp>
 #include <xsec/framework/XSECError.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "../../utils/XSECAutoPtr.hpp"
 
 #include <xercesc/dom/DOM.hpp>
@@ -350,3 +352,5 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
 
     return parseAndUnwrap(responseBuffer.rawCharBuffer(), lent);
 }
+
+#endif /* XSEC_XKMS_ENABLED */

@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSKeyBinding.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSKeyBindingAbstractTypeImpl.hpp"
 
 class XKMSStatusImpl;
@@ -78,4 +80,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSKEYBINDINGIMPL_INCLUDE */

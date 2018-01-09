@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSPendingRequest.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRequestAbstractTypeImpl.hpp"
 
 class XKMSPendingRequestImpl : public XKMSPendingRequest {
@@ -90,4 +92,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSPENDINGREQUESTIMPL_INCLUDE */

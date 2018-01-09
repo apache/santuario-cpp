@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSCompoundResult.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSResultTypeImpl.hpp"
 #include "XKMSMessageFactoryImpl.hpp"
 
@@ -144,4 +146,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSCOMPOUNDRESULTIMPL_INCLUDE */

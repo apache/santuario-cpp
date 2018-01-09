@@ -36,6 +36,8 @@
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/dom/DOMNodeList.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRequestAbstractTypeImpl.hpp"
 #include "XKMSRespondWithImpl.hpp"
 #include "XKMSResponseMechanismImpl.hpp"
@@ -390,4 +392,4 @@ void XKMSRequestAbstractTypeImpl::removeResponseMechanismItem(int item) {
 
 }
 
-
+#endif /* XSEC_XKMS_ENABLED */

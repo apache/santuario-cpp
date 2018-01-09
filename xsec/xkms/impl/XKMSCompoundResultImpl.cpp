@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSCompoundResultImpl.hpp"
 #include "XKMSLocateResultImpl.hpp"
 #include "XKMSStatusResultImpl.hpp"
@@ -303,3 +305,4 @@ XKMSResult * XKMSCompoundResultImpl::createResult(
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

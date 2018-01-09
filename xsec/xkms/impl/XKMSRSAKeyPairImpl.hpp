@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRSAKeyPair.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XSECEnv;
 
 class XKMSRSAKeyPairImpl : public XKMSRSAKeyPair {
@@ -101,4 +103,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSRSAKEYPAIRIMPL_INCLUDE */

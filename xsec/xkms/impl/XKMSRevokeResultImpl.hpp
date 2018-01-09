@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSRevokeResult.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSResultTypeImpl.hpp"
 
 #include <vector>
@@ -101,4 +103,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSREVOKERESULTIMPL_INCLUDE */

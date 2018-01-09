@@ -38,6 +38,8 @@
 #include <xercesc/util/XMLUniDefs.hpp>
 #include <xercesc/util/Janitor.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSMessageAbstractTypeImpl.hpp"
 
 XERCES_CPP_NAMESPACE_USE
@@ -446,3 +448,5 @@ void XKMSMessageAbstractTypeImpl::appendOpaqueClientDataItem(const XMLCh * item)
 	m_opaqueClientDataSize++;
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

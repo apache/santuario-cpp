@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSRegisterResult.hpp>
 #include <xsec/framework/XSECProvider.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSResultTypeImpl.hpp"
 
 #include <vector>
@@ -123,4 +125,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSREGISTERRESULTIMPL_INCLUDE */

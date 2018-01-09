@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSQueryKeyBinding.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSKeyBindingAbstractTypeImpl.hpp"
 
 class XKMSQueryKeyBindingImpl : public XKMSQueryKeyBinding, public XKMSKeyBindingAbstractTypeImpl {
@@ -70,4 +72,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSQUERYKEYBINDING_INCLUDE */

@@ -42,6 +42,8 @@
 
 XERCES_CPP_NAMESPACE_USE
 
+#ifdef XSEC_XKMS_ENABLED
+
 // --------------------------------------------------------------------------------
 //           Constructor/Destructor
 // --------------------------------------------------------------------------------
@@ -514,3 +516,5 @@ XKMSUseKeyWith * XKMSKeyBindingAbstractTypeImpl::appendUseKeyWithItem(
 	return u;
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

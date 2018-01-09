@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSMessageFactory.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XSECProvider;
 class XKMSCompoundRequest;
 class XKMSCompoundResult;
@@ -280,4 +282,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSMESSAGEFACTORYIMPL_INCLUDE */

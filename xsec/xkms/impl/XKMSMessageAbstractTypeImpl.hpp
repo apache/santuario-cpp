@@ -35,6 +35,8 @@
 #include <xsec/xkms/XKMSMessageAbstractType.hpp>
 #include <xsec/framework/XSECProvider.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XSECEnv;
 class DSIGSignature;
 
@@ -162,4 +164,5 @@ private:
 	virtual void appendOpaqueClientDataItem(const XMLCh * item) \
 		{m_msg.appendOpaqueClientDataItem(item);}
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSMESSAGEABSTRACTTYPEIMPL_INCLUDE */

@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSReissueResultImpl.hpp"
 #include "XKMSKeyBindingImpl.hpp"
 
@@ -183,3 +185,4 @@ XKMSKeyBinding * XKMSReissueResultImpl::appendKeyBindingItem(XKMSStatus::StatusV
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

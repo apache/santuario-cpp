@@ -34,6 +34,7 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
 
 
 class XKMSStatusImpl : public XKMSStatus {
@@ -86,4 +87,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSSTATUSIMPL_INCLUDE */

@@ -100,5 +100,4 @@ public :
 };
 
 #endif /* XSEC_XKMS_ENABLED */
-
 #endif /* XSECSOAPREQUESTOR_INCLUDE */

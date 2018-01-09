@@ -143,5 +143,4 @@ private:
 };
 
 #endif /* XSEC_XKMS_ENABLED */
-
 #endif /* XSECSOAPREQUESTORSIMPLE_INCLUDE */

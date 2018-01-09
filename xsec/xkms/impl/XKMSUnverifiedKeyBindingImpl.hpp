@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSUnverifiedKeyBinding.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSKeyBindingAbstractTypeImpl.hpp"
 
 class XKMSUnverifiedKeyBindingImpl : public XKMSUnverifiedKeyBinding, public XKMSKeyBindingAbstractTypeImpl {
@@ -70,4 +72,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSUNVERIFIEDKEYBINDINGIMPL_INCLUDE */

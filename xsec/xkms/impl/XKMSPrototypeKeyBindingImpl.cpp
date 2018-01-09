@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSPrototypeKeyBindingImpl.hpp"
 #include "XKMSValidityIntervalImpl.hpp"
 
@@ -188,4 +190,4 @@ void XKMSPrototypeKeyBindingImpl::setRevocationCodeIdentifier(const XMLCh * iden
 
 }
 
-
+#endif /* XSEC_XKMS_ENABLED */

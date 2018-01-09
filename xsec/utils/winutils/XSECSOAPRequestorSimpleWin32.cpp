@@ -29,7 +29,6 @@
  */
 
 
-#include <xsec/utils/winutils/XSECBinHTTPURIInputStream.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/utils/XSECSafeBuffer.hpp>
 #include <xsec/utils/XSECSOAPRequestorSimple.hpp>
@@ -74,7 +73,6 @@ using std::ostringstream;
 
 XSECSOAPRequestorSimple::XSECSOAPRequestorSimple(const XMLCh * uri) : m_uri(uri) {
 
-    XSECBinHTTPURIInputStream::ExternalInitialize();
     m_envelopeType = ENVELOPE_SOAP11;
 
 }
@@ -121,9 +119,9 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     struct sockaddr_in  sa;
 
 
-    if ((hostEntPtr = XSECBinHTTPURIInputStream::gethostbyname(hostNameAsCharStar.get())) == NULL)
+    if ((hostEntPtr = gethostbyname(hostNameAsCharStar.get())) == NULL)
     {
-        unsigned long  numAddress = XSECBinHTTPURIInputStream::inet_addr(hostNameAsCharStar.get());
+        unsigned long  numAddress = inet_addr(hostNameAsCharStar.get());
         if (numAddress == INADDR_NONE)
         {
             XSEC_RELEASE_XMLCH(content);
@@ -132,7 +130,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
                             "Error reported resolving IP address");
         }
         if ((hostEntPtr =
-                XSECBinHTTPURIInputStream::gethostbyaddr((const char *) &numAddress,
+                gethostbyaddr((const char *) &numAddress,
                               sizeof(unsigned long), AF_INET)) == NULL)
         {
             XSEC_RELEASE_XMLCH(content);
@@ -145,9 +143,9 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     memcpy((void *) &sa.sin_addr,
            (const void *) hostEntPtr->h_addr, hostEntPtr->h_length);
     sa.sin_family = hostEntPtr->h_addrtype;
-    sa.sin_port = XSECBinHTTPURIInputStream::htons(portNumber);
+    sa.sin_port = htons(portNumber);
 
-    SOCKET s = XSECBinHTTPURIInputStream::socket(hostEntPtr->h_addrtype, SOCK_STREAM, 0);
+    SOCKET s = socket(hostEntPtr->h_addrtype, SOCK_STREAM, 0);
     if (s == INVALID_SOCKET)
     {
         XSEC_RELEASE_XMLCH(content);
@@ -156,7 +154,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
                             "Error reported creating socket");
     }
 
-    if (XSECBinHTTPURIInputStream::connect((unsigned short) s, 
+    if (connect((unsigned short) s, 
         (struct sockaddr *) &sa, sizeof(sa)) == SOCKET_ERROR)
     {
         XSEC_RELEASE_XMLCH(content);
@@ -207,7 +205,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     string ostr = outBuffer.str();
     size_t lent = ostr.length();
     int  aLent = 0;
-    if ((aLent = XSECBinHTTPURIInputStream::send((unsigned short) s, 
+    if ((aLent = send((unsigned short) s, 
         ostr.c_str(), lent, 0)) != lent)
     {
         XSEC_RELEASE_XMLCH(content);
@@ -219,7 +217,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     // Now the content
     lent = strlen(content);
     aLent = 0;
-    if ((aLent = XSECBinHTTPURIInputStream::send((unsigned short) s, 
+    if ((aLent = send((unsigned short) s, 
         content, lent, 0)) != lent)
     {
         XSEC_RELEASE_XMLCH(content);
@@ -238,7 +236,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     char* inBufferPos;
 
     memset(inBuffer, 0, sizeof(inBuffer));
-    aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, inBuffer, sizeof(inBuffer)-1, 0);
+    aLent = recv((unsigned short) s, inBuffer, sizeof(inBuffer)-1, 0);
     if (aLent == SOCKET_ERROR || aLent == 0)
     {
         // Call WSAGetLastError() to get the error number.
@@ -274,7 +272,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
             {
                 //
                 // Header is not yet read, do another recv() to get more data...
-                aLent = XSECBinHTTPURIInputStream::recv((unsigned short) s, inBufferEnd, ((int) sizeof(inBuffer) - 1) - (int)(inBufferEnd - inBuffer), 0);
+                aLent = recv((unsigned short) s, inBufferEnd, ((int) sizeof(inBuffer) - 1) - (int)(inBufferEnd - inBuffer), 0);
                 if (aLent == SOCKET_ERROR || aLent == 0)
                 {
                     // Call WSAGetLastError() to get the error number.
@@ -378,7 +376,7 @@ DOMDocument * XSECSOAPRequestorSimple::doRequest(DOMDocument * request) {
     responseBuffer.sbMemcpyIn(inBufferPos, lent);
 
     while (responseLength == -1 || lent < responseLength) {
-        aLent = XSECBinHTTPURIInputStream::recv((unsigned short)s, inBuffer, sizeof(inBuffer)-1, 0);
+        aLent = recv((unsigned short)s, inBuffer, sizeof(inBuffer)-1, 0);
         if (aLent > 0) {
             responseBuffer.sbMemcpyIn(lent, inBuffer, aLent);
             lent += aLent;

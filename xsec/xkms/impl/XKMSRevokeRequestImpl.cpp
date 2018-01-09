@@ -37,6 +37,8 @@
 #include <xsec/xkms/XKMSConstants.hpp>
 #include <xsec/xkms/XKMSStatus.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRevokeRequestImpl.hpp"
 #include "XKMSRevokeKeyBindingImpl.hpp"
 #include "XKMSAuthenticationImpl.hpp"
@@ -296,4 +298,4 @@ void XKMSRevokeRequestImpl::addRevocationCode(const XMLCh * code) {
 
 }
 
-
+#endif /* XSEC_XKMS_ENABLED */

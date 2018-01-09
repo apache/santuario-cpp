@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSKeyBindingAbstractType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include <vector>
 
 XSEC_DECLARE_XERCES_CLASS(DOMNode);
@@ -201,5 +203,5 @@ private:
 		{return XKMSKeyBindingAbstractTypeImpl::appendUseKeyWithItem(application, identifier);}
 
 
-
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSKEYBINDINGABSTRACTTYPEIMPL_INCLUDE */

@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSResultType.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSMessageAbstractTypeImpl.hpp"
 
 XSEC_DECLARE_XERCES_CLASS(DOMElement);
@@ -123,5 +125,5 @@ virtual void setRequestSignatureValue(const XMLCh * value) \
 	{m_result.setRequestSignatureValue(value);}
 
 
-
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSRESULTTYPEIMPL_INCLUDE */

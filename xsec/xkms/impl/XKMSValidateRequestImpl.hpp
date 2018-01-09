@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSValidateRequest.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRequestAbstractTypeImpl.hpp"
 #include "XKMSQueryKeyBindingImpl.hpp"
 
@@ -95,4 +97,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSVALIDATEREQUESTIMPL_INCLUDE */

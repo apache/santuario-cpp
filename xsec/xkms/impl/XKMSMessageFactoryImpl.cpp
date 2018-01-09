@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/Janitor.hpp>
 
@@ -1228,3 +1230,5 @@ XKMSResultType * XKMSMessageFactoryImpl::toResultType(XKMSMessageAbstractType *m
 	}
 	return NULL;
 }
+
+#endif /* XSEC_XKMS_ENABLED */

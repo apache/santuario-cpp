@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSResponseMechanism.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XSECEnv;
 
 class XKMSResponseMechanismImpl : public XKMSResponseMechanism {
@@ -84,4 +86,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSRESPONSEMECHANISMIMPL_INCLUDE */

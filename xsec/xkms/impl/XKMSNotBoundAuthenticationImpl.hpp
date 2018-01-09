@@ -33,6 +33,8 @@
 
 #include <xsec/xkms/XKMSNotBoundAuthentication.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSNotBoundAuthenticationImpl : public XKMSNotBoundAuthentication {
 
 public:
@@ -88,4 +90,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSNOTBOUNDAUTHENTICATIONIMPL_INCLUDE */

@@ -34,6 +34,8 @@
 
 #include <xercesc/dom/DOM.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSUnverifiedKeyBindingImpl.hpp"
 
 XERCES_CPP_NAMESPACE_USE
@@ -85,3 +87,4 @@ DOMElement * XKMSUnverifiedKeyBindingImpl::createBlankUnverifiedKeyBinding(void)
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

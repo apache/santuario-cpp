@@ -35,6 +35,8 @@
 
 #include <xercesc/dom/DOM.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRecoverKeyBindingImpl.hpp"
 #include "XKMSStatusImpl.hpp"
 
@@ -128,3 +130,4 @@ XKMSStatus * XKMSRecoverKeyBindingImpl::getStatus(void) const {
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

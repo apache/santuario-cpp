@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSLocateResultImpl.hpp"
 #include "XKMSUnverifiedKeyBindingImpl.hpp"
 
@@ -182,3 +184,5 @@ XKMSUnverifiedKeyBinding * XKMSLocateResultImpl::appendUnverifiedKeyBindingItem(
 	return u;
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

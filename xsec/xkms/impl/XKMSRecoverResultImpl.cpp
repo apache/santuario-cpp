@@ -39,6 +39,8 @@
 #include <xsec/xenc/XENCEncryptionMethod.hpp>
 #include <xsec/xenc/XENCCipher.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRecoverResultImpl.hpp"
 #include "XKMSKeyBindingImpl.hpp"
 #include "XKMSRSAKeyPairImpl.hpp"
@@ -375,3 +377,4 @@ XENCEncryptedData * XKMSRecoverResultImpl::setRSAKeyPair(const char * passPhrase
 
 }	
 
+#endif /* XSEC_XKMS_ENABLED */

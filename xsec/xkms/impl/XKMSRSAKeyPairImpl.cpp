@@ -34,6 +34,7 @@
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
 
 #include "XKMSRSAKeyPairImpl.hpp"
 
@@ -179,3 +180,4 @@ XKMS_RET_RSA_VAL(InverseQ)
 XKMS_RET_RSA_VAL(D)
 
 
+#endif /* XSEC_XKMS_ENABLED */

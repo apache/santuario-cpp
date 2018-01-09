@@ -33,6 +33,9 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSReissueRequest.hpp>
+
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRequestAbstractTypeImpl.hpp"
 
 class XKMSAuthenticationImpl;
@@ -106,4 +109,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSREISSUEREQUESTIMPL_INCLUDE */

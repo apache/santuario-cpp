@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSStatusRequest.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRequestAbstractTypeImpl.hpp"
 
 class XKMSStatusRequestImpl : public XKMSStatusRequest {
@@ -90,4 +92,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSSTATUSREQUESTIMPL_INCLUDE */

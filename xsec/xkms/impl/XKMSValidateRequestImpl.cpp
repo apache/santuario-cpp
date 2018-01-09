@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSValidateRequestImpl.hpp"
 
 #include <xercesc/dom/DOM.hpp>
@@ -165,3 +167,5 @@ XKMSQueryKeyBinding * XKMSValidateRequestImpl::addQueryKeyBinding(void) {
 	return mp_queryKeyBinding;
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

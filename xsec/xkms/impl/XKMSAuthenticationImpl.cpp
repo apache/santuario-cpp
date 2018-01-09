@@ -33,6 +33,8 @@
 
 #include <xsec/dsig/DSIGReference.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSAuthenticationImpl.hpp"
 #include "XKMSNotBoundAuthenticationImpl.hpp"
 
@@ -245,3 +247,4 @@ void XKMSAuthenticationImpl::setNotBoundAuthentication(
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

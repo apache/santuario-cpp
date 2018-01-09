@@ -32,6 +32,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSStatusResultImpl.hpp"
 #include "XKMSUnverifiedKeyBindingImpl.hpp"
 
@@ -220,4 +222,4 @@ void XKMSStatusResultImpl::setPendingCount(int count) {
 
 }
 
-
+#endif /* XSEC_XKMS_ENABLED */

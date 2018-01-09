@@ -33,6 +33,8 @@
 
 #include <xsec/xkms/XKMSValidityInterval.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XSECEnv;
 
 class XKMSValidityIntervalImpl : public XKMSValidityInterval {
@@ -87,4 +89,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSVALIDITYINTERVAL_INCLUDE */

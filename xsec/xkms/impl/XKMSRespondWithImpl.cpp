@@ -36,6 +36,8 @@
 
 #include <xercesc/util/XMLUniDefs.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSRespondWithImpl.hpp"
 
 #include <xercesc/dom/DOM.hpp>
@@ -158,3 +160,4 @@ void XKMSRespondWithImpl::setRespondWithString(const XMLCh * str) {
 
 }
 
+#endif /* XSEC_XKMS_ENABLED */

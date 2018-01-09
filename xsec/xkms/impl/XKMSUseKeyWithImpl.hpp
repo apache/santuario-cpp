@@ -34,6 +34,8 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/xkms/XKMSUseKeyWith.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 class XKMSUseKeyWithImpl : public XKMSUseKeyWith {
 
 public:
@@ -86,4 +88,5 @@ private:
 
 };
 
+#endif /* XSEC_XKMS_ENABLED */
 #endif /* XKMSUSEKEYWITHIMPL_INCLUDE */

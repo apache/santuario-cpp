@@ -34,6 +34,8 @@
 #include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
+#ifdef XSEC_XKMS_ENABLED
+
 #include "XKMSStatusImpl.hpp"
 
 #include <xercesc/dom/DOM.hpp>
@@ -354,3 +356,5 @@ void XKMSStatusImpl::setStatusReason(StatusValue status, StatusReason reason, bo
 	m_statusReasons[status-1][reason-1] = e;
 
 }
+
+#endif /* XSEC_XKMS_ENABLED */

@@ -37,6 +37,9 @@
 #include "XENCCipherImpl.hpp"
 #include "XENCEncryptedTypeImpl.hpp"
 
+#pragma warning(push)
+#pragma warning(disable: 4250)
+
 XSEC_DECLARE_XERCES_CLASS(DOMNode);
 
 class XENCEncryptedDataImpl : public XENCEncryptedData, public XENCEncryptedTypeImpl {
@@ -67,5 +70,7 @@ private:
 	XENCEncryptedDataImpl & operator = (const XENCEncryptedDataImpl &);
 
 };
+
+#pragma warning(pop)
 
 #endif /* XENCENCRYPTEDDATAIMPL_INCLUDE */

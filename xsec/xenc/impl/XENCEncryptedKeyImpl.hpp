@@ -37,6 +37,9 @@
 #include "XENCCipherImpl.hpp"
 #include "XENCEncryptedTypeImpl.hpp"
 
+#pragma warning(push)
+#pragma warning(disable: 4250)
+
 XSEC_DECLARE_XERCES_CLASS(DOMNode);
 
 class XENCEncryptedKeyImpl : public XENCEncryptedKey, public XENCEncryptedTypeImpl {
@@ -85,5 +88,7 @@ private:
 								* mp_recipientAttr;
 
 };
+
+#pragma warning(pop)
 
 #endif /* XENCENCRYPTEDKEYIMPL_INCLUDE */

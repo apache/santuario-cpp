@@ -175,7 +175,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC15/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_XKMS_ENABLED;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_XKMS_ENABLED;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -186,10 +186,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;wsock32.lib%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -213,7 +212,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC15/Debug/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_XKMS_ENABLED;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_XKMS_ENABLED;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -224,10 +223,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Xalan-C_1D.lib;xerces-c_3D.lib;crypt32.lib;wsock32.lib%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -247,7 +245,7 @@
     </PreBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win32/VC15/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -255,10 +253,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Xalan-C_1.lib;xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Xalan-C_1.lib;xerces-c_3.lib;crypt32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0.dll</OutputFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -283,7 +280,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(XALANCROOT)/Build/Win64/VC15/Release/Nls/Include;$(XALANCROOT)/include;$(XALANCROOT)/src;$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;XSEC_HAVE_XALAN;XSEC_XKMS_ENABLED;XSEC_HAVE_WINCAPI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -291,10 +288,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Xalan-C_1.lib;xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Xalan-C_1.lib;xerces-c_3.lib;crypt32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0.dll</OutputFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -317,7 +313,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -328,10 +324,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -355,7 +350,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;_XSEC_DO_MEMDEBUG;WIN32;_DEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -366,10 +361,9 @@
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BrowseInformation>false</BrowseInformation>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xerces-c_3D.lib;crypt32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0D.dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
@@ -389,7 +383,7 @@
     </PreBuildEvent>
     <ClCompile>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -397,10 +391,9 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xerces-c_3.lib;crypt32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0.dll</OutputFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -425,7 +418,7 @@
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>$(XERCESCROOT)/include;$(XERCESCROOT)/src;../../../..;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>XSEC_HAVE_OPENSSL;_CRT_SECURE_NO_DEPRECATE;WIN32;NDEBUG;_WINDOWS;_USRDLL;XSEC_BUILDING_LIBRARY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>
       </PrecompiledHeader>
       <PrecompiledHeaderFile>
@@ -433,10 +426,9 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <WholeProgramOptimization>true</WholeProgramOptimization>
       <WarningLevel>Level3</WarningLevel>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>xerces-c_3.lib;crypt32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xerces-c_3.lib;crypt32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)xsec_2_0.dll</OutputFile>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -515,9 +507,6 @@
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMHash.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\winutils\XSECSOAPRequestorSimpleWin32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\..\..\..\xsec\utils\XSECAlgorithmSupport.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECBinTXFMInputStream.cpp" />
@@ -526,12 +515,7 @@
     <ClCompile Include="..\..\..\..\xsec\utils\XSECPlatformUtils.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECSafeBuffer.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECSafeBufferFormatter.cpp" />
-    <ClCompile Include="..\..\..\..\xsec\utils\XSECSOAPRequestorSimple.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug Minimal|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="..\..\..\..\xsec\utils\XSECSOAPRequestorSimple.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECTXFMInputSource.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\XSECXPathNodeList.cpp" />
     <ClCompile Include="..\..\..\..\xsec\framework\XSECAlgorithmMapper.cpp" />
@@ -564,6 +548,44 @@
     <ClCompile Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedKeyImpl.cpp" />
     <ClCompile Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedTypeImpl.cpp" />
     <ClCompile Include="..\..\..\..\xsec\xenc\impl\XENCEncryptionMethodImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSAuthenticationImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSCompoundRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSCompoundResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSKeyBindingAbstractTypeImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSLocateRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSLocateResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSMessageAbstractTypeImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSMessageFactoryImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSNotBoundAuthentication.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSPendingRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSPrototypeKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSQueryKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRecoverKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRecoverRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRecoverResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRegisterRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRegisterResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSReissueKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSReissueRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSReissueResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRequestAbstractTypeImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRespondWithImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSResponseMechanismImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSResultTypeImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRevokeKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRevokeRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRevokeResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSRSAKeyPairImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSStatusImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSStatusRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSStatusResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSUnverifiedKeyBindingImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSUseKeyWithImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSValidateRequestImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSValidateResultImpl.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\xkms\impl\XKMSValidityIntervalImpl.cpp" />
     <ClCompile Include="..\..\..\..\xsec\xkms\XKMSConstants.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -706,6 +728,44 @@
     <ClInclude Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedKeyImpl.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xenc\impl\XENCEncryptedTypeImpl.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xenc\impl\XENCEncryptionMethodImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSAuthenticationImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSCompoundRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSCompoundResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSKeyBindingAbstractTypeImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSLocateRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSLocateResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSMessageAbstractTypeImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSMessageFactoryImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSNotBoundAuthenticationImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSPendingRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSPrototypeKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSQueryKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRecoverKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRecoverRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRecoverResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRegisterRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRegisterResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSReissueKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSReissueRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSReissueResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRequestAbstractTypeImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRespondWithImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSResponseMechanismImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSResultTypeImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRevokeKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRevokeRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRevokeResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSRSAKeyPairImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSStatusImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSStatusRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSStatusResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSUnverifiedKeyBindingImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSUseKeyWithImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSValidateRequestImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSValidateResultImpl.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\xkms\impl\XKMSValidityIntervalImpl.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xkms\XKMSAuthentication.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xkms\XKMSCompoundRequest.hpp" />
     <ClInclude Include="..\..\..\..\xsec\xkms\XKMSCompoundResult.hpp" />

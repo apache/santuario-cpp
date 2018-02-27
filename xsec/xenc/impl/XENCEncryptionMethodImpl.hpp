@@ -53,7 +53,7 @@ public:
 	void load();
 
 	// Create from scratch
-	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * createBlankEncryptedMethod(
+	XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * createBlankEncryptionMethod(
 						const XMLCh * algorithm);
 
 	// Interface

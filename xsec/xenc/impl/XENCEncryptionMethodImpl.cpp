@@ -234,7 +234,7 @@ void XENCEncryptionMethodImpl::load() {
 //			Create from scratch
 // --------------------------------------------------------------------------------
 
-DOMElement * XENCEncryptionMethodImpl::createBlankEncryptedMethod(const XMLCh * algorithm) {
+DOMElement * XENCEncryptionMethodImpl::createBlankEncryptionMethod(const XMLCh * algorithm) {
 
 	// Get some setup values
 	safeBuffer str;

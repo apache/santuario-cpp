@@ -293,7 +293,7 @@ DOMElement * XENCEncryptedTypeImpl::createBlankEncryptedType(
 
 		XSECnew(mp_encryptionMethod, XENCEncryptionMethodImpl(mp_env));
 		DOMNode * encryptionMethodNode = 
-			mp_encryptionMethod->createBlankEncryptedMethod(algorithm);
+			mp_encryptionMethod->createBlankEncryptionMethod(algorithm);
 
 		mp_encryptedTypeElement->appendChild(encryptionMethodNode);
 

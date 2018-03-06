@@ -730,7 +730,7 @@ unsigned int DSIGSignature::calculateSignedInfoHash(unsigned char* hashBuf,
 
     // Setup Hash
     // First find the appropriate handler for the URI
-    XSECAlgorithmHandler* handler =
+    const XSECAlgorithmHandler* handler =
         XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
                     mp_signedInfo->getAlgorithmURI());
 
@@ -814,15 +814,13 @@ bool DSIGSignature::verifySignatureOnlyInternal() const {
 
     // Now set up to verify
     // First find the appropriate handler for the URI
-    XSECAlgorithmHandler* handler =
+    const XSECAlgorithmHandler* handler =
         XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
                     mp_signedInfo->getAlgorithmURI());
 
     if (handler == NULL) {
-
         throw XSECException(XSECException::SigVfyError,
             "Hash method unknown in DSIGSignature::verifySignatureOnlyInternal()");
-
     }
 
     bool sigVfyRet = handler->verifyBase64Signature(chain,
@@ -911,16 +909,13 @@ void DSIGSignature::sign() {
 
     safeBuffer b64Buf;
 
-    XSECAlgorithmHandler* handler =
+    const XSECAlgorithmHandler* handler =
         XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
                     mp_signedInfo->getAlgorithmURI());
 
     if (handler == NULL) {
-
-
         throw XSECException(XSECException::SigVfyError,
             "Hash method unknown in DSIGSignature::sign()");
-
     }
 
     if (!handler->signToSafeBuffer(chain, mp_signedInfo->getAlgorithmURI(),

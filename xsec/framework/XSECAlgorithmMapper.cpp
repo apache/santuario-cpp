@@ -67,7 +67,7 @@ const XMLCh XSECAlgorithmMapper::s_defaultEncryptionMapping [] = {
 
 
 
-XSECAlgorithmMapper::XSECAlgorithmMapper(void) {
+XSECAlgorithmMapper::XSECAlgorithmMapper() {
 
 }
 
@@ -83,7 +83,6 @@ XSECAlgorithmMapper::~XSECAlgorithmMapper() {
 		delete (*it);
 
 		it++;
-
 	}
 
 	m_mapping.clear();
@@ -102,7 +101,7 @@ XSECAlgorithmMapper::~XSECAlgorithmMapper() {
     m_blacklist.clear();
 }
 
-XSECAlgorithmMapper::MapperEntry * XSECAlgorithmMapper::findEntry(const XMLCh * URI) const {
+XSECAlgorithmMapper::MapperEntry* XSECAlgorithmMapper::findEntry(const XMLCh* URI) const {
 
 	MapperEntryVectorType::const_iterator it = m_mapping.begin();
 
@@ -121,7 +120,7 @@ XSECAlgorithmMapper::MapperEntry * XSECAlgorithmMapper::findEntry(const XMLCh * 
 }
 
 
-XSECAlgorithmHandler * XSECAlgorithmMapper::mapURIToHandler(const XMLCh * URI) const {
+const XSECAlgorithmHandler* XSECAlgorithmMapper::mapURIToHandler(const XMLCh* URI) const {
 
     bool allowed = true;
     if (!m_whitelist.empty()) {
@@ -162,21 +161,18 @@ XSECAlgorithmHandler * XSECAlgorithmMapper::mapURIToHandler(const XMLCh * URI) c
 	return entry->mp_handler;
 }
 
-void XSECAlgorithmMapper::registerHandler(const XMLCh * URI, const XSECAlgorithmHandler & handler) {
+void XSECAlgorithmMapper::registerHandler(const XMLCh* URI, const XSECAlgorithmHandler& handler) {
 
 	MapperEntry * entry = findEntry(URI);
 
 	if (entry != NULL) {
-
 		delete entry->mp_handler;
-
 	}
 	else {
 		XSECnew(entry, MapperEntry);
 
 		entry->mp_uri = XMLString::replicate(URI);
 		m_mapping.push_back(entry);
-
 	}
 	entry->mp_handler = handler.clone();
 

@@ -60,6 +60,18 @@ static XMLCh s_CipherValue[] = {
 	chNull,
 };
 
+XENCCipherValue* XENCCipherValue::create(
+	const XSECEnv* env,
+	const XMLCh * value)
+{
+
+	XENCCipherValueImpl* ret = new XENCCipherValueImpl(env);
+	if (!ret)
+		throw XSECException(XSECException::MemoryAllocationFail);
+	ret->createBlankCipherValue(value);
+	return ret;
+}
+
 // --------------------------------------------------------------------------------
 //			Constructors/Destructors
 // --------------------------------------------------------------------------------

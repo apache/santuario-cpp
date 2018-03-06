@@ -94,6 +94,20 @@ static XMLCh s_Recipient[] = {
 	chNull
 };
 
+XENCEncryptedKey* XENCEncryptedKey::create(
+	const XSECEnv* env,
+	XENCCipherData::XENCCipherDataType type,
+	const XMLCh * algorithm,
+	const XMLCh * value)
+{
+
+	XENCEncryptedKeyImpl* ret = new XENCEncryptedKeyImpl(env);
+	if (!ret)
+		throw XSECException(XSECException::MemoryAllocationFail);
+	ret->createBlankEncryptedKey(type, algorithm, value);
+	return ret;
+}
+
 // --------------------------------------------------------------------------------
 //			Construct/Destruct
 // --------------------------------------------------------------------------------

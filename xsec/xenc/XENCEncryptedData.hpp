@@ -36,6 +36,8 @@
 #include <xsec/xenc/XENCEncryptedType.hpp>
 #include <xsec/xenc/XENCCipherData.hpp>
 
+class XSECEnv;
+
 /**
  * @ingroup xenc
  */
@@ -77,6 +79,25 @@ protected:
 public:
 
 	virtual ~XENCEncryptedData() {};
+
+
+	/**
+	* \brief Create a new object.
+	*
+	* Create a new object.
+	*
+	* @param env environment instance
+	* @param type type of cipher data
+	* @param algorithm algorithm to use
+	* @param value value to use
+	*
+	* @returns the new object
+	*/
+	static XENCEncryptedData* create(
+		const XSECEnv* env,
+		XENCCipherData::XENCCipherDataType type,
+		const XMLCh * algorithm,
+		const XMLCh * value);
 
 	/** @name Get Interface Methods */
 	//@{

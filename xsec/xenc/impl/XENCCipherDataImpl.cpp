@@ -95,6 +95,19 @@ static XMLCh s_CipherReference[] = {
 	chNull,
 };
 
+XENCCipherData* XENCCipherData::create(
+	const XSECEnv* env,
+	XENCCipherData::XENCCipherDataType type,
+	const XMLCh * value)
+{
+
+	XENCCipherDataImpl* ret = new XENCCipherDataImpl(env);
+	if (!ret)
+		throw XSECException(XSECException::MemoryAllocationFail);
+	ret->createBlankCipherData(type, value);
+	return ret;
+}
+
 // --------------------------------------------------------------------------------
 //			Constructors and Destructors
 // --------------------------------------------------------------------------------

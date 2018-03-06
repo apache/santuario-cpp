@@ -61,6 +61,20 @@ static XMLCh s_EncryptedData[] = {
 	chNull,
 };
 
+XENCEncryptedData* XENCEncryptedData::create(
+	const XSECEnv* env,
+	XENCCipherData::XENCCipherDataType type,
+	const XMLCh * algorithm,
+	const XMLCh * value)
+{
+
+	XENCEncryptedDataImpl* ret = new XENCEncryptedDataImpl(env);
+	if (!ret)
+		throw XSECException(XSECException::MemoryAllocationFail);
+	ret->createBlankEncryptedData(type, algorithm, value);
+	return ret;
+}
+
 // --------------------------------------------------------------------------------
 //			Construct/Destruct
 // --------------------------------------------------------------------------------

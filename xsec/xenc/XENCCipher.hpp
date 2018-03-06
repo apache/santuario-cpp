@@ -75,7 +75,7 @@ class TXFMChain;
  */
 
 
-class XENCCipher {
+class XSEC_EXPORT XENCCipher {
 
 public:
 

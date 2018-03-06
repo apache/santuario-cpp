@@ -72,7 +72,7 @@ class XSECEnv;
  */
 
 
-class XENCEncryptedKey : public virtual XENCEncryptedType, public DSIGKeyInfo {
+class XSEC_EXPORT XENCEncryptedKey : public virtual XENCEncryptedType, public DSIGKeyInfo {
 
 	/** @name Constructors and Destructors */
 	//@{

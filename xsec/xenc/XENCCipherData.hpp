@@ -67,7 +67,7 @@ class XSECEnv;
  */
 
 
-class XENCCipherData {
+class XSEC_EXPORT XENCCipherData {
 
 public:
 

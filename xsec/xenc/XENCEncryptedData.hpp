@@ -67,7 +67,7 @@ class XSECEnv;
  */
 
 
-class XENCEncryptedData : public virtual XENCEncryptedType {
+class XSEC_EXPORT XENCEncryptedData : public virtual XENCEncryptedType {
 
 	/** @name Constructors and Destructors */
 	//@{

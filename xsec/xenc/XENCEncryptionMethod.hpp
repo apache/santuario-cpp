@@ -64,7 +64,7 @@ class XSECEnv;
  */
 
 
-class XENCEncryptionMethod {
+class XSEC_EXPORT XENCEncryptionMethod {
 
 public:
 

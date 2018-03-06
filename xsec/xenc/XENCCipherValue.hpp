@@ -50,7 +50,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMElement);
  */
 
 
-class XENCCipherValue {
+class XSEC_EXPORT XENCCipherValue {
 
 	/** @name Constructors and Destructors */
 	//@{

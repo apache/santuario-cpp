@@ -85,7 +85,7 @@ class XENCEncryptedKey;
  */
 
 
-class XENCEncryptedType {
+class XSEC_EXPORT XENCEncryptedType {
 
 	/** @name Constructors and Destructors */
 	//@{

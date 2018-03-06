@@ -81,7 +81,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMNode);
  */
 
 
-class XENCCipherReference {
+class XSEC_EXPORT XENCCipherReference {
 
 	/** @name Constructors and Destructors */
 	//@{

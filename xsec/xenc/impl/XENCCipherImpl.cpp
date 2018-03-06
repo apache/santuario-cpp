@@ -352,7 +352,7 @@ DOMDocumentFragment * XENCCipherImpl::deSerialise(safeBuffer &content, DOMNode *
 XSECCryptoKey * XENCCipherImpl::decryptKeyFromKeyInfoList(DSIGKeyInfoList * kil) {
 
     XSECCryptoKey * ret = NULL;
-    XSECAlgorithmHandler *handler;
+    const XSECAlgorithmHandler *handler;
 
     int kLen = (int) kil->getSize();
 
@@ -445,7 +445,7 @@ DOMNode * XENCCipherImpl::decryptElementDetached(DOMElement * element) {
 
 DOMNode * XENCCipherImpl::decryptElementDetached() {
 
-    XSECAlgorithmHandler *handler;
+    const XSECAlgorithmHandler *handler;
 
     if (mp_encryptedData == NULL) {
 
@@ -567,11 +567,11 @@ XSECBinTXFMInputStream * XENCCipherImpl::decryptToBinInputStream(
     XERCES_CPP_NAMESPACE_QUALIFIER DOMElement * element
 ) {
 
-    XSECAlgorithmHandler *handler;
+    const XSECAlgorithmHandler *handler;
 
     // First of all load the element
     if (mp_encryptedData != NULL)
-    delete mp_encryptedData;
+    	delete mp_encryptedData;
 
     XSECnew(mp_encryptedData,
         XENCEncryptedDataImpl(mp_env, element));
@@ -690,7 +690,7 @@ int XENCCipherImpl::decryptKey(XENCEncryptedKey * encryptedKey, XMLByte * rawKey
 
     // Get the Algorithm handler for the algorithm
     XENCEncryptionMethod * encryptionMethod = encryptedKey->getEncryptionMethod();
-    XSECAlgorithmHandler *handler;
+    const XSECAlgorithmHandler *handler;
 
     if (encryptionMethod != NULL) {
 
@@ -795,7 +795,7 @@ XENCEncryptedData * XENCCipherImpl::encryptTXFMChain(TXFMChain * plainText, cons
     mp_encryptedData->createBlankEncryptedData(XENCCipherData::VALUE_TYPE, algorithmURI, s_noData);
 
     // Perform the encryption
-    XSECAlgorithmHandler *handler = XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(algorithmURI);
+    const XSECAlgorithmHandler *handler = XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(algorithmURI);
     if (!handler) {
         // Very strange if we get here - any problems should throw an
         // exception in the AlgorithmMapper.
@@ -881,7 +881,7 @@ XENCEncryptedKey * XENCCipherImpl::encryptKey(
     tsb->setInput(rawKey, keyLen);
 
     // Perform the encryption
-    XSECAlgorithmHandler *handler = XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(algorithmURI);
+    const XSECAlgorithmHandler *handler = XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(algorithmURI);
     if (!handler) {
         // Very strange if we get here - any problems should throw an
         // exception in the AlgorithmMapper.

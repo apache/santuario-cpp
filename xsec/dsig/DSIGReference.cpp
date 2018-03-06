@@ -1286,22 +1286,17 @@ unsigned int DSIGReference::calculateHash(XMLByte *toFill, unsigned int maxToFil
 
     // Get the mapping for the hash transform
 
-    XSECAlgorithmHandler * handler =
+    const XSECAlgorithmHandler* handler =
         XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(mp_algorithmURI);
 
     if (handler == NULL) {
-
-
         throw XSECException(XSECException::SigVfyError,
             "Hash method unknown in DSIGReference::calculateHash()");
-
     }
 
     if (!handler->appendHashTxfm(chain, mp_algorithmURI)) {
-
         throw XSECException(XSECException::SigVfyError,
             "Unexpected error in handler whilst appending Hash transform");
-
     }
 
     // Now we have the hashing transform, run it.

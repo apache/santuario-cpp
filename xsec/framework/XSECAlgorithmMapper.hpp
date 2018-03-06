@@ -73,7 +73,7 @@ public:
 	 * \brief Map a URI to a handler
 	 */
 
-	XSECAlgorithmHandler * mapURIToHandler(const XMLCh * URI) const;
+	const XSECAlgorithmHandler* mapURIToHandler(const XMLCh* URI) const;
 
 	//@}
 
@@ -84,7 +84,7 @@ public:
 	 * \brief Register a new handler
 	 */
 
-	void registerHandler(const XMLCh * URI, const XSECAlgorithmHandler & handler);
+	void registerHandler(const XMLCh* URI, const XSECAlgorithmHandler& handler);
 
 	/**
 	 * \brief Indicate an algorithm is approved for use, implying others are not.
@@ -104,18 +104,18 @@ private:
 
 	struct MapperEntry {
 
-		XMLCh * mp_uri;
-		XSECAlgorithmHandler * mp_handler;
+		XMLCh* mp_uri;
+		XSECAlgorithmHandler* mp_handler;
 
 	};
 
-	MapperEntry * findEntry(const XMLCh * URI) const;
+	MapperEntry* findEntry(const XMLCh* URI) const;
 
 #if defined(XSEC_NO_NAMESPACES)
-	typedef vector<MapperEntry *>			MapperEntryVectorType;
+	typedef vector<MapperEntry*>			MapperEntryVectorType;
     typedef vector<XMLCh*>                  WhitelistVectorType;
 #else
-	typedef std::vector<MapperEntry *>		MapperEntryVectorType;
+	typedef std::vector<MapperEntry*>		MapperEntryVectorType;
     typedef std::vector<XMLCh*>             WhitelistVectorType;
 #endif
 

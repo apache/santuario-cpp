@@ -86,6 +86,16 @@ static XMLCh s_Transforms[] = {
 	chNull
 };
 
+XENCCipherReference* XENCCipherReference::create(const XSECEnv* env, const XMLCh * URI)
+{
+
+	XENCCipherReferenceImpl* ret = new XENCCipherReferenceImpl(env);
+	if (!ret)
+		throw XSECException(XSECException::MemoryAllocationFail);
+	ret->createBlankCipherReference(URI);
+	return ret;
+}
+
 // --------------------------------------------------------------------------------
 //			Constructors/Destructors
 // --------------------------------------------------------------------------------

@@ -114,6 +114,15 @@ static XMLCh s_KeySize [] = {
 	chNull
 };
 
+XENCEncryptionMethod* XENCEncryptionMethod::create(const XSECEnv* env, const XMLCh* algorithm) {
+
+	XENCEncryptionMethodImpl* ret = new XENCEncryptionMethodImpl(env);
+	if (!ret)
+		throw XSECException(XSECException::MemoryAllocationFail);
+	ret->createBlankEncryptionMethod(algorithm);
+	return ret;
+}
+
 // --------------------------------------------------------------------------------
 //			Constructors and Destructors
 // --------------------------------------------------------------------------------

@@ -33,6 +33,8 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+class XSECEnv;
+
 XSEC_DECLARE_XERCES_CLASS(DOMElement);
 
 /**
@@ -60,6 +62,20 @@ protected:
 public:
 
 	virtual ~XENCCipherValue() {};
+
+	/**
+	* \brief Create a new object.
+	*
+	* Create a new object.
+	*
+	* @param env environment instance
+	* @param value value to use
+	*
+	* @returns the new object
+	*/
+	static XENCCipherValue* create(
+		const XSECEnv* env,
+		const XMLCh * value);
 
 	/** @name Get Interface Methods */
 	//@{

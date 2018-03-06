@@ -33,6 +33,8 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+class XSECEnv;
+
 /**
  * @ingroup xenc
  */
@@ -69,6 +71,19 @@ public:
 	XENCEncryptionMethod() {};
 
 	virtual ~XENCEncryptionMethod() {};
+
+	
+	/**
+	* \brief Create a new object.
+	*
+	* Create a new object.
+	* 
+	* @param env environment instance
+	* @param algorithm algorithm to use
+	*
+	* @returns the new object
+	*/
+	static XENCEncryptionMethod* create(const XSECEnv* env, const XMLCh* algorithm);
 
 	/** @name Getter Methods */
 	//@{

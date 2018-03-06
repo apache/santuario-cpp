@@ -34,6 +34,7 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 
+class XSECEnv;
 class DSIGTransformList;
 class DSIGTransformBase64;
 class DSIGTransformXPath;
@@ -92,6 +93,18 @@ protected:
 public:
 
 	virtual ~XENCCipherReference() {};
+
+	/**
+	* \brief Create a new object.
+	*
+	* Create a new object.
+	*
+	* @param env environment instance
+	* @param URI reference
+	*
+	* @returns the new object
+	*/
+	static XENCCipherReference* create(const XSECEnv* env, const XMLCh* URI);
 
 	/** @name Get Interface Methods */
 	//@{

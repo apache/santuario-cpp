@@ -264,7 +264,6 @@ utilsinclude_HEADERS = \
   utils/XSECSOAPRequestorSimple.hpp \
   utils/XSECXPathNodeList.hpp \
   utils/XSECSafeBufferFormatter.hpp \
-  utils/XSECDOMUtils.hpp \
   utils/XSECBinTXFMInputStream.hpp \
   utils/XSECPlatformUtils.hpp 
 
@@ -606,6 +605,9 @@ install-exec-hook:
 	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done
 
 EXTRA_DIST = \
+  utils/XSECAlgorithmSupport.hpp \
+  utils/XSECAutoPtr.hpp \
+  utils/XSECDOMUtils.hpp \
   utils/winutils/XSECSOAPRequestorSimpleWin32.cpp \
   enc/WinCAPI/WinCAPICryptoProvider.cpp \
   enc/WinCAPI/WinCAPICryptoKeyHMAC.hpp \

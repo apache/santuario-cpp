@@ -401,7 +401,7 @@ XMLCh * transcodeFromUTF8(const unsigned char * src) {
 
 }
 
-char XSEC_EXPORT * transcodeToUTF8(const XMLCh * src) {
+char * transcodeToUTF8(const XMLCh * src) {
 
 	// Take a UTF-16 buffer and transcode to UTF-8
 

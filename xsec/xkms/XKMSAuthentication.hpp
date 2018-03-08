@@ -68,7 +68,7 @@ class XKMSNotBoundAuthentication;
 \endverbatim
  */
 
-class XKMSAuthentication {
+class XSEC_EXPORT XKMSAuthentication {
 
 	/** @name Constructors and Destructors */
 	//@{

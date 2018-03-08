@@ -56,7 +56,7 @@
  */
 
 
-class XKMSResponseMechanism {
+class XSEC_EXPORT XKMSResponseMechanism {
 
 	/** @name Constructors and Destructors */
 	//@{

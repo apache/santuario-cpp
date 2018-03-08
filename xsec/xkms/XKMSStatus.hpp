@@ -75,7 +75,7 @@
  */
 
 
-class XKMSStatus {
+class XSEC_EXPORT XKMSStatus {
 
 	/** @name Constructors and Destructors */
 	//@{

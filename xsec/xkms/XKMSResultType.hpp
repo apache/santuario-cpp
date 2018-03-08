@@ -68,7 +68,7 @@
  */
 
 
-class XKMSResultType : public XKMSMessageAbstractType {
+class XSEC_EXPORT XKMSResultType : public XKMSMessageAbstractType {
 
 public:
 

@@ -72,7 +72,7 @@ class XENCCipherData;
 \endverbatim
  */
 
-class XKMSRecoverResult : public XKMSResultType {
+class XSEC_EXPORT XKMSRecoverResult : public XKMSResultType {
 
 	/** @name Constructors and Destructors */
 	//@{

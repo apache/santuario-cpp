@@ -85,7 +85,7 @@
  */
 
 
-class XKMSRSAKeyPair {
+class XSEC_EXPORT XKMSRSAKeyPair {
 
 public:
 

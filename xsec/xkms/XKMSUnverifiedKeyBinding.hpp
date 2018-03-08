@@ -66,7 +66,7 @@
  */
 
 
-class XKMSUnverifiedKeyBinding : public XKMSKeyBindingAbstractType {
+class XSEC_EXPORT XKMSUnverifiedKeyBinding : public XKMSKeyBindingAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

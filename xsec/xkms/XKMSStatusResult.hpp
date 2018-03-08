@@ -67,7 +67,7 @@ class XKMSUnverifiedKeyBinding;
    <!-- /StatusResult -->\endverbatim
  */
 
-class XKMSStatusResult : public XKMSResultType {
+class XSEC_EXPORT XKMSStatusResult : public XKMSResultType {
 
 	/** @name Constructors and Destructors */
 	//@{

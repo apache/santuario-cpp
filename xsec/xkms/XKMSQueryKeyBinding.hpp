@@ -66,7 +66,7 @@
  */
 
 
-class XKMSQueryKeyBinding : public XKMSKeyBindingAbstractType {
+class XSEC_EXPORT XKMSQueryKeyBinding : public XKMSKeyBindingAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

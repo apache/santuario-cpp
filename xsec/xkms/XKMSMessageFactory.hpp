@@ -86,7 +86,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMElement);
  */
 
 
-class XKMSMessageFactory {
+class XSEC_EXPORT XKMSMessageFactory {
 
 	/** @name Constructors and Destructors */
 	//@{

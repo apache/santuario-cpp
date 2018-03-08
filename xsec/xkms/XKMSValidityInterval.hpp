@@ -58,7 +58,7 @@
 \endverbatim
  */
 
-class XKMSValidityInterval {
+class XSEC_EXPORT XKMSValidityInterval {
 
 	/** @name Constructors and Destructors */
 	//@{

@@ -60,7 +60,7 @@
 \endverbatim
  */
 
-class XKMSUseKeyWith {
+class XSEC_EXPORT XKMSUseKeyWith {
 
 	/** @name Constructors and Destructors */
 	//@{

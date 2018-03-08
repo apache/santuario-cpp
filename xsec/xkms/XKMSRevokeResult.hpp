@@ -68,7 +68,7 @@ class XKMSKeyBinding;
 \endverbatim
  */
 
-class XKMSRevokeResult : public XKMSResultType {
+class XSEC_EXPORT XKMSRevokeResult : public XKMSResultType {
 
 	/** @name Constructors and Destructors */
 	//@{

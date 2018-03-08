@@ -245,6 +245,7 @@ transformersinclude_HEADERS = \
   transformers/TXFMOutputFile.hpp \
   transformers/TXFMURL.hpp \
   transformers/TXFMBase.hpp \
+  transformers/TXFMChar.hpp \
   transformers/TXFMCipher.hpp \
   transformers/TXFMEnvelope.hpp \
   transformers/TXFMChain.hpp \
@@ -445,7 +446,8 @@ txfm_sources = \
   transformers/TXFMXPath.cpp \
   transformers/TXFMXSL.cpp \
   transformers/TXFMDocObject.cpp \
-  transformers/TXFMConcatChains.cpp
+  transformers/TXFMConcatChains.cpp \
+  transformers/TXFMChar.cpp
 
 # Utility files.  Note we don't worry about checking
 # if the UNIX stuff is necessary - we just assume that

@@ -504,6 +504,7 @@
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoSymmetricKey.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoX509.cpp" />
     <ClCompile Include="..\..\..\..\xsec\enc\XSCrypt\XSCryptCryptoBase64.cpp" />
+    <ClCompile Include="..\..\..\..\xsec\transformers\TXFMChar.cpp" />
     <ClCompile Include="..\..\..\..\xsec\transformers\TXFMHash.cpp" />
     <ClCompile Include="..\..\..\..\xsec\utils\winutils\XSECSOAPRequestorSimpleWin32.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release Minimal|Win32'">true</ExcludedFromBuild>
@@ -663,6 +664,7 @@
     <ClInclude Include="..\..\..\..\xsec\enc\OpenSSL\OpenSSLCryptoX509.hpp" />
     <ClInclude Include="..\..\..\..\xsec\enc\XSCrypt\XSCryptCryptoBase64.hpp" />
     <ClInclude Include="..\..\..\..\xsec\framework\XSECVersion.hpp" />
+    <ClInclude Include="..\..\..\..\xsec\transformers\TXFMChar.hpp" />
     <ClInclude Include="..\..\..\..\xsec\transformers\TXFMHash.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECAlgorithmSupport.hpp" />
     <ClInclude Include="..\..\..\..\xsec\utils\XSECAutoPtr.hpp" />

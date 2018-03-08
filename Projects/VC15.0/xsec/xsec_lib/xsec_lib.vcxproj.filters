@@ -430,6 +430,9 @@
     <ClCompile Include="..\..\..\..\xsec\utils\XSECXPathNodeList.cpp">
       <Filter>utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\..\xsec\transformers\TXFMChar.cpp">
+      <Filter>transformers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\xsec\dsig\DSIGAlgorithmHandlerDefault.hpp">
@@ -1049,6 +1052,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\xsec\framework\resource.h">
       <Filter>framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\xsec\transformers\TXFMChar.hpp">
+      <Filter>transformers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

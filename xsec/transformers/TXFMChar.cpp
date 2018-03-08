@@ -65,13 +65,10 @@ void TXFMChar::setInput(const char* in) {
 
 void TXFMChar::setInput(const char* in, unsigned int bSize) {
 
-	// Assume this is a string
+	// Assume this is a raw buffer
 
 	buf = in;
-	if (bSize > (in ? strlen(in) : 0))
-		toOutput = in ? strlen(in) : 0;
-	else
-		toOutput = bSize;
+	toOutput = bSize;
 	sbs = toOutput;
 
 }

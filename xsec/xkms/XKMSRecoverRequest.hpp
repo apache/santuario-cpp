@@ -72,7 +72,7 @@ class XKMSRecoverKeyBinding;
 \endverbatim
  */
 
-class XKMSRecoverRequest : public XKMSRequestAbstractType {
+class XSEC_EXPORT XKMSRecoverRequest : public XKMSRequestAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

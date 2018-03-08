@@ -73,7 +73,7 @@ class XKMSReissueKeyBinding;
 \endverbatim
  */
 
-class XKMSReissueRequest : public XKMSRequestAbstractType {
+class XSEC_EXPORT XKMSReissueRequest : public XKMSRequestAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

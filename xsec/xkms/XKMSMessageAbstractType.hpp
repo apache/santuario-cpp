@@ -86,7 +86,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMElement);
  */
 
 
-class XKMSMessageAbstractType {
+class XSEC_EXPORT XKMSMessageAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

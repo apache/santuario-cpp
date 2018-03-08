@@ -70,7 +70,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMDocument);
  * thread safe!
  */
 
-class XSECAlgorithmHandler {
+class XSEC_EXPORT XSECAlgorithmHandler {
 
 public:
 	

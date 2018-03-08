@@ -57,7 +57,7 @@
 
 class XKMSStatus;
 
-class XKMSRecoverKeyBinding : public XKMSKeyBindingAbstractType {
+class XSEC_EXPORT XKMSRecoverKeyBinding : public XKMSKeyBindingAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

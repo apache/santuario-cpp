@@ -69,7 +69,7 @@ class XKMSUnverifiedKeyBinding;
 \endverbatim
  */
 
-class XKMSLocateResult : public XKMSResultType {
+class XSEC_EXPORT XKMSLocateResult : public XKMSResultType {
 
 	/** @name Constructors and Destructors */
 	//@{

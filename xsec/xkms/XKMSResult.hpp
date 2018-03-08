@@ -48,7 +48,7 @@
  * there is no result.  It is a straight instantiation of the ResultType
  */
 
-class XKMSResult : public XKMSResultType {
+class XSEC_EXPORT XKMSResult : public XKMSResultType {
 
 	/** @name Constructors and Destructors */
 	//@{

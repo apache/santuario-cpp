@@ -69,7 +69,7 @@ class XKMSValidityInterval;
 
 class XKMSStatus;
 
-class XKMSPrototypeKeyBinding : public XKMSKeyBindingAbstractType {
+class XSEC_EXPORT XKMSPrototypeKeyBinding : public XKMSKeyBindingAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

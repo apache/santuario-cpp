@@ -453,21 +453,20 @@ txfm_sources = \
 # make.  Cygwin compiles use the UNIX utilities, not windows
 
 utils_sources = \
+  utils/XSECAlgorithmSupport.hpp \
   utils/XSECAlgorithmSupport.cpp \
+  utils/XSECAutoPtr.hpp \
   utils/XSECBinTXFMInputStream.cpp \
   utils/XSECXPathNodeList.cpp \
   utils/XSECSafeBuffer.cpp \
   utils/XSECTXFMInputSource.cpp \
+  utils/XSECDOMUtils.hpp \
   utils/XSECDOMUtils.cpp \
   utils/XSECSafeBufferFormatter.cpp \
   utils/XSECNameSpaceExpander.cpp \
-  utils/XSECPlatformUtils.cpp
-
-if XSEC_AM_HAVE_XKMS
-utils_sources += \
+  utils/XSECPlatformUtils.cpp \
   utils/XSECSOAPRequestorSimple.cpp \
   utils/unixutils/XSECSOAPRequestorSimpleUnix.cpp
-endif
 
 # XML Encryption
 
@@ -605,9 +604,6 @@ install-exec-hook:
 	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done
 
 EXTRA_DIST = \
-  utils/XSECAlgorithmSupport.hpp \
-  utils/XSECAutoPtr.hpp \
-  utils/XSECDOMUtils.hpp \
   utils/winutils/XSECSOAPRequestorSimpleWin32.cpp \
   enc/WinCAPI/WinCAPICryptoProvider.cpp \
   enc/WinCAPI/WinCAPICryptoKeyHMAC.hpp \

@@ -77,7 +77,7 @@ class XKMSRecoverRequest;
 \endverbatim
  */
 
-class XKMSCompoundRequest : public XKMSRequestAbstractType {
+class XSEC_EXPORT XKMSCompoundRequest : public XKMSRequestAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

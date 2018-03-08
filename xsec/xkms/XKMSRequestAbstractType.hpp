@@ -74,7 +74,7 @@ class XKMSResponseMechanism;
  */
 
 
-class XKMSRequestAbstractType : public XKMSMessageAbstractType {
+class XSEC_EXPORT XKMSRequestAbstractType : public XKMSMessageAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

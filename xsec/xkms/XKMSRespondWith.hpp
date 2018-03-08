@@ -57,7 +57,7 @@
  */
 
 
-class XKMSRespondWith {
+class XSEC_EXPORT XKMSRespondWith {
 
 	/** @name Constructors and Destructors */
 	//@{

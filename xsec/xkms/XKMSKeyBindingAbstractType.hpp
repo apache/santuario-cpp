@@ -74,7 +74,7 @@ XSEC_DECLARE_XERCES_CLASS(DOMElement);
  */
 
 
-class XKMSKeyBindingAbstractType {
+class XSEC_EXPORT XKMSKeyBindingAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

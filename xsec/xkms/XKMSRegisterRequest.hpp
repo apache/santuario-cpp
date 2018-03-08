@@ -71,7 +71,7 @@ class XKMSPrototypeKeyBinding;
 \endverbatim
  */
 
-class XKMSRegisterRequest : public XKMSRequestAbstractType {
+class XSEC_EXPORT XKMSRegisterRequest : public XKMSRequestAbstractType {
 
 	/** @name Constructors and Destructors */
 	//@{

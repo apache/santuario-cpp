@@ -265,9 +265,7 @@ XKMSRSAKeyPair * XKMSRegisterResultImpl::getRSAKeyPair(const char * passPhrase) 
 	}
 
 	// Now find if we can get an algorithm for this URI
-	XSECAlgorithmHandler *handler;
-
-	handler = 
+	const XSECAlgorithmHandler *handler = 
 		XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
 			xed->getEncryptionMethod()->getAlgorithm());
 
@@ -316,7 +314,7 @@ XENCEncryptedData * XKMSRegisterResultImpl::setRSAKeyPair(const char * passPhras
 	// XML
 
 	// Find if we can get an algorithm for this URI
-	XSECAlgorithmHandler *handler =
+	const XSECAlgorithmHandler *handler =
 		XSECPlatformUtils::g_algorithmMapper->mapURIToHandler(
 			algorithmURI);
 

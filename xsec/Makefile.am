@@ -20,7 +20,9 @@ AM_CPPFLAGS = -I..
 
 noinst_PROGRAMS = ${samples}
 bin_PROGRAMS = ${tools}
-LDADD = libxml-security-c.la
+
+AM_CXXFLAGS = $(xerces_CFLAGS)
+LDADD = libxml-security-c.la $(xerces_LIBS)
 
 #
 # The following are sample programs.  They are NOT installed
@@ -51,6 +53,10 @@ xsec_simpleEncrypt_SOURCES = \
   samples/simpleEncrypt.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
+xsec_simpleEncrypt_CXXFLAGS = $(AM_CXXFLAGS) \
+  $(openssl_CFLAGS)
+xsec_simpleEncrypt_LDADD = $(LDADD) \
+  $(openssl_LIBS)
 
 # Decrypt
 
@@ -59,6 +65,10 @@ xsec_simpleDecrypt_SOURCES = \
   samples/simpleDecrypt.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
+xsec_simpleDecrypt_CXXFLAGS = $(AM_CXXFLAGS) \
+  $(openssl_CFLAGS)
+xsec_simpleDecrypt_LDADD = $(LDADD) \
+  $(openssl_LIBS)
 
 #
 # Finally we compile the tools that can be used to manipulate
@@ -73,6 +83,12 @@ tools += xsec-xtest
 xsec_xtest_SOURCES = \
    tools/xtest/xtest.cpp
 xsec_xtest_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_xtest_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(nss_CFLAGS) \
+   $(openssl_CFLAGS)
+xsec_xtest_LDADD = $(LDADD) \
+   $(nss_LIBS) \
+   $(openssl_LIBS)
 
 tools += xsec-c14n
 xsec_c14n_SOURCES = \
@@ -87,11 +103,21 @@ xsec_checksig_SOURCES = \
    tools/checksig/InteropResolver.hpp \
    tools/checksig/InteropResolver.cpp
 xsec_checksig_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_checksig_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(nss_CFLAGS) \
+   $(openssl_CFLAGS)
+xsec_checksig_LDADD = $(LDADD) \
+   $(nss_LIBS) \
+   $(openssl_LIBS)
 
 tools += xsec-templatesign
 xsec_templatesign_SOURCES = \
    tools/templatesign/templatesign.cpp
 xsec_templatesign_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_templatesign_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(openssl_CFLAGS)
+xsec_templatesign_LDADD = $(LDADD) \
+   $(openssl_LIBS)
 
 tools += xsec-txfmout
 xsec_txfmout_SOURCES = \
@@ -109,6 +135,12 @@ xsec_cipher_SOURCES = \
    tools/cipher/XencInteropResolver.hpp \
    tools/cipher/XencInteropResolver.cpp
 xsec_cipher_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_cipher_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(nss_CFLAGS) \
+   $(openssl_CFLAGS)
+xsec_cipher_LDADD = $(LDADD) \
+   $(nss_LIBS) \
+   $(openssl_LIBS)
 
 if XSEC_AM_HAVE_XKMS
 tools += xsec-xklient
@@ -116,9 +148,23 @@ xsec_xklient_SOURCES = \
    tools/xklient/xklient.cpp \
    enc/OpenSSL/OpenSSLSupport.hpp
 xsec_xklient_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_xklient_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(openssl_CFLAGS)
+xsec_xklient_LDADD = $(LDADD) \
+   $(openssl_LIBS)
 endif
 
 libxml_security_c_la_CPPFLAGS = -DXSEC_BUILDING_LIBRARY
+
+libxml_security_c_la_CXXFLAGS = \
+   $(xerces_CFLAGS) \
+   $(openssl_CFLAGS) \
+   $(nss_CFLAGS)
+
+libxml_security_c_la_LIBADD = \
+   $(xerces_LIBS) \
+   $(openssl_LIBS) \
+   $(nss_LIBS)
 
 lib_LTLIBRARIES = libxml-security-c.la
 

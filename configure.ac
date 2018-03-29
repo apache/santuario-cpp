@@ -79,8 +79,6 @@ return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
 AC_LANG(C++)
 
 AX_PKG_CHECK_MODULES([xerces],,[xerces-c >= 3.2])
-CPPFLAGS="$xerces_CFLAGS $CPPFLAGS"
-LIBS="$xerces_LIBS $LIBS"
 
 # Get user options
 
@@ -166,8 +164,6 @@ AS_IF([test x"$with_openssl" != xno],
     [AX_PKG_CHECK_MODULES([openssl],,[libcrypto],
         [with_openssl=found
          AC_DEFINE([XSEC_HAVE_OPENSSL],[1],[Define if OpenSSL is in use])
-         CPPFLAGS="$openssl_CFLAGS $CPPFLAGS"
-         LIBS="$openssl_LIBS $LIBS"
 
     # Now try to find out some things about this version of OpenSSL
     
@@ -233,8 +229,6 @@ AS_IF([test x"$with_nss" != xno],
     [AX_PKG_CHECK_MODULES([nss],,[nss],
         [with_nss=found
          AC_DEFINE([XSEC_HAVE_NSS],[1],[Define if NSS is in use])
-         CPPFLAGS="$nss_CFLAGS $CPPFLAGS"
-         LIBS="$nss_LIBS $LIBS"
          AC_MSG_WARN([NSS is no longer officially supported])
         ],[AS_IF([test "x$with_nss" != "xcheck"],[AC_MSG_ERROR([Unable to find NSS])])])
     ])

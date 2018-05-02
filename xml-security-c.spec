@@ -49,7 +49,7 @@ This package contains just the shared library.
 %package -n libxml-security-c-devel
 Summary:	Development files for the Apache C++ XML security library
 Group:		Development/Libraries/C and C++
-Requires:	libxml-security-c18 = %{version}-%{release}
+Requires:	libxml-security-c20 = %{version}-%{release}
 Requires:	openssl-devel
 Requires:       libxerces-c-devel >= 3.2
 %{?_with_xalan:Requires: libxalan-c-devel >= 1.11}

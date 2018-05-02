@@ -239,6 +239,10 @@ if test x"$use_openssl" != "xno" ; then
     	AC_DEFINE([XSEC_OPENSSL_CONST_BUFFERS],[1],[Define to 1 if OpenSSL uses const input buffers.])],
     	[AC_MSG_RESULT([no])])
     
+    AC_CHECK_DECL(EVP_PKEY_id,
+        [AC_DEFINE([XSEC_OPENSSL_HAVE_EVP_PKEY_ID],[1],[Define to 1 if OpenSSL has EVP_PKEY_id function.])],
+        ,[#include <openssl/evp.h>])
+    
     AC_MSG_CHECKING([for non-broken AES support])
     AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <openssl/evp.h>]], [[ EVP_aes_256_cbc();
     	]])],[AC_MSG_RESULT([yes])

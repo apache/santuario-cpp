@@ -8,13 +8,8 @@ URL:            http://www.apache.org/dist/santuario/c-library/
 Source:         %{name}-%{version}.tar.bz2
 BuildRoot:      %{_tmppath}/%{name}-%{version}-build
 
-%if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
-BuildRequires:  xerces-c-devel >= 3.2
-%{?_with_xalan:BuildRequires: xalan-c-devel >= 1.11}
-%else
-BuildRequires:  libxerces-c-devel >= 3.2
 %{?_with_xalan:BuildRequires: libxalan-c-devel >= 1.11}
-%endif
+BuildRequires:  libxerces-c-devel >= 3.2
 BuildRequires:  openssl-devel gcc-c++ pkgconfig
 %if "%{_vendor}" == "redhat"
 BuildRequires: redhat-rpm-config
@@ -42,7 +37,6 @@ This package contains the utility programs.
 Summary:    Apache XML security C++ library
 Group:      Development/Libraries/C and C++
 Provides:   xml-security-c = %{version}-%{release}
-Obsoletes:  xml-security-c < %{version}-%{release}
 
 %description -n libxml-security-c20
 The xml-security-c library is a C++ implementation of the XML Digital Signature
@@ -57,15 +51,9 @@ Summary:	Development files for the Apache C++ XML security library
 Group:		Development/Libraries/C and C++
 Requires:	libxml-security-c18 = %{version}-%{release}
 Requires:	openssl-devel
-%if 0%{?rhel} >= 7 || 0%{?centos_version} >= 700
-Requires:       xerces-c-devel
-%{?_with_xalan:Requires: xalan-c-devel}
-%else
-Requires:       libxerces-c-devel
-%{?_with_xalan:Requires: libxalan-c-devel}
-%endif
+Requires:       libxerces-c-devel >= 3.2
+%{?_with_xalan:Requires: libxalan-c-devel >= 1.11}
 Provides:   xml-security-c-devel = %{version}-%{release}
-Obsoletes:  xml-security-c-devel < %{version}-%{release}
 
 %description -n libxml-security-c-devel
 The xml-security-c library is a C++ implementation of the XML Digital Signature
@@ -110,6 +98,7 @@ This package includes files needed for development with xml-security-c.
 %{_includedir}/*
 %{_libdir}/*.so
 %{_libdir}/*.a
+%{_libdir}/pkgconfig/xml-security-c.pc
 
 %changelog
 * Mon Nov 13 2017 Scott Cantor <cantor.2@osu.edu> 2.0.0-1

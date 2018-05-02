@@ -517,8 +517,12 @@ int evaluate(int argc, char ** argv) {
                 EVP_PKEY *pkey;
 
                 pkey = X509_get_pubkey(x);
-
-                if (pkey == NULL || EVP_PKEY_id(pkey) != EVP_PKEY_RSA) {
+#ifdef XSEC_OPENSSL_HAVE_EVP_PKEY_ID
+                if (pkey == NULL || EVP_PKEY_id(pkey) != EVP_PKEY_RSA)
+#else
+                if (pkey == NULL || pkey->type != EVP_PKEY_RSA)
+#endif
+                {
                     cerr << "Error extracting RSA key from certificate" << endl;
                 }
 

@@ -41,6 +41,8 @@
 #include <xsec/xenc/XENCEncryptedData.hpp>
 #include <xsec/xenc/XENCEncryptedKey.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
+
 #include <xsec/enc/OpenSSL/OpenSSLCryptoSymmetricKey.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
 

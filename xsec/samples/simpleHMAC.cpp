@@ -43,6 +43,8 @@
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #include <xsec/framework/XSECException.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
+
 // Xalan
 
 #ifdef XSEC_HAVE_XALAN

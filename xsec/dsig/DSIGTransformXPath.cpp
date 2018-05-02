@@ -38,6 +38,8 @@
 
 #include <xercesc/util/Janitor.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
+
 XERCES_CPP_NAMESPACE_USE
 
 // --------------------------------------------------------------------------------

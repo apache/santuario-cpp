@@ -43,6 +43,8 @@
 
 #include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
+
 // Xalan
 
 #ifdef XSEC_HAVE_XALAN

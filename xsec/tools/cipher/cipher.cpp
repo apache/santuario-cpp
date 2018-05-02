@@ -42,6 +42,8 @@
 
 #include "XencInteropResolver.hpp"
 
+#include "../utils/XSECDOMUtils.hpp"
+
 // General
 
 #include <memory.h>

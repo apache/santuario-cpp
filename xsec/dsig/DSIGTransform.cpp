@@ -30,6 +30,8 @@
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/framework/XSECEnv.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
+
 XERCES_CPP_NAMESPACE_USE
 
 DOMElement * DSIGTransform::createTransformNode() {

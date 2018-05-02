@@ -33,7 +33,6 @@
 
 // XSEC Includes
 
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECSafeBufferFormatter.hpp>
 #include <xsec/enc/XSECCryptoKey.hpp>
 

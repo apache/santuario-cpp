@@ -41,6 +41,7 @@
 #include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
 
 // Xerces
 

@@ -34,9 +34,10 @@
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 
-#include "../utils/XSECAlgorithmSupport.hpp"
-
 #include <xercesc/util/Janitor.hpp>
+
+#include "../utils/XSECAlgorithmSupport.hpp"
+#include "../utils/XSECDOMUtils.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

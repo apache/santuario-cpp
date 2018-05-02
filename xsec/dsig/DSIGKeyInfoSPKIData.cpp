@@ -35,6 +35,8 @@
 
 #include <xercesc/dom/DOM.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
+
 XERCES_CPP_NAMESPACE_USE
 
 // --------------------------------------------------------------------------------

@@ -42,6 +42,8 @@
 #include "XKMSRespondWithImpl.hpp"
 #include "XKMSResponseMechanismImpl.hpp"
 
+#include "../utils/XSECDOMUtils.hpp"
+
 XERCES_CPP_NAMESPACE_USE
 
 // --------------------------------------------------------------------------------

@@ -37,8 +37,9 @@
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/enc/XSECKeyInfoResolverDefault.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 // General
 

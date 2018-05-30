@@ -42,7 +42,7 @@
 
 #include "XencInteropResolver.hpp"
 
-#include "../utils/XSECDOMUtils.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
 // General
 

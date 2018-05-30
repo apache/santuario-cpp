@@ -39,8 +39,9 @@
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/framework/XSECURIResolver.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECBinTXFMInputStream.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 // General
 

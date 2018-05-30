@@ -38,7 +38,6 @@
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/framework/XSECURIResolver.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 
 #if defined (XSEC_HAVE_OPENSSL)
@@ -63,6 +62,8 @@
 #   include <xsec/enc/WinCAPI/WinCAPICryptoKeyRSA.hpp>
 #   include <xsec/enc/WinCAPI/WinCAPICryptoKeyHMAC.hpp>
 #endif
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <memory.h>
 #include <string.h>

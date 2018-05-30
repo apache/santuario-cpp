@@ -44,6 +44,8 @@
 #	endif
 #endif
 
+#include "../../utils/XSECDOMUtils.hpp"
+
 #include <xercesc/util/PlatformUtils.hpp>
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/parsers/XercesDOMParser.hpp>

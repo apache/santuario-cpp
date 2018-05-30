@@ -40,7 +40,6 @@
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/XSCrypt/XSCryptCryptoBase64.hpp>
 #include <xsec/enc/XSECCryptoUtils.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/enc/XSECKeyInfoResolverDefault.hpp>
 
 #include <xsec/xkms/XKMSCompoundRequest.hpp>
@@ -74,6 +73,8 @@
 #include <xsec/xkms/XKMSRSAKeyPair.hpp>
 
 #include <xsec/utils/XSECSOAPRequestorSimple.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 // General
 

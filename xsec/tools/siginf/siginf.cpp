@@ -37,7 +37,6 @@
 #include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/enc/XSECKeyInfoResolverDefault.hpp>
 
 #include <xsec/dsig/DSIGTransformC14n.hpp>
@@ -49,6 +48,8 @@
 #include <xsec/dsig/DSIGTransformEnvelope.hpp>
 
 #include <xsec/dsig/DSIGTransformList.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 // General
 

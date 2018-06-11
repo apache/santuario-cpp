@@ -31,7 +31,8 @@
 #include <xsec/utils/XSECNameSpaceExpander.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "XSECDOMUtils.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

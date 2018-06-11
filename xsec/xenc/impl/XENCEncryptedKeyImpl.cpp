@@ -27,14 +27,14 @@
  */
 
 #include <xsec/framework/XSECDefs.hpp>
+#include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
 
 #include "XENCCipherImpl.hpp"
 #include "XENCEncryptedKeyImpl.hpp"
 #include "XENCCipherDataImpl.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #include <xercesc/util/XMLUniDefs.hpp>
 

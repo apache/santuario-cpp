@@ -28,7 +28,12 @@
 
 // XSEC Includes
 
+#include <xsec/enc/XSECKeyInfoResolver.hpp>
+#include <xsec/enc/XSECCryptoException.hpp>
+#include <xsec/framework/XSECAlgorithmMapper.hpp>
+#include <xsec/framework/XSECAlgorithmHandler.hpp>
 #include <xsec/framework/XSECDefs.hpp>
+#include <xsec/framework/XSECEnv.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/enc/XSECCryptoKey.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
@@ -38,12 +43,6 @@
 #include <xsec/transformers/TXFMURL.hpp>
 #include <xsec/transformers/TXFMDocObject.hpp>
 #include <xsec/transformers/TXFMConcatChains.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/enc/XSECKeyInfoResolver.hpp>
-#include <xsec/enc/XSECCryptoException.hpp>
-#include <xsec/framework/XSECAlgorithmMapper.hpp>
-#include <xsec/framework/XSECAlgorithmHandler.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
 #include <xsec/utils/XSECBinTXFMInputStream.hpp>
 
@@ -53,6 +52,7 @@
 #include "XENCEncryptionMethodImpl.hpp"
 #include "XENCAlgorithmHandlerDefault.hpp"
 #include "../../utils/XSECAutoPtr.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/dom/DOMNode.hpp>
 #include <xercesc/dom/DOMElement.hpp>

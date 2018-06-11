@@ -28,9 +28,10 @@
 
 // XSEC
 
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
+
+#include "XSECDOMUtils.hpp"
 
 // Xerces
 

@@ -30,9 +30,10 @@
 
 #include <xsec/dsig/DSIGKeyInfoDEREncoded.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/framework/XSECEnv.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/Janitor.hpp>
 

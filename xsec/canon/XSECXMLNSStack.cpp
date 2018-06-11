@@ -30,8 +30,9 @@
 // XSEC
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/canon/XSECXMLNSStack.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 // Xerces
 

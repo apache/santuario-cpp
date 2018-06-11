@@ -28,13 +28,13 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/framework/XSECEnv.hpp>
 
 #include "XENCEncryptionMethodImpl.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
-#include <xercesc/util/XMLUniDefs.hpp>
 #include <xercesc/dom/DOM.hpp>
+#include <xercesc/util/XMLUniDefs.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 

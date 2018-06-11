@@ -34,6 +34,7 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 
+XSEC_DECLARE_XERCES_CLASS(DOMElement);
 XSEC_DECLARE_XERCES_CLASS(DOMNode);
 
 class XSECEnv;

@@ -70,27 +70,27 @@ XALAN_USING_XALAN(XalanTransformer)
 
 // XSEC
 
-#include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/framework/XSECProvider.hpp>
 #include <xsec/canon/XSECC14n20010315.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
-#include <xsec/framework/XSECError.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
-#include <xsec/utils/XSECNameSpaceExpander.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/utils/XSECBinTXFMInputStream.hpp>
-#include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
 #include <xsec/dsig/DSIGKeyInfoName.hpp>
 #include <xsec/dsig/DSIGKeyInfoPGPData.hpp>
 #include <xsec/dsig/DSIGKeyInfoSPKIData.hpp>
 #include <xsec/dsig/DSIGKeyInfoMgmtData.hpp>
+#include <xsec/enc/XSECCryptoException.hpp>
+#include <xsec/enc/XSECCryptoSymmetricKey.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/framework/XSECProvider.hpp>
 #include <xsec/xenc/XENCCipher.hpp>
 #include <xsec/xenc/XENCEncryptedData.hpp>
 #include <xsec/xenc/XENCEncryptedKey.hpp>
 #include <xsec/xenc/XENCEncryptionMethod.hpp>
+#include <xsec/utils/XSECNameSpaceExpander.hpp>
+#include <xsec/utils/XSECBinTXFMInputStream.hpp>
+#include <xsec/utils/XSECPlatformUtils.hpp>
 
-#include <xsec/enc/XSECCryptoSymmetricKey.hpp>
+#include "../../utils/XSECDOMUtils.hpp"
 
 #if defined (XSEC_HAVE_OPENSSL)
 #	include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>

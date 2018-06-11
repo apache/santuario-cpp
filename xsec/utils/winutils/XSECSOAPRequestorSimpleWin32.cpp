@@ -32,12 +32,13 @@
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/utils/XSECSafeBuffer.hpp>
 #include <xsec/utils/XSECSOAPRequestorSimple.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 
+#include <xsec/xkms/XKMSConstants.hpp>
+
 #include "../../utils/XSECAutoPtr.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
 #define _WINSOCKAPI_
 

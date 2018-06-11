@@ -26,9 +26,10 @@
  *
  */
 
-#include <xsec/transformers/TXFMDocObject.hpp>
 #include <xsec/framework/XSECException.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+#include <xsec/transformers/TXFMDocObject.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

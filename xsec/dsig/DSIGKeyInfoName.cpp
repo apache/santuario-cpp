@@ -29,11 +29,12 @@
  */
 
 #include <xsec/dsig/DSIGKeyInfoName.hpp>
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/utils/XSECPlatformUtils.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

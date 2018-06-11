@@ -36,10 +36,11 @@
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
 #include <xsec/dsig/DSIGKeyInfoName.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #include <xsec/enc/OpenSSL/OpenSSLCryptoBase64.hpp>
 #include <xsec/enc/OpenSSL/OpenSSLSupport.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/Janitor.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>

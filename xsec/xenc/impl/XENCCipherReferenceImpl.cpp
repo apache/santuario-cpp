@@ -26,7 +26,6 @@
  *
  */
 
-#include <xsec/framework/XSECDefs.hpp>
 #include <xsec/dsig/DSIGTransformList.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/dsig/DSIGTransformList.hpp>
@@ -35,15 +34,17 @@
 #include <xsec/dsig/DSIGTransformXPathFilter.hpp>
 #include <xsec/dsig/DSIGTransformXSL.hpp>
 #include <xsec/dsig/DSIGTransformC14n.hpp>
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/utils/XSECSafeBufferFormatter.hpp>
+#include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/utils/XSECSafeBufferFormatter.hpp>
+
+#include "XENCCipherReferenceImpl.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/XMLUniDefs.hpp>
 #include <xercesc/util/Janitor.hpp>
 
-#include "XENCCipherReferenceImpl.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

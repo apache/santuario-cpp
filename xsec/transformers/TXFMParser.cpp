@@ -28,10 +28,10 @@
  *
  */
 
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMParser.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/framework/XSECError.hpp>
 #include <xsec/utils/XSECTXFMInputSource.hpp>
 
 #include <xercesc/parsers/XercesDOMParser.hpp>

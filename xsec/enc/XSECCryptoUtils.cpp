@@ -33,14 +33,14 @@
 #include <xsec/enc/XSECCryptoUtils.hpp>
 #include <xsec/enc/XSECCryptoKeyHMAC.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "../utils/XSECAlgorithmSupport.hpp"
+#include "../utils/XSECAutoPtr.hpp"
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/Janitor.hpp>
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
-
-#include "../utils/XSECAlgorithmSupport.hpp"
-#include "../utils/XSECAutoPtr.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

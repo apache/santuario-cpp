@@ -27,19 +27,21 @@
  *
  */
 
-#include <xsec/framework/XSECDefs.hpp>
-#include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+#include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoProvider.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoSymmetricKey.hpp>
+#include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/enc/XSECCryptoException.hpp>
+#include <xsec/utils/XSECPlatformUtils.hpp>
 
-#include <xercesc/util/Janitor.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 
 #if defined (XSEC_HAVE_WINCAPI)
+
+#include "../../utils/XSECDOMUtils.hpp"
+
+#include <xercesc/util/Janitor.hpp>
 
 // --------------------------------------------------------------------------------
 //           Constructors and Destructors

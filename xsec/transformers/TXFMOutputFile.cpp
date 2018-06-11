@@ -27,8 +27,8 @@
  *
  */
 
-#include <xsec/transformers/TXFMOutputFile.hpp>
 #include <xsec/framework/XSECException.hpp>
+#include <xsec/transformers/TXFMOutputFile.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 

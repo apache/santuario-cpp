@@ -29,17 +29,17 @@
 
 // XSEC Includes
 
-#include <xsec/framework/XSECDefs.hpp>
 
 #include <xsec/dsig/DSIGAlgorithmHandlerDefault.hpp>
 #include <xsec/enc/XSECCryptoKey.hpp>
+#include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/transformers/TXFMBase64.hpp>
 #include <xsec/transformers/TXFMHash.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #include "../utils/XSECAlgorithmSupport.hpp"
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/Janitor.hpp>

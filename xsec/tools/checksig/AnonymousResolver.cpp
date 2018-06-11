@@ -33,7 +33,8 @@
 // XSEC
 
 #include <xsec/framework/XSECException.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/Janitor.hpp>

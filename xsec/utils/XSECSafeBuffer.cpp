@@ -31,9 +31,10 @@
 // XSEC includes
 
 #include <xsec/utils/XSECSafeBuffer.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMBase.hpp>
+
+#include "XSECDOMUtils.hpp"
 
 #include <xercesc/util/XMLUniDefs.hpp>
 

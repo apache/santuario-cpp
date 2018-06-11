@@ -30,13 +30,13 @@
 
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/utils/XSECSafeBuffer.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECSOAPRequestorSimple.hpp>
 #include <xsec/xkms/XKMSConstants.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 
-#include "../utils/XSECAutoPtr.hpp"
+#include "XSECAutoPtr.hpp"
+#include "XSECDOMUtils.hpp"
 
 #include <stdio.h>
 #include <string.h>

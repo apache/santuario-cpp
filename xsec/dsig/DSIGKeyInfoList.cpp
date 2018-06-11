@@ -39,7 +39,6 @@
 #include <xsec/dsig/DSIGKeyInfoMgmtData.hpp>
 #include <xsec/dsig/DSIGKeyInfoExt.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/dsig/DSIGTransformList.hpp>
@@ -47,6 +46,7 @@
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/transformers/TXFMBase.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
 #include "../xenc/impl/XENCEncryptedKeyImpl.hpp"
 
 #include <xercesc/util/Janitor.hpp>

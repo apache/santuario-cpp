@@ -26,15 +26,13 @@
  *
  */
 
+#include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGTransformC14n.hpp>
+#include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/transformers/TXFMC14n.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/dsig/DSIGSignature.hpp>
-
-#include <xercesc/util/Janitor.hpp>
 
 #include "../utils/XSECAlgorithmSupport.hpp"
 #include "../utils/XSECDOMUtils.hpp"

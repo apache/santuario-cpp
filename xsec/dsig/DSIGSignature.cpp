@@ -56,10 +56,10 @@
 #include <xsec/transformers/TXFMC14n.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 #include <xsec/utils/XSECBinTXFMInputStream.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
 
 #include "../utils/XSECAlgorithmSupport.hpp"
+#include "../utils/XSECDOMUtils.hpp"
 
 // Xerces includes
 

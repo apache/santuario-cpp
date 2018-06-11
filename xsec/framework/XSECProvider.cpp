@@ -29,9 +29,9 @@
 
 #include <xsec/framework/XSECProvider.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/framework/XSECURIResolverXerces.hpp>
 
+#include "../utils/XSECDOMUtils.hpp"
 #include "../xenc/impl/XENCCipherImpl.hpp"
 
 #ifdef XSEC_XKMS_ENABLED

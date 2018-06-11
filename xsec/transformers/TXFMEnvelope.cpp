@@ -26,9 +26,10 @@
  *
  */
 
-#include <xsec/transformers/TXFMEnvelope.hpp>
 #include <xsec/framework/XSECException.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+#include <xsec/transformers/TXFMEnvelope.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/XMLString.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>

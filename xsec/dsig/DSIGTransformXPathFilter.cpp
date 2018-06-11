@@ -29,17 +29,17 @@
  *
  */
 
+#include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGTransformXPathFilter.hpp>
 #include <xsec/dsig/DSIGXPathFilterExpr.hpp>
-#include <xsec/dsig/DSIGSignature.hpp>
-#include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMXPathFilter.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
 
-#include <xercesc/dom/DOMNode.hpp>
-
 #include "../utils/XSECDOMUtils.hpp"
+
+#include <xercesc/dom/DOMNode.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 

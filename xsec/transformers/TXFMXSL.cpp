@@ -26,9 +26,9 @@
  *
  */
 
-#include <xsec/transformers/TXFMXSL.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
 #include <xsec/framework/XSECError.hpp>
+#include <xsec/transformers/TXFMXSL.hpp>
 
 #ifdef XSEC_HAVE_XSLT
 

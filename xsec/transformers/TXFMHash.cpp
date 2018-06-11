@@ -26,9 +26,9 @@
  *
  */
 
+#include <xsec/framework/XSECException.hpp>
 #include <xsec/transformers/TXFMHash.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/framework/XSECException.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 

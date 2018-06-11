@@ -27,12 +27,13 @@
  */
 
 // XSEC Includes
-#include <xsec/dsig/DSIGSignedInfo.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+#include <xsec/dsig/DSIGSignedInfo.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
+#include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/Janitor.hpp>
 

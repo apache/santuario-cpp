@@ -27,13 +27,14 @@
  */
 
 
+#include <xsec/dsig/DSIGConstants.hpp>
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/transformers/TXFMXPath.hpp>
 #include <xsec/transformers/TXFMParser.hpp>
-#include <xsec/dsig/DSIGConstants.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/framework/XSECError.hpp>
 
 #ifdef XSEC_HAVE_XALAN
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #if defined(_MSC_VER)
 #	pragma warning(disable: 4267)

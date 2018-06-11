@@ -31,7 +31,8 @@
  */
 
 #include <xsec/canon/XSECCanon.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <memory.h>
 

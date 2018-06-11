@@ -27,19 +27,20 @@
  */
 
 
-#include <xsec/transformers/TXFMXPathFilter.hpp>
-#include <xsec/transformers/TXFMParser.hpp>
 #include <xsec/dsig/DSIGConstants.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/framework/XSECError.hpp>
 #include <xsec/dsig/DSIGXPathFilterExpr.hpp>
 #include <xsec/dsig/DSIGXPathHere.hpp>
-
-#include <xercesc/util/Janitor.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/transformers/TXFMXPathFilter.hpp>
+#include <xsec/transformers/TXFMParser.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 
 #ifdef XSEC_HAVE_XALAN
+
+#include "../utils/XSECDOMUtils.hpp"
+
+#include <xercesc/util/Janitor.hpp>
 
 #if defined(_MSC_VER)
 #    pragma warning(disable: 4267)

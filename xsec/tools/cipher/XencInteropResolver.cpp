@@ -36,9 +36,11 @@
 #include <xsec/enc/XSECKeyInfoResolver.hpp>
 #include <xsec/dsig/DSIGKeyInfoName.hpp>
 #include <xsec/dsig/DSIGKeyInfoX509.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/xenc/XENCCipher.hpp>
 #include <xsec/xenc/XENCEncryptedKey.hpp>
+
+#include "../../utils/XSECDOMUtils.hpp"
+
 #include <xercesc/util/Janitor.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
 

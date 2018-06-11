@@ -38,9 +38,9 @@
 #include <xsec/transformers/TXFMBase64.hpp>
 #include <xsec/transformers/TXFMSB.hpp>
 #include <xsec/xenc/XENCEncryptionMethod.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #include "../../utils/XSECAutoPtr.hpp"
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include "XENCAlgorithmHandlerDefault.hpp"
 

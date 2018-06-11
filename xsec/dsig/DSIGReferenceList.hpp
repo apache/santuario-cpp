@@ -32,7 +32,6 @@
 
 // XSEC Includes
 #include <xsec/framework/XSECDefs.hpp>
-//#include <dsig/DSIGReference.hpp>
 
 // General includes
 #include <vector>

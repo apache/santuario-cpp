@@ -55,8 +55,9 @@
 #include <xsec/framework/XSECAlgorithmHandler.hpp>
 #include <xsec/framework/XSECAlgorithmMapper.hpp>
 #include <xsec/utils/XSECPlatformUtils.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECBinTXFMInputStream.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 // Xerces
 

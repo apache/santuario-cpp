@@ -27,24 +27,23 @@
  *
  */
 
+
+#include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/framework/XSECDefs.hpp>
+#include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/transformers/TXFMBase64.hpp>
+#include <xsec/transformers/TXFMChain.hpp>
+#include <xsec/transformers/TXFMSB.hpp>
+#include <xsec/transformers/TXFMC14n.hpp>
+#include <xsec/xenc/XENCEncryptedKey.hpp>
 
 #include "XENCCipherImpl.hpp"
 #include "XENCCipherDataImpl.hpp"
 #include "XENCEncryptedTypeImpl.hpp"
 #include "XENCEncryptionMethodImpl.hpp"
 #include "../../utils/XSECAutoPtr.hpp"
-
-#include <xsec/xenc/XENCEncryptedKey.hpp>
-
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/transformers/TXFMBase64.hpp>
-#include <xsec/transformers/TXFMChain.hpp>
-#include <xsec/transformers/TXFMSB.hpp>
-#include <xsec/transformers/TXFMC14n.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/dsig/DSIGReference.hpp>
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/XMLUniDefs.hpp>
 #include <xercesc/util/Janitor.hpp>

@@ -31,13 +31,11 @@
 #ifndef TXFMBASE_INCLUDE
 #define TXFMBASE_INCLUDE
 
-#include <xercesc/dom/DOM.hpp>
 #include <xsec/canon/XSECC14n20010315.hpp>
 #include <xsec/utils/XSECNameSpaceExpander.hpp>
 #include <xsec/utils/XSECXPathNodeList.hpp>
 
-// Xalan
-
+#include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/BinInputStream.hpp>
 
 #include <stdlib.h>

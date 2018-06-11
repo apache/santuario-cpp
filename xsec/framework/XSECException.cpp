@@ -31,7 +31,8 @@
  */
 
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 XSECException::XSECException(XSECExceptionType eNum, const XMLCh * inMsg) {
 

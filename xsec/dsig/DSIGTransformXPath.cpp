@@ -26,19 +26,17 @@
  *
  */
 
-
+#include <xsec/dsig/DSIGSignature.hpp>
 #include <xsec/dsig/DSIGTransformXPath.hpp>
 #include <xsec/transformers/TXFMXPath.hpp>
+#include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/transformers/TXFMC14n.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/dsig/DSIGSignature.hpp>
-
-#include <xercesc/util/Janitor.hpp>
 
 #include "../utils/XSECDOMUtils.hpp"
+
 
 XERCES_CPP_NAMESPACE_USE
 

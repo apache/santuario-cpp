@@ -28,15 +28,16 @@
 
 // XSEC
 
-#include <xsec/dsig/DSIGTransformXSL.hpp>
 #include <xsec/dsig/DSIGSignature.hpp>
+#include <xsec/dsig/DSIGTransformXSL.hpp>
+#include <xsec/framework/XSECEnv.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/framework/XSECException.hpp>
 #include <xsec/transformers/TXFMXSL.hpp>
 #include <xsec/transformers/TXFMC14n.hpp>
 #include <xsec/transformers/TXFMChain.hpp>
-#include <xsec/framework/XSECException.hpp>
-#include <xsec/framework/XSECEnv.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/framework/XSECError.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/framework/MemBufFormatTarget.hpp>

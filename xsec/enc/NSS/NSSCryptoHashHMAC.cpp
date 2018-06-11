@@ -29,9 +29,10 @@
 #include <xsec/enc/NSS/NSSCryptoHashHMAC.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
 #include <xsec/enc/NSS/NSSCryptoKeyHMAC.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #if defined (XSEC_HAVE_NSS)
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <memory.h>
 

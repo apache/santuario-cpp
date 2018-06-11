@@ -29,12 +29,11 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
+#include <xsec/framework/XSECError.hpp>
+#include <xsec/framework/XSECEnv.hpp>
 
 #include "XENCCipherValueImpl.hpp"
-
-#include <xsec/framework/XSECError.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/framework/XSECEnv.hpp>
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/util/XMLUniDefs.hpp>
 

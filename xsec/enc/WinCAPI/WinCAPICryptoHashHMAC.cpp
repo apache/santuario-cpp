@@ -28,13 +28,14 @@
  *
  */
 
-#include <xsec/enc/WinCAPI/WinCAPICryptoHashHMAC.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
+#include <xsec/enc/WinCAPI/WinCAPICryptoHashHMAC.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoProvider.hpp>
 #include <xsec/enc/WinCAPI/WinCAPICryptoKeyHMAC.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 
 #if defined (XSEC_HAVE_WINCAPI)
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include <memory.h>
 

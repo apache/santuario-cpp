@@ -33,8 +33,9 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/canon/XSECC14n20010315.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/utils/XSECSafeBufferFormatter.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 // Xerces includes
 #include <xercesc/dom/DOMElement.hpp>

@@ -29,12 +29,13 @@
 
 // XSEC Includes
 
+#include <xsec/dsig/DSIGConstants.hpp>
+#include <xsec/dsig/DSIGObject.hpp>
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/dsig/DSIGConstants.hpp>
-#include <xsec/dsig/DSIGObject.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>

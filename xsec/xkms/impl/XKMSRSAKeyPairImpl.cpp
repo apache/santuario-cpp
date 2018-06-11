@@ -29,14 +29,16 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECEnv.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 
+#include "../../utils/XSECDOMUtils.hpp"
+
 #include "XKMSRSAKeyPairImpl.hpp"
+
+#include <xsec/xkms/XKMSConstants.hpp>
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>

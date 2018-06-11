@@ -32,10 +32,11 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/xkms/XKMSRequestAbstractType.hpp>
-#include <xsec/xkms/XKMSStatus.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include <xsec/xkms/XKMSRequestAbstractType.hpp>
+#include <xsec/xkms/XKMSStatus.hpp>
 
 class DSIGSignature;
 class XKMSAuthentication;

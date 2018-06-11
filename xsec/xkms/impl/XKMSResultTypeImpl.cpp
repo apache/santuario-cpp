@@ -29,16 +29,17 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/framework/XSECEnv.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 
+#include "../../utils/XSECDOMUtils.hpp"
+
 #include "XKMSResultTypeImpl.hpp"
+
+#include <xsec/xkms/XKMSConstants.hpp>
 
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
-
-#include "../utils/XSECDOMUtils.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

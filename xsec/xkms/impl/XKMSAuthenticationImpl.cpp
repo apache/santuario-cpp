@@ -26,22 +26,22 @@
  *
  */
 
+#include <xsec/dsig/DSIGReference.hpp>
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
-
-#include <xsec/dsig/DSIGReference.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include "XKMSAuthenticationImpl.hpp"
 #include "XKMSNotBoundAuthenticationImpl.hpp"
 
+#include <xsec/xkms/XKMSConstants.hpp>
+
 #include <xercesc/dom/DOM.hpp>
 #include <xercesc/util/XMLUniDefs.hpp>
-
-#include "../utils/XSECDOMUtils.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 

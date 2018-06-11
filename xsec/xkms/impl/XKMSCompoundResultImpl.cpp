@@ -29,10 +29,10 @@
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECEnv.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include "../../utils/XSECDOMUtils.hpp"
 
 #include "XKMSCompoundResultImpl.hpp"
 #include "XKMSLocateResultImpl.hpp"
@@ -43,6 +43,8 @@
 #include "XKMSReissueResultImpl.hpp"
 #include "XKMSRecoverResultImpl.hpp"
 #include "XKMSResultImpl.hpp"
+
+#include <xsec/xkms/XKMSConstants.hpp>
 
 #include <xercesc/dom/DOM.hpp>
 

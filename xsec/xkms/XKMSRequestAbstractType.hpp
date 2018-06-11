@@ -32,9 +32,10 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/xkms/XKMSMessageAbstractType.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include <xsec/xkms/XKMSMessageAbstractType.hpp>
 
 class XKMSRespondWith;
 class XKMSResponseMechanism;

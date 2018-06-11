@@ -26,24 +26,26 @@
  *
  */
 
+#include <xsec/enc/XSECCryptoUtils.hpp>
+#include <xsec/enc/XSECCryptoKey.hpp>
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECEnv.hpp>
 #include <xsec/framework/XSECAlgorithmMapper.hpp>
 #include <xsec/framework/XSECAlgorithmHandler.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
-#include <xsec/enc/XSECCryptoUtils.hpp>
-#include <xsec/enc/XSECCryptoKey.hpp>
 #include <xsec/xenc/XENCEncryptedData.hpp>
 #include <xsec/xenc/XENCEncryptionMethod.hpp>
 #include <xsec/xenc/XENCCipher.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 
+#include "../../utils/XSECDOMUtils.hpp"
+
 #include "XKMSRecoverResultImpl.hpp"
 #include "XKMSKeyBindingImpl.hpp"
 #include "XKMSRSAKeyPairImpl.hpp"
+
+#include <xsec/xkms/XKMSConstants.hpp>
 
 #include <xercesc/dom/DOM.hpp>
 

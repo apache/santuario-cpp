@@ -30,13 +30,15 @@
 
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
 
-#include <xercesc/dom/DOM.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
 
 #include "XKMSUnverifiedKeyBindingImpl.hpp"
+
+#include <xercesc/dom/DOM.hpp>
+
+#include <xsec/xkms/XKMSConstants.hpp>
 
 XERCES_CPP_NAMESPACE_USE
 

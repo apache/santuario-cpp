@@ -32,9 +32,10 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/xkms/XKMSKeyBindingAbstractType.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include <xsec/xkms/XKMSKeyBindingAbstractType.hpp>
 
 class XKMSValidityInterval;
 

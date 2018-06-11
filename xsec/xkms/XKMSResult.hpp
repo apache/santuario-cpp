@@ -32,9 +32,10 @@
 // XSEC Includes
 
 #include <xsec/framework/XSECDefs.hpp>
-#include <xsec/xkms/XKMSResultType.hpp>
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include <xsec/xkms/XKMSResultType.hpp>
 
 /**
  * @ingroup xkms

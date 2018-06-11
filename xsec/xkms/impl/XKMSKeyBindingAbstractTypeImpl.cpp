@@ -26,23 +26,24 @@
  *
  */
 
+#include <xsec/dsig/DSIGKeyInfoList.hpp>
 #include <xsec/framework/XSECDefs.hpp>
 #include <xsec/framework/XSECError.hpp>
 #include <xsec/framework/XSECEnv.hpp>
-#include <xsec/xkms/XKMSConstants.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
-#include <xsec/dsig/DSIGKeyInfoList.hpp>
-
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLUniDefs.hpp>
-#include <xercesc/util/Janitor.hpp>
-
-#include "XKMSKeyBindingAbstractTypeImpl.hpp"
-#include "XKMSUseKeyWithImpl.hpp"
 
 XERCES_CPP_NAMESPACE_USE
 
 #ifdef XSEC_XKMS_ENABLED
+
+#include "../../utils/XSECDOMUtils.hpp"
+
+#include "XKMSKeyBindingAbstractTypeImpl.hpp"
+#include "XKMSUseKeyWithImpl.hpp"
+
+#include <xsec/xkms/XKMSConstants.hpp>
+
+#include <xercesc/dom/DOM.hpp>
+#include <xercesc/util/XMLUniDefs.hpp>
 
 // --------------------------------------------------------------------------------
 //           Constructor/Destructor

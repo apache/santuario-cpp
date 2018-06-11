@@ -36,8 +36,10 @@
  */
 
 #include "IOStreamOutputter.hpp"
+#include "utils/XSECDOMUtils.hpp"
+
 #include <xercesc/parsers/XercesDOMParser.hpp>
-#include <xsec/utils/XSECDOMUtils.hpp>
+
 #include <memory.h>
 
 // Uplift everything to the Xerces name space

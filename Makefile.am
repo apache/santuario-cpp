@@ -24,7 +24,9 @@ EXTRA_DIST = \
 	LICENSE.txt \
 	NOTICE.txt \
 	Projects \
+	doc/doxy.conf \
 	xml-security-c.spec \
+	xsec/basicTests.pl \
 	xsec/framework/resource.h \
 	xsec/framework/version.rc \
 	xsec/tools/threadTest/threadtest.cpp

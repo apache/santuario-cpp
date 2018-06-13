@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 
-AUTOMAKE_OPTIONS = foreign subdir-objects
-
-AM_CPPFLAGS = -I..
+# Find generated headers in the build directory;
+# find everything else in the source directory (always with full path)
+AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 
 noinst_PROGRAMS = ${samples}
 bin_PROGRAMS = ${tools}
@@ -82,7 +82,7 @@ tools =
 tools += xsec-xtest
 xsec_xtest_SOURCES = \
    tools/xtest/xtest.cpp
-xsec_xtest_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_xtest_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 xsec_xtest_CXXFLAGS = $(AM_CXXFLAGS) \
    $(nss_CFLAGS) \
    $(openssl_CFLAGS)
@@ -93,7 +93,7 @@ xsec_xtest_LDADD = $(LDADD) \
 tools += xsec-c14n
 xsec_c14n_SOURCES = \
    tools/c14n/c14n.cpp
-xsec_c14n_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_c14n_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
  
 tools += xsec-checksig
 xsec_checksig_SOURCES = \
@@ -102,7 +102,7 @@ xsec_checksig_SOURCES = \
    tools/checksig/AnonymousResolver.cpp \
    tools/checksig/InteropResolver.hpp \
    tools/checksig/InteropResolver.cpp
-xsec_checksig_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_checksig_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 xsec_checksig_CXXFLAGS = $(AM_CXXFLAGS) \
    $(nss_CFLAGS) \
    $(openssl_CFLAGS)
@@ -113,7 +113,7 @@ xsec_checksig_LDADD = $(LDADD) \
 tools += xsec-templatesign
 xsec_templatesign_SOURCES = \
    tools/templatesign/templatesign.cpp
-xsec_templatesign_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_templatesign_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 xsec_templatesign_CXXFLAGS = $(AM_CXXFLAGS) \
    $(openssl_CFLAGS)
 xsec_templatesign_LDADD = $(LDADD) \
@@ -122,19 +122,19 @@ xsec_templatesign_LDADD = $(LDADD) \
 tools += xsec-txfmout
 xsec_txfmout_SOURCES = \
    tools/txfmout/txfmout.cpp
-xsec_txfmout_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_txfmout_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 
 tools += xsec-siginf
 xsec_siginf_SOURCES = \
    tools/siginf/siginf.cpp
-xsec_siginf_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_siginf_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 
 tools += xsec-cipher
 xsec_cipher_SOURCES = \
    tools/cipher/cipher.cpp \
    tools/cipher/XencInteropResolver.hpp \
    tools/cipher/XencInteropResolver.cpp
-xsec_cipher_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_cipher_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 xsec_cipher_CXXFLAGS = $(AM_CXXFLAGS) \
    $(nss_CFLAGS) \
    $(openssl_CFLAGS)
@@ -147,14 +147,14 @@ tools += xsec-xklient
 xsec_xklient_SOURCES = \
    tools/xklient/xklient.cpp \
    enc/OpenSSL/OpenSSLSupport.hpp
-xsec_xklient_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_xklient_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 xsec_xklient_CXXFLAGS = $(AM_CXXFLAGS) \
    $(openssl_CFLAGS)
 xsec_xklient_LDADD = $(LDADD) \
    $(openssl_LIBS)
 endif
 
-libxml_security_c_la_CPPFLAGS = -DXSEC_BUILDING_LIBRARY
+libxml_security_c_la_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_LIBRARY
 
 libxml_security_c_la_CXXFLAGS = \
    $(xerces_CFLAGS) \

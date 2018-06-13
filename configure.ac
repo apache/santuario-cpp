@@ -21,7 +21,7 @@ AC_INIT([[XML-Security-C]],[2.0.0],[dev@santuario.apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)
-AM_INIT_AUTOMAKE([subdir-objects])
+AM_INIT_AUTOMAKE([foreign dist-bzip2 dist-zip subdir-objects nostdinc])
 AC_PROG_LIBTOOL
 PKG_INSTALLDIR
 

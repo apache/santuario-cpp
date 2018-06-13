@@ -278,11 +278,13 @@ frameworkinclude_HEADERS = \
   framework/XSECException.hpp \
   framework/XSECError.hpp \
   framework/XSECProvider.hpp \
-  framework/XSECConfig.hpp \
   framework/XSECURIResolverXerces.hpp \
   framework/XSECAlgorithmMapper.hpp \
   framework/XSECW32Config.hpp \
   framework/XSECVersion.hpp
+
+nodist_frameworkinclude_HEADERS = \
+  framework/XSECConfig.hpp
 
 transformersinclude_HEADERS = \
   transformers/TXFMXPathFilter.hpp \

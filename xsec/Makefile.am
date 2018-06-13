@@ -648,9 +648,6 @@ nss_sources = \
 #
 libxml_security_c_la_LDFLAGS = -version-info 20:0:0
 
-install-exec-hook:
-	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done
-
 EXTRA_DIST = \
   utils/winutils/XSECSOAPRequestorSimpleWin32.cpp \
   enc/WinCAPI/WinCAPICryptoProvider.cpp \

@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-AUTOMAKE_OPTIONS = foreign dist-bzip2 dist-zip
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = xsec
@@ -25,7 +24,9 @@ EXTRA_DIST = \
 	LICENSE.txt \
 	NOTICE.txt \
 	Projects \
+	doc/doxy.conf \
 	xml-security-c.spec \
+	xsec/basicTests.pl \
 	xsec/framework/resource.h \
 	xsec/framework/version.rc \
 	xsec/tools/threadTest/threadtest.cpp

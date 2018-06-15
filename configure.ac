@@ -21,7 +21,7 @@ AC_INIT([[XML-Security-C]],[2.0.0],[dev@santuario.apache.org],[xml-security-c])
 AC_CONFIG_SRCDIR(xsec)
 AC_CONFIG_AUX_DIR(build-aux)
 AC_CONFIG_MACRO_DIR(m4)
-AM_INIT_AUTOMAKE([subdir-objects])
+AM_INIT_AUTOMAKE([foreign dist-bzip2 dist-zip subdir-objects nostdinc])
 AC_PROG_LIBTOOL
 PKG_INSTALLDIR
 
@@ -85,29 +85,7 @@ return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
 
 AC_LANG(C++)
 
-# Xerces is required
-
-AC_ARG_WITH(xerces,AS_HELP_STRING([--with-xerces=PATH], [where xerces-c is installed]),
-    [if test x_$with_xerces != x_/usr; then
-        LDFLAGS="-L${with_xerces}/lib $LDFLAGS"
-        CPPFLAGS="-I${with_xerces}/include $CPPFLAGS"
-    fi])
-LIBS="-lxerces-c $LIBS"
-
-AC_CHECK_HEADER([xercesc/dom/DOM.hpp],,AC_MSG_ERROR([unable to find xerces header files]))
-AC_MSG_CHECKING([Xerces version])
-AC_PREPROC_IFELSE(
-    [AC_LANG_PROGRAM([#include <xercesc/util/XercesVersion.hpp>],
-[#if  _XERCES_VERSION >= 30200
-int i = 0;
-#else
-#error cannot use version 1.x or 2.x
-#endif])],
-    [AC_MSG_RESULT(OK)],
-    [AC_MSG_FAILURE([Xerces-C 3.2+ is required])])
-
-AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <xercesc/util/PlatformUtils.hpp>]], [[xercesc::XMLPlatformUtils::Initialize()]])],
-    [],[AC_MSG_ERROR([unable to link with Xerces])])
+AX_PKG_CHECK_MODULES([xerces],,[xerces-c >= 3.2])
 
 # Get user options
 
@@ -185,49 +163,15 @@ fi
 
 # Crypto provider options (OpenSSL / NSS)
 
-AC_ARG_WITH(openssl,
-    AS_HELP_STRING([--with-openssl],[Use Openssl.  Values = 'yes' or installation directory (Default = yes)]),
-    use_openssl=$withval, use_openssl=yes)
+AC_ARG_WITH([openssl],
+    [AS_HELP_STRING([--with-openssl],[use the OpenSSL crypto provider @<:@default=check@:>@])],,
+    [with_openssl=check])
 
-if test x"$use_openssl" != "xno" ; then
+AS_IF([test x"$with_openssl" != xno],
+    [AX_PKG_CHECK_MODULES([openssl],,[libcrypto],
+        [with_openssl=found
+         AC_DEFINE([XSEC_HAVE_OPENSSL],[1],[Define if OpenSSL is in use])
 
-    # Check for explicit location or try pkg-config
-    if test x"$use_openssl" = "xyes" ; then
-        AC_PATH_PROG(PKG_CONFIG, pkg-config,)
-        if test "x$PKG_CONFIG" != x && test "x$PKG_CONFIG" != "xno" ; then
-            if pkg-config openssl ; then
-                SSLLIBS="`$PKG_CONFIG --libs openssl`"
-                SSLFLAGS="`$PKG_CONFIG --cflags openssl`"
-            else
-                AC_MSG_WARN([OpenSSL not supported by pkg-config, try --with-openssl=PATH instead])
-            fi
-        else
-             SSLLIBS="-lcrypto -lssl"
-        fi
-    else
-        if test x_$use_openssl != x_/usr; then
-            SSLFLAGS="-I${use_openssl}/include"
-            SSLLIBS="-L${use_openssl}/lib -lcrypto -lssl"
-        else
-            SSLLIBS="-lcrypto -lssl"
-        fi
-    fi
-    
-    AC_MSG_CHECKING(for OpenSSL cflags)
-    AC_MSG_RESULT($SSLFLAGS)
-    CPPFLAGS="$CPPFLAGS $SSLFLAGS"
-    
-    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <openssl/opensslv.h>]])],
-        [AC_DEFINE([XSEC_HAVE_OPENSSL],[1],[Define if OpenSSL is in use.])],
-        [AC_MSG_ERROR([Unable to find OpenSSL headers])]);
-    
-    AC_MSG_CHECKING(for OpenSSL libraries)
-    AC_MSG_RESULT($SSLLIBS)
-    LIBS="$LIBS $SSLLIBS"
-    
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <openssl/evp.h>]], [[EVP_EncryptInit(NULL, NULL, NULL, NULL) ; return 0; ]])],,
-        [AC_MSG_ERROR(["Unable to find libcrypto"])])
-    
     # Now try to find out some things about this version of OpenSSL
     
     AC_MSG_CHECKING([for const input buffers in OpenSSL])
@@ -280,59 +224,21 @@ if test x"$use_openssl" != "xno" ; then
         [AC_MSG_RESULT([yes])
     	AC_DEFINE([XSEC_OPENSSL_D2IX509_CONST_BUFFER],[1],[Define to 1 if OpenSSL X509 API has const input buffer.])],
     	[AC_MSG_RESULT([no])])
-fi
 
-AC_ARG_WITH(nss,
-    AS_HELP_STRING([--with-nss],[Use NSS (no longer officially supported). Values = 'yes' or installation directory (Default = no)]),
-    use_nss=$withval, use_nss=no)
+        ],[AS_IF([test "x$with_openssl" != xcheck],[AC_MSG_ERROR([Unable to find OpenSSL])])])
+    ])
 
-if test x"$use_nss" != "xno" ; then
+AC_ARG_WITH([nss],
+    [AS_HELP_STRING([--with-nss],[use the NSS crypto provider @<:@default=check@:>@])],,
+    [with_nss=check])
 
-    # Check for explicit location or try pkg-config
-    if test x"$use_nss" = "xyes" ; then
-        AC_PATH_PROG(PKG_CONFIG, pkg-config,)
-        if test "x$PKG_CONFIG" != x && test "x$PKG_CONFIG" != "xno" ; then
-            if pkg-config nss && pkg-config nspr; then
-                NSSLIBS="`$PKG_CONFIG --libs nss` `$PKG_CONFIG --libs nspr`"
-                NSSFLAGS="`$PKG_CONFIG --cflags nss` `$PKG_CONFIG --cflags nspr`"
-            else
-                AC_MSG_WARN([NSS not supported by pkg-config, try --with-nss=PATH instead])
-            fi
-        else
-            check=`nss-config --version 2>/dev/null`
-            if test -n "$check"; then
-                NSSLIBS="`nss-config --libs` `nspr-config --libs`"
-                NSSFLAGS="`nss-config --cflags` `nspr-config --cflags`"
-            else
-                AC_MSG_ERROR([Unable to use pkg-config or find nss-config/nspr-config, try --with-nss=PATH])
-            fi
-        fi
-    else
-        if test x_$use_nss != x_/usr; then
-            NSSLIBS="-L${use_nss}/lib"
-        fi
-        # NSS is broken and doesn't use a standard include path.
-        NSSFLAGS="-I${use_nss}/include/nss3 -I${use_nss}/include/nss -I${use_nss}/include/nspr"
-        NSSLIBS="$NSSLIBS -lssl3 -lsmime3 -lnss3 -lplds4 -lplc4 -lnspr4"
-    fi
-    
-    AC_MSG_CHECKING(for NSS cflags)
-    AC_MSG_RESULT($NSSFLAGS)
-    CPPFLAGS="$CPPFLAGS $NSSFLAGS"
-    
-    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <nss.h>]])],
-        [AC_DEFINE([XSEC_HAVE_NSS],[1],[Define if NSS is in use.])],
-        [AC_MSG_ERROR([Unable to find NSS headers])])
-    
-    AC_MSG_CHECKING(for NSS libraries)
-    AC_MSG_RESULT($NSSLIBS)
-    LIBS="$LIBS $NSSLIBS"
-    
-    AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <nss.h>]], [[NSS_NoDB_Init(NULL);]])],,
-        [AC_MSG_ERROR([Unable to link with NSS])])
-        
-    AC_MSG_WARN([NSS is no longer officially supported])
-fi
+AS_IF([test x"$with_nss" != xno],
+    [AX_PKG_CHECK_MODULES([nss],,[nss],
+        [with_nss=found
+         AC_DEFINE([XSEC_HAVE_NSS],[1],[Define if NSS is in use])
+         AC_MSG_WARN([NSS is no longer officially supported])
+        ],[AS_IF([test "x$with_nss" != "xcheck"],[AC_MSG_ERROR([Unable to find NSS])])])
+    ])
 
 AC_ARG_ENABLE(xkms,
     AS_HELP_STRING([--disable-xkms],[disable XKMS support]),
@@ -343,8 +249,8 @@ if test x"$have_xkms" = "xyes" ; then
 fi
 
 # Populate the Makefile conditionals
-AM_CONDITIONAL(XSEC_AM_HAVE_OPENSSL, test x"$use_openssl" != "xno")
-AM_CONDITIONAL(XSEC_AM_HAVE_NSS, test x"$use_nss" != "xno")
+AM_CONDITIONAL([XSEC_AM_HAVE_OPENSSL],[test "x$with_openssl" = xfound])
+AM_CONDITIONAL([XSEC_AM_HAVE_NSS],[test "x$with_nss" = xfound])
 AM_CONDITIONAL(XSEC_AM_HAVE_XKMS, test x"$have_xkms" = "xyes")
 
 # output the Makefiles

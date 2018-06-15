@@ -36,7 +36,7 @@
  */
 
 #include "IOStreamOutputter.hpp"
-#include "utils/XSECDOMUtils.hpp"
+#include "../utils/XSECDOMUtils.hpp"
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
 

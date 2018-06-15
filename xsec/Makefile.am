@@ -14,13 +14,15 @@
 # limitations under the License.
 #
 
-AUTOMAKE_OPTIONS = foreign subdir-objects
-
-AM_CPPFLAGS = -I..
+# Find generated headers in the build directory;
+# find everything else in the source directory (always with full path)
+AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 
 noinst_PROGRAMS = ${samples}
 bin_PROGRAMS = ${tools}
-LDADD = libxml-security-c.la
+
+AM_CXXFLAGS = $(xerces_CFLAGS)
+LDADD = libxml-security-c.la $(xerces_LIBS)
 
 #
 # The following are sample programs.  They are NOT installed
@@ -51,6 +53,10 @@ xsec_simpleEncrypt_SOURCES = \
   samples/simpleEncrypt.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
+xsec_simpleEncrypt_CXXFLAGS = $(AM_CXXFLAGS) \
+  $(openssl_CFLAGS)
+xsec_simpleEncrypt_LDADD = $(LDADD) \
+  $(openssl_LIBS)
 
 # Decrypt
 
@@ -59,6 +65,10 @@ xsec_simpleDecrypt_SOURCES = \
   samples/simpleDecrypt.cpp \
   samples/IOStreamOutputter.cpp \
   samples/IOStreamOutputter.hpp
+xsec_simpleDecrypt_CXXFLAGS = $(AM_CXXFLAGS) \
+  $(openssl_CFLAGS)
+xsec_simpleDecrypt_LDADD = $(LDADD) \
+  $(openssl_LIBS)
 
 #
 # Finally we compile the tools that can be used to manipulate
@@ -72,12 +82,18 @@ tools =
 tools += xsec-xtest
 xsec_xtest_SOURCES = \
    tools/xtest/xtest.cpp
-xsec_xtest_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_xtest_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
+xsec_xtest_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(nss_CFLAGS) \
+   $(openssl_CFLAGS)
+xsec_xtest_LDADD = $(LDADD) \
+   $(nss_LIBS) \
+   $(openssl_LIBS)
 
 tools += xsec-c14n
 xsec_c14n_SOURCES = \
    tools/c14n/c14n.cpp
-xsec_c14n_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_c14n_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
  
 tools += xsec-checksig
 xsec_checksig_SOURCES = \
@@ -86,39 +102,69 @@ xsec_checksig_SOURCES = \
    tools/checksig/AnonymousResolver.cpp \
    tools/checksig/InteropResolver.hpp \
    tools/checksig/InteropResolver.cpp
-xsec_checksig_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_checksig_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
+xsec_checksig_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(nss_CFLAGS) \
+   $(openssl_CFLAGS)
+xsec_checksig_LDADD = $(LDADD) \
+   $(nss_LIBS) \
+   $(openssl_LIBS)
 
 tools += xsec-templatesign
 xsec_templatesign_SOURCES = \
    tools/templatesign/templatesign.cpp
-xsec_templatesign_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_templatesign_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
+xsec_templatesign_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(openssl_CFLAGS)
+xsec_templatesign_LDADD = $(LDADD) \
+   $(openssl_LIBS)
 
 tools += xsec-txfmout
 xsec_txfmout_SOURCES = \
    tools/txfmout/txfmout.cpp
-xsec_txfmout_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_txfmout_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 
 tools += xsec-siginf
 xsec_siginf_SOURCES = \
    tools/siginf/siginf.cpp
-xsec_siginf_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_siginf_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
 
 tools += xsec-cipher
 xsec_cipher_SOURCES = \
    tools/cipher/cipher.cpp \
    tools/cipher/XencInteropResolver.hpp \
    tools/cipher/XencInteropResolver.cpp
-xsec_cipher_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_cipher_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
+xsec_cipher_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(nss_CFLAGS) \
+   $(openssl_CFLAGS)
+xsec_cipher_LDADD = $(LDADD) \
+   $(nss_LIBS) \
+   $(openssl_LIBS)
 
 if XSEC_AM_HAVE_XKMS
 tools += xsec-xklient
 xsec_xklient_SOURCES = \
    tools/xklient/xklient.cpp \
    enc/OpenSSL/OpenSSLSupport.hpp
-xsec_xklient_CPPFLAGS = -DXSEC_BUILDING_TOOLS
+xsec_xklient_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
+xsec_xklient_CXXFLAGS = $(AM_CXXFLAGS) \
+   $(openssl_CFLAGS)
+xsec_xklient_LDADD = $(LDADD) \
+   $(openssl_LIBS)
 endif
 
-libxml_security_c_la_CPPFLAGS = -DXSEC_BUILDING_LIBRARY
+libxml_security_c_la_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_LIBRARY
+
+libxml_security_c_la_CXXFLAGS = \
+   $(xerces_CFLAGS) \
+   $(openssl_CFLAGS) \
+   $(nss_CFLAGS)
+
+libxml_security_c_la_LIBADD = \
+   $(xerces_LIBS) \
+   $(openssl_LIBS) \
+   $(nss_LIBS)
 
 lib_LTLIBRARIES = libxml-security-c.la
 
@@ -232,11 +278,13 @@ frameworkinclude_HEADERS = \
   framework/XSECException.hpp \
   framework/XSECError.hpp \
   framework/XSECProvider.hpp \
-  framework/XSECConfig.hpp \
   framework/XSECURIResolverXerces.hpp \
   framework/XSECAlgorithmMapper.hpp \
   framework/XSECW32Config.hpp \
   framework/XSECVersion.hpp
+
+nodist_frameworkinclude_HEADERS = \
+  framework/XSECConfig.hpp
 
 transformersinclude_HEADERS = \
   transformers/TXFMXPathFilter.hpp \
@@ -601,9 +649,6 @@ nss_sources = \
 # Now the library specific build items
 #
 libxml_security_c_la_LDFLAGS = -version-info 20:0:0
-
-install-exec-hook:
-	for la in $(lib_LTLIBRARIES) ; do rm -f $(DESTDIR)$(libdir)/$$la ; done
 
 EXTRA_DIST = \
   utils/winutils/XSECSOAPRequestorSimpleWin32.cpp \

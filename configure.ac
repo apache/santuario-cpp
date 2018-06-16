@@ -60,13 +60,6 @@ if test "$GCC" = "yes" ; then
     CXXFLAGS="-Wall $GCC_CXXFLAGS"
 fi
 
-# pthreads
-AX_PTHREAD
-CFLAGS="${CFLAGS} ${PTHREAD_CFLAGS}"
-CXXFLAGS="${CXXFLAGS} ${PTHREAD_CFLAGS}"
-LIBS="${LIBS} ${PTHREAD_LIBS}"
-CC="${PTHREAD_CC}"
-
 # Check for required includes
 AC_CHECK_HEADERS([unistd.h direct.h])
 
@@ -178,7 +171,7 @@ AS_IF([test x"$with_openssl" != xno],
     old_libs=$LIBS
     CFLAGS="$CFLAGS $openssl_CFLAGS"
     LIBS="$LIBS $openssl_LIBS"
-    
+
     AC_MSG_CHECKING([for const input buffers in OpenSSL])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <openssl/rsa.h>]], [[ const unsigned char * buf;
     	  unsigned char * outbuf;
@@ -233,7 +226,7 @@ AS_IF([test x"$with_openssl" != xno],
     CFLAGS="$old_CFLAGS"
     LIBS="$old_LIBS"
 
-        ],[AS_IF([test "x$with_openssl" != xcheck],[AC_MSG_ERROR([Unable to find OpenSSL])])])       
+        ],[AS_IF([test "x$with_openssl" != xcheck],[AC_MSG_ERROR([Unable to find OpenSSL])])])
     ])
 
 AC_ARG_WITH([nss],

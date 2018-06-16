@@ -99,10 +99,12 @@ This package includes files needed for development with xml-security-c.
 %{_libdir}/*.so
 %{_libdir}/*.a
 %{_libdir}/pkgconfig/xml-security-c.pc
+%exclude %{_libdir}/*.la
 
 %changelog
 * Mon Nov 13 2017 Scott Cantor <cantor.2@osu.edu> 2.0.0-1
 - update to 2.0.0
+- exclude libtool archive
 
 * Wed Jan 28 2015 Scott Cantor <cantor.2@osu.edu> 1.7.3-1
 - update to 1.7.3

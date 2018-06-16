@@ -173,11 +173,8 @@ AS_IF([test x"$with_openssl" != xno],
          AC_DEFINE([XSEC_HAVE_OPENSSL],[1],[Define if OpenSSL is in use])
 
     # Now try to find out some things about this version of OpenSSL
-    
-    old_flags=$CFLAGS
-    old_libs=$LIBS
-    CFLAGS="$CFLAGS $openssl_CFLAGS"
-    LIBS="$LIBS $openssl_LIBS"
+   
+    AX_SAVE_FLAGS_WITH_PREFIX([openssl],[[CFLAGS],[LIBS]]) 
     
     AC_MSG_CHECKING([for const input buffers in OpenSSL])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <openssl/rsa.h>]], [[ const unsigned char * buf;
@@ -230,8 +227,7 @@ AS_IF([test x"$with_openssl" != xno],
     	AC_DEFINE([XSEC_OPENSSL_D2IX509_CONST_BUFFER],[1],[Define to 1 if OpenSSL X509 API has const input buffer.])],
     	[AC_MSG_RESULT([no])])
 
-    CFLAGS="$old_CFLAGS"
-    LIBS="$old_LIBS"
+    AX_RESTORE_FLAGS_WITH_PREFIX([openssl],[[CFLAGS],[LIBS]])
 
         ],[AS_IF([test "x$with_openssl" != xcheck],[AC_MSG_ERROR([Unable to find OpenSSL])])])       
     ])

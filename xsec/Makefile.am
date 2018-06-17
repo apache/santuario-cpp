@@ -21,8 +21,8 @@ AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 noinst_PROGRAMS = ${samples}
 bin_PROGRAMS = ${tools}
 
-AM_CXXFLAGS = $(xerces_CFLAGS)
-LDADD = libxml-security-c.la $(xerces_LIBS)
+AM_CXXFLAGS = $(xerces_CFLAGS) $(xalan_CFLAGS)
+LDADD = libxml-security-c.la $(xerces_LIBS) $(xalan_LIBS)
 
 #
 # The following are sample programs.  They are NOT installed
@@ -94,7 +94,7 @@ tools += xsec-c14n
 xsec_c14n_SOURCES = \
    tools/c14n/c14n.cpp
 xsec_c14n_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_TOOLS
- 
+
 tools += xsec-checksig
 xsec_checksig_SOURCES = \
    tools/checksig/checksig.cpp \
@@ -157,11 +157,13 @@ endif
 libxml_security_c_la_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_LIBRARY
 
 libxml_security_c_la_CXXFLAGS = \
+   $(xalan_CFLAGS) \
    $(xerces_CFLAGS) \
    $(openssl_CFLAGS) \
    $(nss_CFLAGS)
 
 libxml_security_c_la_LIBADD = \
+   $(xalan_LIBS) \
    $(xerces_LIBS) \
    $(openssl_LIBS) \
    $(nss_LIBS)

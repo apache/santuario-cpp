@@ -105,34 +105,35 @@ if test x"$use_xalan" != x"no" ; then
 
   if test $XALANCROOT; then
 
-    AC_MSG_CHECKING([for Xalan headers in XALANCROOT])
+    AC_MSG_NOTICE([looking for Xalan headers in $XALANCROOT])
 
-    OLD_CPPFLAGS=$CPPFLAGS
     # Updated to include nls/include as this is generally needed for
     # compilation against non-installed xalan.
     # Also now include XALANCROOT/include to cater for installed xalan
-    CPPFLAGS=["-I${XALANCROOT}/src -I${XALANCROOT}/include -I${XALANCROOT}/nls/include ${CPPFLAGS}"]
-
-    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <xalanc/Include/XalanVersion.hpp>]])],[xalan_found=yes 
-      LIBS="-L${XALANCROOT}/lib -lxalan-c ${LIBS}"
-      AC_MSG_RESULT([found])],[CPPFLAGS=$OLD_CPPFLAGS
-      AC_MSG_RESULT([no])]);
+    xalan_CFLAGS="-I${XALANCROOT}/src -I${XALANCROOT}/include -I${XALANCROOT}/nls/include"
+    xalan_LIBS="-L${XALANCROOT}/lib -lxalan-c"
+    AX_SAVE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS]])
+    AC_CHECK_HEADER([xalanc/Include/XalanVersion.hpp],
+                    [xalan_found=yes])
+    AX_RESTORE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS]])
 
   fi
 
   if test -z "$xalan_found" ; then
 
-    AC_MSG_CHECKING([for Xalan in system includes])
-    AC_PREPROC_IFELSE([AC_LANG_SOURCE([[#include <xalanc/Include/XalanVersion.hpp>]])],
-        [xalan_found=yes 
-        LIBS="${LIBS} -lxalan-c"
-        AC_MSG_RESULT([found])],
-      [AC_MSG_RESULT([no - WARNING - configuring without Xalan])]);
+    AC_MSG_NOTICE([looking for Xalan in system includes])
+    unset ac_cv_header_xalanc_Include_XalanVersion_hpp
+    AC_CHECK_HEADER([xalanc/Include/XalanVersion.hpp],
+                    [xalan_found=yes
+		     xalan_CFLAGS=""
+		     xalan_LIBS="-lxalan-c"],
+		    [AC_MSG_NOTICE([WARNING - configuring without Xalan])])
 
   fi
 fi
 
 if test "${xalan_found}" = "yes" ; then
+AX_SAVE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS],[LIBS]])
 
 AC_MSG_CHECKING([Xalan version])
 AC_PREPROC_IFELSE(
@@ -146,16 +147,13 @@ int i = 0;
     [AC_MSG_FAILURE([Xalan-C 1.11+ is required])])
 
   # Do we need xalanMsg.so?
-  AC_MSG_CHECKING([if libxalanMsg is required])
-  old_libs=$LIBS
-  LIBS="${LIBS} -lxalanMsg"
-  AC_LINK_IFELSE([AC_LANG_PROGRAM([[]], [[
-    int test=1;
-  ]])],[AC_MSG_RESULT(yes)],[AC_MSG_RESULT(no)
-  LIBS=${old_libs}]);
+  AC_SEARCH_LIBS([XalanInitialize],[xalanMsg],[xalan_LIBS="$LIBS"])
   
   AC_DEFINE([XSEC_HAVE_XALAN],[1],[Define to 1 if Xalan is available.])
+  AC_SUBST([xalan_CFLAGS])
+  AC_SUBST([xalan_LIBS])
 
+AX_RESTORE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS],[LIBS]])
 else
   AC_MSG_NOTICE([Xalan not included in build - XPath and XSLT will not be available])
 fi

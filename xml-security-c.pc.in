@@ -7,6 +7,7 @@ Name: @PACKAGE_NAME@
 Description: Apache XML security C++ library
 Version: @VERSION@
 Libs: -L${libdir} -lxml-security-c
-Cflags: -I${includedir}
+Libs.private: @xalan_LIBS@
+Cflags: -I${includedir} @xalan_CFLAGS@
 Requires: @AX_PACKAGE_REQUIRES@
 Requires.private: @AX_PACKAGE_REQUIRES_PRIVATE@

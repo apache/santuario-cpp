@@ -85,7 +85,16 @@ return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
 
 AC_LANG(C++)
 
+# Note that the pkg-config macros improperly set pkg_CFLAGS rather
+# than CPPFLAGS and/or CXXFLAGS, so this requires some workarounds.
+# Where possible, we clear the CFLAGS version to make sure nothing
+# is depending on it downstream. Compile tests are favored over
+# preproc-only tests so that CXXFLAGS should be sufficient.
+
 AX_PKG_CHECK_MODULES([xerces],,[xerces-c >= 3.2])
+xerces_CXXFLAGS=$xerces_CFLAGS
+xerces_CFLAGS=""
+AC_SUBST([xerces_CXXFLAGS])
 
 # Get user options
 
@@ -110,12 +119,12 @@ if test x"$use_xalan" != x"no" ; then
     # Updated to include nls/include as this is generally needed for
     # compilation against non-installed xalan.
     # Also now include XALANCROOT/include to cater for installed xalan
-    xalan_CFLAGS="-I${XALANCROOT}/src -I${XALANCROOT}/include -I${XALANCROOT}/nls/include"
+    xalan_CXXFLAGS="-I${XALANCROOT}/src -I${XALANCROOT}/include -I${XALANCROOT}/nls/include"
     xalan_LIBS="-L${XALANCROOT}/lib -lxalan-c"
-    AX_SAVE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS]])
+    AX_SAVE_FLAGS_WITH_PREFIX([xalan],[[CXXFLAGS]])
     AC_CHECK_HEADER([xalanc/Include/XalanVersion.hpp],
                     [xalan_found=yes])
-    AX_RESTORE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS]])
+    AX_RESTORE_FLAGS_WITH_PREFIX([xalan],[[CXXFLAGS]])
 
   fi
 
@@ -125,7 +134,7 @@ if test x"$use_xalan" != x"no" ; then
     unset ac_cv_header_xalanc_Include_XalanVersion_hpp
     AC_CHECK_HEADER([xalanc/Include/XalanVersion.hpp],
                     [xalan_found=yes
-		     xalan_CFLAGS=""
+		     xalan_CXXFLAGS=""
 		     xalan_LIBS="-lxalan-c"],
 		    [AC_MSG_NOTICE([WARNING - configuring without Xalan])])
 
@@ -133,10 +142,10 @@ if test x"$use_xalan" != x"no" ; then
 fi
 
 if test "${xalan_found}" = "yes" ; then
-AX_SAVE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS],[LIBS]])
+AX_SAVE_FLAGS_WITH_PREFIX([xalan],[[CXXFLAGS],[LIBS]])
 
 AC_MSG_CHECKING([Xalan version])
-AC_PREPROC_IFELSE(
+AC_COMPILE_IFELSE(
     [AC_LANG_PROGRAM([#include <xalanc/Include/XalanVersion.hpp>],
 [#if  _XALAN_VERSION >= 11100
 int i = 0;
@@ -150,14 +159,15 @@ int i = 0;
   AC_SEARCH_LIBS([XalanInitialize],[xalanMsg],[xalan_LIBS="$LIBS"])
   
   AC_DEFINE([XSEC_HAVE_XALAN],[1],[Define to 1 if Xalan is available.])
-  AC_SUBST([xalan_CFLAGS])
+  AC_SUBST([xalan_CXXFLAGS])
   AC_SUBST([xalan_LIBS])
 
-AX_RESTORE_FLAGS_WITH_PREFIX([xalan],[[CFLAGS],[LIBS]])
+AX_RESTORE_FLAGS_WITH_PREFIX([xalan],[[CXXFLAGS],[LIBS]])
 else
   AC_MSG_NOTICE([Xalan not included in build - XPath and XSLT will not be available])
 fi
 
+AC_LANG(C)
 
 # Crypto provider options (OpenSSL / NSS)
 

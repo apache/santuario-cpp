@@ -8,6 +8,6 @@ Description: Apache XML security C++ library
 Version: @VERSION@
 Libs: -L${libdir} -lxml-security-c
 Libs.private: @xalan_LIBS@
-Cflags: -I${includedir} @xalan_CFLAGS@
+Cflags: -I${includedir} @xalan_CXXFLAGS@
 Requires: @AX_PACKAGE_REQUIRES@
 Requires.private: @AX_PACKAGE_REQUIRES_PRIVATE@

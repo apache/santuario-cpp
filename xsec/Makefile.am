@@ -21,7 +21,7 @@ AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 noinst_PROGRAMS = ${samples}
 bin_PROGRAMS = ${tools}
 
-AM_CXXFLAGS = $(xerces_CFLAGS) $(xalan_CFLAGS)
+AM_CXXFLAGS = $(xerces_CXXFLAGS) $(xalan_CXXFLAGS)
 LDADD = libxml-security-c.la $(xerces_LIBS) $(xalan_LIBS)
 
 #
@@ -157,8 +157,8 @@ endif
 libxml_security_c_la_CPPFLAGS = $(AM_CPPFLAGS) -DXSEC_BUILDING_LIBRARY
 
 libxml_security_c_la_CXXFLAGS = \
-   $(xalan_CFLAGS) \
-   $(xerces_CFLAGS) \
+   $(xalan_CXXFLAGS) \
+   $(xerces_CXXFLAGS) \
    $(openssl_CFLAGS) \
    $(nss_CFLAGS)
 

@@ -34,12 +34,11 @@
 
 // XML-Security-C (XSEC)
 
-#include <xsec/framework/XSECProvider.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
-#include <xsec/framework/XSECException.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
 #include <xsec/enc/XSECCryptoException.hpp>
+#include <xsec/framework/XSECProvider.hpp>
+#include <xsec/framework/XSECException.hpp>
+#include <xsec/utils/XSECPlatformUtils.hpp>
 
 #include "../utils/XSECDOMUtils.hpp"
 
@@ -173,9 +172,8 @@ int main (int argc, char **argv) {
 
 
 	try {
-		// Use the OpenSSL interface objects to get a signing key
-
-		OpenSSLCryptoX509 * x509 = new OpenSSLCryptoX509();
+		// Use the interface objects to get a signing key
+		XSECCryptoX509* x509 = XSECPlatformUtils::g_cryptoProvider->X509();
 		x509->loadX509Base64Bin(cert, (unsigned int) strlen(cert));
 		
 		sig->load();

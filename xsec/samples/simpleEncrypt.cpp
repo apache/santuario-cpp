@@ -37,14 +37,12 @@
 
 #include <xsec/framework/XSECProvider.hpp>
 #include <xsec/framework/XSECException.hpp>
+#include <xsec/utils/XSECPlatformUtils.hpp>
 #include <xsec/xenc/XENCCipher.hpp>
 #include <xsec/xenc/XENCEncryptedData.hpp>
 #include <xsec/xenc/XENCEncryptedKey.hpp>
 
 #include "../utils/XSECDOMUtils.hpp"
-
-#include <xsec/enc/OpenSSL/OpenSSLCryptoSymmetricKey.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLCryptoX509.hpp>
 
 // Xalan
 
@@ -52,10 +50,6 @@
 #include <xalanc/XalanTransformer/XalanTransformer.hpp>
 XALAN_USING_XALAN(XalanTransformer)
 #endif
-
-// OpenSSL
-
-#include <openssl/rand.h>
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -151,30 +145,14 @@ int main (int argc, char **argv) {
 
 		cipher = prov.newCipher(doc);
 
-		/* Now generate a random key that we can use to encrypt the element
-		 *
-		 * First check the status of the random generation in OpenSSL
-		 */
-
-		if (RAND_status() != 1) {
-
-			cerr << "OpenSSL random generation not properly initialised" << endl;
-			exit(1);
-
-		}
+		/* Now generate a random key that we can use to encrypt the element */
 
 		unsigned char keyBuf[24];
-		if (RAND_bytes(keyBuf, 24) == 0) {
-
-			cerr << "Error obtaining 24 bytes of random from OpenSSL" << endl;
-			exit(1);
-
-		}
+		XSECPlatformUtils::g_cryptoProvider->getRandom(keyBuf, 24);
 
 		/* Wrap this in a Symmetric 3DES key */
 
-		OpenSSLCryptoSymmetricKey * key = 
-			new OpenSSLCryptoSymmetricKey(XSECCryptoSymmetricKey::KEY_3DES_192);
+		XSECCryptoSymmetricKey * key = XSECPlatformUtils::g_cryptoProvider->keySymmetric(XSECCryptoSymmetricKey::KEY_3DES_192);
 		key->setKey(keyBuf, 24);
 		cipher->setKey(key);
 
@@ -184,7 +162,7 @@ int main (int argc, char **argv) {
 		/* Now lets create an EncryptedKey element to hold the generated key */
 
 		/* First lets load the public key in the certificate */
-		OpenSSLCryptoX509 * x509 = new OpenSSLCryptoX509();
+		XSECCryptoX509* x509 = XSECPlatformUtils::g_cryptoProvider->X509();
 		x509->loadX509Base64Bin(cert, (unsigned int) strlen(cert));
 	
 		/* Now set the Key Encrypting Key (NOTE: Not the normal key) */

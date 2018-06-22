@@ -775,14 +775,7 @@ int main(int argc, char **argv) {
         else 
 #endif
         if (_stricmp(argv[paramCount], "--hmackey") == 0 || _stricmp(argv[paramCount], "-h") == 0) {
-
-#if defined (XSEC_HAVE_OPENSSL)
-            OpenSSLCryptoKeyHMAC * hmacKey = new OpenSSLCryptoKeyHMAC();
-#else
-#   if defined (XSEC_HAVE_WINCAPI)
-            WinCAPICryptoKeyHMAC * hmacKey = new WinCAPICryptoKeyHMAC(0);
-#   endif
-#endif
+            XSECCryptoKeyHMAC* hmacKey = XSECPlatformUtils::g_cryptoProvider->keyHMAC();
             hmacKey->setKey((unsigned char *) argv[paramCount + 1], (unsigned int) strlen(argv[paramCount + 1]));
             key = hmacKey;
             paramCount += 2;

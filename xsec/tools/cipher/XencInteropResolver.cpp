@@ -48,10 +48,6 @@ XERCES_CPP_NAMESPACE_USE
 
 #include <iostream>
 
-#if !defined (XSEC_HAVE_OPENSSL) && !defined (XSEC_HAVE_WINCAPI) && !defined (XSEC_HAVE_NSS)
-#   error Require OpenSSL or Windows Crypto API for the Merlin Resolver
-#endif
-
 #if defined (XSEC_HAVE_OPENSSL)
 #   include <openssl/x509.h>
 #   include <openssl/pem.h>

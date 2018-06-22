@@ -40,8 +40,8 @@
 
 #include <xsec/framework/XSECProvider.hpp>
 #include <xsec/dsig/DSIGReference.hpp>
-#include <xsec/enc/OpenSSL/OpenSSLCryptoKeyHMAC.hpp>
 #include <xsec/framework/XSECException.hpp>
+#include <xsec/utils/XSECPlatformUtils.hpp>
 
 #include "../utils/XSECDOMUtils.hpp"
 
@@ -146,7 +146,7 @@ int main (int argc, char **argv) {
 
 		// Set the HMAC Key to be the string "secret"
 
-		OpenSSLCryptoKeyHMAC * hmacKey = new OpenSSLCryptoKeyHMAC();
+		XSECCryptoKeyHMAC* hmacKey = XSECPlatformUtils::g_cryptoProvider->keyHMAC();
 		hmacKey->setKey((unsigned char *) "secret", (unsigned int) strlen("secret"));
 		sig->setSigningKey(hmacKey);
 

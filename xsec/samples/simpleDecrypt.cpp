@@ -41,7 +41,12 @@
 #include <xsec/framework/XSECException.hpp>
 #include <xsec/xenc/XENCCipher.hpp>
 
-#include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
+#ifdef XSEC_HAVE_OPENSSL
+# include <xsec/enc/OpenSSL/OpenSSLCryptoKeyRSA.hpp>
+# include <openssl/bio.h>
+# include <openssl/evp.h>
+# include <openssl/pem.h>
+#endif
 
 #include "../utils/XSECDOMUtils.hpp"
 
@@ -53,10 +58,6 @@ XALAN_USING_XALAN(XalanTransformer)
 #endif
 
 // OpenSSL
-
-#include <openssl/bio.h>
-#include <openssl/evp.h>
-#include <openssl/pem.h>
 
 XERCES_CPP_NAMESPACE_USE
 
@@ -117,10 +118,10 @@ int main (int argc, char **argv) {
 	}
 	catch (const XMLException &e) {
 
-		cerr << "Error during initialisation of Xerces" << endl;
+		cerr << "Error during initialization of libraries" << endl;
 		cerr << "Error Message = : "
 		     << e.getMessage() << endl;
-
+		return -1;
 	}
 
 	// Use xerces to parse the document
@@ -153,6 +154,7 @@ int main (int argc, char **argv) {
 
 		cipher = prov.newCipher(doc);
 
+#ifdef XSEC_HAVE_OPENSSL
 		/* Load the private key via OpenSSL and then wrap in an OpenSSLCrypto construct */
 		BIO * bioMem = BIO_new(BIO_s_mem());
 		BIO_puts(bioMem, s_privateKey);
@@ -162,6 +164,9 @@ int main (int argc, char **argv) {
 
 		OpenSSLCryptoKeyRSA * k = new OpenSSLCryptoKeyRSA(pk);
 		cipher->setKEK(k);
+#else
+		throw XSECException(XSECException::CryptoProviderError);
+#endif
 
 		/* Find the EncryptedData node */
 		DOMNode * encryptedNode = findXENCNode(doc, "EncryptedData");

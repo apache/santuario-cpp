@@ -1,4 +1,12 @@
-For subsequent changes, refer to the issue tracker.
+2.0.0
+=====================================
+This is a major upgrade of the library that includes both a small
+number of enumerated changes, and a large number of fairly minimal API
+changes across the entire library. For this release, and all future
+releases, please refer to the web site and/or issue tracker for a
+summary of changes.
+
+Below are older change logs maintained from earlier releases.
 
 Changes since 1.7.0
 =====================================

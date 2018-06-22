@@ -98,10 +98,6 @@ XALAN_USING_XALAN(XalanTransformer)
 
 #endif
 
-#if !defined (XSEC_HAVE_OPENSSL) && !defined(XSEC_HAVE_WINCAPI) && !defined(XSEC_HAVE_NSS)
-#   error No available cryptoAPI
-#endif
-
 #if defined (XSEC_HAVE_OPENSSL)
 // OpenSSL
 

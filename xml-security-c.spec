@@ -67,7 +67,7 @@ This package includes files needed for development with xml-security-c.
 %setup -q
 
 %build
-%configure %{!?_with_xalan: --without-xalan} %{!?_enable_xkms: --disable-xkms}
+%configure --with-openssl %{!?_with_xalan: --without-xalan} %{!?_enable_xkms: --disable-xkms}
 %{__make}
 
 %install

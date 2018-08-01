@@ -63,12 +63,12 @@ XSECKeyInfoResolverDefault::~XSECKeyInfoResolverDefault() {
 // --------------------------------------------------------------------------------
 
 
-XSECCryptoKey * XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList * lst) const {
+XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst) const {
 
 	// Try to find a key from the KeyInfo list as best we can
 	// NOTE: No validation is performed (i.e. no cert/CRL checks etc.)
 
-	XSECCryptoKey * ret = NULL;
+	XSECCryptoKey* ret = NULL;
 
 	DSIGKeyInfoList::size_type sz = lst->getSize();
 
@@ -79,13 +79,11 @@ XSECCryptoKey * XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList * l
 		case (DSIGKeyInfo::KEYINFO_X509) :
 		{
 			ret = NULL;
-			const XMLCh * x509Str;
-			XSECCryptoX509 * x509 = XSECPlatformUtils::g_cryptoProvider->X509();
-			Janitor<XSECCryptoX509> j_x509(x509);
-
-			x509Str = ((DSIGKeyInfoX509 *) lst->item(i))->getCertificateItem(0);
+			const XMLCh* x509Str = ((const DSIGKeyInfoX509 *) lst->item(i))->getCertificateItem(0);
 			
-			if (x509Str != 0) {
+			if (x509Str) {
+	            XSECCryptoX509 * x509 = XSECPlatformUtils::g_cryptoProvider->X509();
+	            Janitor<XSECCryptoX509> j_x509(x509);
 
 				// The crypto interface classes work UTF-8
 				safeBuffer transX509;
@@ -104,66 +102,82 @@ XSECCryptoKey * XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList * l
 		case (DSIGKeyInfo::KEYINFO_VALUE_DSA) :
 		{
 
-			XSECCryptoKeyDSA * dsa = XSECPlatformUtils::g_cryptoProvider->keyDSA();
-			Janitor<XSECCryptoKeyDSA> j_dsa(dsa);
+			const DSIGKeyInfoValue* dsaval = (const DSIGKeyInfoValue *) lst->item(i);
+			if (dsaval->getDSAP() && dsaval->getDSAQ() && dsaval->getDSAG() && dsaval->getDSAY()) {
 
-			safeBuffer value;
+	            XSECCryptoKeyDSA * dsa = XSECPlatformUtils::g_cryptoProvider->keyDSA();
+	            Janitor<XSECCryptoKeyDSA> j_dsa(dsa);
 
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getDSAP());
-			dsa->loadPBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getDSAQ());
-			dsa->loadQBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getDSAG());
-			dsa->loadGBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getDSAY());
-			dsa->loadYBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                safeBuffer value;
 
-			j_dsa.release();
-			return dsa;
+                value << (*mp_formatter << dsaval->getDSAP());
+                dsa->loadPBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                value << (*mp_formatter << dsaval->getDSAQ());
+                dsa->loadQBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                value << (*mp_formatter << dsaval->getDSAG());
+                dsa->loadGBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                value << (*mp_formatter << dsaval->getDSAY());
+                dsa->loadYBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+
+                j_dsa.release();
+                return dsa;
+			}
 		}
 			break;
 
 		case (DSIGKeyInfo::KEYINFO_VALUE_RSA) :
 		{
+		    const DSIGKeyInfoValue* rsaval = (const DSIGKeyInfoValue *) lst->item(i);
+		    if (rsaval->getRSAModulus() && rsaval->getRSAExponent()) {
 
-			XSECCryptoKeyRSA * rsa = XSECPlatformUtils::g_cryptoProvider->keyRSA();
-			Janitor<XSECCryptoKeyRSA> j_rsa(rsa);
+                XSECCryptoKeyRSA* rsa = XSECPlatformUtils::g_cryptoProvider->keyRSA();
+                Janitor<XSECCryptoKeyRSA> j_rsa(rsa);
 
-			safeBuffer value;
+                safeBuffer value;
 
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getRSAModulus());
-			rsa->loadPublicModulusBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getRSAExponent());
-			rsa->loadPublicExponentBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                value << (*mp_formatter << rsaval->getRSAModulus());
+                rsa->loadPublicModulusBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                value << (*mp_formatter << rsaval->getRSAExponent());
+                rsa->loadPublicExponentBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
 
-			j_rsa.release();
-			return rsa;
+                j_rsa.release();
+                return rsa;
+		    }
 
 		}
             break;
 
         case (DSIGKeyInfo::KEYINFO_VALUE_EC) :
         {
+            const DSIGKeyInfoValue* ecval = (const DSIGKeyInfoValue *) lst->item(i);
+            if (ecval->getECPublicKey() && ecval->getECNamedCurve()) {
 
-            XSECCryptoKeyEC* ec = XSECPlatformUtils::g_cryptoProvider->keyEC();
-            Janitor<XSECCryptoKeyEC> j_ec(ec);
+                XSECCryptoKeyEC* ec = XSECPlatformUtils::g_cryptoProvider->keyEC();
+                Janitor<XSECCryptoKeyEC> j_ec(ec);
 
-            safeBuffer value;
-			value << (*mp_formatter << ((DSIGKeyInfoValue *) lst->item(i))->getECPublicKey());
-            XSECAutoPtrChar curve(((DSIGKeyInfoValue *) lst->item(i))->getECNamedCurve());
-            if (curve.get()) {
-                ec->loadPublicKeyBase64(curve.get(), value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-                j_ec.release();
-                return ec;
+                safeBuffer value;
+
+                value << (*mp_formatter << ecval->getECPublicKey());
+                XSECAutoPtrChar curve(ecval->getECNamedCurve());
+                if (curve.get()) {
+                    ec->loadPublicKeyBase64(curve.get(), value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                    j_ec.release();
+                    return ec;
+                }
             }
         }
             break;
 
         case (DSIGKeyInfo::KEYINFO_DERENCODED) :
         {
-            safeBuffer value;
-			value << (*mp_formatter << ((DSIGKeyInfoDEREncoded *) lst->item(i))->getData());
-            return XSECPlatformUtils::g_cryptoProvider->keyDER(value.rawCharBuffer(), (unsigned int)strlen(value.rawCharBuffer()), true);
+            const DSIGKeyInfoDEREncoded* derval = (const DSIGKeyInfoDEREncoded *) lst->item(i);
+            if (derval->getData()) {
+
+                safeBuffer value;
+
+                value << (*mp_formatter << derval->getData());
+                return XSECPlatformUtils::g_cryptoProvider->keyDER(value.rawCharBuffer(), (unsigned int)strlen(value.rawCharBuffer()), true);
+            }
         }
             break;
 
@@ -178,7 +192,7 @@ XSECCryptoKey * XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList * l
 }
 
 
-XSECKeyInfoResolver * XSECKeyInfoResolverDefault::clone(void) const {
+XSECKeyInfoResolver* XSECKeyInfoResolverDefault::clone() const {
 
 	return new XSECKeyInfoResolverDefault();
 

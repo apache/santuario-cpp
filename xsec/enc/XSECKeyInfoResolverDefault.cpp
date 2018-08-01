@@ -103,21 +103,29 @@ XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst
 		{
 
 			const DSIGKeyInfoValue* dsaval = (const DSIGKeyInfoValue *) lst->item(i);
-			if (dsaval->getDSAP() && dsaval->getDSAQ() && dsaval->getDSAG() && dsaval->getDSAY()) {
+			if (dsaval->getDSAP() || dsaval->getDSAQ() || dsaval->getDSAG() || dsaval->getDSAY()) {
 
 	            XSECCryptoKeyDSA * dsa = XSECPlatformUtils::g_cryptoProvider->keyDSA();
 	            Janitor<XSECCryptoKeyDSA> j_dsa(dsa);
 
                 safeBuffer value;
 
-                value << (*mp_formatter << dsaval->getDSAP());
-                dsa->loadPBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-                value << (*mp_formatter << dsaval->getDSAQ());
-                dsa->loadQBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-                value << (*mp_formatter << dsaval->getDSAG());
-                dsa->loadGBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-                value << (*mp_formatter << dsaval->getDSAY());
-                dsa->loadYBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                if (dsaval->getDSAP()) {
+                    value << (*mp_formatter << dsaval->getDSAP());
+                    dsa->loadPBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                }
+                if (dsaval->getDSAQ()) {
+                    value << (*mp_formatter << dsaval->getDSAQ());
+                    dsa->loadQBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                }
+                if (dsaval->getDSAG()) {
+                    value << (*mp_formatter << dsaval->getDSAG());
+                    dsa->loadGBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                }
+                if (dsaval->getDSAY()) {
+                    value << (*mp_formatter << dsaval->getDSAY());
+                    dsa->loadYBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
+                }
 
                 j_dsa.release();
                 return dsa;

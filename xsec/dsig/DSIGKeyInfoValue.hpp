@@ -109,7 +109,7 @@ public:
 	 * a DOM structure 
 	 */
 
-	virtual void load(void);
+	virtual void load();
 
 	/**
 	 * \brief Get P value
@@ -117,7 +117,7 @@ public:
 	 * @returns a pointer to the DSA P string value.
 	 */
 
-	const XMLCh * getDSAP(void) const {return mp_PTextNode->getNodeValue();}
+	const XMLCh * getDSAP() const {return mp_PTextNode ? mp_PTextNode->getNodeValue() : NULL;}
 
 	/**
 	 * \brief Get Q value
@@ -125,7 +125,7 @@ public:
 	 * @returns a pointer to the DSA Q string value.
 	 */
 
-	const XMLCh * getDSAQ(void) const {return mp_QTextNode->getNodeValue();}
+	const XMLCh * getDSAQ() const {return mp_QTextNode ? mp_QTextNode->getNodeValue() : NULL;}
 
 	/**
 	 * \brief Get G value
@@ -133,7 +133,7 @@ public:
 	 * @returns a pointer to the DSA G string value.
 	 */
 
-	const XMLCh * getDSAG(void) const {return mp_GTextNode->getNodeValue();}
+	const XMLCh * getDSAG() const {return mp_GTextNode ? mp_GTextNode->getNodeValue() : NULL;}
 
 	/**
 	 * \brief Get Y value
@@ -141,7 +141,7 @@ public:
 	 * @returns a pointer to the DSA Y string value.
 	 */
 
-	const XMLCh * getDSAY(void) const {return mp_YTextNode->getNodeValue();}
+	const XMLCh * getDSAY() const {return mp_YTextNode ? mp_YTextNode->getNodeValue() : NULL;}
 
 	/**
 	 * \brief Get Modulus
@@ -149,7 +149,7 @@ public:
 	 * @returns A pointer to the RSA Modulus
 	 */
 
-	const XMLCh * getRSAModulus(void) const;
+	const XMLCh * getRSAModulus() const;
 
 	/**
 	 * \brief Get Exponent
@@ -157,7 +157,7 @@ public:
 	 * @returns A pointer to the buffer containing the RSA Modulus string
 	 */
 
-	const XMLCh * getRSAExponent(void) const;
+	const XMLCh * getRSAExponent() const;
 
 	/**
 	 * \brief Get NamedCurve URI
@@ -165,7 +165,7 @@ public:
 	 * @returns A pointer to the EC NamedCurve URI
 	 */
 
-	const XMLCh * getECNamedCurve(void) const;
+	const XMLCh * getECNamedCurve() const;
 
 	/**
 	 * \brief Get EC Public Key
@@ -173,7 +173,7 @@ public:
 	 * @returns A pointer to the buffer containing the EC public key
 	 */
 
-	const XMLCh * getECPublicKey(void) const;
+	const XMLCh * getECPublicKey() const;
 
     //@}
 

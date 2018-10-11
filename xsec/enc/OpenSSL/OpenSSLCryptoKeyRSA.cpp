@@ -449,6 +449,12 @@ bool OpenSSLCryptoKeyRSA::verifySHA1PKCS1Base64Signature(
             "OpenSSL:RSA - Attempt to validate signature with empty key");
     }
 
+    XSECCryptoKey::KeyType keyType = getKeyType();
+    if (keyType != KEY_RSA_PAIR && keyType != KEY_RSA_PUBLIC) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "OpenSSL:RSA - Attempt to validate signature without public key");
+    }
+
     char* cleanedBase64Signature;
     unsigned int cleanedBase64SignatureLen = 0;
 
@@ -566,6 +572,12 @@ unsigned int OpenSSLCryptoKeyRSA::signSHA1PKCS1Base64Signature(
     if (mp_rsaKey == NULL) {
         throw XSECCryptoException(XSECCryptoException::RSAError,
             "OpenSSL:RSA - Attempt to sign data with empty key");
+    }
+
+    KeyType keyType = getKeyType();
+    if (keyType != KEY_RSA_PAIR && keyType != KEY_RSA_PRIVATE) {
+        throw XSECCryptoException(XSECCryptoException::RSAError,
+            "OpenSSL:RSA - Attempt to sign data without private key");
     }
 
     // Build the buffer to be encrypted by prepending the SHA1 OID to the hash

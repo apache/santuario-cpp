@@ -152,9 +152,14 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
     // Use the currently loaded key to validate the Base64 encoded signature
 
     if (mp_ecKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::ECError,
             "OpenSSL:EC - Attempt to validate signature with empty key");
+    }
+
+    KeyType keyType = getKeyType();
+    if (keyType != KEY_EC_PAIR && keyType != KEY_EC_PUBLIC) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Attempt to validate signature without public key");
     }
 
     char * cleanedBase64Signature;
@@ -183,10 +188,10 @@ bool OpenSSLCryptoKeyEC::verifyBase64SignatureDSA(unsigned char * hashBuf,
                           cleanedBase64SignatureLen);
 
     if (rc < 0) {
-
         throw XSECCryptoException(XSECCryptoException::ECError,
             "OpenSSL:EC - Error during Base64 Decode");
     }
+
     int t = 0;
 
     EVP_DecodeFinal(dctx.of(), &sigVal[sigValLen], &t);
@@ -239,10 +244,13 @@ unsigned int OpenSSLCryptoKeyEC::signBase64SignatureDSA(unsigned char * hashBuf,
             "OpenSSL:EC - Attempt to sign data with empty key");
     }
 
-    ECDSA_SIG * ecdsa_sig;
+    KeyType keyType = getKeyType();
+    if (keyType != KEY_EC_PAIR && keyType != KEY_EC_PRIVATE) {
+        throw XSECCryptoException(XSECCryptoException::ECError,
+            "OpenSSL:EC - Attempt to sign data without private key");
+    }
 
-    ecdsa_sig = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
-
+    ECDSA_SIG* ecdsa_sig  = ECDSA_do_sign(hashBuf, hashLen, mp_ecKey);
     if (ecdsa_sig == NULL) {
         throw XSECCryptoException(XSECCryptoException::ECError,
             "OpenSSL:EC - Error signing data");

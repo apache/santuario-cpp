@@ -257,9 +257,14 @@ bool OpenSSLCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
     // Use the currently loaded key to validate the Base64 encoded signature
 
     if (mp_dsaKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Attempt to validate signature with empty key");
+    }
+
+    XSECCryptoKey::KeyType keyType = getKeyType();
+    if (keyType != KEY_DSA_PAIR && keyType != KEY_DSA_PUBLIC) {
+        throw XSECCryptoException(XSECCryptoException::DSAError,
+            "OpenSSL:DSA - Attempt to validate signature without public key");
     }
 
     char* cleanedBase64Signature;
@@ -289,10 +294,10 @@ bool OpenSSLCryptoKeyDSA::verifyBase64Signature(unsigned char * hashBuf,
                           cleanedBase64SignatureLen);
 
     if (rc < 0) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error during Base64 Decode");
     }
+
     int t = 0;
 
     EVP_DecodeFinal(dctx.of(), &sigVal[sigValLen], &t);
@@ -363,14 +368,18 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
     // Sign a pre-calculated hash using this key
 
     if (mp_dsaKey == NULL) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Attempt to sign data with empty key");
     }
 
-    DSA_SIG * dsa_sig;
+    KeyType keyType = getKeyType();
+    if (keyType != KEY_DSA_PAIR && keyType != KEY_DSA_PRIVATE) {
+        throw XSECCryptoException(XSECCryptoException::DSAError,
+            "OpenSSL:DSA - Attempt to sign data without private key");
+    }
 
-    dsa_sig = DSA_do_sign(hashBuf, hashLen, mp_dsaKey);
+
+    DSA_SIG* dsa_sig = DSA_do_sign(hashBuf, hashLen, mp_dsaKey);
 
     if (dsa_sig == NULL) {
 
@@ -392,19 +401,15 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
     unsigned int rawLen = BN_bn2bin(dsaSigR, rawSigBuf);
 
     if (rawLen <= 0) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error converting signature to raw buffer");
-
     }
 
     unsigned int rawLenS = BN_bn2bin(dsaSigS, (unsigned char *) &rawSigBuf[rawLen]);
 
     if (rawLenS <= 0) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error converting signature to raw buffer");
-
     }
 
     rawLen += rawLenS;
@@ -427,7 +432,6 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
     BIO_free_all(b64);
 
     if (sigValLen <= 0) {
-
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error base64 encoding signature");
     }

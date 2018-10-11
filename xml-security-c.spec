@@ -1,5 +1,5 @@
 Name:           xml-security-c
-Version:        2.0.1
+Version:        2.0.2
 Release:        1
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++

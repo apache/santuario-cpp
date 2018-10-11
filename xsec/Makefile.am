@@ -650,7 +650,7 @@ nss_sources = \
 #
 # Now the library specific build items
 #
-libxml_security_c_la_LDFLAGS = -version-info 20:1:0
+libxml_security_c_la_LDFLAGS = -version-info 20:2:0
 
 EXTRA_DIST = \
   utils/winutils/XSECSOAPRequestorSimpleWin32.cpp \

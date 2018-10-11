@@ -105,7 +105,7 @@ XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst
 			const DSIGKeyInfoValue* dsaval = (const DSIGKeyInfoValue *) lst->item(i);
 			if (dsaval->getDSAP() || dsaval->getDSAQ() || dsaval->getDSAG() || dsaval->getDSAY()) {
 
-	            XSECCryptoKeyDSA * dsa = XSECPlatformUtils::g_cryptoProvider->keyDSA();
+	            XSECCryptoKeyDSA* dsa = XSECPlatformUtils::g_cryptoProvider->keyDSA();
 	            Janitor<XSECCryptoKeyDSA> j_dsa(dsa);
 
                 safeBuffer value;
@@ -127,8 +127,10 @@ XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst
                     dsa->loadYBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
                 }
 
-                j_dsa.release();
-                return dsa;
+                if (dsa->getKeyType() != XSECCryptoKey::KEY_NONE) {
+                    j_dsa.release();
+                    return dsa;
+                }
 			}
 		}
 			break;
@@ -148,8 +150,10 @@ XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst
                 value << (*mp_formatter << rsaval->getRSAExponent());
                 rsa->loadPublicExponentBase64BigNums(value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
 
-                j_rsa.release();
-                return rsa;
+                if (rsa->getKeyType() != XSECCryptoKey::KEY_NONE) {
+                    j_rsa.release();
+                    return rsa;
+                }
 		    }
 
 		}
@@ -169,8 +173,10 @@ XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst
                 XSECAutoPtrChar curve(ecval->getECNamedCurve());
                 if (curve.get()) {
                     ec->loadPublicKeyBase64(curve.get(), value.rawCharBuffer(), (unsigned int) strlen(value.rawCharBuffer()));
-                    j_ec.release();
-                    return ec;
+                    if (ec->getKeyType() != XSECCryptoKey::KEY_NONE) {
+                        j_ec.release();
+                        return ec;
+                    }
                 }
             }
         }
@@ -184,7 +190,11 @@ XSECCryptoKey* XSECKeyInfoResolverDefault::resolveKey(const DSIGKeyInfoList* lst
                 safeBuffer value;
 
                 value << (*mp_formatter << derval->getData());
-                return XSECPlatformUtils::g_cryptoProvider->keyDER(value.rawCharBuffer(), (unsigned int)strlen(value.rawCharBuffer()), true);
+                XSECCryptoKey* key = XSECPlatformUtils::g_cryptoProvider->keyDER(value.rawCharBuffer(), (unsigned int)strlen(value.rawCharBuffer()), true);
+                if (key && key->getKeyType() != XSECCryptoKey::KEY_NONE) {
+                    return key;
+                }
+                delete key;
             }
         }
             break;

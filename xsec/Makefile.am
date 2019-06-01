@@ -316,6 +316,8 @@ utilsinclude_HEADERS = \
   utils/XSECXPathNodeList.hpp \
   utils/XSECSafeBufferFormatter.hpp \
   utils/XSECBinTXFMInputStream.hpp \
+  utils/XSECAlgorithmSupport.hpp \
+  utils/XSECDOMUtils.hpp \
   utils/XSECPlatformUtils.hpp 
 
 xencinclude_HEADERS = \

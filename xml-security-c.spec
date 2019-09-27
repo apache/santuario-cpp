@@ -1,6 +1,6 @@
 Name:           xml-security-c
 Version:        2.0.2
-Release:        1
+Release:        2
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
 License:        Apache 2.0
@@ -13,6 +13,10 @@ BuildRequires:  libxerces-c-devel >= 3.2
 BuildRequires:  openssl-devel gcc-c++ pkgconfig
 %if "%{_vendor}" == "redhat"
 BuildRequires: redhat-rpm-config
+%endif
+
+%if 0%{?rhel} >= 8 || 0%{?centos_version} >= 800
+BuildRequires: gdb
 %endif
 
 %description
@@ -77,13 +81,9 @@ This package includes files needed for development with xml-security-c.
 %{__rm} -rf $RPM_BUILD_ROOT
 
 
-%ifnos solaris2.8 solaris2.9 solaris2.10
 %post -n libxml-security-c20 -p /sbin/ldconfig
-%endif
 
-%ifnos solaris2.8 solaris2.9 solaris2.10
 %postun -n libxml-security-c20 -p /sbin/ldconfig
-%endif
 
 %files -n xml-security-c-bin
 %defattr(-,root,root,-)
@@ -102,6 +102,10 @@ This package includes files needed for development with xml-security-c.
 %exclude %{_libdir}/*.la
 
 %changelog
+* Fri Sep 27 2019 Scott Cantor <cantor.2@osu.edu> 2.0.0-2
+- Add CentOS 8 dependency rule
+- Remove Solaris exclusions
+
 * Mon Nov 13 2017 Scott Cantor <cantor.2@osu.edu> 2.0.0-1
 - update to 2.0.0
 - exclude libtool archive

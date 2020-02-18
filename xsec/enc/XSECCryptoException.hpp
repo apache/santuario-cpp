@@ -99,7 +99,7 @@ public:
 	
 public:
 
-	/** @name Contructors and Destructors */
+	/** @name Constructors and Destructors */
 	//@{
 
 	/**

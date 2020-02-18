@@ -65,7 +65,7 @@ public:
     //@{
 	
     /**
-	 * \brief Contructor.
+	 * \brief Constructor.
 	 *
 	 */
 

@@ -68,7 +68,7 @@ public:
     //@{
 
     /**
-     * \brief Contructor used for existing XML signatures.
+     * \brief Constructor used for existing XML signatures.
      *
      * The Node structure already exists, so read the nodes in.
      *
@@ -80,7 +80,7 @@ public:
     DSIGTransformXPathFilter(const XSECEnv* env, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode* node);
 
     /**
-     * \brief Contructor used for new signatures.
+     * \brief Constructor used for new signatures.
      *
      * The Node structure will have to be created.
      *

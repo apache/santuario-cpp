@@ -76,7 +76,7 @@ protected:
     //@{
 
     /**
-     * \brief Contructor for use with existing XML signatures or templates.
+     * \brief Constructor for use with existing XML signatures or templates.
      *
      * <p>Create a DSIGSignature object based on an already existing
      * DSIG Signature XML node.  It is assumed that the underlying

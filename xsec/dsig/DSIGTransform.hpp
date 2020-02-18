@@ -69,7 +69,7 @@ public:
     //@{
 	
     /**
-	 * \brief Contructor used for existing XML signatures.
+	 * \brief Constructor used for existing XML signatures.
 	 *
 	 * The Node structure already exists, so this type of Transform constructor
 	 * will generally read the nodes in.
@@ -87,7 +87,7 @@ public:
 		  mp_env(env) {};
 
     /**
-	 * \brief Contructor used for new signatures.
+	 * \brief Constructor used for new signatures.
 	 *
 	 * The Node structure will have to be created by the implementation class
 	 *

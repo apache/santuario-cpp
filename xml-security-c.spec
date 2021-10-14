@@ -1,6 +1,6 @@
 Name:           xml-security-c
-Version:        2.0.2
-Release:        2
+Version:        2.0.3
+Release:        1
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
 License:        Apache 2.0
@@ -102,6 +102,9 @@ This package includes files needed for development with xml-security-c.
 %exclude %{_libdir}/*.la
 
 %changelog
+* Thu Oct 14 2021 Scott Cantor <cantor.2@osu.edu> 2.0.3-1
+- Bump version for OpenSSL 3 fix
+
 * Fri Sep 27 2019 Scott Cantor <cantor.2@osu.edu> 2.0.0-2
 - Add CentOS 8 dependency rule
 - Remove Solaris exclusions

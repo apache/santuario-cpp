@@ -74,14 +74,18 @@ AC_CHECK_FUNCS([strcasecmp])
 
 # Check whether getcwd can dynamically allocate memory.
 AC_MSG_CHECKING([whether getcwd(NULL, 0) works])
-AC_RUN_IFELSE([AC_LANG_PROGRAM([#include <stdlib.h>
-     #include <unistd.h>],
-[char *cwd = getcwd(NULL, 0);
-return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;])],
-     [AC_MSG_RESULT(yes)
-      AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
-         [Define to 1 if getcwd(NULL, 0) works])],
-     [AC_MSG_RESULT(no)])
+AC_CACHE_VAL([xml_cv_func_getcwd_null],
+[AC_RUN_IFELSE([AC_LANG_PROGRAM([[#include <stdlib.h>
+     #include <unistd.h>
+     char *cwd = getcwd(NULL, 0);
+     return (cwd != NULL) ? EXIT_SUCCESS : EXIT_FAILURE;]])],
+  [xml_cv_func_getcwd_null=yes],
+  [xml_cv_func_getcwd_null=no])])
+AC_MSG_RESULT([$xml_cv_func_getcwd_null])
+if test $xml_cv_func_getcwd_null = yes; then
+AC_DEFINE([XSEC_HAVE_GETCWD_DYN], [1],
+  [Define to 1 if getcwd(NULL, 0) works])
+fi
 
 AC_LANG(C++)
 

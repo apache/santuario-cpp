@@ -395,24 +395,18 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 
     DSA_SIG_get0(dsa_sig, &dsaSigR, &dsaSigS);
 
-    unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsaSigR) + BN_num_bits(dsaSigS) + 7) / 8];
-    ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
+    const int DSAsigCompLen = 20; // XMLDSIG spec 6.4.1
+    unsigned char rawSigBuf[2*DSAsigCompLen];
     
-    unsigned int rawLen = BN_bn2bin(dsaSigR, rawSigBuf);
-
-    if (rawLen <= 0) {
+    if (BN_bn2binpad(dsaSigR, rawSigBuf, DSAsigCompLen) <= 0) {
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error converting signature to raw buffer");
     }
 
-    unsigned int rawLenS = BN_bn2bin(dsaSigS, (unsigned char *) &rawSigBuf[rawLen]);
-
-    if (rawLenS <= 0) {
+    if (BN_bn2binpad(dsaSigS, rawSigBuf+DSAsigCompLen, DSAsigCompLen) <= 0) {
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error converting signature to raw buffer");
     }
-
-    rawLen += rawLenS;
 
     // Now convert to Base 64
 
@@ -424,7 +418,7 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 
     // Translate signature from Base64
 
-    BIO_write(b64, rawSigBuf, rawLen);
+    BIO_write(b64, rawSigBuf, 2*DSAsigCompLen);
     BIO_flush(b64);
 
     unsigned int sigValLen = BIO_read(bmem, base64SignatureBuf, base64SignatureBufLen);

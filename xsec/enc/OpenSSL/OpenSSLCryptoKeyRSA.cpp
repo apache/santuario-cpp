@@ -413,7 +413,7 @@ OpenSSLCryptoKeyRSA::OpenSSLCryptoKeyRSA(EVP_PKEY *k) :
     if (k == NULL || EVP_PKEY_id(k) != EVP_PKEY_RSA)
         return; // Nothing to do with us
 
-    RSA *rsa = EVP_PKEY_get0_RSA(k);
+    const RSA *rsa = EVP_PKEY_get0_RSA(k);
 
     const BIGNUM *n=NULL, *e=NULL, *d=NULL;
     RSA_get0_key(rsa, &n, &e, &d);

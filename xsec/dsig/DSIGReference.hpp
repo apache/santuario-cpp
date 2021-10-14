@@ -26,6 +26,9 @@
  *					 
  */
 
+#ifndef DSIGREFERENCE_INCLUDE
+#define DSIGREFERENCE_INCLUDE
+
 // High level include
 #include <xsec/framework/XSECDefs.hpp>
 
@@ -528,6 +531,4 @@ private:
 	friend class DSIGSignedInfo;
 };
 
-
-
-
+#endif /* #define DSIGREFERENCE_INCLUDE */

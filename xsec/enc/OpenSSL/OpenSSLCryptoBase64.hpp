@@ -205,7 +205,7 @@ private :
     EVP_ENCODE_CTX *mp_ectx;              // Encode context
     EVP_ENCODE_CTX *mp_dctx;              // Decode context
 
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L)
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
     EVP_ENCODE_CTX m_ectx_store;
     EVP_ENCODE_CTX m_dctx_store;
 #endif 

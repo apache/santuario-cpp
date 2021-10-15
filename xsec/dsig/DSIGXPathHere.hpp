@@ -54,6 +54,11 @@
 #	pragma warning(default: 4267)
 #endif
 
+// If this isn't defined, we're on Xalan 1.12+ and require modern C++
+#ifndef XALAN_USING_XALAN
+# define XALAN_USING_XALAN(NAME) using xalanc :: NAME;
+#endif
+
 // Namespace usage
 
 XALAN_USING_XALAN(Function);

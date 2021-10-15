@@ -43,6 +43,11 @@
 #include <xalanc/XPath/ElementPrefixResolverProxy.hpp>
 #include <xalanc/XalanTransformer/XalanTransformer.hpp>
 
+// If this isn't defined, we're on Xalan 1.12+ and require modern C++
+#ifndef XALAN_USING_XALAN
+# define XALAN_USING_XALAN(NAME) using xalanc :: NAME;
+#endif
+
 // Xalan Namespace usage
 XALAN_USING_XALAN(XercesDOMSupport)
 XALAN_USING_XALAN(XercesParserLiaison)

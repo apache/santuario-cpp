@@ -55,6 +55,11 @@ XERCES_CPP_NAMESPACE_USE
 #include <xalanc/XPath/XPathEvaluator.hpp>
 #include <xalanc/XPath/NodeRefList.hpp>
 
+// If this isn't defined, we're on Xalan 1.12+ and require modern C++
+#ifndef XALAN_USING_XALAN
+# define XALAN_USING_XALAN(NAME) using xalanc :: NAME;
+#endif
+
 // Namespace definitions
 XALAN_USING_XALAN(XPathEvaluator)
 XALAN_USING_XALAN(XercesDOMSupport)

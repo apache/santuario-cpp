@@ -27,15 +27,12 @@ PKG_INSTALLDIR
 AC_SYS_LARGEFILE
 
 AC_ARG_ENABLE(debug,
-    AS_HELP_STRING([--enable-debug],[Have GCC compile with symbols (Default = no)]),
+    AS_HELP_STRING([--enable-debug],[Produce debug variant (Default = no)]),
     enable_debug=$enableval, enable_debug=no)
 
 if test "$enable_debug" = "yes" ; then
-    GCC_CFLAGS="$CFLAGS -g -D_DEBUG"
-    GCC_CXXFLAGS="$CXXFLAGS -g -D_DEBUG"
-else
-    GCC_CFLAGS="$CFLAGS -O2 -DNDEBUG"
-    GCC_CXXFLAGS="$CXXFLAGS -O2 -DNDEBUG"
+    AM_CFLAGS="-D_DEBUG"
+    AM_CXXFLAGS="-D_DEBUG"
 fi
 
 
@@ -56,9 +53,12 @@ AC_PROG_AWK
 AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 
 if test "$GCC" = "yes" ; then
-    CFLAGS="-Wall $GCC_CFLAGS"
-    CXXFLAGS="-Wall $GCC_CXXFLAGS"
+    AM_CFLAGS="$AM_CFLAGS -Wall -W"
+    AM_CXXFLAGS="$AM_CXXFLAGS -Wall -W"
 fi
+
+AC_SUBST([AM_CFLAGS])
+AC_SUBST([AM_CXXFLAGS])
 
 AX_PTHREAD(,[AC_MSG_ERROR([unable to find pthreads, currently this is required])])
 

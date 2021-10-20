@@ -160,13 +160,15 @@ libxml_security_c_la_CXXFLAGS = \
    $(xalan_CXXFLAGS) \
    $(xerces_CXXFLAGS) \
    $(openssl_CFLAGS) \
-   $(nss_CFLAGS)
+   $(nss_CFLAGS) \
+   $(PTHREAD_CFLAGS)
 
 libxml_security_c_la_LIBADD = \
    $(xalan_LIBS) \
    $(xerces_LIBS) \
    $(openssl_LIBS) \
-   $(nss_LIBS)
+   $(nss_LIBS) \
+   $(PTHREAD_LIBS)
 
 lib_LTLIBRARIES = libxml-security-c.la
 

@@ -1,5 +1,5 @@
 Name:           xml-security-c
-Version:        2.0.3
+Version:        2.0.4
 Release:        1
 Summary:        Apache XML security C++ library
 Group:          Development/Libraries/C and C++
@@ -97,7 +97,6 @@ This package includes files needed for development with xml-security-c.
 %defattr(-,root,root,-)
 %{_includedir}/*
 %{_libdir}/*.so
-%{_libdir}/*.a
 %{_libdir}/pkgconfig/xml-security-c.pc
 %exclude %{_libdir}/*.la
 

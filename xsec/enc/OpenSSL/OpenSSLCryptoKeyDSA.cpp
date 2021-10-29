@@ -43,6 +43,23 @@ XSEC_USING_XERCES(ArrayJanitor);
 
 #include <openssl/dsa.h>
 
+// Inline for older OpenSSL versions.
+#if (OPENSSL_VERSION_NUMBER <   0x10100000L)
+static int BN_bn2binpad(const BIGNUM *a, unsigned char *to, int tolen)
+{
+    int bytes = BN_num_bytes(a);
+
+    if (bytes > tolen) {
+        return -1;
+    }
+    while (bytes < tolen) {
+        *to++ = 0;
+        bytes++;
+    }
+    BN_bn2bin(a, to);
+    return tolen;
+}
+#endif
 
 OpenSSLCryptoKeyDSA::OpenSSLCryptoKeyDSA() : mp_dsaKey(NULL), mp_accumP(NULL), mp_accumQ(NULL), mp_accumG(NULL) {
 };
@@ -395,7 +412,6 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 
     DSA_SIG_get0(dsa_sig, &dsaSigR, &dsaSigS);
 
-#if (OPENSSL_VERSION_NUMBER >=  0x10100000L)
     const int DSAsigCompLen = 20; // XMLDSIG spec 6.4.1
     unsigned char rawSigBuf[2*DSAsigCompLen];
     
@@ -408,28 +424,6 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
         throw XSECCryptoException(XSECCryptoException::DSAError,
             "OpenSSL:DSA - Error converting signature to raw buffer");
     }
-#else
-    // See SANTUARIO-498.
-    // This code is apparently wrong, but I do not have a fix for OpenSSL < 1.1
-    unsigned char* rawSigBuf = new unsigned char[(BN_num_bits(dsaSigR) + BN_num_bits(dsaSigS) + 7) / 8];
-    ArrayJanitor<unsigned char> j_sigbuf(rawSigBuf);
-
-    unsigned int rawLen = BN_bn2bin(dsaSigR, rawSigBuf);
-
-    if (rawLen <= 0) {
-        throw XSECCryptoException(XSECCryptoException::DSAError,
-            "OpenSSL:DSA - Error converting signature to raw buffer");
-    }
-
-    unsigned int rawLenS = BN_bn2bin(dsaSigS, (unsigned char *) &rawSigBuf[rawLen]);
-
-    if (rawLenS <= 0) {
-        throw XSECCryptoException(XSECCryptoException::DSAError,
-            "OpenSSL:DSA - Error converting signature to raw buffer");
-    }
-
-    rawLen += rawLenS;
-#endif
 
     // Now convert to Base 64
 
@@ -441,11 +435,7 @@ unsigned int OpenSSLCryptoKeyDSA::signBase64Signature(unsigned char * hashBuf,
 
     // Translate signature from Base64
 
-#if (OPENSSL_VERSION_NUMBER >=  0x10100000L)
     BIO_write(b64, rawSigBuf, 2*DSAsigCompLen);
-#else
-    BIO_write(b64, rawSigBuf, rawLen);
-#endif
     BIO_flush(b64);
 
     unsigned int sigValLen = BIO_read(bmem, base64SignatureBuf, base64SignatureBufLen);

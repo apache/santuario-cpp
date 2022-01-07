@@ -53,51 +53,58 @@ OpenSSLCryptoHash::OpenSSLCryptoHash(HashType alg) :
     switch (alg) {
 
     case (XSECCryptoHash::HASH_SHA1) :
-    
+
         mp_md = EVP_get_digestbyname("SHA1");
         break;
 
     case (XSECCryptoHash::HASH_MD5) :
-    
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+        octx = OSSL_LIB_CTX_new();
+        mp_md = EVP_MD_fetch(octx, OSSL_DIGEST_NAME_MD5, "-fips");
+#else
+#ifdef EVP_MD_CTX_FLAG_NON_FIPS_ALLOW
+        EVP_MD_CTX_set_flags(mp_mdctx, EVP_MD_CTX_FLAG_NON_FIPS_ALLOW);
+#endif
         mp_md = EVP_get_digestbyname("MD5");
+#endif
         break;
 
     case (XSECCryptoHash::HASH_SHA224) :
-    
+
         mp_md = EVP_get_digestbyname("SHA224");
         if (mp_md == NULL) {
             throw XSECCryptoException(XSECCryptoException::MDError,
-            "OpenSSL:Hash - SHA224 not supported by this version of OpenSSL"); 
+            "OpenSSL:Hash - SHA224 not supported by this version of OpenSSL");
         }
 
         break;
 
     case (XSECCryptoHash::HASH_SHA256) :
-    
+
         mp_md = EVP_get_digestbyname("SHA256");
         if (mp_md == NULL) {
             throw XSECCryptoException(XSECCryptoException::MDError,
-            "OpenSSL:Hash - SHA256 not supported by this version of OpenSSL"); 
+            "OpenSSL:Hash - SHA256 not supported by this version of OpenSSL");
         }
 
         break;
 
     case (XSECCryptoHash::HASH_SHA384) :
-    
+
         mp_md = EVP_get_digestbyname("SHA384");
         if (mp_md == NULL) {
             throw XSECCryptoException(XSECCryptoException::MDError,
-            "OpenSSL:Hash - SHA384 not supported by this version of OpenSSL"); 
+            "OpenSSL:Hash - SHA384 not supported by this version of OpenSSL");
         }
 
         break;
 
     case (XSECCryptoHash::HASH_SHA512) :
-    
+
         mp_md = EVP_get_digestbyname("SHA512");
         if (mp_md == NULL) {
             throw XSECCryptoException(XSECCryptoException::MDError,
-            "OpenSSL:Hash - SHA512 not supported by this version of OpenSSL"); 
+            "OpenSSL:Hash - SHA512 not supported by this version of OpenSSL");
         }
 
         break;
@@ -111,25 +118,26 @@ OpenSSLCryptoHash::OpenSSLCryptoHash(HashType alg) :
     if(!mp_md) {
 
         throw XSECCryptoException(XSECCryptoException::MDError,
-            "OpenSSL:Hash - Error loading Message Digest"); 
+            "OpenSSL:Hash - Error loading Message Digest");
     }
 
     EVP_DigestInit(mp_mdctx, mp_md);
     m_hashType = alg;
-
 }
 
-
 OpenSSLCryptoHash::~OpenSSLCryptoHash() {
+    EVP_MD_free((EVP_MD*)mp_md);
 #if (OPENSSL_VERSION_NUMBER < 0x10100000L)
     EVP_MD_CTX_cleanup(mp_mdctx);
 #else
     EVP_MD_CTX_free(mp_mdctx);
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+    if (m_hashType == HASH_MD5) {
+	    OSSL_LIB_CTX_free(octx);
+    }
 #endif
-
+#endif
 }
-
-
 
 // Hashing Activities
 void OpenSSLCryptoHash::reset(void) {
@@ -141,7 +149,7 @@ void OpenSSLCryptoHash::reset(void) {
 
 }
 
-void OpenSSLCryptoHash::hash(unsigned char * data, 
+void OpenSSLCryptoHash::hash(unsigned char * data,
                                  unsigned int length) {
 
     EVP_DigestUpdate(mp_mdctx, data, length);
@@ -157,7 +165,7 @@ unsigned int OpenSSLCryptoHash::finish(unsigned char * hash,
     EVP_DigestFinal(mp_mdctx, m_mdValue, &m_mdLen);
 
     // Copy to output buffer
-    
+
     retLen = (maxLength > m_mdLen ? m_mdLen : maxLength);
     memcpy(hash, m_mdValue, retLen);
 

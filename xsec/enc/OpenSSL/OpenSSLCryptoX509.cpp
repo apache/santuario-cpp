@@ -163,8 +163,8 @@ void OpenSSLCryptoX509::loadX509Base64Bin(const char * buf, unsigned int len) {
 
     }
 
-    m_DERX509.sbStrcpyIn(buf);
-
+    m_DERX509.sbMemcpyIn(buf, len);
+    m_DERX509[len] = '\0';
 }
 
 // Info functions

@@ -88,7 +88,8 @@ public:
 
 private:
     EVP_ENCODE_CTX *mp_ctx;
-#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || defined(LIBRESSL_VERSION_NUMBER)
+#if (OPENSSL_VERSION_NUMBER < 0x10100000L) || \
+	((defined(LIBRESSL_VERSION_NUMBER) && LIBRESSL_VERSION_NUMBER < 0x30500000L))
     EVP_ENCODE_CTX mp_ctx_store;
 #endif    
 };

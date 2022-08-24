@@ -40,6 +40,10 @@
 
 #   include <openssl/evp.h>
 
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+#   include <openssl/core_names.h>
+#endif
+
 /**
  * @ingroup opensslcrypto
  */
@@ -156,7 +160,9 @@ private:
     unsigned char       m_mdValue[EVP_MAX_MD_SIZE];     // Final output
     unsigned int        m_mdLen;                        // Length of digest
     HashType            m_hashType;                     // What type of hash is this?
-
+#if OPENSSL_VERSION_NUMBER >= 0x30000000
+    OSSL_LIB_CTX 	*octx;
+#endif
 };
 
 #endif /* XSEC_HAVE_OPENSSL */

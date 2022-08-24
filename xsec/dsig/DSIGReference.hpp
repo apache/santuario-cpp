@@ -79,7 +79,7 @@ public:
     //@{
 	
     /**
-	 * \brief Contructor for use with existing XML signatures or templates.
+	 * \brief Constructor for use with existing XML signatures or templates.
 	 *
 	 * <p>Create a DSIGReference object based on an already existing
 	 * DSIG Reference XML node.  It is assumed that the underlying
@@ -97,7 +97,7 @@ public:
 	DSIGReference(const XSECEnv * env, XERCES_CPP_NAMESPACE_QUALIFIER DOMNode *dom);
 
     /**
-	 * \brief Contructor for use when creating new Reference structures.
+	 * \brief Constructor for use when creating new Reference structures.
 	 *
 	 * <p>Create a DSIGReference object that can later be used to create
 	 * a new Reference structure in the DOM document.</p>
